@@ -366,9 +366,16 @@ impl AptosVM {
     }
 
     fn verify_module_bundle<S: MoveResolverExt>(
+        &self,
         session: &mut SessionExt<S>,
         module_bundle: &ModuleBundle,
+        sender: &AccountAddress,
     ) -> VMResult<()> {
+        // Check publisher allow list
+        let module_publisher_config = self.0.module_publisher_config();
+        let allowed_for_update = module_publisher_config
+            .publisher_allowlist()
+            .contains(sender);
         for module_blob in module_bundle.iter() {
             match CompiledModule::deserialize(module_blob.code()) {
                 Ok(module) => {
@@ -378,12 +385,14 @@ impl AptosVM {
                         .load_module(&module.self_id())
                         .is_ok()
                     {
-                        return Err(verification_error(
-                            StatusCode::DUPLICATE_MODULE_NAME,
-                            IndexKind::AddressIdentifier,
-                            module.self_handle_idx().0,
-                        )
-                        .finish(Location::Undefined));
+                        if !allowed_for_update {
+                            return Err(verification_error(
+                                StatusCode::DUPLICATE_MODULE_NAME,
+                                IndexKind::AddressIdentifier,
+                                module.self_handle_idx().0,
+                            )
+                            .finish(Location::Undefined));
+                        }
                     }
                 }
                 Err(err) => return Err(err.finish(Location::Undefined)),
@@ -417,7 +426,7 @@ impl AptosVM {
             .charge_intrinsic_gas(txn_data.transaction_size())
             .map_err(|e| e.into_vm_status())?;
 
-        Self::verify_module_bundle(&mut session, modules)?;
+        self.verify_module_bundle(&mut session, modules, &txn_data.sender())?;
         session
             .publish_module_bundle(modules.clone().into_inner(), module_address, gas_status)
             .map_err(|e| e.into_vm_status())?;

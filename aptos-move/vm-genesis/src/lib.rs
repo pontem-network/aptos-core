@@ -15,7 +15,8 @@ use aptos_types::{
     chain_id::ChainId,
     contract_event::ContractEvent,
     on_chain_config::{
-        ConsensusConfigV1, OnChainConsensusConfig, VMPublishingOption, APTOS_MAX_KNOWN_VERSION,
+        ConsensusConfigV1, OnChainConsensusConfig, VMPublishingOption,
+        APTOS_MAX_KNOWN_VERSION, ModulePublisherConfig,
     },
     transaction::{authenticator::AuthenticationKey, ChangeSet, Transaction, WriteSetPayload},
 };
@@ -54,6 +55,7 @@ pub fn encode_genesis_transaction(
     aptos_root_key: Ed25519PublicKey,
     validators: &[Validator],
     stdlib_module_bytes: &[Vec<u8>],
+    vm_publishing_option: Option<VMPublishingOption>,
     chain_id: ChainId,
     min_price_per_gas_unit: u64,
 ) -> Transaction {
@@ -67,7 +69,8 @@ pub fn encode_genesis_transaction(
         &aptos_root_key,
         validators,
         stdlib_module_bytes,
-        VMPublishingOption::open(),
+        vm_publishing_option.unwrap_or_else(VMPublishingOption::open),
+        None,
         consensus_config,
         chain_id,
         min_price_per_gas_unit,
@@ -79,6 +82,7 @@ pub fn encode_genesis_change_set(
     validators: &[Validator],
     stdlib_module_bytes: &[Vec<u8>],
     vm_publishing_option: VMPublishingOption,
+    module_publisher_config: Option<ModulePublisherConfig>,
     consensus_config: OnChainConsensusConfig,
     chain_id: ChainId,
     min_price_per_gas_unit: u64,
@@ -101,6 +105,7 @@ pub fn encode_genesis_change_set(
         &mut session,
         aptos_root_key,
         vm_publishing_option,
+        module_publisher_config.unwrap_or_default(),
         consensus_config,
         chain_id,
         min_price_per_gas_unit,
@@ -167,6 +172,7 @@ fn create_and_initialize_main_accounts(
     session: &mut SessionExt<impl MoveResolver>,
     aptos_root_key: &Ed25519PublicKey,
     publishing_option: VMPublishingOption,
+    module_publisher_config: ModulePublisherConfig,
     consensus_config: OnChainConsensusConfig,
     chain_id: ChainId,
     min_price_per_gas_unit: u64,
@@ -216,6 +222,7 @@ fn create_and_initialize_main_accounts(
             MoveValue::U64(epoch_interval),
             MoveValue::U64(minimum_stake),
             MoveValue::U64(maximum_stake),
+            MoveValue::vector_address(module_publisher_config.publisher_allowlist().to_owned()),
         ]),
     );
 }
@@ -330,7 +337,7 @@ pub fn generate_genesis_change_set_for_testing(genesis_options: GenesisOptions) 
         GenesisOptions::Fresh => framework::aptos::module_blobs(),
     };
 
-    generate_test_genesis(&modules, VMPublishingOption::open(), None).0
+    generate_test_genesis(&modules, VMPublishingOption::open(), None, None).0
 }
 
 pub fn test_genesis_transaction() -> Transaction {
@@ -344,6 +351,7 @@ pub fn test_genesis_change_set_and_validators(
     generate_test_genesis(
         cached_framework_packages::module_blobs(),
         VMPublishingOption::open(),
+        None,
         count,
     )
 }
@@ -410,6 +418,7 @@ impl TestValidator {
 pub fn generate_test_genesis(
     stdlib_modules: &[Vec<u8>],
     vm_publishing_option: VMPublishingOption,
+    module_publisher_config: Option<ModulePublisherConfig>,
     count: Option<usize>,
 ) -> (ChangeSet, Vec<TestValidator>) {
     let test_validators = TestValidator::new_test_set(count);
@@ -421,6 +430,7 @@ pub fn generate_test_genesis(
         validators,
         stdlib_modules,
         vm_publishing_option,
+        module_publisher_config,
         OnChainConsensusConfig::default(),
         ChainId::test(),
         0,

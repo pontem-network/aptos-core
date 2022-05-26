@@ -23,7 +23,7 @@ use aptos_types::{
     access_path::AccessPath,
     account_config::{AccountResource, CoinStoreResource, CORE_CODE_ADDRESS},
     block_metadata::{new_block_event_key, BlockMetadata, NewBlockEvent},
-    on_chain_config::{OnChainConfig, VMPublishingOption, ValidatorSet, Version},
+    on_chain_config::{OnChainConfig, VMPublishingOption, ValidatorSet, Version, ModulePublisherConfig},
     state_store::state_key::StateKey,
     transaction::{
         ChangeSet, ExecutionStatus, SignedTransaction, Transaction, TransactionOutput,
@@ -111,13 +111,14 @@ impl FakeExecutor {
             cached_framework_packages::module_blobs(),
             None,
             VMPublishingOption::open(),
+            None,
         )
     }
 
     /// Creates an executor from the genesis file GENESIS_FILE_LOCATION with script/module
     /// publishing options given by `publishing_options`. These can only be either `Open` or
     /// `CustomScript`.
-    pub fn from_genesis_with_options(publishing_options: VMPublishingOption) -> Self {
+    pub fn from_genesis_with_options(publishing_options: VMPublishingOption, publisher_config: Option<ModulePublisherConfig>) -> Self {
         if !publishing_options.is_open_script() {
             panic!("Allowlisted transactions are not supported as a publishing option")
         }
@@ -126,6 +127,7 @@ impl FakeExecutor {
             cached_framework_packages::module_blobs(),
             None,
             publishing_options,
+            publisher_config,
         )
     }
 
@@ -197,13 +199,26 @@ impl FakeExecutor {
         genesis_modules: &[Vec<u8>],
         validator_accounts: Option<usize>,
         publishing_options: VMPublishingOption,
+        publisher_config: Option<ModulePublisherConfig>,
     ) -> Self {
         let genesis = vm_genesis::generate_test_genesis(
             genesis_modules,
             publishing_options,
+            publisher_config,
             validator_accounts,
         );
         Self::from_genesis(genesis.0.write_set())
+    }
+
+    pub fn parallel_genesis() -> Self {
+        let genesis = vm_genesis::generate_test_genesis(
+            cached_framework_packages::module_blobs(),
+            VMPublishingOption::open(),
+            None,
+            None,
+        )
+        .0;
+        FakeExecutor::from_genesis(genesis.write_set())
     }
 
     /// Create one instance of [`AccountData`] without saving it to data store.

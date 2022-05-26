@@ -5,6 +5,7 @@ module AptosFramework::Genesis {
     use AptosFramework::Account;
     use AptosFramework::ConsensusConfig;
     use AptosFramework::TransactionPublishingOption;
+    use AptosFramework::ModulePublisherConfig;
     use AptosFramework::Version;
     use AptosFramework::Block;
     use AptosFramework::ChainId;
@@ -29,6 +30,7 @@ module AptosFramework::Genesis {
         epoch_interval: u64,
         minimum_stake: u64,
         maximum_stake: u64,
+	module_publisher_allow_list: vector<address>,
     ) {
         initialize_internal(
             &core_resource_account,
@@ -44,6 +46,7 @@ module AptosFramework::Genesis {
             epoch_interval,
             minimum_stake,
             maximum_stake,
+            module_publisher_allow_list,
         )
     }
 
@@ -61,6 +64,7 @@ module AptosFramework::Genesis {
         epoch_interval: u64,
         minimum_stake: u64,
         maximum_stake: u64,
+	module_publisher_allow_list: vector<address>,
     ) {
         // initialize the core resource account
         Account::initialize(
@@ -102,6 +106,9 @@ module AptosFramework::Genesis {
 
         // Give TransactionFee BurnCapability<TestCoin> so it can burn gas.
         TransactionFee::store_test_coin_burn_cap(&core_framework_account, burn_cap);
+
+	// ModulePublisher config setup
+	ModulePublisherConfig::initialize(core_resource_account, module_publisher_allow_list);
 
         // Pad the event counter for the Root account to match DPN. This
         // _MUST_ match the new epoch event counter otherwise all manner of

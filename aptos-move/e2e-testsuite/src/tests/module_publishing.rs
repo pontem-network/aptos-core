@@ -1,12 +1,13 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
+use aptos_keygen::KeyGen;
 use aptos_types::{
-    on_chain_config::VMPublishingOption,
+    on_chain_config::{ModulePublisherConfig, VMPublishingOption},
     transaction::{ExecutionStatus, TransactionStatus},
 };
 use language_e2e_tests::{
-    account::Account, compile::compile_module, current_function_name, executor::FakeExecutor,
+    account::{Account, AccountData, AccountRoleSpecifier}, compile::compile_module, current_function_name, executor::FakeExecutor,
     transaction_status_eq,
 };
 use move_deps::move_core_types::vm_status::StatusCode;
@@ -14,7 +15,7 @@ use move_deps::move_core_types::vm_status::StatusCode;
 // A module with an address different from the sender's address should be rejected
 #[test]
 fn bad_module_address() {
-    let mut executor = FakeExecutor::from_genesis_with_options(VMPublishingOption::open());
+    let mut executor = FakeExecutor::from_genesis_with_options(VMPublishingOption::open(), None);
     executor.set_golden_file(current_function_name!());
 
     // create a transaction trying to publish a new module.
@@ -69,7 +70,7 @@ macro_rules! module_republish_test {
     ($name:ident, $prog1:literal, $prog2:literal) => {
         #[test]
         fn $name() {
-            let mut executor = FakeExecutor::from_genesis_with_options(VMPublishingOption::open());
+            let mut executor = FakeExecutor::from_genesis_with_options(VMPublishingOption::open(), None);
             executor.set_golden_file(current_function_name!());
 
             let sequence_number = 2;
@@ -326,7 +327,7 @@ pub fn test_publishing_modules_invalid_sender() {
 #[test]
 pub fn test_publishing_allow_modules() {
     // create a FakeExecutor with a genesis from file
-    let mut executor = FakeExecutor::from_genesis_with_options(VMPublishingOption::open());
+    let mut executor = FakeExecutor::from_genesis_with_options(VMPublishingOption::open(), None);
     executor.set_golden_file(current_function_name!());
 
     // create a transaction trying to publish a new module.
@@ -352,5 +353,133 @@ pub fn test_publishing_allow_modules() {
     assert_eq!(
         executor.execute_transaction(txn).status(),
         &TransactionStatus::Keep(ExecutionStatus::Success)
+    );
+}
+
+#[test]
+fn check_module_update_allow_list() {
+    let (privkey, pubkey) = KeyGen::from_os_rng().generate_keypair();
+    let allowed_module_publisher = aptos_types::account_address::from_public_key(&pubkey);
+
+    let publisher_allowlist = vec![allowed_module_publisher.clone()];
+
+    let mut executor = FakeExecutor::from_genesis_with_options(VMPublishingOption::open(), Some(ModulePublisherConfig::from(publisher_allowlist)));
+
+    let sequence_number = 2;
+    let account = Account::new_validator(allowed_module_publisher, privkey, pubkey);
+    let sender = AccountData::with_account(account, 1_000_000, sequence_number, AccountRoleSpecifier::ParentVASP);
+    // let sender = executor.create_raw_account_data(1_000_000, sequence_number);
+    executor.add_account_data(&sender);
+    let non_allowed_sender = executor.create_raw_account_data(1_000_000, sequence_number);
+    executor.add_account_data(&non_allowed_sender);
+
+    // create a transaction trying to publish a new module.
+    let module = format!(
+        "
+        module 0x{}.M {{
+            struct T {{ f: address }}
+        }}
+        ",
+        sender.address(),
+    );
+
+    let random_script = compile_module(&module).1;
+    let txn = sender
+        .account()
+        .transaction()
+        .module(random_script)
+        .sequence_number(sequence_number)
+        .sign();
+    assert_eq!(executor.verify_transaction(txn.clone()).status(), None);
+    let output = executor.execute_transaction(txn);
+    executor.apply_write_set(output.write_set());
+    assert_eq!(
+        output.status(),
+        &TransactionStatus::Keep(ExecutionStatus::Success)
+    );
+
+    // update module from address that contains in allow list
+    let updated_module = format!(
+        "
+        module 0x{}.M {{
+            struct T {{ f: address }}
+            struct U {{ f: u64 }}
+        }}
+        ",
+        sender.address(),
+    );
+
+    let updated_script = compile_module(&updated_module).1;
+    let update_txn = sender
+        .account()
+        .transaction()
+        .module(updated_script)
+        .sequence_number(sequence_number + 1)
+        .sign();
+    assert_eq!(
+        executor.verify_transaction(update_txn.clone()).status(),
+        None
+    );
+    let output = executor.execute_transaction(update_txn);
+    executor.apply_write_set(output.write_set());
+    assert_eq!(
+        output.status(),
+        &TransactionStatus::Keep(ExecutionStatus::Success)
+    );
+
+    // publish new module from second address
+    let second_module = format!(
+        "
+        module 0x{}.M {{
+            struct T {{ f: address }}
+        }}
+        ",
+        non_allowed_sender.address(),
+    );
+
+    let second_script = compile_module(&second_module).1;
+    let txn = non_allowed_sender
+        .account()
+        .transaction()
+        .module(second_script)
+        .sequence_number(sequence_number)
+        .sign();
+    assert_eq!(executor.verify_transaction(txn.clone()).status(), None);
+    let output = executor.execute_transaction(txn);
+    executor.apply_write_set(output.write_set());
+    assert_eq!(
+        output.status(),
+        &TransactionStatus::Keep(ExecutionStatus::Success)
+    );
+
+    // try update module from second address that not contains in allow list
+    let reupdated_module = format!(
+        "
+        module 0x{}.M {{
+            struct T {{ f: address }}
+            struct U {{ f: u64 }}
+        }}
+        ",
+        non_allowed_sender.address(),
+    );
+
+    let reupdated_script = compile_module(&reupdated_module).1;
+    let disallow_txn = non_allowed_sender
+        .account()
+        .transaction()
+        .module(reupdated_script)
+        .sequence_number(sequence_number + 1)
+        .sign();
+    assert_eq!(
+        executor.verify_transaction(disallow_txn.clone()).status(),
+        None
+    );
+    let output = executor.execute_transaction(disallow_txn);
+    executor.apply_write_set(output.write_set());
+    assert_eq!(
+        output.status(),
+        &TransactionStatus::Keep(ExecutionStatus::MiscellaneousError(Some(
+            StatusCode::DUPLICATE_MODULE_NAME
+        )))
     );
 }

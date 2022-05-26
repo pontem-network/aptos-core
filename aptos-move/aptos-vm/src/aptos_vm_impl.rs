@@ -17,7 +17,7 @@ use aptos_types::{
     account_config,
     account_config::ChainSpecificAccountInfo,
     on_chain_config::{
-        ConfigStorage, OnChainConfig, VMConfig, VMPublishingOption, Version, APTOS_VERSION_3,
+        ConfigStorage, OnChainConfig, VMConfig, VMPublishingOption, Version, APTOS_VERSION_3, ModulePublisherConfig,
     },
     transaction::{ExecutionStatus, TransactionOutput, TransactionStatus},
     vm_status::{StatusCode, VMStatus},
@@ -49,6 +49,7 @@ pub struct AptosVMImpl {
     version: Option<Version>,
     publishing_option: Option<VMPublishingOption>,
     chain_account_info: Option<ChainSpecificAccountInfo>,
+    module_publisher_config: Option<ModulePublisherConfig>,
 }
 
 impl AptosVMImpl {
@@ -62,6 +63,7 @@ impl AptosVMImpl {
             version: None,
             publishing_option: None,
             chain_account_info: None,
+            module_publisher_config: None,
         };
         vm.load_configs_impl(&RemoteStorage::new(state));
         vm.chain_account_info = Self::get_chain_specific_account_info(&RemoteStorage::new(state));
@@ -81,6 +83,7 @@ impl AptosVMImpl {
             version: Some(version),
             publishing_option: Some(publishing_option),
             chain_account_info: None,
+            module_publisher_config: None,
         }
     }
 
@@ -109,10 +112,15 @@ impl AptosVMImpl {
         })
     }
 
+    pub fn module_publisher_config(&self) -> ModulePublisherConfig {
+        self.module_publisher_config.clone().unwrap()
+    }
+
     fn load_configs_impl<S: ConfigStorage>(&mut self, data_cache: &S) {
         self.on_chain_config = VMConfig::fetch_config(data_cache);
         self.version = Version::fetch_config(data_cache);
         self.publishing_option = VMPublishingOption::fetch_config(data_cache);
+        self.module_publisher_config = ModulePublisherConfig::fetch_config(data_cache);
     }
 
     // TODO: Move this to an on-chain config once those are a part of the core framework
