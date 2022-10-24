@@ -1,7 +1,7 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::Swarm;
 use std::time::Duration;
 
@@ -27,7 +27,7 @@ async fn test_gas_check() {
 
     let transfer_txn = account1.sign_with_transaction_builder(
         info.transaction_factory()
-            .payload(aptos_stdlib::aptos_coin_transfer(account2.address(), 100)),
+            .payload(pont_stdlib::aptos_coin_transfer(account2.address(), 100)),
     );
     // fail due to not enough gas
     let err = info
@@ -44,7 +44,7 @@ async fn test_gas_check() {
     let transfer_too_much = account2.sign_with_transaction_builder(
         // TODO(Gas): double check this
         info.transaction_factory()
-            .payload(aptos_stdlib::aptos_coin_transfer(account1.address(), 1_000)),
+            .payload(pont_stdlib::aptos_coin_transfer(account1.address(), 1_000)),
     );
 
     let err = info
@@ -79,7 +79,7 @@ async fn test_gas_check() {
 
     let zero_gas_txn = account1.sign_with_transaction_builder(
         info.transaction_factory()
-            .payload(aptos_stdlib::aptos_coin_transfer(account2.address(), 100))
+            .payload(pont_stdlib::aptos_coin_transfer(account2.address(), 100))
             .gas_unit_price(0),
     );
     while info

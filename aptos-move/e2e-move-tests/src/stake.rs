@@ -8,7 +8,7 @@ use aptos_types::{
     on_chain_config::ValidatorSet, stake_pool::StakePool, transaction::TransactionStatus,
     validator_config::ValidatorConfig,
 };
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use language_e2e_tests::account::Account;
 use move_deps::move_core_types::parser::parse_struct_tag;
 
@@ -32,7 +32,7 @@ pub fn initialize_staking(
 ) -> TransactionStatus {
     harness.run_transaction_payload(
         account,
-        aptos_stdlib::stake_initialize_stake_owner(
+        pont_stdlib::stake_initialize_stake_owner(
             initial_stake_amount,
             operator_address,
             voter_address,
@@ -41,7 +41,7 @@ pub fn initialize_staking(
 }
 
 pub fn add_stake(harness: &mut MoveHarness, account: &Account, amount: u64) -> TransactionStatus {
-    harness.run_transaction_payload(account, aptos_stdlib::stake_add_stake(amount))
+    harness.run_transaction_payload(account, pont_stdlib::stake_add_stake(amount))
 }
 
 pub fn unlock_stake(
@@ -49,7 +49,7 @@ pub fn unlock_stake(
     account: &Account,
     amount: u64,
 ) -> TransactionStatus {
-    harness.run_transaction_payload(account, aptos_stdlib::stake_unlock(amount))
+    harness.run_transaction_payload(account, pont_stdlib::stake_unlock(amount))
 }
 
 pub fn withdraw_stake(
@@ -57,7 +57,7 @@ pub fn withdraw_stake(
     account: &Account,
     amount: u64,
 ) -> TransactionStatus {
-    harness.run_transaction_payload(account, aptos_stdlib::stake_withdraw(amount))
+    harness.run_transaction_payload(account, pont_stdlib::stake_withdraw(amount))
 }
 
 pub fn join_validator_set(
@@ -67,7 +67,7 @@ pub fn join_validator_set(
 ) -> TransactionStatus {
     harness.run_transaction_payload(
         account,
-        aptos_stdlib::stake_join_validator_set(pool_address),
+        pont_stdlib::stake_join_validator_set(pool_address),
     )
 }
 
@@ -83,7 +83,7 @@ pub fn rotate_consensus_key(
         .to_vec();
     harness.run_transaction_payload(
         account,
-        aptos_stdlib::stake_rotate_consensus_key(
+        pont_stdlib::stake_rotate_consensus_key(
             pool_address,
             consensus_pubkey,
             proof_of_possession,
@@ -98,7 +98,7 @@ pub fn leave_validator_set(
 ) -> TransactionStatus {
     harness.run_transaction_payload(
         account,
-        aptos_stdlib::stake_leave_validator_set(pool_address),
+        pont_stdlib::stake_leave_validator_set(pool_address),
     )
 }
 

@@ -4,7 +4,7 @@ version = "0.0.0"
 
 [dependencies]
 AptosFramework = { local = "../../framework/pont-framework" }
-AptosToken = { local = "../../framework/aptos-token" }
+AptosToken = { local = "../../framework/pont-token" }
 
 [addresses]
 aptos_framework = "0x1"

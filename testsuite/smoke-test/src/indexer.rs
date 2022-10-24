@@ -6,7 +6,7 @@ use aptos_indexer::{
     models::transactions::TransactionQuery,
 };
 use aptos_sdk::types::LocalAccount;
-use cached_packages::aptos_stdlib::aptos_token_stdlib;
+use cached_packages::pont_stdlib::aptos_token_stdlib;
 use diesel::RunQueryDsl;
 use forge::{AptosPublicInfo, Result, Swarm};
 use std::sync::Arc;

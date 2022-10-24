@@ -7,7 +7,7 @@ use anyhow::bail;
 use aptos_config::config::NodeConfig;
 use aptos_rest_client::Client as RestClient;
 use aptos_types::account_address::AccountAddress;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::NodeExt;
 use forge::Result;
 use forge::Swarm;
@@ -61,7 +61,7 @@ async fn test_indexer() {
     wait_for_account(&client, account1.address()).await.unwrap();
 
     let txn = account1.sign_with_transaction_builder(
-        factory.payload(aptos_stdlib::aptos_coin_transfer(account2.address(), 10)),
+        factory.payload(pont_stdlib::aptos_coin_transfer(account2.address(), 10)),
     );
 
     client.submit_and_wait(&txn).await.unwrap();

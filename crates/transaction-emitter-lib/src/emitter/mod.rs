@@ -46,7 +46,7 @@ use crate::{
         transaction_mix_generator::TxnMixGeneratorCreator, TransactionGeneratorCreator,
     },
 };
-use aptos_sdk::transaction_builder::aptos_stdlib;
+use aptos_sdk::transaction_builder::pont_stdlib;
 use rand::rngs::StdRng;
 
 // Max is 100k TPS for a full day.
@@ -803,6 +803,6 @@ pub fn gen_transfer_txn_request(
     txn_factory: &TransactionFactory,
 ) -> SignedTransaction {
     sender.sign_with_transaction_builder(
-        txn_factory.payload(aptos_stdlib::aptos_coin_transfer(*receiver, num_coins)),
+        txn_factory.payload(pont_stdlib::aptos_coin_transfer(*receiver, num_coins)),
     )
 }

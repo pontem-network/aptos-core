@@ -8,7 +8,7 @@ use framework::ReleaseOptions;
 use framework::ReleaseTarget;
 
 #[derive(Parser)]
-#[clap(name = "aptos-framework", author, version, propagate_version = true)]
+#[clap(name = "pont-framework", author, version, propagate_version = true)]
 enum Commands {
     /// Creates an Aptos framework release for the specified target.
     Release(StandardRelease),

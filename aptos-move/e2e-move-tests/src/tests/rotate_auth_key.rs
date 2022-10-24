@@ -11,7 +11,7 @@ use aptos_types::{
 };
 
 use aptos::common::types::RotationProofChallenge;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use language_e2e_tests::account::Account;
 use move_deps::move_core_types::parser::parse_struct_tag;
 
@@ -134,7 +134,7 @@ pub fn assert_successful_payload_key_rotation<
 
     assert_success!(harness.run_transaction_payload(
         &current_account,
-        aptos_stdlib::account_rotate_authentication_key(
+        pont_stdlib::account_rotate_authentication_key(
             from_scheme,
             current_account.pubkey.to_bytes().to_vec(),
             to_scheme,

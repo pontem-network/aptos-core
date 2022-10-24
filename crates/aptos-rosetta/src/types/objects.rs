@@ -29,7 +29,7 @@ use aptos_types::state_store::state_key::StateKey;
 use aptos_types::transaction::{EntryFunction, TransactionPayload};
 use aptos_types::write_set::{WriteOp, WriteSet};
 use aptos_types::{account_address::AccountAddress, event::EventKey};
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
@@ -1449,13 +1449,13 @@ impl InternalOperation {
     ) -> ApiResult<(aptos_types::transaction::TransactionPayload, AccountAddress)> {
         Ok(match self {
             InternalOperation::CreateAccount(create_account) => (
-                aptos_stdlib::aptos_account_create_account(create_account.new_account),
+                pont_stdlib::aptos_account_create_account(create_account.new_account),
                 create_account.sender,
             ),
             InternalOperation::Transfer(transfer) => {
                 is_native_coin(&transfer.currency)?;
                 (
-                    aptos_stdlib::aptos_account_transfer(transfer.receiver, transfer.amount.0),
+                    pont_stdlib::aptos_account_transfer(transfer.receiver, transfer.amount.0),
                     transfer.sender,
                 )
             }
@@ -1466,7 +1466,7 @@ impl InternalOperation {
                     )));
                 }
                 (
-                    aptos_stdlib::staking_contract_switch_operator_with_same_commission(
+                    pont_stdlib::staking_contract_switch_operator_with_same_commission(
                         set_operator.old_operator.unwrap(),
                         set_operator.new_operator,
                     ),
@@ -1480,7 +1480,7 @@ impl InternalOperation {
                     )));
                 }
                 (
-                    aptos_stdlib::staking_contract_update_voter(
+                    pont_stdlib::staking_contract_update_voter(
                         set_voter.operator.unwrap(),
                         set_voter.new_voter,
                     ),
@@ -1488,7 +1488,7 @@ impl InternalOperation {
                 )
             }
             InternalOperation::InitializeStakePool(init_stake_pool) => (
-                aptos_stdlib::staking_contract_create_staking_contract(
+                pont_stdlib::staking_contract_create_staking_contract(
                     init_stake_pool.operator,
                     init_stake_pool.voter,
                     init_stake_pool.amount,

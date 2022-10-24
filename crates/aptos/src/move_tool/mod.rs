@@ -539,7 +539,7 @@ impl CliCommand<TransactionSummary> for PublishPackage {
         } else {
             // Send the compiled module and metadata using the code::publish_package_txn.
             let metadata = package.extract_metadata()?;
-            let payload = cached_packages::aptos_stdlib::code_publish_package_txn(
+            let payload = cached_packages::pont_stdlib::code_publish_package_txn(
                 bcs::to_bytes(&metadata).expect("PackageMetadata has BCS"),
                 compiled_units,
             );

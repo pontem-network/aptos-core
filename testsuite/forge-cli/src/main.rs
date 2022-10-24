@@ -4,7 +4,7 @@
 use anyhow::{format_err, Context, Result};
 use aptos_logger::Level;
 use aptos_rest_client::Client as RestClient;
-use aptos_sdk::{move_types::account_address::AccountAddress, transaction_builder::aptos_stdlib};
+use aptos_sdk::{move_types::account_address::AccountAddress, transaction_builder::pont_stdlib};
 use forge::success_criteria::{StateProgressThreshold, SuccessCriteria};
 use forge::system_metrics::{MetricsThreshold, SystemMetricsThreshold};
 use forge::{ForgeConfig, Options, *};
@@ -1066,7 +1066,7 @@ impl AptosTest for TransferCoins {
 
         let transfer_txn = payer.sign_with_transaction_builder(
             ctx.aptos_transaction_factory()
-                .payload(aptos_stdlib::aptos_coin_transfer(payee.address(), 10)),
+                .payload(pont_stdlib::aptos_coin_transfer(payee.address(), 10)),
         );
         client.submit_and_wait(&transfer_txn).await?;
         check_account_balance(&client, payee.address(), 10).await?;

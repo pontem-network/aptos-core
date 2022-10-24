@@ -23,7 +23,7 @@ use aptos_types::{
     transaction::authenticator::AuthenticationKey,
 };
 use async_trait::async_trait;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, path::PathBuf};
@@ -117,7 +117,7 @@ impl CliCommand<RotateSummary> for RotateKey {
 
         let txn_summary = self
             .txn_options
-            .submit_transaction(aptos_stdlib::account_rotate_authentication_key(
+            .submit_transaction(pont_stdlib::account_rotate_authentication_key(
                 0,
                 // Existing public key
                 current_private_key.public_key().to_bytes().to_vec(),

@@ -4,7 +4,7 @@
 use crate::transaction_generator::{TransactionGenerator, TransactionGeneratorCreator};
 use aptos_rest_client::Client as RestClient;
 use aptos_sdk::{
-    transaction_builder::{aptos_stdlib::aptos_token_stdlib, TransactionFactory},
+    transaction_builder::{pont_stdlib::aptos_token_stdlib, TransactionFactory},
     types::{transaction::SignedTransaction, LocalAccount},
 };
 use std::collections::HashMap;

@@ -6,7 +6,7 @@ use aptos_sdk::{
     transaction_builder::TransactionFactory,
     types::{transaction::SignedTransaction, LocalAccount},
 };
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::{reconfig, LocalSwarm, NodeExt, Swarm};
 use rand::random;
 
@@ -23,7 +23,7 @@ pub async fn transfer_coins_non_blocking(
     amount: u64,
 ) -> SignedTransaction {
     let txn = sender.sign_with_transaction_builder(transaction_factory.payload(
-        aptos_stdlib::aptos_coin_transfer(receiver.address(), amount),
+        pont_stdlib::aptos_coin_transfer(receiver.address(), amount),
     ));
 
     client.submit(&txn).await.unwrap();

@@ -14,7 +14,7 @@ use aptos_infallible::Mutex;
 use aptos_logger::{debug, info, sample, sample::SampleRate, warn};
 use aptos_rest_client::{aptos_api_types::AptosError, Client as RestClient};
 use aptos_sdk::{
-    transaction_builder::{aptos_stdlib, TransactionFactory},
+    transaction_builder::{pont_stdlib, TransactionFactory},
     types::{
         transaction::{
             authenticator::{AuthenticationKey, AuthenticationKeyPreimage},
@@ -236,7 +236,7 @@ impl<'t> AccountMinter<'t> {
         let txn = self
             .source_account
             .sign_with_transaction_builder(self.txn_factory.payload(
-                aptos_stdlib::aptos_coin_mint(self.source_account.address(), amount),
+                pont_stdlib::aptos_coin_mint(self.source_account.address(), amount),
             ));
         execute_and_wait_transactions(
             &self.pick_mint_client(rest_clients).clone(),
@@ -445,7 +445,7 @@ pub fn create_and_fund_account_request(
     let preimage = AuthenticationKeyPreimage::ed25519(pubkey);
     let auth_key = AuthenticationKey::from_preimage(&preimage);
     creation_account.sign_with_transaction_builder(txn_factory.payload(
-        aptos_stdlib::aptos_account_transfer(auth_key.derived_address(), amount),
+        pont_stdlib::aptos_account_transfer(auth_key.derived_address(), amount),
     ))
 }
 

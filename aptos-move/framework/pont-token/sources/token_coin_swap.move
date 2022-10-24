@@ -1,11 +1,11 @@
 /// Deprecated module
-module aptos_token::token_coin_swap {
+module pont_token::token_coin_swap {
     use std::string::String;
     use std::error;
     use pont_std::table::Table;
     use pont_std::type_info::TypeInfo;
-    use aptos_framework::event::EventHandle;
-    use aptos_token::token::{Token, TokenId};
+    use pont_framework::event::EventHandle;
+    use pont_token::token::{Token, TokenId};
 
     //
     // Errors.

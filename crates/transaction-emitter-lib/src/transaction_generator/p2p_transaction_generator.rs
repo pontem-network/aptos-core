@@ -4,7 +4,7 @@ use crate::transaction_generator::{TransactionGenerator, TransactionGeneratorCre
 use aptos_infallible::RwLock;
 use aptos_sdk::{
     move_types::account_address::AccountAddress,
-    transaction_builder::{aptos_stdlib, TransactionFactory},
+    transaction_builder::{pont_stdlib, TransactionFactory},
     types::{chain_id::ChainId, transaction::SignedTransaction, LocalAccount},
 };
 use async_trait::async_trait;
@@ -54,7 +54,7 @@ impl P2PTransactionGenerator {
     ) -> SignedTransaction {
         from.sign_with_transaction_builder(
             txn_factory
-                .payload(aptos_stdlib::aptos_coin_transfer(*to, num_coins))
+                .payload(pont_stdlib::aptos_coin_transfer(*to, num_coins))
                 .gas_unit_price(gas_price),
         )
     }

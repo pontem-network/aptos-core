@@ -5,7 +5,7 @@ use crate::tests::common::test_dir_path;
 use crate::MoveHarness;
 use aptos_crypto::{bls12381, PrivateKey, Uniform};
 use aptos_types::account_address::{default_stake_pool_address, AccountAddress};
-use cached_packages::{aptos_stdlib, aptos_token_sdk_builder};
+use cached_packages::{pont_stdlib, aptos_token_sdk_builder};
 
 /// Run with `cargo test test_gas -- --nocapture` to see output.
 #[test]
@@ -23,14 +23,14 @@ fn test_gas() {
         "Transfer",
         harness.evaluate_gas(
             account_1,
-            aptos_stdlib::aptos_coin_transfer(account_2_address, 1000),
+            pont_stdlib::aptos_coin_transfer(account_2_address, 1000),
         ),
     );
     print_gas_cost(
         "CreateAccount",
         harness.evaluate_gas(
             account_1,
-            aptos_stdlib::aptos_account_create_account(
+            pont_stdlib::aptos_account_create_account(
                 AccountAddress::from_hex_literal("0xcafe1").unwrap(),
             ),
         ),
@@ -39,7 +39,7 @@ fn test_gas() {
         "CreateTransfer",
         harness.evaluate_gas(
             account_1,
-            aptos_stdlib::aptos_account_transfer(
+            pont_stdlib::aptos_account_transfer(
                 AccountAddress::from_hex_literal("0xcafe2").unwrap(),
                 1000,
             ),
@@ -49,7 +49,7 @@ fn test_gas() {
         "CreateStakePool",
         harness.evaluate_gas(
             account_1,
-            aptos_stdlib::staking_contract_create_staking_contract(
+            pont_stdlib::staking_contract_create_staking_contract(
                 account_2_address,
                 account_3_address,
                 25_000_000,
@@ -68,7 +68,7 @@ fn test_gas() {
         "RotateConsensusKey",
         harness.evaluate_gas(
             account_2,
-            aptos_stdlib::stake_rotate_consensus_key(
+            pont_stdlib::stake_rotate_consensus_key(
                 pool_address,
                 consensus_pubkey,
                 proof_of_possession,
@@ -79,21 +79,21 @@ fn test_gas() {
         "JoinValidator100",
         harness.evaluate_gas(
             account_2,
-            aptos_stdlib::stake_join_validator_set(pool_address),
+            pont_stdlib::stake_join_validator_set(pool_address),
         ),
     );
     print_gas_cost(
         "AddStake",
         harness.evaluate_gas(
             account_1,
-            aptos_stdlib::staking_contract_add_stake(account_2_address, 1000),
+            pont_stdlib::staking_contract_add_stake(account_2_address, 1000),
         ),
     );
     print_gas_cost(
         "UnlockStake",
         harness.evaluate_gas(
             account_1,
-            aptos_stdlib::staking_contract_unlock_stake(account_2_address, 1000),
+            pont_stdlib::staking_contract_unlock_stake(account_2_address, 1000),
         ),
     );
     harness.fast_forward(7200);
@@ -102,14 +102,14 @@ fn test_gas() {
         "WithdrawStake",
         harness.evaluate_gas(
             account_1,
-            aptos_stdlib::staking_contract_distribute(account_1_address, account_2_address),
+            pont_stdlib::staking_contract_distribute(account_1_address, account_2_address),
         ),
     );
     print_gas_cost(
         "LeaveValidatorSet100",
         harness.evaluate_gas(
             account_2,
-            aptos_stdlib::stake_leave_validator_set(pool_address),
+            pont_stdlib::stake_leave_validator_set(pool_address),
         ),
     );
     let collection_name = "collection name".to_owned().into_bytes();

@@ -203,8 +203,8 @@ impl ReleasePackage {
         emitln!(writer, "script {");
         writer.indent();
         emitln!(writer, "use std::vector;");
-        emitln!(writer, "use aptos_framework::aptos_governance;");
-        emitln!(writer, "use aptos_framework::code;\n");
+        emitln!(writer, "use pont_framework::aptos_governance;");
+        emitln!(writer, "use pont_framework::code;\n");
         emitln!(writer, "fun main(proposal_id: u64){");
         writer.indent();
 

@@ -7,7 +7,7 @@ use crate::{
     setup_staking, unlock_stake, withdraw_stake, MoveHarness,
 };
 use aptos_types::account_address::{default_stake_pool_address, AccountAddress};
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use move_deps::move_core_types::language_storage::CORE_CODE_ADDRESS;
 
 #[test]
@@ -95,7 +95,7 @@ fn test_staking_mainnet() {
     assert_abort!(
         harness.run_transaction_payload(
             &aptos_framework_account,
-            aptos_stdlib::aptos_coin_mint(CORE_CODE_ADDRESS, 1000),
+            pont_stdlib::aptos_coin_mint(CORE_CODE_ADDRESS, 1000),
         ),
         _
     );
@@ -231,7 +231,7 @@ fn test_staking_contract() {
     let operator_2_address = *operator_2.address();
     assert_success!(harness.run_transaction_payload(
         &staker,
-        aptos_stdlib::staking_contract_create_staking_contract(
+        pont_stdlib::staking_contract_create_staking_contract(
             operator_1_address,
             operator_1_address,
             amount,
@@ -241,7 +241,7 @@ fn test_staking_contract() {
     ));
     assert_success!(harness.run_transaction_payload(
         &staker,
-        aptos_stdlib::staking_contract_add_stake(operator_1_address, amount)
+        pont_stdlib::staking_contract_add_stake(operator_1_address, amount)
     ));
 
     // Join validator set.
@@ -264,7 +264,7 @@ fn test_staking_contract() {
     harness.new_epoch();
     assert_success!(harness.run_transaction_payload(
         &staker,
-        aptos_stdlib::staking_contract_request_commission(staker_address, operator_1_address)
+        pont_stdlib::staking_contract_request_commission(staker_address, operator_1_address)
     ));
 
     // Wait until stake is unlocked.
@@ -272,7 +272,7 @@ fn test_staking_contract() {
     harness.new_epoch();
     assert_success!(harness.run_transaction_payload(
         &staker,
-        aptos_stdlib::staking_contract_distribute(staker_address, operator_1_address)
+        pont_stdlib::staking_contract_distribute(staker_address, operator_1_address)
     ));
 
     // Staker unlocks some stake.
@@ -280,7 +280,7 @@ fn test_staking_contract() {
     harness.new_epoch();
     assert_success!(harness.run_transaction_payload(
         &staker,
-        aptos_stdlib::staking_contract_unlock_stake(operator_1_address, amount)
+        pont_stdlib::staking_contract_unlock_stake(operator_1_address, amount)
     ));
 
     // Wait until stake is unlocked.
@@ -288,13 +288,13 @@ fn test_staking_contract() {
     harness.new_epoch();
     assert_success!(harness.run_transaction_payload(
         &staker,
-        aptos_stdlib::staking_contract_distribute(staker_address, operator_1_address)
+        pont_stdlib::staking_contract_distribute(staker_address, operator_1_address)
     ));
 
     // Switch operators.
     assert_success!(harness.run_transaction_payload(
         &staker,
-        aptos_stdlib::staking_contract_switch_operator_with_same_commission(
+        pont_stdlib::staking_contract_switch_operator_with_same_commission(
             operator_1_address,
             operator_2_address,
         )

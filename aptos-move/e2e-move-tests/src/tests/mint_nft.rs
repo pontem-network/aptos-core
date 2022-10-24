@@ -73,7 +73,7 @@ fn mint_nft_e2e() {
     // create the resource account and publish the module under the resource account's address
     let result = h.run_transaction_payload(
         &acc,
-        cached_packages::aptos_stdlib::resource_account_create_resource_account_and_publish_package(
+        cached_packages::pont_stdlib::resource_account_create_resource_account_and_publish_package(
             vec![],
             bcs::to_bytes(&metadata).expect("PackageMetadata has BCS"),
             code,

@@ -28,7 +28,7 @@ use aptos_crypto::ed25519::Ed25519PrivateKey;
 use aptos_logger::info;
 use aptos_rest_client::Client;
 use aptos_sdk::{
-    transaction_builder::{aptos_stdlib, TransactionFactory},
+    transaction_builder::{pont_stdlib, TransactionFactory},
     types::{
         account_address::AccountAddress, account_config::aptos_test_root_address,
         chain_id::ChainId, LocalAccount,
@@ -301,7 +301,7 @@ pub async fn delegate_mint_account(
             .client
             .submit_and_wait(&faucet_account.sign_with_transaction_builder(
                 service.transaction_factory.payload(
-                    aptos_stdlib::aptos_coin_delegate_mint_capability(delegated_account.address()),
+                    pont_stdlib::aptos_coin_delegate_mint_capability(delegated_account.address()),
                 ),
             ))
             .await
@@ -315,7 +315,7 @@ pub async fn delegate_mint_account(
             &delegated_account.sign_with_transaction_builder(
                 service
                     .transaction_factory
-                    .payload(aptos_stdlib::aptos_coin_claim_mint_capability()),
+                    .payload(pont_stdlib::aptos_coin_claim_mint_capability()),
             ),
         )
         .await

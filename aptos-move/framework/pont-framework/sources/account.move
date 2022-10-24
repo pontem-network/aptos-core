@@ -146,7 +146,7 @@ module pont_framework::account {
 
         // NOTE: @core_resources gets created via a `create_account` call, so we do not include it below.
         assert!(
-            new_address != @vm_reserved && new_address != @pont_framework && new_address != @aptos_token,
+            new_address != @vm_reserved && new_address != @pont_framework && new_address != @pont_token,
             error::invalid_argument(ECANNOT_RESERVED_ADDRESS)
         );
 

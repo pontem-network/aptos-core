@@ -63,11 +63,11 @@ impl ReleaseTarget {
             ("pont-stdlib", None),
             (
                 "pont-framework",
-                Some("cached-packages/src/aptos_framework_sdk_builder.rs"),
+                Some("cached-packages/src/pont_framework_sdk_builder.rs"),
             ),
             (
-                "aptos-token",
-                Some("cached-packages/src/aptos_token_sdk_builder.rs"),
+                "pont-token",
+                Some("cached-packages/src/pont_token_sdk_builder.rs"),
             ),
         ];
         // Currently we don't have experimental packages only included in particular targets.
@@ -160,7 +160,7 @@ static NAMED_ADDRESSES: Lazy<BTreeMap<String, NumericalAddress>> = Lazy::new(|| 
     result.insert("std".to_owned(), one);
     result.insert("pont_std".to_owned(), one);
     result.insert("pont_framework".to_owned(), one);
-    result.insert("aptos_token".to_owned(), two);
+    result.insert("pont_token".to_owned(), two);
     result.insert("core_resources".to_owned(), resources);
     result.insert("vm_reserved".to_owned(), zero);
     result

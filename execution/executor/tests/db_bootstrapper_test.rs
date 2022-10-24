@@ -28,7 +28,7 @@ use aptos_types::{
 };
 use aptos_vm::AptosVM;
 use aptosdb::AptosDB;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use executor::{
     block_executor::BlockExecutor,
     db_bootstrapper::{generate_waypoint, maybe_bootstrap},
@@ -130,7 +130,7 @@ fn get_aptos_coin_mint_transaction(
         /* sequence_number = */ aptos_root_seq_num,
         aptos_root_key.clone(),
         aptos_root_key.public_key(),
-        Some(aptos_stdlib::aptos_coin_mint(*account, amount)),
+        Some(pont_stdlib::aptos_coin_mint(*account, amount)),
     )
 }
 
@@ -145,7 +145,7 @@ fn get_account_transaction(
         /* sequence_number = */ aptos_root_seq_num,
         aptos_root_key.clone(),
         aptos_root_key.public_key(),
-        Some(aptos_stdlib::aptos_account_create_account(*account)),
+        Some(pont_stdlib::aptos_account_create_account(*account)),
     )
 }
 
@@ -161,7 +161,7 @@ fn get_aptos_coin_transfer_transaction(
         sender_seq_number,
         sender_key.clone(),
         sender_key.public_key(),
-        Some(aptos_stdlib::aptos_coin_transfer(recipient, amount)),
+        Some(pont_stdlib::aptos_coin_transfer(recipient, amount)),
     )
 }
 

@@ -11,7 +11,7 @@ use aptos_types::account_address::{
 };
 use aptos_types::vesting::VestingAdminStore;
 use async_trait::async_trait;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use clap::Parser;
 
 /// Tool for manipulating stake
@@ -84,7 +84,7 @@ impl CliCommand<Vec<TransactionSummary>> for AddStake {
                 StakePoolType::Direct => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::stake_add_stake(amount))
+                            .submit_transaction(pont_stdlib::stake_add_stake(amount))
                             .await
                             .map(|inner| inner.into())?,
                     );
@@ -92,7 +92,7 @@ impl CliCommand<Vec<TransactionSummary>> for AddStake {
                 StakePoolType::StakingContract => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::staking_contract_add_stake(
+                            .submit_transaction(pont_stdlib::staking_contract_add_stake(
                                 stake_pool.operator_address,
                                 amount,
                             ))
@@ -145,7 +145,7 @@ impl CliCommand<Vec<TransactionSummary>> for UnlockStake {
                 StakePoolType::Direct => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::stake_unlock(amount))
+                            .submit_transaction(pont_stdlib::stake_unlock(amount))
                             .await
                             .map(|inner| inner.into())?,
                     );
@@ -153,7 +153,7 @@ impl CliCommand<Vec<TransactionSummary>> for UnlockStake {
                 StakePoolType::StakingContract => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::staking_contract_unlock_stake(
+                            .submit_transaction(pont_stdlib::staking_contract_unlock_stake(
                                 stake_pool.operator_address,
                                 amount,
                             ))
@@ -194,7 +194,7 @@ impl CliCommand<TransactionSummary> for WithdrawStake {
 
     async fn execute(mut self) -> CliTypedResult<TransactionSummary> {
         self.node_op_options
-            .submit_transaction(aptos_stdlib::stake_withdraw(self.amount))
+            .submit_transaction(pont_stdlib::stake_withdraw(self.amount))
             .await
             .map(|inner| inner.into())
     }
@@ -229,7 +229,7 @@ impl CliCommand<Vec<TransactionSummary>> for IncreaseLockup {
                 StakePoolType::Direct => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::stake_increase_lockup())
+                            .submit_transaction(pont_stdlib::stake_increase_lockup())
                             .await
                             .map(|inner| inner.into())?,
                     );
@@ -237,7 +237,7 @@ impl CliCommand<Vec<TransactionSummary>> for IncreaseLockup {
                 StakePoolType::StakingContract => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::staking_contract_reset_lockup(
+                            .submit_transaction(pont_stdlib::staking_contract_reset_lockup(
                                 stake_pool.operator_address,
                             ))
                             .await
@@ -247,7 +247,7 @@ impl CliCommand<Vec<TransactionSummary>> for IncreaseLockup {
                 StakePoolType::Vesting => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::vesting_reset_lockup(
+                            .submit_transaction(pont_stdlib::vesting_reset_lockup(
                                 stake_pool.vesting_contract.unwrap(),
                             ))
                             .await
@@ -291,7 +291,7 @@ impl CliCommand<TransactionSummary> for InitializeStakeOwner {
     async fn execute(mut self) -> CliTypedResult<TransactionSummary> {
         let owner_address = self.txn_options.sender_address()?;
         self.txn_options
-            .submit_transaction(aptos_stdlib::stake_initialize_stake_owner(
+            .submit_transaction(pont_stdlib::stake_initialize_stake_owner(
                 self.initial_stake_amount,
                 self.operator_address.unwrap_or(owner_address),
                 self.voter_address.unwrap_or(owner_address),
@@ -335,7 +335,7 @@ impl CliCommand<Vec<TransactionSummary>> for SetOperator {
                 StakePoolType::Direct => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::stake_set_operator(
+                            .submit_transaction(pont_stdlib::stake_set_operator(
                                 new_operator_address,
                             ))
                             .await
@@ -346,7 +346,7 @@ impl CliCommand<Vec<TransactionSummary>> for SetOperator {
                     transaction_summaries.push(
                         self.txn_options
                             .submit_transaction(
-                                aptos_stdlib::staking_contract_switch_operator_with_same_commission(
+                                pont_stdlib::staking_contract_switch_operator_with_same_commission(
                                     stake_pool.operator_address,
                                     new_operator_address,
                                 ),
@@ -359,7 +359,7 @@ impl CliCommand<Vec<TransactionSummary>> for SetOperator {
                     transaction_summaries.push(
                         self.txn_options
                             .submit_transaction(
-                                aptos_stdlib::vesting_update_operator_with_same_commission(
+                                pont_stdlib::vesting_update_operator_with_same_commission(
                                     stake_pool.vesting_contract.unwrap(),
                                     new_operator_address,
                                 ),
@@ -408,7 +408,7 @@ impl CliCommand<Vec<TransactionSummary>> for SetDelegatedVoter {
                 StakePoolType::Direct => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::stake_set_delegated_voter(
+                            .submit_transaction(pont_stdlib::stake_set_delegated_voter(
                                 new_voter_address,
                             ))
                             .await
@@ -418,7 +418,7 @@ impl CliCommand<Vec<TransactionSummary>> for SetDelegatedVoter {
                 StakePoolType::StakingContract => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::staking_contract_update_voter(
+                            .submit_transaction(pont_stdlib::staking_contract_update_voter(
                                 stake_pool.operator_address,
                                 new_voter_address,
                             ))
@@ -429,7 +429,7 @@ impl CliCommand<Vec<TransactionSummary>> for SetDelegatedVoter {
                 StakePoolType::Vesting => {
                     transaction_summaries.push(
                         self.txn_options
-                            .submit_transaction(aptos_stdlib::vesting_update_voter(
+                            .submit_transaction(pont_stdlib::vesting_update_voter(
                                 stake_pool.vesting_contract.unwrap(),
                                 new_voter_address,
                             ))
@@ -485,7 +485,7 @@ impl CliCommand<TransactionSummary> for CreateStakingContract {
         )?;
 
         self.txn_options
-            .submit_transaction(aptos_stdlib::staking_contract_create_staking_contract(
+            .submit_transaction(pont_stdlib::staking_contract_create_staking_contract(
                 self.operator,
                 self.voter,
                 self.amount,
@@ -518,7 +518,7 @@ impl CliCommand<TransactionSummary> for DistributeVestedCoins {
     async fn execute(mut self) -> CliTypedResult<TransactionSummary> {
         let vesting_contract_address = create_vesting_contract_address(self.admin_address, 0, &[]);
         self.txn_options
-            .submit_transaction(aptos_stdlib::vesting_distribute(vesting_contract_address))
+            .submit_transaction(pont_stdlib::vesting_distribute(vesting_contract_address))
             .await
             .map(|inner| inner.into())
     }
@@ -549,7 +549,7 @@ impl CliCommand<TransactionSummary> for UnlockVestedCoins {
     async fn execute(mut self) -> CliTypedResult<TransactionSummary> {
         let vesting_contract_address = create_vesting_contract_address(self.admin_address, 0, &[]);
         self.txn_options
-            .submit_transaction(aptos_stdlib::vesting_vest(vesting_contract_address))
+            .submit_transaction(pont_stdlib::vesting_vest(vesting_contract_address))
             .await
             .map(|inner| inner.into())
     }
@@ -592,7 +592,7 @@ impl CliCommand<TransactionSummary> for RequestCommission {
             self.owner_address
         };
         self.txn_options
-            .submit_transaction(aptos_stdlib::staking_contract_request_commission(
+            .submit_transaction(pont_stdlib::staking_contract_request_commission(
                 staker_address,
                 self.operator_address,
             ))

@@ -1,17 +1,17 @@
 /// This module provides the foundation for Tokens.
 /// Checkout our developer doc on our token standard https://aptos.dev/concepts/coin-and-token/aptos-token
-module aptos_token::token {
+module pont_token::token {
     use std::error;
     use std::signer;
     use std::string::{Self, String};
     use std::vector;
     use std::option::{Self, Option};
 
-    use aptos_framework::event::{Self, EventHandle};
-    use aptos_framework::account;
-    use aptos_framework::timestamp;
+    use pont_framework::event::{Self, EventHandle};
+    use pont_framework::account;
+    use pont_framework::timestamp;
     use pont_std::table::{Self, Table};
-    use aptos_token::property_map::{Self, PropertyMap};
+    use pont_token::property_map::{Self, PropertyMap};
 
     //
     // Constants

@@ -4,13 +4,13 @@
 use crate::{account::Account, executor::FakeExecutor};
 use aptos_types::{account_config::CORE_CODE_ADDRESS, on_chain_config::Version};
 use aptos_vm::AptosVM;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 
 pub fn set_aptos_version(executor: &mut FakeExecutor, version: Version) {
     let account = Account::new_genesis_account(CORE_CODE_ADDRESS);
     let txn = account
         .transaction()
-        .payload(aptos_stdlib::version_set_version(version.major))
+        .payload(pont_stdlib::version_set_version(version.major))
         .sequence_number(0)
         .sign();
     executor.new_block();

@@ -13,7 +13,7 @@ use aptos_types::{
     trusted_state::TrustedState,
     validator_signer::ValidatorSigner,
 };
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use executor_test_helpers::{
     gen_block_id, gen_ledger_info_with_sigs, get_test_signed_transaction,
     integration_test_impl::{
@@ -112,7 +112,7 @@ fn test_reconfiguration() {
         /* sequence_number = */ 0,
         genesis_key.clone(),
         genesis_key.public_key(),
-        Some(aptos_stdlib::aptos_coin_mint(validator_account, 1_000_000)),
+        Some(pont_stdlib::aptos_coin_mint(validator_account, 1_000_000)),
     );
     // txn2 = a dummy block prologue to bump the timer.
     let txn2 = Transaction::BlockMetadata(BlockMetadata::new(
@@ -131,7 +131,7 @@ fn test_reconfiguration() {
         /* sequence_number = */ 1,
         genesis_key.clone(),
         genesis_key.public_key(),
-        Some(aptos_stdlib::version_set_version(42)),
+        Some(pont_stdlib::version_set_version(42)),
     );
 
     let txn_block = vec![txn1, txn2, txn3];

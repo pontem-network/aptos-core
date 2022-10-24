@@ -5,7 +5,7 @@ use aptos_infallible::RwLock;
 use aptos_logger::{info, sample, sample::SampleRate};
 use aptos_sdk::{
     move_types::account_address::AccountAddress,
-    transaction_builder::{aptos_stdlib, TransactionFactory},
+    transaction_builder::{pont_stdlib, TransactionFactory},
     types::{transaction::SignedTransaction, LocalAccount},
 };
 use async_trait::async_trait;
@@ -52,7 +52,7 @@ impl AccountGenerator {
     ) -> SignedTransaction {
         from.sign_with_transaction_builder(
             txn_factory
-                .payload(aptos_stdlib::aptos_account_create_account(to))
+                .payload(pont_stdlib::aptos_account_create_account(to))
                 .gas_unit_price(gas_price),
         )
     }

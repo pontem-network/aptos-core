@@ -16,7 +16,7 @@ use aptos_sdk::{
         LocalAccount,
     },
 };
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use rand::{rngs::OsRng, Rng, SeedableRng};
 use reqwest::Url;
 
@@ -148,7 +148,7 @@ impl<'t> AptosPublicInfo<'t> {
         let create_account_txn =
             self.root_account
                 .sign_with_transaction_builder(self.transaction_factory().payload(
-                    aptos_stdlib::aptos_account_create_account(auth_key.derived_address()),
+                    pont_stdlib::aptos_account_create_account(auth_key.derived_address()),
                 ));
         self.rest_client
             .submit_and_wait(&create_account_txn)
@@ -159,7 +159,7 @@ impl<'t> AptosPublicInfo<'t> {
     pub async fn mint(&mut self, addr: AccountAddress, amount: u64) -> Result<()> {
         let mint_txn = self.root_account.sign_with_transaction_builder(
             self.transaction_factory()
-                .payload(aptos_stdlib::aptos_coin_mint(addr, amount)),
+                .payload(pont_stdlib::aptos_coin_mint(addr, amount)),
         );
         self.rest_client.submit_and_wait(&mint_txn).await?;
         Ok(())
@@ -172,7 +172,7 @@ impl<'t> AptosPublicInfo<'t> {
         amount: u64,
     ) -> Result<PendingTransaction> {
         let tx = from_account.sign_with_transaction_builder(self.transaction_factory().payload(
-            aptos_stdlib::aptos_coin_transfer(to_account.address(), amount),
+            pont_stdlib::aptos_coin_transfer(to_account.address(), amount),
         ));
         let pending_txn = self.rest_client.submit(&tx).await?.into_inner();
         Ok(pending_txn)
@@ -250,7 +250,7 @@ pub async fn reconfig(
     let txn = root_account.sign_with_transaction_builder(
         transaction_factory
             .clone()
-            .payload(aptos_stdlib::version_set_version(current_version + 1)),
+            .payload(pont_stdlib::version_set_version(current_version + 1)),
     );
     let result = client.submit_and_wait(&txn).await;
     if let Err(e) = result {

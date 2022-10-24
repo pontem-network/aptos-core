@@ -10,7 +10,7 @@ use aptos_types::account_config::{AccountResource, CORE_CODE_ADDRESS};
 use aptos_types::on_chain_config::GasScheduleV2;
 use aptos_types::transaction::authenticator::AuthenticationKey;
 use aptos_types::transaction::{SignedTransaction, Transaction};
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::Swarm;
 use std::convert::TryFrom;
 use std::str::FromStr;
@@ -42,7 +42,7 @@ async fn test_basic_client() {
 
     let tx = account1.sign_with_transaction_builder(
         info.transaction_factory()
-            .payload(aptos_stdlib::aptos_coin_transfer(account2.address(), 1)),
+            .payload(pont_stdlib::aptos_coin_transfer(account2.address(), 1)),
     );
     let pending_txn = info.client().submit(&tx).await.unwrap().into_inner();
 

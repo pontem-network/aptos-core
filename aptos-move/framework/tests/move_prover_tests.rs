@@ -34,19 +34,19 @@ pub fn run_prover_for_pkg(path_to_pkg: impl Into<String>) {
 #[ignore]
 #[test]
 fn move_framework_prover_tests() {
-    run_prover_for_pkg("aptos-framework");
+    run_prover_for_pkg("pont-framework");
 }
 
 #[ignore]
 #[test]
 fn move_token_prover_tests() {
-    run_prover_for_pkg("aptos-token");
+    run_prover_for_pkg("pont-token");
 }
 
 #[ignore]
 #[test]
 fn move_aptos_stdlib_prover_tests() {
-    run_prover_for_pkg("aptos-stdlib");
+    run_prover_for_pkg("pont-stdlib");
 }
 
 #[ignore]

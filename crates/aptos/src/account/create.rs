@@ -4,7 +4,7 @@
 use crate::common::types::{CliCommand, CliTypedResult, TransactionOptions, TransactionSummary};
 use aptos_types::account_address::AccountAddress;
 use async_trait::async_trait;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use clap::Parser;
 
 // TODO(Gas): double check if this is correct
@@ -32,7 +32,7 @@ impl CliCommand<TransactionSummary> for CreateAccount {
     async fn execute(self) -> CliTypedResult<TransactionSummary> {
         let address = self.account;
         self.txn_options
-            .submit_transaction(aptos_stdlib::aptos_account_create_account(address))
+            .submit_transaction(pont_stdlib::aptos_account_create_account(address))
             .await
             .map(TransactionSummary::from)
     }

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use aptos_types::transaction::{ExecutionStatus, TransactionStatus};
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use language_e2e_tests::{account::Account, executor::FakeExecutor};
 
 #[test]
@@ -21,7 +21,7 @@ fn mint_to_new_account() {
     let mint_amount = 1_000_000;
     let txn = root
         .transaction()
-        .payload(aptos_stdlib::aptos_coin_mint(
+        .payload(pont_stdlib::aptos_coin_mint(
             *new_account.address(),
             mint_amount,
         ))

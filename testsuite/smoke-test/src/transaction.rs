@@ -10,7 +10,7 @@ use aptos_sdk::{
     crypto::{PrivateKey, SigningKey},
     types::transaction::{authenticator::AuthenticationKey, SignedTransaction},
 };
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::Swarm;
 
 use crate::smoke_test_environment::new_local_swarm_with_aptos;
@@ -57,7 +57,7 @@ async fn test_external_transaction_signer() {
 
     let unsigned_txn = info
         .transaction_factory()
-        .payload(aptos_stdlib::aptos_coin_transfer(
+        .payload(pont_stdlib::aptos_coin_transfer(
             receiver.address(),
             amount,
         ))

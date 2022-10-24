@@ -7,7 +7,7 @@ use crate::{
         assert_balance, check_create_mint_transfer, create_and_fund_account, transfer_coins,
     },
 };
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::{NodeExt, Swarm};
 use std::time::{Duration, Instant};
 
@@ -97,7 +97,7 @@ async fn test_concurrent_transfers_single_node() {
 
     for _ in 0..20 {
         let txn = account_0.sign_with_transaction_builder(
-            transaction_factory.payload(aptos_stdlib::aptos_coin_transfer(account_1.address(), 1)),
+            transaction_factory.payload(pont_stdlib::aptos_coin_transfer(account_1.address(), 1)),
         );
         client.submit_and_wait(&txn).await.unwrap();
     }

@@ -33,7 +33,7 @@ use aptos_types::account_config::CORE_CODE_ADDRESS;
 use aptos_types::on_chain_config::GasScheduleV2;
 use aptos_types::transaction::SignedTransaction;
 use aptos_types::{account_address::AccountAddress, chain_id::ChainId};
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::{AptosPublicInfo, LocalSwarm, Node, NodeExt, Swarm};
 use std::collections::{BTreeMap, HashSet};
 use std::convert::TryFrom;
@@ -457,7 +457,7 @@ async fn create_staking_contract(
 ) -> Response<Transaction> {
     let staking_contract_creation = info
         .transaction_factory()
-        .payload(aptos_stdlib::staking_contract_create_staking_contract(
+        .payload(pont_stdlib::staking_contract_create_staking_contract(
             operator,
             voter,
             amount,
@@ -580,7 +580,7 @@ async fn test_transfer() {
     let transaction_factory = TransactionFactory::new(chain_id)
         .with_gas_unit_price(1)
         .with_max_gas_amount(1000);
-    let txn_payload = aptos_stdlib::aptos_account_transfer(receiver, 100);
+    let txn_payload = pont_stdlib::aptos_account_transfer(receiver, 100);
     let unsigned_transaction = transaction_factory
         .payload(txn_payload)
         .sender(sender)

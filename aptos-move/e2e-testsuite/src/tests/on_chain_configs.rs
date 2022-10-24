@@ -5,7 +5,7 @@ use aptos_types::{
     account_config::CORE_CODE_ADDRESS, on_chain_config::Version, transaction::TransactionStatus,
 };
 use aptos_vm::AptosVM;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use language_e2e_tests::{common_transactions::peer_to_peer_txn, executor::FakeExecutor};
 
 #[test]
@@ -19,7 +19,7 @@ fn initial_aptos_version() {
     let txn = executor
         .new_account_at(CORE_CODE_ADDRESS)
         .transaction()
-        .payload(aptos_stdlib::version_set_version(version.major + 1))
+        .payload(pont_stdlib::version_set_version(version.major + 1))
         .sequence_number(0)
         .sign();
     executor.new_block();
@@ -45,7 +45,7 @@ fn drop_txn_after_reconfiguration() {
     let txn = executor
         .new_account_at(CORE_CODE_ADDRESS)
         .transaction()
-        .payload(aptos_stdlib::version_set_version(version.major + 1))
+        .payload(pont_stdlib::version_set_version(version.major + 1))
         .sequence_number(0)
         .sign();
     executor.new_block();

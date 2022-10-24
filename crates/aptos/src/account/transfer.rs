@@ -9,7 +9,7 @@ use aptos_rest_client::{
 };
 use aptos_types::account_address::AccountAddress;
 use async_trait::async_trait;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use clap::Parser;
 use serde::Serialize;
 use std::collections::BTreeMap;
@@ -38,7 +38,7 @@ impl CliCommand<TransferSummary> for TransferCoins {
 
     async fn execute(self) -> CliTypedResult<TransferSummary> {
         self.txn_options
-            .submit_transaction(aptos_stdlib::aptos_account_transfer(
+            .submit_transaction(pont_stdlib::aptos_account_transfer(
                 self.account,
                 self.amount,
             ))

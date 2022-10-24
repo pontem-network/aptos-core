@@ -43,15 +43,15 @@ pub fn aptos_test_natives() -> NativeFunctionTable {
 
 #[test]
 fn move_framework_unit_tests() {
-    run_tests_for_pkg("aptos-framework");
+    run_tests_for_pkg("pont-framework");
 }
 
 #[test]
 fn move_stdlib_unit_tests() {
-    run_tests_for_pkg("aptos-stdlib");
+    run_tests_for_pkg("pont-stdlib");
 }
 
 #[test]
 fn move_token_unit_tests() {
-    run_tests_for_pkg("aptos-token");
+    run_tests_for_pkg("pont-token");
 }

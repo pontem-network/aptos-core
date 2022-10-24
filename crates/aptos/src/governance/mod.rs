@@ -24,7 +24,7 @@ use aptos_types::{
     transaction::{Script, TransactionPayload},
 };
 use async_trait::async_trait;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use clap::Parser;
 use framework::{BuildOptions, BuiltPackage, ReleasePackage};
 use move_deps::move_core_types::transaction_argument::TransactionArgument;
@@ -297,7 +297,7 @@ impl CliCommand<ProposalSubmissionSummary> for SubmitProposal {
 
         let txn = self
             .txn_options
-            .submit_transaction(aptos_stdlib::aptos_governance_create_proposal(
+            .submit_transaction(pont_stdlib::aptos_governance_create_proposal(
                 self.pool_address_args.pool_address,
                 script_hash.to_vec(),
                 self.metadata_url.to_string().as_bytes().to_vec(),
@@ -499,7 +499,7 @@ impl CliCommand<Vec<TransactionSummary>> for SubmitVote {
 
             summaries.push(
                 self.txn_options
-                    .submit_transaction(aptos_stdlib::aptos_governance_vote(
+                    .submit_transaction(pont_stdlib::aptos_governance_vote(
                         pool_address,
                         proposal_id,
                         vote,

@@ -15,7 +15,7 @@ use aptos_types::{
     state_store::state_key::StateKey,
     transaction::{EntryFunction, SignedTransaction, TransactionPayload, TransactionStatus},
 };
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use framework::natives::code::PackageMetadata;
 use framework::{BuildOptions, BuiltPackage};
 use language_e2e_tests::{
@@ -250,7 +250,7 @@ impl MoveHarness {
         patch_metadata(&mut metadata);
         self.create_transaction_payload(
             account,
-            aptos_stdlib::code_publish_package_txn(
+            pont_stdlib::code_publish_package_txn(
                 bcs::to_bytes(&metadata).expect("PackageMetadata has BCS"),
                 code,
             ),

@@ -24,7 +24,7 @@ use aptos_types::{
 };
 use aptos_vm::AptosVM;
 use aptosdb::AptosDB;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use consensus_types::block::Block;
 use executor::block_executor::BlockExecutor;
 use executor_types::BlockExecutorTrait;
@@ -113,7 +113,7 @@ pub fn test_execution_with_storage_impl() -> Arc<AptosDB> {
         account1.sign_with_transaction_builder(txn_factory.transfer(account3.address(), 70 * B));
 
     let reconfig1 = core_resources_account
-        .sign_with_transaction_builder(txn_factory.payload(aptos_stdlib::version_set_version(100)));
+        .sign_with_transaction_builder(txn_factory.payload(pont_stdlib::version_set_version(100)));
 
     let block1: Vec<_> = vec![
         block1_meta,
@@ -140,7 +140,7 @@ pub fn test_execution_with_storage_impl() -> Arc<AptosDB> {
         2,
     ));
     let reconfig2 = core_resources_account
-        .sign_with_transaction_builder(txn_factory.payload(aptos_stdlib::version_set_version(200)));
+        .sign_with_transaction_builder(txn_factory.payload(pont_stdlib::version_set_version(200)));
     let block2 = vec![block2_meta, UserTransaction(reconfig2)];
 
     let block3_id = gen_block_id(3);

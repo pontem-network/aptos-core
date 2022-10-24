@@ -15,11 +15,11 @@ fn main() {
         prev_dir.pop();
         println!(
             "cargo:rerun-if-changed={}",
-            prev_dir.join("aptos-token").join("sources").display()
+            prev_dir.join("pont-token").join("sources").display()
         );
         println!(
             "cargo:rerun-if-changed={}",
-            prev_dir.join("aptos-token").join("Move.toml").display()
+            prev_dir.join("pont-token").join("Move.toml").display()
         );
         println!(
             "cargo:rerun-if-changed={}",

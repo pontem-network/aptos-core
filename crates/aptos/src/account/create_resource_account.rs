@@ -8,7 +8,7 @@ use aptos_rest_client::{
 };
 use aptos_types::{account_address::AccountAddress, transaction::authenticator::AuthenticationKey};
 use async_trait::async_trait;
-use cached_packages::aptos_stdlib::resource_account_create_resource_account;
+use cached_packages::pont_stdlib::resource_account_create_resource_account;
 use clap::Parser;
 use serde::Serialize;
 use std::str::FromStr;

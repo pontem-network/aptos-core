@@ -5,7 +5,7 @@ use aptos_sdk::{transaction_builder::TransactionBuilder, types::LocalAccount};
 use aptos_types::{
     account_address::AccountAddress, account_config::aptos_test_root_address, chain_id::ChainId,
 };
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::{AptosPublicInfo, Swarm};
 
 use crate::smoke_test_environment::new_local_swarm_with_aptos;
@@ -18,7 +18,7 @@ async fn submit_and_check_err<F: Fn(TransactionBuilder) -> TransactionBuilder>(
 ) {
     let payload = info
         .transaction_factory()
-        .payload(aptos_stdlib::aptos_coin_claim_mint_capability())
+        .payload(pont_stdlib::aptos_coin_claim_mint_capability())
         .sequence_number(0);
     let txn = local_account.sign_transaction(f(payload).build());
     let err = format!(

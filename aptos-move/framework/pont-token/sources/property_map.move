@@ -2,7 +2,7 @@
 /// It maps a String key to a PropertyValue that consists of type (string) and value (vector<u8>)
 /// It provides basic on-chain serialization of primitive and string to property value with type information
 /// It also supports deserializing property value to it original type.
-module aptos_token::property_map {
+module pont_token::property_map {
     use std::bcs;
     use std::vector;
     use std::error;

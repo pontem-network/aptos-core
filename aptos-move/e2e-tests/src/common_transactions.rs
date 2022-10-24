@@ -5,7 +5,7 @@
 
 use crate::account::Account;
 use aptos_types::transaction::{Script, SignedTransaction};
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use move_deps::move_ir_compiler::Compiler;
 use once_cell::sync::Lazy;
 
@@ -46,7 +46,7 @@ pub fn create_account_txn(
 ) -> SignedTransaction {
     sender
         .transaction()
-        .payload(aptos_stdlib::aptos_account_create_account(
+        .payload(pont_stdlib::aptos_account_create_account(
             *new_account.address(),
         ))
         .sequence_number(seq_num)
@@ -64,7 +64,7 @@ pub fn peer_to_peer_txn(
     // get a SignedTransaction
     sender
         .transaction()
-        .payload(aptos_stdlib::aptos_coin_transfer(
+        .payload(pont_stdlib::aptos_coin_transfer(
             *receiver.address(),
             transfer_amount,
         ))
