@@ -3,7 +3,7 @@ name = "MarketPlace"
 version = "0.0.1"
 
 [dependencies]
-AptosFramework = { local = "../../framework/aptos-framework" }
+AptosFramework = { local = "../../framework/pont-framework" }
 AptosToken = { local = "../../framework/aptos-token" }
 
 [addresses]

@@ -23,11 +23,11 @@ fn main() {
         );
         println!(
             "cargo:rerun-if-changed={}",
-            prev_dir.join("aptos-framework").join("sources").display()
+            prev_dir.join("pont-framework").join("sources").display()
         );
         println!(
             "cargo:rerun-if-changed={}",
-            prev_dir.join("aptos-framework").join("Move.toml").display()
+            prev_dir.join("pont-framework").join("Move.toml").display()
         );
         println!(
             "cargo:rerun-if-changed={}",

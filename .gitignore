@@ -63,7 +63,7 @@ build/
 # experimental -- these are the release code.
 !aptos-move/framework/DPN/releases/artifacts/**
 !aptos-move/framework/experimental/releases/artifacts/**
-!aptos-move/framework/aptos-framework/releases/artifacts/**
+!aptos-move/framework/pont-framework/releases/artifacts/**
 
 # Docker incremental build temporary files and directories
 target-out-docker

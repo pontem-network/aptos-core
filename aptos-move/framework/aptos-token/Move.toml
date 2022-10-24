@@ -9,4 +9,4 @@ aptos_token = "0x3"
 
 [dependencies]
 MoveStdlib = { local = "../move-stdlib" }
-AptosFramework = { local = "../aptos-framework"}
+PontFramework = { local = "../pont-framework" }

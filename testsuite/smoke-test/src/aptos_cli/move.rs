@@ -21,7 +21,7 @@ fn aptos_framework_dir() -> PathBuf {
         .join("..")
         .join("aptos-move")
         .join("framework")
-        .join("aptos-framework")
+        .join("pont-framework")
 }
 
 #[tokio::test]
