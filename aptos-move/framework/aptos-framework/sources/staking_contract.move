@@ -30,8 +30,8 @@ module aptos_framework::staking_contract {
     use std::signer;
     use std::vector;
 
-    use aptos_std::pool_u64::{Self, Pool};
-    use aptos_std::simple_map::{Self, SimpleMap};
+    use pont_std::pool_u64::{Self, Pool};
+    use pont_std::simple_map::{Self, SimpleMap};
 
     use aptos_framework::account::{Self, SignerCapability};
     use aptos_framework::aptos_coin::AptosCoin;

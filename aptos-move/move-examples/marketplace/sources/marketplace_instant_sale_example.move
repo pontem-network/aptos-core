@@ -4,7 +4,7 @@
 /// For more detailed description, check readme
 module marketplace::marketplace_instant_sale_example {
     use std::string::String;
-    use aptos_std::table::Table;
+    use pont_std::table::Table;
     use marketplace::marketplace_listing_utils::{Self as listing_utils, Listing};
     use marketplace::marketplace_bid_utils::{Self as bid_utils};
 

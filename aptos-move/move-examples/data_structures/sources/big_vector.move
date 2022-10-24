@@ -1,7 +1,7 @@
-module aptos_std::big_vector {
+module pont_std::big_vector {
     use std::error;
     use std::vector;
-    use aptos_std::table_with_length::{Self, TableWithLength};
+    use pont_std::table_with_length::{Self, TableWithLength};
 
     /// Vector index is out of bounds
     const EINDEX_OUT_OF_BOUNDS: u64 = 1;

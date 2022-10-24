@@ -10,7 +10,7 @@ module aptos_framework::coin {
     use aptos_framework::optional_aggregator::{Self, OptionalAggregator};
     use aptos_framework::system_addresses;
 
-    use aptos_std::type_info;
+    use pont_std::type_info;
 
     friend aptos_framework::aptos_coin;
     friend aptos_framework::genesis;

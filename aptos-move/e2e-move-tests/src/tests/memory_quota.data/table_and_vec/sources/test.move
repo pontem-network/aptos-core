@@ -1,6 +1,6 @@
 module 0xbeef::test {
     use std::vector;
-    use aptos_std::table_with_length as table;
+    use pont_std::table_with_length as table;
 
     public entry fun just_under_quota() {
         let v = vector::empty();

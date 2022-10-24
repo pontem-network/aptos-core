@@ -10,7 +10,7 @@ module aptos_token::token {
     use aptos_framework::event::{Self, EventHandle};
     use aptos_framework::account;
     use aptos_framework::timestamp;
-    use aptos_std::table::{Self, Table};
+    use pont_std::table::{Self, Table};
     use aptos_token::property_map::{Self, PropertyMap};
 
     //

@@ -23,8 +23,8 @@ module aptos_framework::stake {
     use std::option::{Self, Option};
     use std::signer;
     use std::vector;
-    use aptos_std::bls12381;
-    use aptos_std::math64::min;
+    use pont_std::bls12381;
+    use pont_std::math64::min;
     use aptos_framework::aptos_coin::AptosCoin;
     use aptos_framework::account;
     use aptos_framework::coin::{Self, Coin, MintCapability};
@@ -1300,7 +1300,7 @@ module aptos_framework::stake {
 
     #[test_only]
     use aptos_framework::aptos_coin;
-    use aptos_std::bls12381::proof_of_possession_from_bytes;
+    use pont_std::bls12381::proof_of_possession_from_bytes;
 
     #[test_only]
     const CONSENSUS_KEY_1: vector<u8> = x"8a54b92288d4ba5073d3a52e80cc00ae9fbbc1cc5b433b46089b7804c38a76f00fc64746c7685ee628fc2d0b929c2294";

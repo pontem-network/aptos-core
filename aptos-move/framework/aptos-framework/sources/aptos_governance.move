@@ -17,8 +17,8 @@ module aptos_framework::aptos_governance {
     use std::signer;
     use std::string::{Self, String, utf8};
 
-    use aptos_std::simple_map::{Self, SimpleMap};
-    use aptos_std::table::{Self, Table};
+    use pont_std::simple_map::{Self, SimpleMap};
+    use pont_std::table::{Self, Table};
 
     use aptos_framework::account::{Self, SignerCapability, create_signer_with_capability};
     use aptos_framework::coin;

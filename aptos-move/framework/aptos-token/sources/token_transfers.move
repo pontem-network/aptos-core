@@ -3,7 +3,7 @@ module aptos_token::token_transfers {
     use std::signer;
     use std::string::String;
     use std::error;
-    use aptos_std::table::{Self, Table};
+    use pont_std::table::{Self, Table};
     use aptos_token::token::{Self, Token, TokenId};
     use aptos_framework::account;
     use aptos_framework::event::{Self, EventHandle};

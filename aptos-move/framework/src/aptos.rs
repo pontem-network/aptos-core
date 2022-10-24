@@ -60,7 +60,7 @@ impl ReleaseTarget {
     pub fn packages(self) -> Vec<(&'static str, Option<&'static str>)> {
         let result = vec![
             ("move-stdlib", None),
-            ("aptos-stdlib", None),
+            ("pont-stdlib", None),
             (
                 "aptos-framework",
                 Some("cached-packages/src/aptos_framework_sdk_builder.rs"),
@@ -158,7 +158,7 @@ static NAMED_ADDRESSES: Lazy<BTreeMap<String, NumericalAddress>> = Lazy::new(|| 
     let two = NumericalAddress::parse_str("0x2").unwrap();
     let resources = NumericalAddress::parse_str("0xA550C18").unwrap();
     result.insert("std".to_owned(), one);
-    result.insert("aptos_std".to_owned(), one);
+    result.insert("pont_std".to_owned(), one);
     result.insert("aptos_framework".to_owned(), one);
     result.insert("aptos_token".to_owned(), two);
     result.insert("core_resources".to_owned(), resources);

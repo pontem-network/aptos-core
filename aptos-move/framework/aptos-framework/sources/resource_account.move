@@ -66,7 +66,7 @@ module aptos_framework::resource_account {
     use aptos_framework::account;
     use aptos_framework::aptos_coin::AptosCoin;
     use aptos_framework::coin;
-    use aptos_std::simple_map::{Self, SimpleMap};
+    use pont_std::simple_map::{Self, SimpleMap};
 
     /// Container resource not found in account
     const ECONTAINER_NOT_PUBLISHED: u64 = 1;

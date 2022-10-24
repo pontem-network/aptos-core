@@ -29,10 +29,10 @@ module aptos_framework::voting {
     use std::string::{String, utf8};
     use std::vector;
 
-    use aptos_std::from_bcs::to_u64;
-    use aptos_std::simple_map::{Self, SimpleMap};
-    use aptos_std::table::{Self, Table};
-    use aptos_std::type_info::{Self, TypeInfo};
+    use pont_std::from_bcs::to_u64;
+    use pont_std::simple_map::{Self, SimpleMap};
+    use pont_std::table::{Self, Table};
+    use pont_std::type_info::{Self, TypeInfo};
 
     use aptos_framework::account;
     use aptos_framework::event::{Self, EventHandle};

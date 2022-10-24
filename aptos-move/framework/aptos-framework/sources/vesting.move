@@ -42,8 +42,8 @@ module aptos_framework::vesting {
     use std::string::{utf8, String};
     use std::vector;
 
-    use aptos_std::pool_u64::{Self, Pool};
-    use aptos_std::simple_map::{Self, SimpleMap};
+    use pont_std::pool_u64::{Self, Pool};
+    use pont_std::simple_map::{Self, SimpleMap};
 
     use aptos_framework::account::{Self, SignerCapability, new_event_handle};
     use aptos_framework::aptos_account::assert_account_is_registered_for_apt;
@@ -821,7 +821,7 @@ module aptos_framework::vesting {
 
     #[test_only]
     use aptos_framework::account::create_account_for_test;
-    use aptos_std::math64::min;
+    use pont_std::math64::min;
 
     #[test_only]
     const MIN_STAKE: u64 = 100000000000000; // 1M APT coins with 8 decimals.

@@ -7,9 +7,9 @@ module aptos_token::property_map {
     use std::vector;
     use std::error;
     use std::string::{Self, String};
-    use aptos_std::from_bcs;
-    use aptos_std::simple_map::{Self, SimpleMap};
-    use aptos_std::type_info::type_name;
+    use pont_std::from_bcs;
+    use pont_std::simple_map::{Self, SimpleMap};
+    use pont_std::type_info::type_name;
 
     //
     // Constants

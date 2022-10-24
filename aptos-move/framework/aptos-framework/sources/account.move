@@ -5,14 +5,14 @@ module aptos_framework::account {
     use std::option::{Self, Option};
     use std::signer;
     use std::vector;
-    use aptos_std::type_info::{Self, TypeInfo};
+    use pont_std::type_info::{Self, TypeInfo};
     use aptos_framework::event::{Self, EventHandle};
     use aptos_framework::guid;
     use aptos_framework::system_addresses;
-    use aptos_std::table::{Self, Table};
-    use aptos_std::ed25519;
-    use aptos_std::from_bcs;
-    use aptos_std::multi_ed25519;
+    use pont_std::table::{Self, Table};
+    use pont_std::ed25519;
+    use pont_std::from_bcs;
+    use pont_std::multi_ed25519;
 
     friend aptos_framework::aptos_account;
     friend aptos_framework::coin;

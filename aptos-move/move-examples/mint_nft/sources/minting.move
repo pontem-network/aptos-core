@@ -25,12 +25,12 @@ module mint_nft::minting {
     use aptos_framework::account;
     use aptos_framework::event::{Self, EventHandle};
     use aptos_framework::timestamp;
-    use aptos_std::ed25519;
+    use pont_std::ed25519;
     use aptos_token::token::{Self, TokenDataId};
     use aptos_framework::resource_account;
     #[test_only]
     use aptos_framework::account::create_account_for_test;
-    use aptos_std::ed25519::ValidatedPublicKey;
+    use pont_std::ed25519::ValidatedPublicKey;
 
     // This struct stores the token receiver's address and token_data_id in the event of token minting
     struct TokenMintingEvent has drop, store {

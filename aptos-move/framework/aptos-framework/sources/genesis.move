@@ -3,7 +3,7 @@ module aptos_framework::genesis {
     use std::fixed_point32;
     use std::vector;
 
-    use aptos_std::simple_map;
+    use pont_std::simple_map;
 
     use aptos_framework::account;
     use aptos_framework::aggregator_factory;
