@@ -9,6 +9,10 @@ homepage = "https://aptoslabs.com"
 license = "Apache-2.0"
 publish = false
 
+[[bin]]
+name = "pont-rosetta"
+path = "src/main.rs"
+
 [dependencies]
 anyhow = "1.0.57"
 aptos-config = { path = "../../config" }

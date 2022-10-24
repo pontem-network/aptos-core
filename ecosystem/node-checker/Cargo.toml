@@ -9,6 +9,10 @@ homepage = "https://aptoslabs.com"
 license = "Apache-2.0"
 publish = false
 
+[[bin]]
+name = "pont-node-checker"
+path = "src/bin/aptos-node-checker.rs"
+
 [dependencies]
 anyhow = "1.0.57"
 async-trait = "0.1.53"

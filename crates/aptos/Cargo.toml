@@ -9,6 +9,10 @@ license = "Apache-2.0"
 publish = false
 edition = "2021"
 
+[[bin]]
+name = "pont"
+path = "src/main.rs"
+
 [dependencies]
 anyhow = "1.0.57"
 async-trait = "0.1.53"
