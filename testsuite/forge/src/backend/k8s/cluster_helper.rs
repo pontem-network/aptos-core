@@ -12,8 +12,6 @@ use crate::{
 };
 use again::RetryPolicy;
 use anyhow::{bail, format_err};
-use aptos_logger::info;
-use aptos_sdk::types::PeerId;
 use k8s_openapi::api::{
     apps::v1::{Deployment, StatefulSet},
     batch::{v1::Job, v1beta1::CronJob},
@@ -24,6 +22,8 @@ use kube::{
     client::Client as K8sClient,
     Config, Error as KubeError,
 };
+use pont_logger::info;
+use pont_sdk::types::PeerId;
 use rand::Rng;
 use serde::de::DeserializeOwned;
 use serde_json::Value;
@@ -52,10 +52,10 @@ pub fn get_free_port() -> u32 {
 
 /// Waits for the testnet's genesis job to complete, while tailing the job's logs
 async fn wait_genesis_job(kube_client: &K8sClient, era: &str, kube_namespace: &str) -> Result<()> {
-    aptos_retrier::retry_async(k8s_wait_genesis_strategy(), || {
+    pont_retrier::retry_async(k8s_wait_genesis_strategy(), || {
         let jobs: Api<Job> = Api::namespaced(kube_client.clone(), kube_namespace);
         Box::pin(async move {
-            let job_name = format!("{}-aptos-genesis-e{}", GENESIS_HELM_RELEASE_NAME, era);
+            let job_name = format!("{}-pont-genesis-e{}", GENESIS_HELM_RELEASE_NAME, era);
 
             let genesis_job = jobs.get_status(&job_name).await.unwrap();
 
@@ -97,7 +97,7 @@ async fn wait_node_haproxy(
     kube_namespace: &str,
     num_haproxy: usize,
 ) -> Result<()> {
-    aptos_retrier::retry_async(k8s_wait_nodes_strategy(), || {
+    pont_retrier::retry_async(k8s_wait_nodes_strategy(), || {
         let deployments_api: Api<Deployment> = Api::namespaced(kube_client.clone(), kube_namespace);
         Box::pin(async move {
             for i in 0..num_haproxy {
@@ -157,7 +157,7 @@ async fn wait_nodes_stateful_set(
     Ok(())
 }
 
-/// Deletes a collection of resources in k8s as part of aptos-node
+/// Deletes a collection of resources in k8s as part of pont-node
 async fn delete_k8s_collection<T: Clone + DeserializeOwned + Meta>(
     api: Api<T>,
     name: &'static str,
@@ -185,12 +185,12 @@ async fn delete_k8s_collection<T: Clone + DeserializeOwned + Meta>(
 /// Delete existing k8s resources in the namespace. This is essentially helm uninstall but lighter weight
 pub(crate) async fn delete_k8s_resources(client: K8sClient, kube_namespace: &str) -> Result<()> {
     // selector for the helm chart
-    let aptos_node_helm_selector = "app.kubernetes.io/part-of=aptos-node";
+    let pont_node_helm_selector = "app.kubernetes.io/part-of=pont-node";
     let testnet_addons_helm_selector = "app.kubernetes.io/part-of=testnet-addons";
-    let genesis_helm_selector = "app.kubernetes.io/part-of=aptos-genesis";
+    let genesis_helm_selector = "app.kubernetes.io/part-of=pont-genesis";
 
     // delete all deployments and statefulsets
-    // cross this with all the compute resources created by aptos-node helm chart
+    // cross this with all the compute resources created by pont-node helm chart
     let deployments: Api<Deployment> = Api::namespaced(client.clone(), kube_namespace);
     let stateful_sets: Api<StatefulSet> = Api::namespaced(client.clone(), kube_namespace);
     let pvcs: Api<PersistentVolumeClaim> = Api::namespaced(client.clone(), kube_namespace);
@@ -200,7 +200,7 @@ pub(crate) async fn delete_k8s_resources(client: K8sClient, kube_namespace: &str
     // let services: Api<Service> = Api::namespaced(client.clone(), kube_namespace);
 
     for selector in &[
-        aptos_node_helm_selector,
+        pont_node_helm_selector,
         testnet_addons_helm_selector,
         genesis_helm_selector,
     ] {
@@ -362,7 +362,7 @@ fn upgrade_validator(
     todo!()
 }
 
-fn upgrade_aptos_node_helm(options: &[String], kube_namespace: String) -> Result<()> {
+fn upgrade_pont_node_helm(options: &[String], kube_namespace: String) -> Result<()> {
     upgrade_helm_release(
         APTOS_NODE_HELM_RELEASE_NAME.to_string(),
         APTOS_NODE_HELM_CHART_PATH.to_string(),
@@ -371,7 +371,7 @@ fn upgrade_aptos_node_helm(options: &[String], kube_namespace: String) -> Result
     )
 }
 
-// runs helm upgrade on the installed aptos-genesis release named "genesis"
+// runs helm upgrade on the installed pont-genesis release named "genesis"
 // if a new "era" is specified, a new genesis will be created, and old resources will be destroyed
 fn upgrade_genesis_helm(options: &[String], kube_namespace: String) -> Result<()> {
     upgrade_helm_release(
@@ -386,7 +386,7 @@ pub async fn uninstall_testnet_resources(kube_namespace: String) -> Result<()> {
     // delete kubernetes resources
     delete_k8s_cluster(kube_namespace.clone()).await?;
     info!(
-        "aptos-node resources for Forge removed in namespace: {}",
+        "pont-node resources for Forge removed in namespace: {}",
         kube_namespace
     );
 
@@ -402,9 +402,9 @@ fn generate_new_era() -> String {
 fn get_node_default_helm_path() -> String {
     let forge_run_mode = std::env::var("FORGE_RUNNER_MODE").unwrap_or_else(|_| "k8s".to_string());
     if forge_run_mode.eq("local") {
-        "testsuite/forge/src/backend/k8s/helm-values/aptos-node-default-values.yaml".to_string()
+        "testsuite/forge/src/backend/k8s/helm-values/pont-node-default-values.yaml".to_string()
     } else {
-        "/aptos/terraform/aptos-node-default-values.yaml".to_string()
+        "/pont/terraform/pont-node-default-values.yaml".to_string()
     }
 }
 
@@ -424,14 +424,14 @@ pub async fn install_testnet_resources(
 
     // get deployment-specific helm values and cache it
     let tmp_dir = TempDir::new().expect("Could not create temp dir");
-    let aptos_node_values_file = dump_helm_values_to_file(APTOS_NODE_HELM_RELEASE_NAME, &tmp_dir)?;
+    let pont_node_values_file = dump_helm_values_to_file(APTOS_NODE_HELM_RELEASE_NAME, &tmp_dir)?;
     let genesis_values_file = dump_helm_values_to_file(GENESIS_HELM_RELEASE_NAME, &tmp_dir)?;
 
     // generate a random era to wipe the network state
     let new_era = generate_new_era();
 
     // get forge override helm values and cache it
-    let aptos_node_forge_helm_values_yaml = construct_node_helm_values(
+    let pont_node_forge_helm_values_yaml = construct_node_helm_values(
         node_helm_config_fn,
         fs::read_to_string(get_node_default_helm_path())
             .expect("Not able to read default value file"),
@@ -443,9 +443,9 @@ pub async fn install_testnet_resources(
         enable_haproxy,
     )?;
 
-    let aptos_node_forge_values_file = dump_string_to_file(
-        "aptos-node-values.yaml".to_string(),
-        aptos_node_forge_helm_values_yaml,
+    let pont_node_forge_values_file = dump_string_to_file(
+        "pont-node-values.yaml".to_string(),
+        pont_node_forge_helm_values_yaml,
         &tmp_dir,
     )?;
 
@@ -464,12 +464,12 @@ pub async fn install_testnet_resources(
     )?;
 
     // combine all helm values
-    let aptos_node_upgrade_options = vec![
+    let pont_node_upgrade_options = vec![
         // use the old values
         "-f".to_string(),
-        aptos_node_values_file,
+        pont_node_values_file,
         "-f".to_string(),
-        aptos_node_forge_values_file,
+        pont_node_forge_values_file,
     ];
 
     let mut genesis_upgrade_options = vec![
@@ -480,7 +480,7 @@ pub async fn install_testnet_resources(
         genesis_forge_values_file,
     ];
 
-    // run genesis from the directory in aptos/init image
+    // run genesis from the directory in pont/init image
     if let Some(genesis_modules_path) = genesis_modules_path {
         genesis_upgrade_options.extend([
             "--set".to_string(),
@@ -495,10 +495,7 @@ pub async fn install_testnet_resources(
     wait_genesis_job(&kube_client, &new_era, &kube_namespace).await?;
 
     // TODO(rustielin): get the helm releases to be consistent
-    upgrade_aptos_node_helm(
-        aptos_node_upgrade_options.as_slice(),
-        kube_namespace.clone(),
-    )?;
+    upgrade_pont_node_helm(pont_node_upgrade_options.as_slice(), kube_namespace.clone())?;
 
     let (validators, fullnodes) = collect_running_nodes(
         &kube_client,
@@ -672,7 +669,7 @@ pub fn dump_string_to_file(
 }
 
 fn dump_helm_values_to_file(helm_release_name: &str, tmp_dir: &TempDir) -> Result<String> {
-    // get aptos-node values
+    // get pont-node values
     let v: Value = get_helm_status(helm_release_name).unwrap();
     let config = &v["config"];
     let content = config.to_string();

@@ -1,10 +1,10 @@
 base:
   role: "full_node"
   waypoint:
-    from_file: "/opt/aptos/genesis/waypoint.txt"
+    from_file: "/opt/pont/genesis/waypoint.txt"
 
 execution:
-  genesis_file_location: "/opt/aptos/genesis/genesis.blob"
+  genesis_file_location: "/opt/pont/genesis/genesis.blob"
 
 full_node_networks:
 - network_id: "public"
@@ -15,7 +15,7 @@ full_node_networks:
     {{- .Values.fullnode_identity | toYaml | nindent 6 }}
   {{- end }}
   seeds:
-    {{- (get .Values.aptos_chains .Values.chain.name).seeds | default dict | toYaml | nindent 6 }}
+    {{- (get .Values.pont_chains .Values.chain.name).seeds | default dict | toYaml | nindent 6 }}
   {{- if .Values.fullnode_inbound_rate_limit }}
   inbound_rate_limit_config:
     {{- .Values.fullnode_inbound_rate_limit | toYaml | nindent 6 }}

@@ -11,24 +11,7 @@ use crate::{
     test_utils::{MockStateComputer, MockStorage},
     util::time_service::ClockTimeService,
 };
-use aptos_config::{
-    config::{NodeConfig, WaypointConfig},
-    generator::{self, ValidatorSwarm},
-    network_id::NetworkId,
-};
-use aptos_mempool::mocks::MockSharedMempool;
-use aptos_types::{
-    ledger_info::LedgerInfoWithSignatures,
-    on_chain_config::{
-        ConsensusConfigV1, OnChainConfig, OnChainConfigPayload, OnChainConsensusConfig,
-        ProposerElectionType::{self, RoundProposer},
-        ValidatorSet,
-    },
-    transaction::SignedTransaction,
-    validator_info::ValidatorInfo,
-    waypoint::Waypoint,
-};
-use channel::{self, aptos_channel, message_queues::QueueStyle};
+use channel::{self, message_queues::QueueStyle, pont_channel};
 use consensus_types::common::{Author, Round};
 use event_notifications::{ReconfigNotification, ReconfigNotificationListener};
 use futures::channel::mpsc;
@@ -40,6 +23,23 @@ use network::{
     },
     transport::ConnectionMetadata,
     ProtocolId,
+};
+use pont_config::{
+    config::{NodeConfig, WaypointConfig},
+    generator::{self, ValidatorSwarm},
+    network_id::NetworkId,
+};
+use pont_mempool::mocks::MockSharedMempool;
+use pont_types::{
+    ledger_info::LedgerInfoWithSignatures,
+    on_chain_config::{
+        ConsensusConfigV1, OnChainConfig, OnChainConfigPayload, OnChainConsensusConfig,
+        ProposerElectionType::{self, RoundProposer},
+        ValidatorSet,
+    },
+    transaction::SignedTransaction,
+    validator_info::ValidatorInfo,
+    waypoint::Waypoint,
 };
 use std::{collections::HashMap, iter::FromIterator, sync::Arc};
 use tokio::runtime::{Builder, Runtime};
@@ -66,9 +66,9 @@ impl SMRNode {
         storage: Arc<MockStorage>,
         twin_id: TwinId,
     ) -> Self {
-        let (network_reqs_tx, network_reqs_rx) = aptos_channel::new(QueueStyle::FIFO, 8, None);
-        let (connection_reqs_tx, _) = aptos_channel::new(QueueStyle::FIFO, 8, None);
-        let (consensus_tx, consensus_rx) = aptos_channel::new(QueueStyle::FIFO, 8, None);
+        let (network_reqs_tx, network_reqs_rx) = pont_channel::new(QueueStyle::FIFO, 8, None);
+        let (connection_reqs_tx, _) = pont_channel::new(QueueStyle::FIFO, 8, None);
+        let (consensus_tx, consensus_rx) = pont_channel::new(QueueStyle::FIFO, 8, None);
         let (_conn_mgr_reqs_tx, conn_mgr_reqs_rx) = channel::new_test(8);
         let (_, conn_notifs_channel) = conn_notifs_channel::new();
         let mut network_sender = ConsensusNetworkSender::new(
@@ -89,7 +89,7 @@ impl SMRNode {
             commit_cb_sender,
             Arc::clone(&storage),
         ));
-        let (reconfig_sender, reconfig_events) = aptos_channel::new(QueueStyle::LIFO, 1, None);
+        let (reconfig_sender, reconfig_events) = pont_channel::new(QueueStyle::LIFO, 1, None);
         let reconfig_listener = ReconfigNotificationListener {
             notification_receiver: reconfig_events,
         };

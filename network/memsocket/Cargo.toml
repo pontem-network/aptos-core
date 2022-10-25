@@ -1,10 +1,10 @@
 [package]
 name = "memsocket"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos memsocket"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont memsocket"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 edition = "2021"
 publish = false
@@ -14,7 +14,7 @@ bytes = "1.1.0"
 futures = "0.3.21"
 once_cell = "1.10.0"
 
-aptos-infallible = { path = "../../crates/aptos-infallible" }
+pont-infallible = { path = "../../crates/pont-infallible" }
 
 [features]
 default = []

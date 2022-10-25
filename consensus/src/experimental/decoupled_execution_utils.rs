@@ -14,11 +14,11 @@ use crate::{
     round_manager::VerifiedEvent,
     state_replication::StateComputer,
 };
-use aptos_infallible::Mutex;
-use aptos_types::{account_address::AccountAddress, validator_verifier::ValidatorVerifier};
-use channel::aptos_channel::Receiver;
+use channel::pont_channel::Receiver;
 use consensus_types::common::Author;
 use futures::channel::mpsc::UnboundedReceiver;
+use pont_infallible::Mutex;
+use pont_types::{account_address::AccountAddress, validator_verifier::ValidatorVerifier};
 use std::sync::{atomic::AtomicU64, Arc};
 
 /// build channels and return phases and buffer manager

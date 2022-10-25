@@ -7,13 +7,13 @@ use crate::{
     event::{EventHandle, EventKey},
 };
 use anyhow::Result;
-use aptos_crypto::HashValue;
 use move_core_types::{
     ident_str,
     identifier::IdentStr,
     move_resource::{MoveResource, MoveStructType},
 };
 use once_cell::sync::Lazy;
+use pont_crypto::HashValue;
 use serde::{Deserialize, Serialize};
 
 /// Struct that represents a NewBlockEvent.

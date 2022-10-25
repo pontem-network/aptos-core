@@ -6,9 +6,9 @@ use crate::{
     test_utils::{naive_smt::NaiveSmt, proof_reader::ProofReader},
     SparseMerkleTree,
 };
-use aptos_crypto::{hash::SPARSE_MERKLE_PLACEHOLDER_HASH, HashValue};
-use aptos_types::state_store::state_storage_usage::StateStorageUsage;
-use aptos_types::state_store::state_value::StateValue;
+use pont_crypto::{hash::SPARSE_MERKLE_PLACEHOLDER_HASH, HashValue};
+use pont_types::state_store::state_storage_usage::StateStorageUsage;
+use pont_types::state_store::state_value::StateValue;
 use proptest::{
     collection::{hash_set, vec},
     prelude::*,

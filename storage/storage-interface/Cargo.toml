@@ -1,10 +1,10 @@
 [package]
 name = "storage-interface"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos storage interface"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont storage interface"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -19,13 +19,13 @@ rayon = "1.5.2"
 serde = { version = "1.0.137", default-features = false }
 thiserror = "1.0.31"
 
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-metrics-core = { path = "../../crates/aptos-metrics-core" }
-aptos-secure-net = { path = "../../secure/net" }
-aptos-state-view = { path = "../state-view" }
-aptos-types = { path = "../../types" }
-aptos-vm = { path = "../../aptos-move/aptos-vm" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-metrics-core = { path = "../../crates/pont-metrics-core" }
+pont-secure-net = { path = "../../secure/net" }
+pont-state-view = { path = "../state-view" }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../../pont-move/pont-vm" }
 
 scratchpad = { path = "../scratchpad" }
 
@@ -34,8 +34,8 @@ move-core-types = { git = "https://github.com/move-language/move", rev = "6a3228
 [dev-dependencies]
 assert_unordered = "0.1.1"
 
-aptos-types = { path = "../../types", features = ["fuzzing"] }
+pont-types = { path = "../../types", features = ["fuzzing"] }
 
 [features]
 default = []
-fuzzing = ["aptos-types/fuzzing"]
+fuzzing = ["pont-types/fuzzing"]

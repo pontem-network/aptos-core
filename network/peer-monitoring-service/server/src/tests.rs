@@ -6,13 +6,7 @@
 use crate::{
     PeerMonitoringServiceNetworkEvents, PeerMonitoringServiceServer, PEER_MONITORING_SERVER_VERSION,
 };
-use aptos_config::{
-    config::{PeerMonitoringServiceConfig, PeerRole},
-    network_id::{NetworkId, PeerNetworkId},
-};
-use aptos_logger::Level;
-use aptos_types::{network_address::NetworkAddress, PeerId};
-use channel::aptos_channel;
+use channel::pont_channel;
 use futures::channel::oneshot;
 use netcore::transport::ConnectionOrigin;
 use network::{
@@ -32,6 +26,12 @@ use peer_monitoring_service_types::{
     ConnectedPeersResponse, PeerMonitoringServiceError, PeerMonitoringServiceMessage,
     PeerMonitoringServiceRequest, PeerMonitoringServiceResponse, ServerProtocolVersionResponse,
 };
+use pont_config::{
+    config::{PeerMonitoringServiceConfig, PeerRole},
+    network_id::{NetworkId, PeerNetworkId},
+};
+use pont_logger::Level;
+use pont_types::{network_address::NetworkAddress, PeerId};
 use std::{
     collections::{hash_map::Entry, HashMap},
     str::FromStr,
@@ -126,7 +126,7 @@ async fn test_get_connected_peers() {
 /// A wrapper around the inbound network interface/channel for easily sending
 /// mock client requests to a [`PeerMonitoringServiceServer`].
 struct MockClient {
-    peer_notification_sender: aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
+    peer_notification_sender: pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
 }
 
 impl MockClient {
@@ -203,9 +203,9 @@ impl MockClient {
     }
 }
 
-/// Initializes the Aptos logger for tests
+/// Initializes the Pont logger for tests
 pub fn initialize_logger() {
-    aptos_logger::Logger::builder()
+    pont_logger::Logger::builder()
         .is_async(false)
         .level(Level::Debug)
         .build();

@@ -49,7 +49,7 @@ impl GitHub {
         })?;
         let request = self.client.get(url);
         let response = request
-            .header(USER_AGENT, "aptos-forge")
+            .header(USER_AGENT, "pont-forge")
             .send()
             .map_err(|e| format_err!("Failed to query github: {:?}", e))?;
         let response: Vec<CommitInfo> = response

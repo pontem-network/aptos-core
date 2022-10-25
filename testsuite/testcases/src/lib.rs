@@ -21,13 +21,13 @@ pub mod validator_join_leave_test;
 pub mod validator_reboot_stress_test;
 
 use anyhow::{anyhow, ensure, Context};
-use aptos_logger::info;
-use aptos_sdk::{transaction_builder::TransactionFactory, types::PeerId};
 use forge::{
     EmitJobRequest, NetworkContext, NetworkTest, NodeExt, Result, Swarm, SwarmExt, Test,
     TxnEmitter, TxnStats, Version,
 };
 use futures::future::join_all;
+use pont_logger::info;
+use pont_sdk::{transaction_builder::TransactionFactory, types::PeerId};
 use rand::{rngs::StdRng, SeedableRng};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 use tokio::runtime::Builder;
@@ -72,7 +72,7 @@ pub fn create_emitter_and_request(
 
     let chain_info = swarm.chain_info();
     let transaction_factory = TransactionFactory::new(chain_info.chain_id)
-        .with_gas_unit_price(aptos_global_constants::GAS_UNIT_PRICE);
+        .with_gas_unit_price(pont_global_constants::GAS_UNIT_PRICE);
     let emitter = TxnEmitter::new(transaction_factory, rng);
 
     emit_job_request = emit_job_request
@@ -215,7 +215,7 @@ impl dyn NetworkLoadTest {
             ctx.swarm(),
             emit_job_request,
             &nodes_to_send_load_to,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
             rng,
         )
         .context("create emitter")?;

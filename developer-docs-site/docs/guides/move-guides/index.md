@@ -1,11 +1,11 @@
 ---
 title: "Move Guides"
-slug: "aptos-move-guides"
+slug: "pont-move-guides"
 ---
 
 # Move Guides
 
-Start here to learn how the Move language works on the Aptos blockchain. 
+Start here to learn how the Move language works on the Pont blockchain. 
 
-- ### [Move on Aptos](move-on-aptos.md)
+- ### [Move on Pont](move-on-pont.md)
 - ### [Upgrading Move Code](upgrading-move-code)

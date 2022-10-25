@@ -1,12 +1,12 @@
 ---
-title: "Aptos SDKs"
+title: "Pont SDKs"
 slug: "index"
 hidden: false
 ---
 
-# Aptos SDKs
+# Pont SDKs
 
-Use these Aptos SDKs, in combination with the [Aptos CLI](/cli-tools/aptos-cli-tool/index.md) for your development on the Aptos blockchain. 
+Use these Pont SDKs, in combination with the [Pont CLI](/cli-tools/pont-cli-tool/index.md) for your development on the Pont blockchain. 
 
 - ### [Python SDK](python-sdk.md)
 

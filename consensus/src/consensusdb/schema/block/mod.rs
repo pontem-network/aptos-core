@@ -11,8 +11,8 @@
 
 use super::BLOCK_CF_NAME;
 use anyhow::Result;
-use aptos_crypto::HashValue;
 use consensus_types::block::Block;
+use pont_crypto::HashValue;
 use schemadb::schema::{KeyCodec, Schema, ValueCodec};
 
 #[derive(Debug)]

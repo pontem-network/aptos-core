@@ -1,6 +1,6 @@
 ---
 name: "\U0001F41B Bug report"
-about: Create a bug report to help improve Aptos Core
+about: Create a bug report to help improve Pont Core
 title: "[Bug]"
 labels: bug
 assignees: ''
@@ -10,7 +10,7 @@ assignees: ''
 # 🐛 Bug
 
 <!-- A clear and concise description of what the bug is.
-To report a security issue, please email security@aptoslabs.com. -->
+To report a security issue, please email security@pontlabs.com. -->
 
 ## To reproduce
 
@@ -32,7 +32,7 @@ To report a security issue, please email security@aptoslabs.com. -->
 ## System information
 
 **Please complete the following information:**
-- <!-- Aptos Core Version -->
+- <!-- Pont Core Version -->
 - <!-- Rust Version -->
 - <!-- Computer OS -->
 

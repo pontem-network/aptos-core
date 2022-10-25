@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::keys::ConfigKey;
-use aptos_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
-use aptos_temppath::TempPath;
-use aptos_types::transaction::authenticator::AuthenticationKey;
+use pont_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
+use pont_temppath::TempPath;
+use pont_types::transaction::authenticator::AuthenticationKey;
 use rand::rngs::StdRng;
 use serde::{Deserialize, Serialize};
 use std::path::Path;

@@ -1,12 +1,12 @@
-# -- Default image tag to use for all aptos images
+# -- Default image tag to use for all pont images
 imageTag: devnet
 
 genesis:
-  # -- Validator username prefix, used to get genesis secrets. This should be the fullname for the aptos-node helm release
-  username_prefix: aptos-node
+  # -- Validator username prefix, used to get genesis secrets. This should be the fullname for the pont-node helm release
+  username_prefix: pont-node
   # -- Number of validators deployed in this testnet
   numValidators:
-  # -- Aptos Chain ID
+  # -- Pont Chain ID
   chain_id:
 
 waypoint:
@@ -30,7 +30,7 @@ load_test:
   enabled: false
   image:
     # -- Image repo to use for tools image for running load tests
-    repo: aptoslabs/tools
+    repo: pontlabs/tools
     # -- Image tag to use for tools image
     tag:
     # -- Image pull policy to use for tools image

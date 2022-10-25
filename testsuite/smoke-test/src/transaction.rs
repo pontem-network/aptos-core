@@ -1,26 +1,26 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_keygen::KeyGen;
-use aptos_rest_client::{
-    aptos_api_types::{EntryFunctionPayload, TransactionPayload},
+use cached_packages::pont_stdlib;
+use forge::Swarm;
+use pont_keygen::KeyGen;
+use pont_rest_client::{
+    pont_api_types::{EntryFunctionPayload, TransactionPayload},
     Transaction,
 };
-use aptos_sdk::{
+use pont_sdk::{
     crypto::{PrivateKey, SigningKey},
     types::transaction::{authenticator::AuthenticationKey, SignedTransaction},
 };
-use cached_packages::aptos_stdlib;
-use forge::Swarm;
 
-use crate::smoke_test_environment::new_local_swarm_with_aptos;
+use crate::smoke_test_environment::new_local_swarm_with_pont;
 
 // TODO: debug me and re-enable the test!
 #[ignore]
 #[tokio::test]
 async fn test_external_transaction_signer() {
-    let mut swarm = new_local_swarm_with_aptos(1).await;
-    let mut info = swarm.aptos_public_info();
+    let mut swarm = new_local_swarm_with_pont(1).await;
+    let mut info = swarm.pont_public_info();
 
     // generate key pair
     let mut key_gen = KeyGen::from_os_rng();
@@ -57,10 +57,7 @@ async fn test_external_transaction_signer() {
 
     let unsigned_txn = info
         .transaction_factory()
-        .payload(aptos_stdlib::aptos_coin_transfer(
-            receiver.address(),
-            amount,
-        ))
+        .payload(pont_stdlib::pont_coin_transfer(receiver.address(), amount))
         .sender(sender_address)
         .sequence_number(test_sequence_number)
         .max_gas_amount(test_max_gas_amount)

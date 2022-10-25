@@ -21,21 +21,21 @@ use crate::{
     ProtocolId,
 };
 use anyhow::anyhow;
-use aptos_config::{
-    config::{PeerRole, MAX_INBOUND_CONNECTIONS},
-    network_id::NetworkContext,
-};
-use aptos_infallible::RwLock;
-use aptos_rate_limiter::rate_limit::TokenBucketRateLimiter;
-use aptos_time_service::TimeService;
-use aptos_types::{network_address::NetworkAddress, PeerId};
 use bytes::Bytes;
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use futures::{channel::oneshot, io::AsyncWriteExt, stream::StreamExt};
 use memsocket::MemorySocket;
 use netcore::transport::{
     boxed::BoxedTransport, memory::MemoryTransport, ConnectionOrigin, TransportExt,
 };
+use pont_config::{
+    config::{PeerRole, MAX_INBOUND_CONNECTIONS},
+    network_id::NetworkContext,
+};
+use pont_infallible::RwLock;
+use pont_rate_limiter::rate_limit::TokenBucketRateLimiter;
+use pont_time_service::TimeService;
+use pont_types::{network_address::NetworkAddress, PeerId};
 use std::{collections::HashMap, sync::Arc};
 use tokio::runtime::Handle;
 use tokio_util::compat::{
@@ -88,15 +88,15 @@ fn build_test_peer_manager(
         BoxedTransport<Connection<MemorySocket>, impl std::error::Error + Sync + Send + 'static>,
         MemorySocket,
     >,
-    aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerRequest>,
-    aptos_channel::Sender<PeerId, ConnectionRequest>,
-    aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerNotification>,
+    pont_channel::Sender<(PeerId, ProtocolId), PeerManagerRequest>,
+    pont_channel::Sender<PeerId, ConnectionRequest>,
+    pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerNotification>,
     conn_notifs_channel::Receiver,
 ) {
     let (peer_manager_request_tx, peer_manager_request_rx) =
-        aptos_channel::new(QueueStyle::FIFO, 1, None);
-    let (connection_reqs_tx, connection_reqs_rx) = aptos_channel::new(QueueStyle::FIFO, 1, None);
-    let (hello_tx, hello_rx) = aptos_channel::new(QueueStyle::FIFO, 1, None);
+        pont_channel::new(QueueStyle::FIFO, 1, None);
+    let (connection_reqs_tx, connection_reqs_rx) = pont_channel::new(QueueStyle::FIFO, 1, None);
+    let (hello_tx, hello_rx) = pont_channel::new(QueueStyle::FIFO, 1, None);
     let (conn_status_tx, conn_status_rx) = conn_notifs_channel::new();
 
     let peer_manager = PeerManager::new(
@@ -251,7 +251,7 @@ fn create_connection<TSocket: transport::TSocket>(
 
 #[test]
 fn peer_manager_simultaneous_dial_two_inbound() {
-    ::aptos_logger::Logger::init_for_testing();
+    ::pont_logger::Logger::init_for_testing();
     let runtime = ::tokio::runtime::Runtime::new().unwrap();
 
     // Create a list of ordered PeerIds so we can ensure how PeerIds will be compared.
@@ -299,7 +299,7 @@ fn peer_manager_simultaneous_dial_two_inbound() {
 
 #[test]
 fn peer_manager_simultaneous_dial_inbound_outbound_remote_id_larger() {
-    ::aptos_logger::Logger::init_for_testing();
+    ::pont_logger::Logger::init_for_testing();
     let runtime = ::tokio::runtime::Runtime::new().unwrap();
 
     // Create a list of ordered PeerIds so we can ensure how PeerIds will be compared.
@@ -348,7 +348,7 @@ fn peer_manager_simultaneous_dial_inbound_outbound_remote_id_larger() {
 
 #[test]
 fn peer_manager_simultaneous_dial_inbound_outbound_own_id_larger() {
-    ::aptos_logger::Logger::init_for_testing();
+    ::pont_logger::Logger::init_for_testing();
     let runtime = ::tokio::runtime::Runtime::new().unwrap();
 
     // Create a list of ordered PeerIds so we can ensure how PeerIds will be compared.
@@ -397,7 +397,7 @@ fn peer_manager_simultaneous_dial_inbound_outbound_own_id_larger() {
 
 #[test]
 fn peer_manager_simultaneous_dial_outbound_inbound_remote_id_larger() {
-    ::aptos_logger::Logger::init_for_testing();
+    ::pont_logger::Logger::init_for_testing();
     let runtime = ::tokio::runtime::Runtime::new().unwrap();
 
     // Create a list of ordered PeerIds so we can ensure how PeerIds will be compared.
@@ -446,7 +446,7 @@ fn peer_manager_simultaneous_dial_outbound_inbound_remote_id_larger() {
 
 #[test]
 fn peer_manager_simultaneous_dial_outbound_inbound_own_id_larger() {
-    ::aptos_logger::Logger::init_for_testing();
+    ::pont_logger::Logger::init_for_testing();
     let runtime = ::tokio::runtime::Runtime::new().unwrap();
 
     // Create a list of ordered PeerIds so we can ensure how PeerIds will be compared.
@@ -495,7 +495,7 @@ fn peer_manager_simultaneous_dial_outbound_inbound_own_id_larger() {
 
 #[test]
 fn peer_manager_simultaneous_dial_two_outbound() {
-    ::aptos_logger::Logger::init_for_testing();
+    ::pont_logger::Logger::init_for_testing();
     let runtime = ::tokio::runtime::Runtime::new().unwrap();
 
     // Create a list of ordered PeerIds so we can ensure how PeerIds will be compared.
@@ -583,7 +583,7 @@ fn peer_manager_simultaneous_dial_disconnect_event() {
 
 #[test]
 fn test_dial_disconnect() {
-    ::aptos_logger::Logger::init_for_testing();
+    ::pont_logger::Logger::init_for_testing();
     let runtime = ::tokio::runtime::Runtime::new().unwrap();
 
     // Create a list of ordered PeerIds so we can ensure how PeerIds will be compared.

@@ -1,0 +1,8 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc f020e0a225a75f22b51f16b8a2e5f11eb70bf7b93a04396d1ec8fbf76b253d70 # shrinks to sleeps_ms = [6, 5, 4, 6, 6, 0, 9, 7, 7, 0, 7, 0, 6, 9, 1, 0, 7, 3, 3, 7], max_in_progress = 12
+cc f782193c8bde50131eba5919f8dd321bc35ffb5b6382bca1593967afed02c19f # shrinks to sleeps_ms = [4, 4, 5, 1, 1, 8, 4, 7, 8, 4, 0, 6, 4, 5, 0, 9, 0, 6, 0, 2, 8, 0, 8, 1, 8, 9, 6, 0, 0, 6, 5, 2, 8, 6, 9, 4, 0, 4, 8, 6, 1, 2, 3, 5, 9, 0, 3, 0, 8, 3, 9, 4, 6, 9, 6, 3, 1, 2, 7, 6, 2, 5, 3, 4, 5, 4, 1, 5, 8, 8, 6, 2, 6, 5, 2, 7], max_in_progress = 56

@@ -53,21 +53,21 @@ impl From<serde_json::Error> for Error {
     }
 }
 
-impl From<aptos_vault_client::Error> for Error {
-    fn from(error: aptos_vault_client::Error) -> Self {
+impl From<pont_vault_client::Error> for Error {
+    fn from(error: pont_vault_client::Error) -> Self {
         match error {
-            aptos_vault_client::Error::NotFound(_, key) => Self::KeyNotSet(key),
-            aptos_vault_client::Error::HttpError(403, _, _) => Self::PermissionDenied,
+            pont_vault_client::Error::NotFound(_, key) => Self::KeyNotSet(key),
+            pont_vault_client::Error::HttpError(403, _, _) => Self::PermissionDenied,
             _ => Self::InternalError(format!("{}", error)),
         }
     }
 }
 
-impl From<aptos_github_client::Error> for Error {
-    fn from(error: aptos_github_client::Error) -> Self {
+impl From<pont_github_client::Error> for Error {
+    fn from(error: pont_github_client::Error) -> Self {
         match error {
-            aptos_github_client::Error::NotFound(key) => Self::KeyNotSet(key),
-            aptos_github_client::Error::HttpError(403, _, _) => Self::PermissionDenied,
+            pont_github_client::Error::NotFound(key) => Self::KeyNotSet(key),
+            pont_github_client::Error::HttpError(403, _, _) => Self::PermissionDenied,
             _ => Self::InternalError(format!("{}", error)),
         }
     }

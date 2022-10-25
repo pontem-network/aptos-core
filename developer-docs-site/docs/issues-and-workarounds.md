@@ -8,7 +8,7 @@ slug: "issues-and-workarounds"
 This page provides workarounds and answers for issues and questions that frequently come up. 
 
 :::tip Help keep this page up-to-date
-If you found an issue that is not on this page, submit a [GitHub Issue](https://github.com/aptos-labs/aptos-core/issues). Make sure to follow the issue format used in this document. 
+If you found an issue that is not on this page, submit a [GitHub Issue](https://github.com/aptos-labs/pont-core/issues). Make sure to follow the issue format used in this document. 
 :::
 
 ## Nodes
@@ -25,19 +25,19 @@ Receive this error from a validator node:
 
 #### Workaround
 
-Delete the `secure-data.json` file because very likely you are using an older version of it.  Check your `validator.yaml` file and you will see something like `path: /opt/aptos/data/secure-data.json`. Or see [Bootstrapping validator node](nodes/validator-node/operator/connect-to-aptos-network.md#bootstrapping-validator-node) for the location of this file. For Docker, you can delete this file by `docker` commands such as: `docker-compose down --volumes` (check the `docker-compose` help). Finally, **remember to restart the node. **
+Delete the `secure-data.json` file because very likely you are using an older version of it.  Check your `validator.yaml` file and you will see something like `path: /opt/pont/data/secure-data.json`. Or see [Bootstrapping validator node](nodes/validator-node/operator/connect-to-pont-network.md#bootstrapping-validator-node) for the location of this file. For Docker, you can delete this file by `docker` commands such as: `docker-compose down --volumes` (check the `docker-compose` help). Finally, **remember to restart the node. **
 
 ### How to find out when the next epoch starts
 
 :::tip Current epoch duration
-The Aptos current epoch duration is 1 hour.
+The Pont current epoch duration is 1 hour.
 :::
 
 You can find out when the next epoch starts in multiple ways: 
 
 **Use the CLI**
 ```bash
-aptos node show-epoch-info --url https://fullnode.premainnet.aptoslabs.com/v1
+pont node show-epoch-info --url https://fullnode.premainnet.pontlabs.com/v1
 ```
 which produces an output like below (example output for premainnet):
 ```json
@@ -59,13 +59,13 @@ which produces an output like below (example output for premainnet):
 
 **Find it in your stake pool information output**
 
-You can see when the next epoch starts in the output of the command `aptos node get-stake-pool`. See [Checking your stake pool information](/nodes/validator-node/operator/staking-pool-operations/#checking-your-stake-pool-information).
+You can see when the next epoch starts in the output of the command `pont node get-stake-pool`. See [Checking your stake pool information](/nodes/validator-node/operator/staking-pool-operations/#checking-your-stake-pool-information).
 
-Finally, you can use Aptos Explorer and an online epoch converter to find out when the next epoch starts. See below:
+Finally, you can use Pont Explorer and an online epoch converter to find out when the next epoch starts. See below:
 
-**You can use the Aptos Explorer and epoch converter**
+**You can use the Pont Explorer and epoch converter**
 
-1. Go to account `0x1` page on the Aptos Explorer by [clicking here](https://explorer.aptoslabs.com/account/0x1). Make sure the correct network (mainnet or testnet or devnet) is selected at the top right.
+1. Go to account `0x1` page on the Pont Explorer by [clicking here](https://explorer.pontlabs.com/account/0x1). Make sure the correct network (mainnet or testnet or devnet) is selected at the top right.
 2. Switch to **RESOURCES** tab.
 3. Using the browser search (Ctrl-f, do not use the **Search transactions** field), search for `last_reconfiguration_time`. You will find the last epoch transition timestamp in microseconds. The text display looks like this:
   ```json
@@ -88,41 +88,41 @@ Finally, you can use Aptos Explorer and an online epoch converter to find out wh
 
 ### How to check if a validator address is in the validator set
 
-You can check if a validator address is in the Aptos validator set either on the command line or by using the Aptos Explorer.
+You can check if a validator address is in the Pont validator set either on the command line or by using the Pont Explorer.
 
 **CLI** 
 
 Run the below command:
 ```bash
-aptos node show-validator-set --profile operator | jq -r '.Result.active_validators[].addr' | grep <stake pool address>
+pont node show-validator-set --profile operator | jq -r '.Result.active_validators[].addr' | grep <stake pool address>
 ```
 
 And ensure you see the validator in the output.
 
-**Aptos Explorer**
+**Pont Explorer**
 
-Follow these steps on the Aptos Explorer:
+Follow these steps on the Pont Explorer:
 
-1. Go to account [`0x1`](https://explorer.aptoslabs.com/account/0x1) page on the Aptos Explorer.
+1. Go to account [`0x1`](https://explorer.pontlabs.com/account/0x1) page on the Pont Explorer.
 1. Make sure the correct network (mainnet or testnet or devnet) is selected at the top right.
 2. Switch to the **RESOURCES** tab.
 3. Using the browser search (Ctrl-f, do not use the **Search transactions** field), search for the validator address. 
 
 ### How to find stake pool address
 
-To find out which stake pool address to use (for example, to bootstrap your node), run the below command. This example is for mainnet. See the `--url` value for testnet or devnet in [Aptos Blockchain Deployments](/docs/nodes/aptos-deployments.md). Also see [Bootstrapping validator node](nodes/validator-node/operator/connect-to-aptos-network.md#bootstrapping-validator-node):
+To find out which stake pool address to use (for example, to bootstrap your node), run the below command. This example is for mainnet. See the `--url` value for testnet or devnet in [Pont Blockchain Deployments](/docs/nodes/pont-deployments.md). Also see [Bootstrapping validator node](nodes/validator-node/operator/connect-to-pont-network.md#bootstrapping-validator-node):
 
 ```bash
-aptos node get-stake-pool \
+pont node get-stake-pool \
   --owner-address 0x0756c80f0597fc221fe043d5388949b34151a4efe5753965bbfb0ed7d0be08ea \
-  --url https://fullnode.mainnet.aptoslabs.com/v1
+  --url https://fullnode.mainnet.pontlabs.com/v1
 ```
 
 ### How to check if an address is the correct stake pool address or a correct validator address
 
-Follow these steps on the Aptos Explorer:
+Follow these steps on the Pont Explorer:
 
-1. Go to account [`0x1`](https://explorer.aptoslabs.com/account/0x1) page on the Aptos Explorer.
+1. Go to account [`0x1`](https://explorer.pontlabs.com/account/0x1) page on the Pont Explorer.
 1.  Make sure the correct network (mainnet or testnet or devnet) is selected at the top right.
 2. Switch to **RESOURCES** tab.
 3. Using the browser search (Ctrl-f, do not use the **Search transactions** field), search for `StakePool`. The address with the `StakePool` resource is the correct stake pool address.
@@ -133,7 +133,7 @@ Follow these steps on the Aptos Explorer:
 To see the previous epoch rewards for a given pool address, click on a URL of the below format. This example is for Premainnet and for the pool address `0x2b32ede8ef4805487eff7b283571789e0f4d10766d5cb5691fe880b76f21e7e4`. Use the network and pool address of your choice in this place:
 
 ```html
-https://fullnode.mainnet.aptoslabs.com/v1/accounts/0x2b32ede8ef4805487eff7b283571789e0f4d10766d5cb5691fe880b76f21e7e4/events/10
+https://fullnode.mainnet.pontlabs.com/v1/accounts/0x2b32ede8ef4805487eff7b283571789e0f4d10766d5cb5691fe880b76f21e7e4/events/10
 ```
 
 ### Terraform "Connection Refused" error
@@ -143,7 +143,7 @@ https://fullnode.mainnet.aptoslabs.com/v1/accounts/0x2b32ede8ef4805487eff7b28357
 When running terraform, the command errors out with a connection refused error message.
 
   ```
-  Error: Get "http://localhost/api/v1/namespaces/aptos": dial tcp 127.0.0.1:80: connect: connection refused
+  Error: Get "http://localhost/api/v1/namespaces/pont": dial tcp 127.0.0.1:80: connect: connection refused
   ```
 
 #### Workaround
@@ -187,14 +187,14 @@ YAML files are sensitive to formatting errors. Use a dedicated YAML editor or us
 When starting a node with the `cargo run -p ...` command, you receive a "Unable to fetch any peers to poll" error. It looks like you have no peers on the available node testers. You have no output when running:
 
 ```bash
-curl 127.0.0.1:9101/metrics 2> /dev/null | grep "aptos_state_sync_version{type=\"synced\"}"
+curl 127.0.0.1:9101/metrics 2> /dev/null | grep "pont_state_sync_version{type=\"synced\"}"
 ```
 
 Also sync version does not increase, indicating syncing is not working.
 
 #### Workaround
 
-The devnet validator fullnodes will accept only a maximum of connections. If Aptos devnet is experiencing high network connection volume, your fullnode might not able to connect. It is also possible that you do not have proper network configuration with firewall rules to allow outbound traffic.
+The devnet validator fullnodes will accept only a maximum of connections. If Pont devnet is experiencing high network connection volume, your fullnode might not able to connect. It is also possible that you do not have proper network configuration with firewall rules to allow outbound traffic.
 
 You can workaround this by:
 
@@ -214,7 +214,7 @@ full_node_networks:
       seeds:
         bb14af025d226288a3488b4433cf5cb54d6a710365a2d95ac6ffbd9b9198a86a:
             addresses:
-            - "/dns4/pfn0.node.devnet.aptoslabs.com/tcp/6182/noise-ik/bb14af025d226288a3488b4433cf5cb54d6a710365a2d95ac6ffbd9b9198a86a/handshake/0"
+            - "/dns4/pfn0.node.devnet.pontlabs.com/tcp/6182/noise-ik/bb14af025d226288a3488b4433cf5cb54d6a710365a2d95ac6ffbd9b9198a86a/handshake/0"
             role: "Upstream"
 ```
 
@@ -222,10 +222,10 @@ full_node_networks:
 
 #### Workaround
 
-If your validator node is facing persistent issues, for example, it is unable to propose or fails to synchronize, open an [aptos-ait2](https://github.com/aptos-labs/aptos-ait2/issues) GitHub issue and provide the following:
+If your validator node is facing persistent issues, for example, it is unable to propose or fails to synchronize, open an [pont-ait2](https://github.com/aptos-labs/pont-ait2/issues) GitHub issue and provide the following:
 - Your node setup, i.e., if you're running it from source, Docker or Terraform. Include the source code version, i.e., the image tag or branch).
 - A description of the issues you are facing and how long they have been occurring.
-- **Important**: The logs for your node (going as far back as possible). Without the detailed logs, the Aptos team will likely be unable to debug the issue.
+- **Important**: The logs for your node (going as far back as possible). Without the detailed logs, the Pont team will likely be unable to debug the issue.
 - We may also ask you to enable the debug logs for the node. You can do this by updating your node configuration file (e.g., `validator.yaml`) by adding:
 ```yaml
  logger:
@@ -234,11 +234,11 @@ If your validator node is facing persistent issues, for example, it is unable to
 - Make sure to also include any other information you think might be useful and whether or not restarting your validator helps.
 
 
-[rest_spec]: https://github.com/aptos-labs/aptos-core/tree/main/api
-[devnet_genesis]: https://devnet.aptoslabs.com/genesis.blob
-[devnet_waypoint]: https://devnet.aptoslabs.com/waypoint.txt
-[aptos-labs/aptos-core]: https://github.com/aptos-labs/aptos-core.git
-[status dashboard]: https://status.devnet.aptos.dev
+[rest_spec]: https://github.com/aptos-labs/pont-core/tree/main/api
+[devnet_genesis]: https://devnet.pontlabs.com/genesis.blob
+[devnet_waypoint]: https://devnet.pontlabs.com/waypoint.txt
+[aptos-labs/pont-core]: https://github.com/aptos-labs/pont-core.git
+[status dashboard]: https://status.devnet.pont.dev
 
 
 

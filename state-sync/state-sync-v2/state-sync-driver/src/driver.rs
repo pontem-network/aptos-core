@@ -19,11 +19,6 @@ use crate::{
     utils,
     utils::PENDING_DATA_LOG_FREQ_SECS,
 };
-use aptos_config::config::{RoleType, StateSyncDriverConfig};
-use aptos_data_client::AptosDataClient;
-use aptos_infallible::Mutex;
-use aptos_logger::prelude::*;
-use aptos_types::waypoint::Waypoint;
 use consensus_notifications::{
     ConsensusCommitNotification, ConsensusNotification, ConsensusSyncNotification,
 };
@@ -33,6 +28,11 @@ use data_streaming_service::streaming_client::{
 use event_notifications::EventSubscriptionService;
 use futures::StreamExt;
 use mempool_notifications::MempoolNotificationSender;
+use pont_config::config::{RoleType, StateSyncDriverConfig};
+use pont_data_client::PontDataClient;
+use pont_infallible::Mutex;
+use pont_logger::prelude::*;
+use pont_types::waypoint::Waypoint;
 use std::{sync::Arc, time::SystemTime};
 use storage_interface::DbReader;
 use tokio::task::yield_now;
@@ -89,7 +89,7 @@ pub struct StateSyncDriver<
     continuous_syncer: ContinuousSyncer<StorageSyncer, StreamingClient>,
 
     // The client for checking the global data summary of our peers
-    aptos_data_client: DataClient,
+    pont_data_client: DataClient,
 
     // The configuration for the driver
     driver_configuration: DriverConfiguration,
@@ -114,7 +114,7 @@ pub struct StateSyncDriver<
 }
 
 impl<
-        DataClient: AptosDataClient + Send + Clone + 'static,
+        DataClient: PontDataClient + Send + Clone + 'static,
         MempoolNotifier: MempoolNotificationSender,
         MetadataStorage: MetadataStorageInterface + Clone,
         StorageSyncer: StorageSynchronizerInterface + Clone,
@@ -132,7 +132,7 @@ impl<
         mempool_notification_handler: MempoolNotificationHandler<MempoolNotifier>,
         metadata_storage: MetadataStorage,
         storage_synchronizer: StorageSyncer,
-        aptos_data_client: DataClient,
+        pont_data_client: DataClient,
         streaming_client: StreamingClient,
         storage: Arc<dyn DbReader>,
     ) -> Self {
@@ -156,7 +156,7 @@ impl<
             commit_notification_listener,
             consensus_notification_handler,
             continuous_syncer,
-            aptos_data_client,
+            pont_data_client,
             driver_configuration,
             error_notification_listener,
             event_subscription_service,
@@ -542,7 +542,7 @@ impl<
     /// Checks that state sync is making progress
     async fn drive_progress(&mut self) {
         // Fetch the global data summary and verify we have active peers
-        let global_data_summary = self.aptos_data_client.get_global_data_summary();
+        let global_data_summary = self.pont_data_client.get_global_data_summary();
         if global_data_summary.is_empty() {
             trace!(LogSchema::new(LogEntry::Driver).message(
                 "The global data summary is empty! It's likely that we have no active peers."

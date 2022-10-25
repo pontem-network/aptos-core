@@ -3,15 +3,28 @@
 
 #![forbid(unsafe_code)]
 
-use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, Uniform};
-use aptos_gas::LATEST_GAS_FEATURE_VERSION;
-use aptos_state_view::account_with_state_view::AsAccountWithStateView;
-use aptos_temppath::TempPath;
-use aptos_types::{
+use cached_packages::pont_stdlib;
+use executor::{
+    block_executor::BlockExecutor,
+    db_bootstrapper::{generate_waypoint, maybe_bootstrap},
+};
+use executor_test_helpers::{
+    bootstrap_genesis, gen_ledger_info_with_sigs, get_test_signed_transaction,
+};
+use executor_types::BlockExecutorTrait;
+use move_core_types::{
+    language_storage::TypeTag,
+    move_resource::{MoveResource, MoveStructType},
+};
+use pont_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, Uniform};
+use pont_gas::LATEST_GAS_FEATURE_VERSION;
+use pont_state_view::account_with_state_view::AsAccountWithStateView;
+use pont_temppath::TempPath;
+use pont_types::{
     access_path::AccessPath,
     account_address::AccountAddress,
     account_config::{
-        aptos_test_root_address, new_block_event_key, CoinStoreResource, NewBlockEvent,
+        new_block_event_key, pont_test_root_address, CoinStoreResource, NewBlockEvent,
         CORE_CODE_ADDRESS,
     },
     account_view::AccountView,
@@ -26,21 +39,8 @@ use aptos_types::{
     waypoint::Waypoint,
     write_set::{WriteOp, WriteSetMut},
 };
-use aptos_vm::AptosVM;
-use aptosdb::AptosDB;
-use cached_packages::aptos_stdlib;
-use executor::{
-    block_executor::BlockExecutor,
-    db_bootstrapper::{generate_waypoint, maybe_bootstrap},
-};
-use executor_test_helpers::{
-    bootstrap_genesis, gen_ledger_info_with_sigs, get_test_signed_transaction,
-};
-use executor_types::BlockExecutorTrait;
-use move_core_types::{
-    language_storage::TypeTag,
-    move_resource::{MoveResource, MoveStructType},
-};
+use pont_vm::PontVM;
+use pontdb::PontDB;
 use rand::SeedableRng;
 use storage_interface::{state_view::LatestDbStateCheckpointView, DbReaderWriter};
 
@@ -49,7 +49,7 @@ fn test_empty_db() {
     let genesis = vm_genesis::test_genesis_change_set_and_validators(Some(1));
     let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis.0));
     let tmp_dir = TempPath::new();
-    let db_rw = DbReaderWriter::new(AptosDB::new_for_test(&tmp_dir));
+    let db_rw = DbReaderWriter::new(PontDB::new_for_test(&tmp_dir));
 
     assert!(db_rw
         .reader
@@ -58,8 +58,8 @@ fn test_empty_db() {
         .is_none());
 
     // Bootstrap empty DB.
-    let waypoint = generate_waypoint::<AptosVM>(&db_rw, &genesis_txn).expect("Should not fail.");
-    maybe_bootstrap::<AptosVM>(&db_rw, &genesis_txn, waypoint).unwrap();
+    let waypoint = generate_waypoint::<PontVM>(&db_rw, &genesis_txn).expect("Should not fail.");
+    maybe_bootstrap::<PontVM>(&db_rw, &genesis_txn, waypoint).unwrap();
     let ledger_info = db_rw.reader.get_latest_ledger_info().unwrap();
     assert_eq!(
         Waypoint::new_epoch_boundary(ledger_info.ledger_info()).unwrap(),
@@ -75,7 +75,7 @@ fn test_empty_db() {
     assert!(trusted_state_change.is_epoch_change());
 
     // `maybe_bootstrap()` does nothing on non-empty DB.
-    assert!(!maybe_bootstrap::<AptosVM>(&db_rw, &genesis_txn, waypoint).unwrap());
+    assert!(!maybe_bootstrap::<PontVM>(&db_rw, &genesis_txn, waypoint).unwrap());
 }
 
 fn execute_and_commit(txns: Vec<Transaction>, db: &DbReaderWriter, signer: &ValidatorSigner) {
@@ -84,7 +84,7 @@ fn execute_and_commit(txns: Vec<Transaction>, db: &DbReaderWriter, signer: &Vali
     let version = li.ledger_info().version();
     let epoch = li.ledger_info().next_block_epoch();
     let target_version = version + txns.len() as u64;
-    let executor = BlockExecutor::<AptosVM>::new(db.clone());
+    let executor = BlockExecutor::<PontVM>::new(db.clone());
     let output = executor
         .execute_block((block_id, txns), executor.committed_block_id())
         .unwrap();
@@ -119,37 +119,37 @@ fn get_demo_accounts() -> (
     (account1, privkey1, account2, privkey2)
 }
 
-fn get_aptos_coin_mint_transaction(
-    aptos_root_key: &Ed25519PrivateKey,
-    aptos_root_seq_num: u64,
+fn get_pont_coin_mint_transaction(
+    pont_root_key: &Ed25519PrivateKey,
+    pont_root_seq_num: u64,
     account: &AccountAddress,
     amount: u64,
 ) -> Transaction {
     get_test_signed_transaction(
-        aptos_test_root_address(),
-        /* sequence_number = */ aptos_root_seq_num,
-        aptos_root_key.clone(),
-        aptos_root_key.public_key(),
-        Some(aptos_stdlib::aptos_coin_mint(*account, amount)),
+        pont_test_root_address(),
+        /* sequence_number = */ pont_root_seq_num,
+        pont_root_key.clone(),
+        pont_root_key.public_key(),
+        Some(pont_stdlib::pont_coin_mint(*account, amount)),
     )
 }
 
 fn get_account_transaction(
-    aptos_root_key: &Ed25519PrivateKey,
-    aptos_root_seq_num: u64,
+    pont_root_key: &Ed25519PrivateKey,
+    pont_root_seq_num: u64,
     account: &AccountAddress,
     _account_key: &Ed25519PrivateKey,
 ) -> Transaction {
     get_test_signed_transaction(
-        aptos_test_root_address(),
-        /* sequence_number = */ aptos_root_seq_num,
-        aptos_root_key.clone(),
-        aptos_root_key.public_key(),
-        Some(aptos_stdlib::aptos_account_create_account(*account)),
+        pont_test_root_address(),
+        /* sequence_number = */ pont_root_seq_num,
+        pont_root_key.clone(),
+        pont_root_key.public_key(),
+        Some(pont_stdlib::pont_account_create_account(*account)),
     )
 }
 
-fn get_aptos_coin_transfer_transaction(
+fn get_pont_coin_transfer_transaction(
     sender: AccountAddress,
     sender_seq_number: u64,
     sender_key: &Ed25519PrivateKey,
@@ -161,7 +161,7 @@ fn get_aptos_coin_transfer_transaction(
         sender_seq_number,
         sender_key.clone(),
         sender_key.public_key(),
-        Some(aptos_stdlib::aptos_coin_transfer(recipient, amount)),
+        Some(pont_stdlib::pont_coin_transfer(recipient, amount)),
     )
 }
 
@@ -177,9 +177,9 @@ fn get_balance(account: &AccountAddress, db: &DbReaderWriter) -> u64 {
 
 fn get_configuration(db: &DbReaderWriter) -> ConfigurationResource {
     let db_state_view = db.reader.latest_state_checkpoint_view().unwrap();
-    let aptos_framework_account_state_view =
+    let pont_framework_account_state_view =
         db_state_view.as_account_with_state_view(&CORE_CODE_ADDRESS);
-    aptos_framework_account_state_view
+    pont_framework_account_state_view
         .get_configuration_resource()
         .unwrap()
         .unwrap()
@@ -192,8 +192,8 @@ fn test_new_genesis() {
     let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis.0));
     // Create bootstrapped DB.
     let tmp_dir = TempPath::new();
-    let db = DbReaderWriter::new(AptosDB::new_for_test(&tmp_dir));
-    let waypoint = bootstrap_genesis::<AptosVM>(&db, &genesis_txn).unwrap();
+    let db = DbReaderWriter::new(PontDB::new_for_test(&tmp_dir));
+    let waypoint = bootstrap_genesis::<PontVM>(&db, &genesis_txn).unwrap();
     let signer = ValidatorSigner::new(
         genesis.1[0].data.owner_address,
         genesis.1[0].consensus_key.clone(),
@@ -203,8 +203,8 @@ fn test_new_genesis() {
     let (account1, account1_key, account2, account2_key) = get_demo_accounts();
     let txn1 = get_account_transaction(genesis_key, 0, &account1, &account1_key);
     let txn2 = get_account_transaction(genesis_key, 1, &account2, &account2_key);
-    let txn3 = get_aptos_coin_mint_transaction(genesis_key, 2, &account1, 200_000_000);
-    let txn4 = get_aptos_coin_mint_transaction(genesis_key, 3, &account2, 200_000_000);
+    let txn3 = get_pont_coin_mint_transaction(genesis_key, 2, &account1, 200_000_000);
+    let txn4 = get_pont_coin_mint_transaction(genesis_key, 3, &account2, 200_000_000);
     execute_and_commit(block(vec![txn1, txn2, txn3, txn4]), &db, &signer);
     assert_eq!(get_balance(&account1, &db), 200_000_000);
     assert_eq!(get_balance(&account2, &db), 200_000_000);
@@ -270,8 +270,8 @@ fn test_new_genesis() {
     ));
 
     // Bootstrap DB into new genesis.
-    let waypoint = generate_waypoint::<AptosVM>(&db, &genesis_txn).unwrap();
-    assert!(maybe_bootstrap::<AptosVM>(&db, &genesis_txn, waypoint).unwrap());
+    let waypoint = generate_waypoint::<PontVM>(&db, &genesis_txn).unwrap();
+    assert!(maybe_bootstrap::<PontVM>(&db, &genesis_txn, waypoint).unwrap());
     assert_eq!(waypoint.version(), 6);
 
     // Client bootable from waypoint.
@@ -289,7 +289,7 @@ fn test_new_genesis() {
 
     println!("FINAL TRANSFER");
     // Transfer some money.
-    let txn = get_aptos_coin_transfer_transaction(account1, 0, &account1_key, account2, 50_000_000);
+    let txn = get_pont_coin_transfer_transaction(account1, 0, &account1_key, account2, 50_000_000);
     execute_and_commit(block(vec![txn]), &db, &signer);
 
     // And verify.

@@ -7,11 +7,11 @@ slug: "network-identity-fullnode"
 
 Fullnodes will automatically start up with a randomly generated network identity. This works well for regular fullnodes. However:
 
-- You may want your fullnode to be added to a specific upstream fullnode's allowlist (i.e., another fullnode participant in the Aptos network), because:
+- You may want your fullnode to be added to a specific upstream fullnode's allowlist (i.e., another fullnode participant in the Pont network), because:
 
   - You might require specific permissions for your fullnode on this specific upstream fullnode, or
   - This upstream fullnode only allows known identities to connect to it, or
-  - You may wish to advertise your fullnode for other Aptos fullnodes to connect to (to help support the Aptos network).
+  - You may wish to advertise your fullnode for other Pont fullnodes to connect to (to help support the Pont network).
 
 In such cases, it helps if you run your fullnode with a static network identity, instead of a randomly generated network identity that keeps changing every time you start up your fullnode.
 
@@ -27,7 +27,7 @@ Before you proceed, make sure that you already know how to start your local full
 
 :::caution Docker support only on Linux
 
-Docker container is currently supported only on Linux x86-64 platform. If you are on macOS or Windows platform, use the Aptos-core source approach.
+Docker container is currently supported only on Linux x86-64 platform. If you are on macOS or Windows platform, use the Pont-core source approach.
 
 :::
 
@@ -43,33 +43,33 @@ Follow the below detailed steps:
 
 1. Preparation
     
-    **Using Aptos-core source code**
+    **Using Pont-core source code**
     
-    Clone the [aptos-labs/aptos-core](https://github.com/aptos-labs/aptos-core) repo. For example:
+    Clone the [aptos-labs/pont-core](https://github.com/aptos-labs/pont-core) repo. For example:
 
     ```bash
-    git clone https://github.com/aptos-labs/aptos-core.git
-    cd aptos-core
+    git clone https://github.com/aptos-labs/pont-core.git
+    cd pont-core
     ./scripts/dev_setup.sh
     source ~/.cargo/env
     ```
 
     **Using Docker**
 
-    Alternatively, if you are on Linux x86-64 platform, you can use the Aptos Docker image.
+    Alternatively, if you are on Linux x86-64 platform, you can use the Pont Docker image.
 
     `cd` into the directory for your local public fullnode and start a Docker container with the latest tools, for example:
 
     ```bash
     cd ~/my-full-node
-    docker run -it aptoslabs/tools:devnet /bin/bash
+    docker run -it pontlabs/tools:devnet /bin/bash
     ```
 
 2. Generate the private key
 
-  **Using Aptos-core source code**
+  **Using Pont-core source code**
   
-  Run the [Aptos CLI](https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos/README.md) `aptos` to produce a hex encoded static x25519 private key. This will be the private key for your network identity.
+  Run the [Pont CLI](https://github.com/aptos-labs/pont-core/blob/main/crates/pont/README.md) `pont` to produce a hex encoded static x25519 private key. This will be the private key for your network identity.
 
   :::tip
 
@@ -78,7 +78,7 @@ Follow the below detailed steps:
   :::
 
   ```bash
-  aptos key generate --key-type x25519 --output-file /path/to/private-key.txt
+  pont key generate --key-type x25519 --output-file /path/to/private-key.txt
 
   ```
 
@@ -94,24 +94,24 @@ Follow the below detailed steps:
 
   **Using Docker**
 
-  Run this step from inside the `aptoslabs/tools` Docker container. Open a new terminal and `cd` into the directory where you started the Docker container for your fullnode. Making sure to provide the full path to where you want the private key TXT file to be stored, run the command as below:
+  Run this step from inside the `pontlabs/tools` Docker container. Open a new terminal and `cd` into the directory where you started the Docker container for your fullnode. Making sure to provide the full path to where you want the private key TXT file to be stored, run the command as below:
 
   ```bash
-  aptos key generate \
+  pont key generate \
       --key-type x25519 \
       --output-file /path/to/private-key.txt
   ```
 
 3. Retrieve the peer identity
   
-  **Using Aptos-core source code**
+  **Using Pont-core source code**
 
   :::tip Required: host information
   Use the `--host` flag to provide the host information to output a network address for the fullnode. 
   :::
 
   ```bash
-  aptos key extract-peer --host example.com:6180 \
+  pont key extract-peer --host example.com:6180 \
       --public-network-key-file private-key.txt.pub \
       --output-file peer-info.yaml
   ```
@@ -133,7 +133,7 @@ Follow the below detailed steps:
   ```
   or
   ```bash
-  aptos key extract-peer --host 1.1.1.1:6180 \
+  pont key extract-peer --host 1.1.1.1:6180 \
       --public-network-key-file private-key.txt.pub \
       --output-file peer-info.yaml
   ```
@@ -156,10 +156,10 @@ Follow the below detailed steps:
 
   **Using Docker**
 
-  Run the same above commands to extract the peer from inside the `aptoslabs/tools` Docker container. For example:
+  Run the same above commands to extract the peer from inside the `pontlabs/tools` Docker container. For example:
 
   ```bash
-  aptos key extract-peer --host 1.1.1.1:6180 \
+  pont key extract-peer --host 1.1.1.1:6180 \
       --public-network-key-file /path/to/private-key.txt.pub \
       --output-file /path/to/peer-info.yaml
   ```
@@ -246,7 +246,7 @@ Share your fullnode static network identity in the following format in the Disco
   ```yaml
   B881EA2C174D8211C123E5A91D86227DB116A44BB345A6E66874F83D8993F813:
     addresses:
-    - "/dns4/pfn0.node.devnet.aptoslabs.com/tcp/6182/noise-ik/B881EA2C174D8211C123E5A91D86227DB116A44BB345A6E66874F83D8993F813/handshake/0"
+    - "/dns4/pfn0.node.devnet.pontlabs.com/tcp/6182/noise-ik/B881EA2C174D8211C123E5A91D86227DB116A44BB345A6E66874F83D8993F813/handshake/0"
     role: "Upstream"
   B881EA2C174D8211C123E5A91D86227DB116A44BB345A6E66874F83D8993F813:
     addresses:
@@ -256,6 +256,6 @@ Share your fullnode static network identity in the following format in the Disco
 
 :::tip
 
-Peer ID is synonymous with `AccountAddress`. See [NetworkAddress](https://github.com/aptos-labs/aptos-core/blob/main/documentation/specifications/network/network-address.md) to see how `addresses` key value is constructed.
+Peer ID is synonymous with `AccountAddress`. See [NetworkAddress](https://github.com/aptos-labs/pont-core/blob/main/documentation/specifications/network/network-address.md) to see how `addresses` key value is constructed.
 
 :::

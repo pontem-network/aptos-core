@@ -2,11 +2,11 @@
 
    - [Installation](#installation)   
       - [Requirements](#requirements)   
-   - [Fork and clone the Aptos repo](#fork-and-clone-the-aptos-repo)   
+   - [Fork and clone the Pont repo](#fork-and-clone-the-pont-repo)   
    - [Build and serve the docs locally](#build-and-serve-the-docs-locally)   
    - [Build static html files](#build-static-html-files)   
 
-This Aptos Developer Documenatation is built using [Docusaurus 2](https://docusaurus.io/). Follow the below steps to build the docs locally to test your contribution.
+This Pont Developer Documenatation is built using [Docusaurus 2](https://docusaurus.io/). Follow the below steps to build the docs locally to test your contribution.
 
 ## Installation
 
@@ -28,10 +28,10 @@ brew install node
 brew install yarn
 ```
 
-## Clone the Aptos repo
+## Clone the Pont repo
 
   ```
-  git clone https://github.com/aptos-labs/aptos-core.git
+  git clone https://github.com/aptos-labs/pont-core.git
 
   ```
 
@@ -40,7 +40,7 @@ brew install yarn
 1. `cd` into the `developer-docs-site` directory in your clone.
 
   ```
-  cd aptos-core/developer-docs-site
+  cd pont-core/developer-docs-site
   ```
 2. Run `yarn`.
 

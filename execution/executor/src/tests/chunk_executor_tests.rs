@@ -10,28 +10,28 @@ use crate::{
     mock_vm::{encode_mint_transaction, MockVM},
     tests,
 };
-use aptos_crypto::HashValue;
-use aptos_types::{
+use executor_types::{BlockExecutorTrait, ChunkExecutorTrait};
+use pont_crypto::HashValue;
+use pont_types::{
     ledger_info::LedgerInfoWithSignatures,
     test_helpers::transaction_test_helpers::block,
     transaction::{TransactionListWithProof, TransactionOutputListWithProof},
 };
-use aptosdb::AptosDB;
-use executor_types::{BlockExecutorTrait, ChunkExecutorTrait};
+use pontdb::PontDB;
 use rand::Rng;
 use storage_interface::DbReaderWriter;
 
 pub struct TestExecutor {
-    _path: aptos_temppath::TempPath,
+    _path: pont_temppath::TempPath,
     pub db: DbReaderWriter,
     pub executor: ChunkExecutor<MockVM>,
 }
 
 impl TestExecutor {
     pub fn new() -> TestExecutor {
-        let path = aptos_temppath::TempPath::new();
+        let path = pont_temppath::TempPath::new();
         path.create_as_dir().unwrap();
-        let db = DbReaderWriter::new(AptosDB::new_for_test(path.path()));
+        let db = DbReaderWriter::new(PontDB::new_for_test(path.path()));
         let genesis = vm_genesis::test_genesis_transaction();
         let waypoint = generate_waypoint::<MockVM>(&db, &genesis).unwrap();
         maybe_bootstrap::<MockVM>(&db, &genesis, waypoint).unwrap();

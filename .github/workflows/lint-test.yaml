@@ -77,7 +77,7 @@ jobs:
         with:
           fetch-depth: 0 # get all the history because cargo xtest --change-since origin/main requires it.
       - uses: ./.github/actions/rust-setup
-      - run: cargo test --locked --doc --workspace --exclude aptos-node-checker
+      - run: cargo test --locked --doc --workspace --exclude pont-node-checker
 
   rust-unit-test:
     runs-on: high-perf-docker
@@ -103,10 +103,10 @@ jobs:
       - uses: taiki-e/install-action@v1.5.6
         with:
           tool: nextest
-      # prebuild aptos-node binary, so that tests don't start before node is built.
-      # also prebuild aptos-node binary as a separate step to avoid feature unification issues
+      # prebuild pont-node binary, so that tests don't start before node is built.
+      # also prebuild pont-node binary as a separate step to avoid feature unification issues
       # --test-threads is intentionally set to reduce resource contention in ci jobs. Increasing this, increases job failures and retries.
-      - run: cargo build --locked --package=aptos-node --features=failpoints,indexer --release && LOCAL_SWARM_NODE_RELEASE=1 cargo nextest run --release --profile ci --package smoke-test --test-threads 6 --retries 3
+      - run: cargo build --locked --package=pont-node --features=failpoints,indexer --release && LOCAL_SWARM_NODE_RELEASE=1 cargo nextest run --release --profile ci --package smoke-test --test-threads 6 --retries 3
         env:
           INDEXER_DATABASE_URL: postgresql://postgres@localhost/postgres
 
@@ -126,7 +126,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/rust-setup
-      - run: cargo test --locked --features check-vm-features -p aptos-node
+      - run: cargo test --locked --features check-vm-features -p pont-node
 
   python-unit-test:
     uses: ./.github/workflows/python-unit-test.yaml

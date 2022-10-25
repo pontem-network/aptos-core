@@ -1,26 +1,26 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::ed25519::Ed25519Signature;
-use aptos_gas::{AptosGasParameters, FromOnChainGasSchedule};
-use aptos_rest_client::aptos_api_types::{MoveModuleId, TransactionData};
-use aptos_sdk::move_types::language_storage::StructTag;
-use aptos_types::account_address::AccountAddress;
-use aptos_types::account_config::{AccountResource, CORE_CODE_ADDRESS};
-use aptos_types::on_chain_config::GasScheduleV2;
-use aptos_types::transaction::authenticator::AuthenticationKey;
-use aptos_types::transaction::{SignedTransaction, Transaction};
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::Swarm;
+use pont_crypto::ed25519::Ed25519Signature;
+use pont_gas::{FromOnChainGasSchedule, PontGasParameters};
+use pont_rest_client::pont_api_types::{MoveModuleId, TransactionData};
+use pont_sdk::move_types::language_storage::StructTag;
+use pont_types::account_address::AccountAddress;
+use pont_types::account_config::{AccountResource, CORE_CODE_ADDRESS};
+use pont_types::on_chain_config::GasScheduleV2;
+use pont_types::transaction::authenticator::AuthenticationKey;
+use pont_types::transaction::{SignedTransaction, Transaction};
 use std::convert::TryFrom;
 use std::str::FromStr;
 
-use crate::smoke_test_environment::new_local_swarm_with_aptos;
+use crate::smoke_test_environment::new_local_swarm_with_pont;
 
 #[tokio::test]
 async fn test_get_index() {
-    let mut swarm = new_local_swarm_with_aptos(1).await;
-    let info = swarm.aptos_public_info();
+    let mut swarm = new_local_swarm_with_pont(1).await;
+    let info = swarm.pont_public_info();
 
     let resp = reqwest::get(info.url().to_owned()).await.unwrap();
     assert_eq!(reqwest::StatusCode::OK, resp.status());
@@ -28,21 +28,21 @@ async fn test_get_index() {
 
 #[tokio::test]
 async fn test_basic_client() {
-    let mut swarm = new_local_swarm_with_aptos(1).await;
-    let mut info = swarm.aptos_public_info();
+    let mut swarm = new_local_swarm_with_pont(1).await;
+    let mut info = swarm.pont_public_info();
 
     info.client().get_ledger_information().await.unwrap();
 
     // NOTE(Gas): For some reason, there needs to be a lot of funds in the account in order for the
     //            test to pass.
     //            Is this caused by us increasing the default max gas amount in
-    //            testsuite/forge/src/interface/aptos.rs?
+    //            testsuite/forge/src/interface/pont.rs?
     let mut account1 = info.create_and_fund_user_account(10_000_000).await.unwrap();
     let account2 = info.create_and_fund_user_account(10_000_000).await.unwrap();
 
     let tx = account1.sign_with_transaction_builder(
         info.transaction_factory()
-            .payload(aptos_stdlib::aptos_coin_transfer(account2.address(), 1)),
+            .payload(pont_stdlib::pont_coin_transfer(account2.address(), 1)),
     );
     let pending_txn = info.client().submit(&tx).await.unwrap().into_inner();
 
@@ -69,8 +69,8 @@ async fn test_basic_client() {
 #[ignore]
 #[tokio::test]
 async fn test_gas_estimation() {
-    let mut swarm = new_local_swarm_with_aptos(1).await;
-    let mut public_info = swarm.aptos_public_info();
+    let mut swarm = new_local_swarm_with_pont(1).await;
+    let mut public_info = swarm.pont_public_info();
 
     let gas_schedule: GasScheduleV2 = public_info
         .client()
@@ -79,7 +79,7 @@ async fn test_gas_estimation() {
         .unwrap()
         .into_inner();
     let gas_params =
-        AptosGasParameters::from_on_chain_gas_schedule(&gas_schedule.to_btree_map()).unwrap();
+        PontGasParameters::from_on_chain_gas_schedule(&gas_schedule.to_btree_map()).unwrap();
 
     // No transactions should always return 1 as the estimated gas
     assert_eq!(
@@ -185,8 +185,8 @@ async fn test_gas_estimation() {
 
 #[tokio::test]
 async fn test_bcs() {
-    let mut swarm = new_local_swarm_with_aptos(1).await;
-    let mut info = swarm.aptos_public_info();
+    let mut swarm = new_local_swarm_with_pont(1).await;
+    let mut info = swarm.pont_public_info();
 
     // Create accounts
     let mut local_account = info
@@ -299,7 +299,7 @@ async fn test_bcs() {
         let bcs_txn = transactions_bcs.get(i).unwrap();
         assert_eq!(bcs_txn.version, expected_transaction.version().unwrap());
         let expected_hash =
-            aptos_crypto::HashValue::from(expected_transaction.transaction_info().unwrap().hash);
+            pont_crypto::HashValue::from(expected_transaction.transaction_info().unwrap().hash);
 
         let bcs_hash = if let Transaction::UserTransaction(ref txn) = bcs_txn.transaction {
             txn.clone().committed_hash()
@@ -349,7 +349,7 @@ async fn test_bcs() {
 
         assert_eq!(json_txn.version().unwrap(), bcs_txn.version);
         assert_eq!(
-            aptos_crypto::HashValue::from(json_txn.transaction_info().unwrap().hash),
+            pont_crypto::HashValue::from(json_txn.transaction_info().unwrap().hash),
             bcs_txn.info.transaction_hash()
         );
     }
@@ -372,7 +372,7 @@ async fn test_bcs() {
 
     let bcs_txn = client.simulate_bcs(&signed_txn).await.unwrap().into_inner();
     assert_eq!(
-        aptos_crypto::HashValue::from(json_txn.info.hash),
+        pont_crypto::HashValue::from(json_txn.info.hash),
         bcs_txn.info.transaction_hash()
     );
 
@@ -405,7 +405,7 @@ async fn test_bcs() {
 
     assert_eq!(json_block.block_height.0, bcs_block.block_height);
     assert_eq!(
-        aptos_crypto::HashValue::from(json_block.block_hash),
+        pont_crypto::HashValue::from(json_block.block_hash),
         bcs_block.block_hash
     );
 
@@ -415,7 +415,7 @@ async fn test_bcs() {
     let first_bcs_txn = bcs_txns.first().unwrap();
     assert_eq!(first_json_txn.version().unwrap(), first_bcs_txn.version);
     assert_eq!(
-        aptos_crypto::HashValue::from(first_json_txn.transaction_info().unwrap().hash),
+        pont_crypto::HashValue::from(first_json_txn.transaction_info().unwrap().hash),
         first_bcs_txn.info.transaction_hash()
     );
 
@@ -436,7 +436,7 @@ async fn test_bcs() {
     assert_eq!(bcs_block.block_height, bcs_block_by_height.block_height);
     assert_eq!(bcs_block.block_hash, bcs_block_by_height.block_hash);
     assert_eq!(
-        aptos_crypto::HashValue::from(json_block_by_height.block_hash),
+        pont_crypto::HashValue::from(json_block_by_height.block_hash),
         bcs_block_by_height.block_hash
     );
 

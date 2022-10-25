@@ -1,6 +1,6 @@
-# Aptos Node API
+# Pont Node API
 
-This module provides a REST API for client applications to query the Aptos blockchain.
+This module provides a REST API for client applications to query the Pont blockchain.
 
 See spec source:
 - [YAML in doc/spec.yaml](doc/spec.yaml).

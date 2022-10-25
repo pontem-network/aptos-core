@@ -7,10 +7,6 @@ use crate::{
     transport::Connection,
 };
 use anyhow::format_err;
-use aptos_config::network_id::NetworkContext;
-use aptos_logger::prelude::*;
-use aptos_time_service::{TimeService, TimeServiceTrait};
-use aptos_types::{network_address::NetworkAddress, PeerId};
 use channel::{self};
 use futures::{
     channel::oneshot,
@@ -20,6 +16,10 @@ use futures::{
     stream::{Fuse, FuturesUnordered, StreamExt},
 };
 use netcore::transport::{ConnectionOrigin, Transport};
+use pont_config::network_id::NetworkContext;
+use pont_logger::prelude::*;
+use pont_time_service::{TimeService, TimeServiceTrait};
+use pont_types::{network_address::NetworkAddress, PeerId};
 use short_hex_str::AsShortHexStr;
 use std::time::Instant;
 

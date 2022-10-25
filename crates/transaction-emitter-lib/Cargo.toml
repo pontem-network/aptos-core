@@ -1,10 +1,10 @@
 [package]
 name = "transaction-emitter-lib"
 version = "0.0.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Library for Aptos transaction emitter"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Library for Pont transaction emitter"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -24,11 +24,11 @@ serde = { version = "1.0.137", features = ["derive"] }
 tokio = { version = "1.21.0", features = ["full"] }
 url = { version = "2.2.2", features = ["serde"] }
 
-aptos = { path = "../aptos" }
-aptos-config = { path = "../../config" }
-aptos-crypto = { path = "../aptos-crypto" }
-aptos-global-constants = { path = "../../config/global-constants" }
-aptos-infallible = { path = "../../crates/aptos-infallible" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-rest-client = { path = "../aptos-rest-client" }
-aptos-sdk = { path = "../../sdk" }
+pont = { path = "../pont" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../pont-crypto" }
+pont-global-constants = { path = "../../config/global-constants" }
+pont-infallible = { path = "../../crates/pont-infallible" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-rest-client = { path = "../pont-rest-client" }
+pont-sdk = { path = "../../sdk" }

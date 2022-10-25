@@ -1,10 +1,10 @@
 [package]
 name = "storage-service-server"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "The Aptos storage service (server-side)"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "The Pont storage service (server-side)"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -19,12 +19,12 @@ serde = { version = "1.0.137", default-features = false }
 thiserror = "1.0.31"
 tokio = { version = "1.21.0", features = ["rt", "macros"], default-features = false }
 
-aptos-config = { path = "../../../config" }
-aptos-infallible = { path = "../../../crates/aptos-infallible" }
-aptos-logger = { path = "../../../crates/aptos-logger" }
-aptos-metrics-core = { path = "../../../crates/aptos-metrics-core" }
-aptos-time-service = { path = "../../../crates/aptos-time-service", features = ["async"] }
-aptos-types = { path = "../../../types" }
+pont-config = { path = "../../../config" }
+pont-infallible = { path = "../../../crates/pont-infallible" }
+pont-logger = { path = "../../../crates/pont-logger" }
+pont-metrics-core = { path = "../../../crates/pont-metrics-core" }
+pont-time-service = { path = "../../../crates/pont-time-service", features = ["async"] }
+pont-types = { path = "../../../types" }
 
 bounded-executor = { path = "../../../crates/bounded-executor" }
 channel = { path = "../../../crates/channel" }
@@ -38,9 +38,9 @@ claims = "0.7"
 mockall = "0.11.0"
 rand = "0.7.3"
 
-aptos-bitvec = { path = "../../../crates/aptos-bitvec" }
-aptos-crypto = { path = "../../../crates/aptos-crypto" }
-aptos-time-service = { path = "../../../crates/aptos-time-service", features = ["async", "testing"] }
-aptos-types = { path = "../../../types" }
-move-deps = { path = "../../../aptos-move/move-deps", features = ["address32"] }
+pont-bitvec = { path = "../../../crates/pont-bitvec" }
+pont-crypto = { path = "../../../crates/pont-crypto" }
+pont-time-service = { path = "../../../crates/pont-time-service", features = ["async", "testing"] }
+pont-types = { path = "../../../types" }
+move-deps = { path = "../../../pont-move/move-deps", features = ["address32"] }
 storage-interface = { path = "../../../storage/storage-interface" }

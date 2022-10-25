@@ -3,14 +3,14 @@ title: "Using Source Code"
 slug: "run-validator-node-using-source"
 ---
 
-# Using Aptos-core source code
+# Using Pont-core source code
 
-This is a step-by-step guide to install an Aptos node using source code. Follow these steps to configure a validator node and a validator fullnode on separate machines. Use the `fullnode.yaml` to run a validator fullnode&mdash;see Step 12.
+This is a step-by-step guide to install an Pont node using source code. Follow these steps to configure a validator node and a validator fullnode on separate machines. Use the `fullnode.yaml` to run a validator fullnode&mdash;see Step 12.
 
 ## Before you proceed
 
 Make sure the following are installed on your local computer:
-   - **Aptos CLI**: https://aptos.dev/cli-tools/aptos-cli-tool/install-aptos-cli
+   - **Pont CLI**: https://pont.dev/cli-tools/pont-cli-tool/install-pont-cli
 
 ## Install
 
@@ -18,16 +18,16 @@ Make sure the following are installed on your local computer:
 Follow the below instructions **twice**, i.e., first on one machine to run a validator node and the second time on another machine to run a validator fullnode. 
 :::
 
-1. Clone the Aptos repo.
+1. Clone the Pont repo.
 
       ```bash
-      git clone https://github.com/aptos-labs/aptos-core.git
+      git clone https://github.com/aptos-labs/pont-core.git
       ```
 
-2. `cd` into `aptos-core` directory.
+2. `cd` into `pont-core` directory.
 
     ```bash
-    cd aptos-core
+    cd pont-core
     ```
 
 3. Run the `scripts/dev_setup.sh` Bash script as shown below. This will prepare your developer environment.
@@ -46,7 +46,7 @@ With your development environment ready, now you can start to setup your validat
 
 5. Checkout the `mainnet` branch using `git checkout --track origin/mainnet`.
 
-6. Create a directory for your Aptos node composition, and pick a username for your node. e.g.
+6. Create a directory for your Pont node composition, and pick a username for your node. e.g.
     ```bash
     export WORKSPACE=mainnet
     export USERNAME=alice
@@ -56,7 +56,7 @@ With your development environment ready, now you can start to setup your validat
 7. Generate the key pairs (node owner, voter, operator key, consensus key and networking key) in your working directory.
 
     ```bash
-    aptos genesis generate-keys --output-dir ~/$WORKSPACE/keys
+    pont genesis generate-keys --output-dir ~/$WORKSPACE/keys
     ```
 
     This will create 4 key files under `~/$WORKSPACE/keys` directory: 
@@ -74,7 +74,7 @@ With your development environment ready, now you can start to setup your validat
 
     ```bash
     cd ~/$WORKSPACE
-    aptos genesis set-validator-configuration \
+    pont genesis set-validator-configuration \
         --local-repository-dir ~/$WORKSPACE \
         --username $USERNAME \
         --owner-public-identity-file ~/$WORKSPACE/keys/public-keys.yaml \
@@ -84,7 +84,7 @@ With your development environment ready, now you can start to setup your validat
 
     # for example, with IP:
 
-    aptos genesis set-validator-configuration \
+    pont genesis set-validator-configuration \
         --local-repository-dir ~/$WORKSPACE \
         --username $USERNAME \
         --owner-public-identity-file ~/$WORKSPACE/keys/public-keys.yaml \
@@ -94,12 +94,12 @@ With your development environment ready, now you can start to setup your validat
 
     # For example, with DNS:
 
-    aptos genesis set-validator-configuration \
+    pont genesis set-validator-configuration \
         --local-repository-dir ~/$WORKSPACE \
         --username $USERNAME \
         --owner-public-identity-file ~/$WORKSPACE/keys/public-keys.yaml \
-        --validator-host bot.aptosdev.com:6180 \
-        --full-node-host fn.bot.aptosdev.com:6182 \
+        --validator-host bot.pontdev.com:6180 \
+        --full-node-host fn.bot.pontdev.com:6182 \
         --stake-amount 100000000000000
     ```
 
@@ -110,8 +110,8 @@ With your development environment ready, now you can start to setup your validat
 10. Copy the `validator.yaml`, `fullnode.yaml` files into this directory.
     ```bash
     mkdir ~/$WORKSPACE/config
-    cp docker/compose/aptos-node/validator.yaml ~/$WORKSPACE/config/validator.yaml
-    cp docker/compose/aptos-node/fullnode.yaml ~/$WORKSPACE/config/fullnode.yaml
+    cp docker/compose/pont-node/validator.yaml ~/$WORKSPACE/config/validator.yaml
+    cp docker/compose/pont-node/fullnode.yaml ~/$WORKSPACE/config/fullnode.yaml
     ```
 
     Modify the config files to update the data directory, key path, genesis file path, waypoint path. User must have write access to data directory.
@@ -135,13 +135,13 @@ With your development environment ready, now you can start to setup your validat
 12. Start your validator by running the below command:
 
     ```bash
-    cargo run -p aptos-node --release -- -f ~/$WORKSPACE/config/validator.yaml
+    cargo run -p pont-node --release -- -f ~/$WORKSPACE/config/validator.yaml
     ```
 
     Run validator fullnode on **another machine**:
 
     ```bash
-    cargo run -p aptos-node --release -- -f ~/$WORKSPACE/config/fullnode.yaml
+    cargo run -p pont-node --release -- -f ~/$WORKSPACE/config/fullnode.yaml
     ```
 
 Now you have completed setting up your node.

@@ -8,25 +8,25 @@ import TabItem from '@theme/TabItem';
 
 # Getting Started
 
-To kickstart your journey as a developer in the Aptos ecosystem, set up your development environment as described in this section. See [Installing Aptos CLI](../cli-tools/aptos-cli-tool/install-aptos-cli.md) for the supported operating systems.
+To kickstart your journey as a developer in the Pont ecosystem, set up your development environment as described in this section. See [Installing Pont CLI](../cli-tools/pont-cli-tool/install-pont-cli.md) for the supported operating systems.
 
-## Clone the Aptos-core repo
+## Clone the Pont-core repo
 
-Start by cloning the `aptos-core` GitHub repo from [GitHub](https://github.com/aptos-labs/aptos-core).
+Start by cloning the `pont-core` GitHub repo from [GitHub](https://github.com/aptos-labs/pont-core).
 
-1. Clone the Aptos repo.
+1. Clone the Pont repo.
 
       ```
-      git clone https://github.com/aptos-labs/aptos-core.git
+      git clone https://github.com/aptos-labs/pont-core.git
       ```
 
-2. `cd` into `aptos-core` directory.
+2. `cd` into `pont-core` directory.
 
     ```
-    cd aptos-core
+    cd pont-core
     ```
 
-3. Run the `scripts/dev_setup.sh` Bash script as shown below. This will prepare your developer environment by installing most of the dependencies needed to build, test and inspect Aptos Core. Note, you may be prompted for your password:
+3. Run the `scripts/dev_setup.sh` Bash script as shown below. This will prepare your developer environment by installing most of the dependencies needed to build, test and inspect Pont Core. Note, you may be prompted for your password:
 
     ```
     ./scripts/dev_setup.sh
@@ -35,13 +35,13 @@ Start by cloning the `aptos-core` GitHub repo from [GitHub](https://github.com/a
     You can see the available options for the script by running `./scripts/dev_setup.sh --help`
     :::
 
-4. Update your current shell environment to run `cargo build` and other Aptos-related commands:
+4. Update your current shell environment to run `cargo build` and other Pont-related commands:
 
     ```
     source ~/.cargo/env
     ```
 
-5. Optionally, check out a release branch to install an Aptos node:
+5. Optionally, check out a release branch to install an Pont node:
 
     <Tabs groupId="network">
     <TabItem value="devnet" label="Devnet">
@@ -64,7 +64,7 @@ Start by cloning the `aptos-core` GitHub repo from [GitHub](https://github.com/a
 
 ## Install the CLI
 
-Install the Aptos CLI following the [Installing Aptos CLI](/cli-tools/aptos-cli-tool/install-aptos-cli.md) guide. 
+Install the Pont CLI following the [Installing Pont CLI](/cli-tools/pont-cli-tool/install-pont-cli.md) guide. 
 
 ## Install tools for macOS
 
@@ -81,44 +81,44 @@ Make sure you have the below tools installed on your computer if running macOS. 
     ```
 - **Poetry**: Install Poetry from [https://python-poetry.org/docs/#installation](https://python-poetry.org/docs/#installation).
 
-Now your basic Aptos development environment is ready.
+Now your basic Pont development environment is ready.
 
-## Aptos developer resources
+## Pont developer resources
 
-This section contains links to frequently referred Aptos developer resources. 
+This section contains links to frequently referred Pont developer resources. 
 
-### Aptos Explorer
+### Pont Explorer
 
-- [Aptos Explorer](https://explorer.aptoslabs.com/): Use the top-right drop-down menu to select the network.
-- [Aptos Community](https://aptoslabs.com/community): Links to discussion forum, Discord and AIT.
+- [Pont Explorer](https://explorer.pontlabs.com/): Use the top-right drop-down menu to select the network.
+- [Pont Community](https://pontlabs.com/community): Links to discussion forum, Discord and AIT.
 
-### Aptos testnet
+### Pont testnet
 
-- **REST API Open API spec**: [https://fullnode.testnet.aptoslabs.com/v1/spec#/](https://fullnode.testnet.aptoslabs.com/v1/spec#/)
-- **REST service:** [https://fullnode.testnet.aptoslabs.com/v1](https://fullnode.testnet.aptoslabs.com/v1)
-- **Faucet service:** [https://faucet.testnet.aptoslabs.com](https://faucet.testnet.aptoslabs.com)
-- **Genesis**: [https://testnet.aptoslabs.com/genesis.blob](https://testnet.aptoslabs.com/genesis.blob)
-- **Genesis and waypoint**: [https://github.com/aptos-labs/aptos-genesis-waypoint/tree/main/testnet](https://github.com/aptos-labs/aptos-genesis-waypoint/tree/main/testnet)
-- **ChainID**: [Click here to see it on the Aptos Explorer](https://explorer.aptoslabs.com/?network=testnet).
+- **REST API Open API spec**: [https://fullnode.testnet.pontlabs.com/v1/spec#/](https://fullnode.testnet.pontlabs.com/v1/spec#/)
+- **REST service:** [https://fullnode.testnet.pontlabs.com/v1](https://fullnode.testnet.pontlabs.com/v1)
+- **Faucet service:** [https://faucet.testnet.pontlabs.com](https://faucet.testnet.pontlabs.com)
+- **Genesis**: [https://testnet.pontlabs.com/genesis.blob](https://testnet.pontlabs.com/genesis.blob)
+- **Genesis and waypoint**: [https://github.com/aptos-labs/pont-genesis-waypoint/tree/main/testnet](https://github.com/aptos-labs/pont-genesis-waypoint/tree/main/testnet)
+- **ChainID**: [Click here to see it on the Pont Explorer](https://explorer.pontlabs.com/?network=testnet).
 
-### Aptos devnet
+### Pont devnet
 
-- **REST API Open API spec**: [https://fullnode.devnet.aptoslabs.com/v1/spec#/](https://fullnode.devnet.aptoslabs.com/v1/spec#/)
-- **REST service:** [https://fullnode.devnet.aptoslabs.com/v1](https://fullnode.devnet.aptoslabs.com/v1)
-- **Faucet service:** [https://faucet.devnet.aptoslabs.com](https://faucet.devnet.aptoslabs.com)
-- **Genesis**: [https://devnet.aptoslabs.com/genesis.blob](https://devnet.aptoslabs.com/genesis.blob)
-- **Waypoint**: [https://devnet.aptoslabs.com/waypoint.txt](https://devnet.aptoslabs.com/waypoint.txt)
-- **ChainID**: [Click here to see it on the Aptos Explorer](https://explorer.aptoslabs.com/?network=devnet).
+- **REST API Open API spec**: [https://fullnode.devnet.pontlabs.com/v1/spec#/](https://fullnode.devnet.pontlabs.com/v1/spec#/)
+- **REST service:** [https://fullnode.devnet.pontlabs.com/v1](https://fullnode.devnet.pontlabs.com/v1)
+- **Faucet service:** [https://faucet.devnet.pontlabs.com](https://faucet.devnet.pontlabs.com)
+- **Genesis**: [https://devnet.pontlabs.com/genesis.blob](https://devnet.pontlabs.com/genesis.blob)
+- **Waypoint**: [https://devnet.pontlabs.com/waypoint.txt](https://devnet.pontlabs.com/waypoint.txt)
+- **ChainID**: [Click here to see it on the Pont Explorer](https://explorer.pontlabs.com/?network=devnet).
 
-### Aptos CLI
+### Pont CLI
 
-- [Aptos CLI releases](https://github.com/aptos-labs/aptos-core/releases?q=cli&expanded=true)
-- [Aptos CLI Documentation](/cli-tools/aptos-cli-tool/aptos-cli-index)
+- [Pont CLI releases](https://github.com/aptos-labs/pont-core/releases?q=cli&expanded=true)
+- [Pont CLI Documentation](/cli-tools/pont-cli-tool/pont-cli-index)
 
-### Aptos SDK
+### Pont SDK
 
-- [Typescript SDK](https://www.npmjs.com/package/aptos)
-- [Python SDK](https://pypi.org/project/aptos-sdk/)
+- [Typescript SDK](https://www.npmjs.com/package/pont)
+- [Python SDK](https://pypi.org/project/pont-sdk/)
 - [Rust SDK](/sdks/rust-sdk.md)
 
 ### IDE plugins for Move language

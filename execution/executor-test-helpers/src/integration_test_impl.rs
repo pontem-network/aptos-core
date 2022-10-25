@@ -3,13 +3,17 @@
 
 use crate::{bootstrap_genesis, gen_block_id, gen_ledger_info_with_sigs};
 use anyhow::{anyhow, ensure, Result};
-use aptos_sdk::{
+use cached_packages::pont_stdlib;
+use consensus_types::block::Block;
+use executor::block_executor::BlockExecutor;
+use executor_types::BlockExecutorTrait;
+use pont_sdk::{
     transaction_builder::TransactionFactory,
     types::{AccountKey, LocalAccount},
 };
-use aptos_state_view::account_with_state_view::{AccountWithStateView, AsAccountWithStateView};
-use aptos_types::{
-    account_config::aptos_test_root_address,
+use pont_state_view::account_with_state_view::{AccountWithStateView, AsAccountWithStateView};
+use pont_types::{
+    account_config::pont_test_root_address,
     account_view::AccountView,
     block_metadata::BlockMetadata,
     chain_id::ChainId,
@@ -22,35 +26,31 @@ use aptos_types::{
     trusted_state::{TrustedState, TrustedStateChange},
     waypoint::Waypoint,
 };
-use aptos_vm::AptosVM;
-use aptosdb::AptosDB;
-use cached_packages::aptos_stdlib;
-use consensus_types::block::Block;
-use executor::block_executor::BlockExecutor;
-use executor_types::BlockExecutorTrait;
+use pont_vm::PontVM;
+use pontdb::PontDB;
 use rand::SeedableRng;
 use std::sync::Arc;
 
 use storage_interface::{state_view::DbStateViewAtVersion, DbReaderWriter, Order};
 
-pub fn test_execution_with_storage_impl() -> Arc<AptosDB> {
+pub fn test_execution_with_storage_impl() -> Arc<PontDB> {
     const B: u64 = 1_000_000_000;
 
     let (genesis, validators) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
     let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis));
 
     let mut core_resources_account: LocalAccount = LocalAccount::new(
-        aptos_test_root_address(),
+        pont_test_root_address(),
         AccountKey::from_private_key(vm_genesis::GENESIS_KEYPAIR.0.clone()),
         0,
     );
 
-    let path = aptos_temppath::TempPath::new();
+    let path = pont_temppath::TempPath::new();
     path.create_as_dir().unwrap();
-    let (aptos_db, db, executor, waypoint) = create_db_and_executor(path.path(), &genesis_txn);
+    let (pont_db, db, executor, waypoint) = create_db_and_executor(path.path(), &genesis_txn);
 
     let parent_block_id = executor.committed_block_id();
-    let signer = aptos_types::validator_signer::ValidatorSigner::new(
+    let signer = pont_types::validator_signer::ValidatorSigner::new(
         validators[0].data.owner_address,
         validators[0].consensus_key.clone(),
     );
@@ -113,7 +113,7 @@ pub fn test_execution_with_storage_impl() -> Arc<AptosDB> {
         account1.sign_with_transaction_builder(txn_factory.transfer(account3.address(), 70 * B));
 
     let reconfig1 = core_resources_account
-        .sign_with_transaction_builder(txn_factory.payload(aptos_stdlib::version_set_version(100)));
+        .sign_with_transaction_builder(txn_factory.payload(pont_stdlib::version_set_version(100)));
 
     let block1: Vec<_> = vec![
         block1_meta,
@@ -140,7 +140,7 @@ pub fn test_execution_with_storage_impl() -> Arc<AptosDB> {
         2,
     ));
     let reconfig2 = core_resources_account
-        .sign_with_transaction_builder(txn_factory.payload(aptos_stdlib::version_set_version(200)));
+        .sign_with_transaction_builder(txn_factory.payload(pont_stdlib::version_set_version(200)));
     let block2 = vec![block2_meta, UserTransaction(reconfig2)];
 
     let block3_id = gen_block_id(3);
@@ -314,7 +314,7 @@ pub fn test_execution_with_storage_impl() -> Arc<AptosDB> {
             current_version,
         )
         .unwrap();
-    // Account1 has one deposit event since AptosCoin was minted to it.
+    // Account1 has one deposit event since PontCoin was minted to it.
     assert_eq!(account1_received_events.len(), 1);
 
     let account2_received_events = db
@@ -492,7 +492,7 @@ pub fn test_execution_with_storage_impl() -> Arc<AptosDB> {
         6
     );
 
-    aptos_db
+    pont_db
 }
 
 fn approx_eq(a: u64, b: u64) -> bool {
@@ -503,14 +503,9 @@ fn approx_eq(a: u64, b: u64) -> bool {
 pub fn create_db_and_executor<P: AsRef<std::path::Path>>(
     path: P,
     genesis: &Transaction,
-) -> (
-    Arc<AptosDB>,
-    DbReaderWriter,
-    BlockExecutor<AptosVM>,
-    Waypoint,
-) {
-    let (db, dbrw) = DbReaderWriter::wrap(AptosDB::new_for_test(&path));
-    let waypoint = bootstrap_genesis::<AptosVM>(&dbrw, genesis).unwrap();
+) -> (Arc<PontDB>, DbReaderWriter, BlockExecutor<PontVM>, Waypoint) {
+    let (db, dbrw) = DbReaderWriter::wrap(PontDB::new_for_test(&path));
+    let waypoint = bootstrap_genesis::<PontVM>(&dbrw, genesis).unwrap();
     let executor = BlockExecutor::new(dbrw.clone());
 
     (db, dbrw, executor, waypoint)

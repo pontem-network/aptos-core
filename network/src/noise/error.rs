@@ -1,8 +1,8 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::noise::NoiseError;
-use aptos_types::PeerId;
+use pont_crypto::noise::NoiseError;
+use pont_types::PeerId;
 use short_hex_str::ShortHexStr;
 use std::io;
 use thiserror::Error;

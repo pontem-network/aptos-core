@@ -3,11 +3,11 @@
 version: "3.8"
 services:
   restore:
-    image: aptoslabs/tools:nightly
+    image: pontlabs/tools:nightly
     volumes:
       - type: volume
         source: db
-        target: /opt/aptos/data
+        target: /opt/pont/data
       - type: volume
         source: tmp
         target: /tmp
@@ -15,10 +15,10 @@ services:
       # `s3.yaml` (AWS S3)
       # `gcs.yaml` (GCP GCS)
       # You can update the yaml file to specify where you want to download data from,
-      # default data resource is hosted by AptosLabs.
+      # default data resource is hosted by PontLabs.
       - type: bind
         source: ./s3.yaml
-        target: /opt/aptos/etc/restore.yaml
+        target: /opt/pont/etc/restore.yaml
         read_only: true
     environment:
       - HOME=/tmp
@@ -26,9 +26,9 @@ services:
     command: >
       sh -c "
       /usr/local/bin/db-restore --concurrent-downloads 2 \
-        --target-db-dir /opt/aptos/data/db auto \
-        --metadata-cache-dir /tmp/aptos-restore-metadata \
-        command-adapter --config /opt/aptos/etc/restore.yaml
+        --target-db-dir /opt/pont/data/db auto \
+        --metadata-cache-dir /tmp/pont-restore-metadata \
+        command-adapter --config /opt/pont/etc/restore.yaml
       "
 
 # update the db volume name to the one you want to restore if needed
@@ -36,5 +36,5 @@ services:
 # so make sure you start this docker compose using same project name as the db you want to restore.
 volumes:
   db:
-    name: aptos-validator
+    name: pont-validator
   tmp:

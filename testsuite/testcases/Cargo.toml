@@ -1,30 +1,30 @@
 [package]
 name = "testcases"
 version = "0.0.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos compatibility tests"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont compatibility tests"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
 
 [dependencies]
 anyhow = "1.0.57"
-aptos = { path = "../../crates/aptos", features = ["fuzzing"] }
+pont = { path = "../../crates/pont", features = ["fuzzing"] }
 
-aptos-genesis = { path = "../../crates/aptos-genesis", features = ["testing"] }
-aptos-global-constants = { path = "../../config/global-constants" }
-aptos-keygen = { path = "../../crates/aptos-keygen" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-rest-client = { path = "../../crates/aptos-rest-client" }
-aptos-sdk = { path = "../../sdk" }
-aptos-types = { path = "../../types" }
+pont-genesis = { path = "../../crates/pont-genesis", features = ["testing"] }
+pont-global-constants = { path = "../../config/global-constants" }
+pont-keygen = { path = "../../crates/pont-keygen" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-rest-client = { path = "../../crates/pont-rest-client" }
+pont-sdk = { path = "../../sdk" }
+pont-types = { path = "../../types" }
 
 forge = { path = "../forge" }
 futures = "0.3.21"
 hex = "0.4.3"
-move-examples = { path = "../../aptos-move/move-examples" }
+move-examples = { path = "../../pont-move/move-examples" }
 rand = "0.7.3"
 reqwest = { version = "0.11.10", features = ["json", "cookies", "blocking"] }
 serde_json = "1.0.81"

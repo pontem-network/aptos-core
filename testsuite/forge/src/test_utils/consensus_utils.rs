@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{bail, Context, Result};
-use aptos_config::config::DEFAULT_MAX_PAGE_SIZE;
-use aptos_rest_client::Client as RestClient;
 use async_trait::async_trait;
 use chrono::Utc;
 use core::time;
 use futures::future::join_all;
 use itertools::Itertools;
+use pont_config::config::DEFAULT_MAX_PAGE_SIZE;
+use pont_rest_client::Client as RestClient;
 use std::time::Duration;
 use std::{collections::HashSet, time::Instant};
 
@@ -144,7 +144,7 @@ pub async fn test_consensus_fault_tolerance(
         }
 
         if new_epoch_on_cycle {
-            swarm.aptos_public_info().reconfig().await;
+            swarm.pont_public_info().reconfig().await;
         }
     }
 

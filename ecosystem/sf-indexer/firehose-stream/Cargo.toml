@@ -1,10 +1,10 @@
 [package]
-name = "aptos-fh-stream"
+name = "pont-fh-stream"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos StreamingFast Firehose Stream"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont StreamingFast Firehose Stream"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -24,16 +24,16 @@ serde = { version = "1.0.137", features = ["derive"], default-features = false }
 serde_json = { version = "1.0.81", features = ["preserve_order"] }
 tokio = { version = "1.21.0", features = ["full"] }
 
-aptos-api = { path = "../../../api", package = "aptos-api" }
-aptos-api-types = { path = "../../../api/types" }
-aptos-bitvec = { path = "../../../crates/aptos-bitvec" }
-aptos-config = { path = "../../../config" }
-aptos-logger = { path = "../../../crates/aptos-logger" }
-aptos-mempool = { path = "../../../mempool" }
-aptos-metrics-core = { path = "../../../crates/aptos-metrics-core" }
-aptos-protos = { path = "../../../crates/aptos-protos" }
-aptos-types = { path = "../../../types" }
-aptos-vm = { path = "../../../aptos-move/aptos-vm" }
+pont-api = { path = "../../../api", package = "pont-api" }
+pont-api-types = { path = "../../../api/types" }
+pont-bitvec = { path = "../../../crates/pont-bitvec" }
+pont-config = { path = "../../../config" }
+pont-logger = { path = "../../../crates/pont-logger" }
+pont-mempool = { path = "../../../mempool" }
+pont-metrics-core = { path = "../../../crates/pont-metrics-core" }
+pont-protos = { path = "../../../crates/pont-protos" }
+pont-types = { path = "../../../types" }
+pont-vm = { path = "../../../pont-move/pont-vm" }
 storage-interface = { path = "../../../storage/storage-interface" }
 
 move-binary-format = { git = "https://github.com/move-language/move", rev = "6a32284d6e04ea5bfa5919df9aac2ccb3ffa010e" }
@@ -45,20 +45,20 @@ goldenfile = "1.1.0"
 rand = "0.7.3"
 regex = "1.5.5"
 
-aptos-api-test-context  = { path = "../../../api/test-context" }
-aptos-crypto = { path = "../../../crates/aptos-crypto" }
-aptos-genesis = { path = "../../../crates/aptos-genesis", features = ["testing"] }
-aptos-global-constants = { path = "../../../config/global-constants" }
-aptos-mempool = { path = "../../../mempool", features = ["fuzzing"] }
-aptos-proptest-helpers = { path = "../../../crates/aptos-proptest-helpers" }
-aptos-sdk = { path = "../../../sdk" }
-aptos-secure-storage = { path = "../../../secure/storage" }
-aptos-temppath = { path = "../../../crates/aptos-temppath" }
-aptos-vm = { path = "../../../aptos-move/aptos-vm" }
-aptosdb = { path = "../../../storage/aptosdb", features = ["fuzzing"] }
+pont-api-test-context  = { path = "../../../api/test-context" }
+pont-crypto = { path = "../../../crates/pont-crypto" }
+pont-genesis = { path = "../../../crates/pont-genesis", features = ["testing"] }
+pont-global-constants = { path = "../../../config/global-constants" }
+pont-mempool = { path = "../../../mempool", features = ["fuzzing"] }
+pont-proptest-helpers = { path = "../../../crates/pont-proptest-helpers" }
+pont-sdk = { path = "../../../sdk" }
+pont-secure-storage = { path = "../../../secure/storage" }
+pont-temppath = { path = "../../../crates/pont-temppath" }
+pont-vm = { path = "../../../pont-move/pont-vm" }
+pontdb = { path = "../../../storage/pontdb", features = ["fuzzing"] }
 executor = { path = "../../../execution/executor" }
 executor-types = { path = "../../../execution/executor-types" }
-framework = { path = "../../../aptos-move/framework" }
+framework = { path = "../../../pont-move/framework" }
 mempool-notifications = { path = "../../../state-sync/inter-component/mempool-notifications" }
 vm-validator = { path = "../../../vm-validator" }
 

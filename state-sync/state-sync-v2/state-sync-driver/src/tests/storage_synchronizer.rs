@@ -22,13 +22,6 @@ use crate::{
     },
 };
 use anyhow::format_err;
-use aptos_config::config::StateSyncDriverConfig;
-use aptos_infallible::{Mutex, RwLock};
-use aptos_types::{
-    ledger_info::LedgerInfoWithSignatures,
-    on_chain_config::ON_CHAIN_CONFIG_REGISTRY,
-    transaction::{TransactionOutputListWithProof, Version},
-};
 use claims::assert_matches;
 use data_streaming_service::data_notification::NotificationId;
 use event_notifications::EventSubscriptionService;
@@ -36,6 +29,13 @@ use executor_types::ChunkCommitNotification;
 use futures::StreamExt;
 use mempool_notifications::MempoolNotificationListener;
 use mockall::predicate::always;
+use pont_config::config::StateSyncDriverConfig;
+use pont_infallible::{Mutex, RwLock};
+use pont_types::{
+    ledger_info::LedgerInfoWithSignatures,
+    on_chain_config::ON_CHAIN_CONFIG_REGISTRY,
+    transaction::{TransactionOutputListWithProof, Version},
+};
 use std::{sync::Arc, time::Duration};
 use storage_interface::DbReaderWriter;
 use tokio::task::JoinHandle;
@@ -494,7 +494,7 @@ fn create_storage_synchronizer(
     JoinHandle<()>,
     JoinHandle<()>,
 ) {
-    aptos_logger::Logger::init_for_testing();
+    pont_logger::Logger::init_for_testing();
 
     // Create the notification channels
     let (commit_notification_sender, commit_notification_listener) =
@@ -513,7 +513,7 @@ fn create_storage_synchronizer(
     let mempool_notification_handler = MempoolNotificationHandler::new(mempool_notification_sender);
 
     // Create the metadata storage
-    let db_path = aptos_temppath::TempPath::new();
+    let db_path = pont_temppath::TempPath::new();
     let metadata_storage = PersistentMetadataStorage::new(db_path.path());
 
     // Create the storage synchronizer

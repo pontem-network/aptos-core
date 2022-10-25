@@ -11,10 +11,10 @@ use crate::{
     },
 };
 use anyhow::{anyhow, ensure, Result};
-use aptos_logger::prelude::*;
-use aptos_types::{ledger_info::LedgerInfoWithSignatures, waypoint::Waypoint};
 use clap::Parser;
 use once_cell::sync::Lazy;
+use pont_logger::prelude::*;
+use pont_types::{ledger_info::LedgerInfoWithSignatures, waypoint::Waypoint};
 use std::{convert::TryInto, str::FromStr, sync::Arc};
 use tokio::io::AsyncWriteExt;
 

@@ -6,12 +6,12 @@
 # Build and package a release for the CLI #
 ###########################################
 
-# Note: This must be run from the root of the aptos-core repository
+# Note: This must be run from the root of the pont-core repository
 
 set -e
 
-NAME='aptos-cli'
-CRATE_NAME='aptos'
+NAME='pont-cli'
+CRATE_NAME='pont'
 CARGO_PATH="crates/$CRATE_NAME/Cargo.toml"
 NAME="$1"
 

@@ -3,9 +3,9 @@
 
 use crate::protocols::wire::messaging::v1::{MultiplexMessage, NetworkMessage};
 use anyhow::{bail, ensure};
-use aptos_id_generator::{IdGenerator, U32IdGenerator};
 use channel::Sender;
 use futures_util::SinkExt;
+use pont_id_generator::{IdGenerator, U32IdGenerator};
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 use serde::{Deserialize, Serialize};

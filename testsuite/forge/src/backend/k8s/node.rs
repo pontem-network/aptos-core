@@ -8,12 +8,12 @@ use crate::{
     REST_API_SERVICE_PORT,
 };
 use anyhow::{anyhow, format_err};
-use aptos_config::config::NodeConfig;
-use aptos_logger::info;
-use aptos_rest_client::Client as RestClient;
-use aptos_sdk::types::PeerId;
-use aptos_secure_storage::SECURE_STORAGE_DB_NAME;
-use aptosdb::{LEDGER_DB_NAME, STATE_MERKLE_DB_NAME};
+use pont_config::config::NodeConfig;
+use pont_logger::info;
+use pont_rest_client::Client as RestClient;
+use pont_sdk::types::PeerId;
+use pont_secure_storage::SECURE_STORAGE_DB_NAME;
+use pontdb::{LEDGER_DB_NAME, STATE_MERKLE_DB_NAME};
 use reqwest::Url;
 use serde_json::Value;
 use state_sync_driver::metadata_storage::STATE_SYNC_DB_NAME;
@@ -25,7 +25,7 @@ use std::{
     time::{Duration, Instant},
 };
 
-const APTOS_DATA_DIR: &str = "/opt/aptos/data";
+const APTOS_DATA_DIR: &str = "/opt/pont/data";
 
 pub struct K8sNode {
     pub(crate) name: String,

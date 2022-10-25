@@ -5,7 +5,7 @@ id: "base-gas"
 
 # How Base Gas Works
 
-Aptos transactions by default charge a base gas fee, regardless of market conditions.
+Pont transactions by default charge a base gas fee, regardless of market conditions.
 For each transaction, this "base gas" amount is based on three conditions:
 
 1. Instructions.
@@ -179,7 +179,7 @@ Basic instruction gas parameters are defined at [`instr.rs`] and include the fol
 | `vec_unpack_base`              | Base cost to unpack a vector             |
 | `vec_unpack_per_expected_elem` | Base cost to unpack a vector per element |
 
-Additional storage gas parameters are defined in [`table.rs`], [`move_stdlib.rs`], and other assorted source files in [`aptos-gas/src/`].
+Additional storage gas parameters are defined in [`table.rs`], [`move_stdlib.rs`], and other assorted source files in [`pont-gas/src/`].
 
 ## Storage gas
 
@@ -238,7 +238,7 @@ Then, to convert from external gas units to octas, multiply by the "gas price", 
 
 ### Unit and pricing constants
 
-As of the time of this writing, `min_price_per_gas_unit` in [`transaction.rs`] is defined as [`aptos_global_constants`]`::GAS_UNIT_PRICE` (which is itself defined as 100), with other noteworthy [`transaction.rs`] constants as follows:
+As of the time of this writing, `min_price_per_gas_unit` in [`transaction.rs`] is defined as [`pont_global_constants`]`::GAS_UNIT_PRICE` (which is itself defined as 100), with other noteworthy [`transaction.rs`] constants as follows:
 
 | Constant                  | Value  |
 |---------------------------|--------|
@@ -322,18 +322,18 @@ Hence in practice, payload gas is unlikely to be a concern.
 
 <!--- Alphabetized reference links -->
 
-[#4540]:                           https://github.com/aptos-labs/aptos-core/pull/4540/files
-[`aptos-gas/src/`]:                https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/aptos-gas/src/
-[`aptos_global_constants`]:        https://github.com/aptos-labs/aptos-core/blob/main/config/global-constants/src/lib.rs
-[`base_8192_exponential_curve()`]: https://github.com/aptos-labs/aptos-core/blob/framework-docs/AptosFramework/storage_gas.md#0x1_storage_gas_base_8192_exponential_curve
+[#4540]:                           https://github.com/aptos-labs/pont-core/pull/4540/files
+[`pont-gas/src/`]:                https://github.com/aptos-labs/pont-core/blob/main/pont-move/pont-gas/src/
+[`pont_global_constants`]:        https://github.com/aptos-labs/pont-core/blob/main/config/global-constants/src/lib.rs
+[`base_8192_exponential_curve()`]: https://github.com/aptos-labs/pont-core/blob/framework-docs/PontFramework/storage_gas.md#0x1_storage_gas_base_8192_exponential_curve
 [BCS sequence specification]:      https://github.com/diem/bcs#fixed-and-variable-length-sequences
-[`gas_meter.rs`]:                  https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/aptos-gas/src/gas_meter.rs
-[`initialize()`]:                  https://github.com/aptos-labs/aptos-core/blob/framework-docs/AptosFramework/storage_gas.md#0x1_storage_gas_initialize
-[`instr.rs`]:                      https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/aptos-gas/src/instr.rs
-[`move_stdlib.rs`]:                https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/aptos-gas/src/move_stdlib.rs
-[`on_reconfig()`]:                 https://github.com/aptos-labs/aptos-core/blob/framework-docs/AptosFramework/storage_gas.md#0x1_storage_gas_on_reconfig
-[`storage_gas.md`]:                https://github.com/aptos-labs/aptos-core/blob/framework-docs/AptosFramework/storage_gas.md
-[`storage_gas.move`]:              https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/framework/aptos-framework/sources/storage_gas.move
-[`StorageGas`]:                    https://github.com/aptos-labs/aptos-core/blob/framework-docs/AptosFramework/storage_gas.md#0x1_storage_gas_StorageGas
-[`table.rs`]:                      https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/aptos-gas/src/table.rs
-[`transaction.rs`]:                https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/aptos-gas/src/transaction.rs
+[`gas_meter.rs`]:                  https://github.com/aptos-labs/pont-core/blob/main/pont-move/pont-gas/src/gas_meter.rs
+[`initialize()`]:                  https://github.com/aptos-labs/pont-core/blob/framework-docs/PontFramework/storage_gas.md#0x1_storage_gas_initialize
+[`instr.rs`]:                      https://github.com/aptos-labs/pont-core/blob/main/pont-move/pont-gas/src/instr.rs
+[`move_stdlib.rs`]:                https://github.com/aptos-labs/pont-core/blob/main/pont-move/pont-gas/src/move_stdlib.rs
+[`on_reconfig()`]:                 https://github.com/aptos-labs/pont-core/blob/framework-docs/PontFramework/storage_gas.md#0x1_storage_gas_on_reconfig
+[`storage_gas.md`]:                https://github.com/aptos-labs/pont-core/blob/framework-docs/PontFramework/storage_gas.md
+[`storage_gas.move`]:              https://github.com/aptos-labs/pont-core/blob/main/pont-move/framework/pont-framework/sources/storage_gas.move
+[`StorageGas`]:                    https://github.com/aptos-labs/pont-core/blob/framework-docs/PontFramework/storage_gas.md#0x1_storage_gas_StorageGas
+[`table.rs`]:                      https://github.com/aptos-labs/pont-core/blob/main/pont-move/pont-gas/src/table.rs
+[`transaction.rs`]:                https://github.com/aptos-labs/pont-core/blob/main/pont-move/pont-gas/src/transaction.rs

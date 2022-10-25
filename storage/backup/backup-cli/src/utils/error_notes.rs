@@ -1,7 +1,7 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_logger::error;
+use pont_logger::error;
 use std::fmt::{Debug, Display};
 
 pub(crate) trait ErrorNotes<T, E: Display, N: Debug> {

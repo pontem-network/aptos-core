@@ -12,7 +12,7 @@ Follow these instructions to shut down the validator node and validator fullnode
 Before you shutdown the node, make sure to leave the validator set first. This will be become effective in the next epoch. Also note that a node can choose to leave the validator set at anytime, or it would happen automatically when there is insufficient stake in the validator account. To leave the validator set, run the below command, shown using the example profile of `mainnet-operator`:
 
 ```bash
-aptos node leave-validator-set --profile mainnet-operator --pool-address <owner-address>
+pont node leave-validator-set --profile mainnet-operator --pool-address <owner-address>
 ```
 
 :::danger Important
@@ -57,7 +57,7 @@ This is currently only supported using Terraform.
 1. Set the `enable_monitoring` variable in your terraform module. For example:
 
     ```rust
-    module "aptos-node" {
+    module "pont-node" {
       ...
       enable_monitoring           = true
       utility_instance_num        = 3  # this will add one more utility instance to run monitoring component
@@ -73,7 +73,7 @@ This is currently only supported using Terraform.
     First, find the IP/DNS for the monitoring load balancer.
 
     ```bash
-    kubectl get svc ${WORKSPACE}-mon-aptos-monitoring --output jsonpath='{.status.loadBalancer.ingress[0]}'
+    kubectl get svc ${WORKSPACE}-mon-pont-monitoring --output jsonpath='{.status.loadBalancer.ingress[0]}'
     ```
 
     You can access the dashboard on `http://<ip/DNS>`.

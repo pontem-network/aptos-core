@@ -3,8 +3,8 @@
 #![allow(clippy::extra_unused_lifetimes)]
 use crate::{models::transactions::Transaction, schema::move_resources};
 use anyhow::{Context, Result};
-use aptos_api_types::{DeleteResource, MoveStructTag as APIMoveStructTag, WriteResource};
 use field_count::FieldCount;
+use pont_api_types::{DeleteResource, MoveStructTag as APIMoveStructTag, WriteResource};
 use serde::{Deserialize, Serialize};
 #[derive(
     Associations, Clone, Debug, Deserialize, FieldCount, Identifiable, Insertable, Serialize,

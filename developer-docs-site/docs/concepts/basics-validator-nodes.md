@@ -4,11 +4,11 @@ slug: "basics-validator-nodes"
 ---
 import BlockQuote from "@site/src/components/BlockQuote";
 
-An Aptos node is an entity of the Aptos ecosystem that tracks the state of the Aptos blockchain. Clients interact with the blockchain via Aptos nodes. There are two types of nodes:
+An Pont node is an entity of the Pont ecosystem that tracks the state of the Pont blockchain. Clients interact with the blockchain via Pont nodes. There are two types of nodes:
 * Validator nodes
 * [Fullnodes](basics-fullnodes.md)
 
-Each Aptos node comprises several logical components:
+Each Pont node comprises several logical components:
 * [REST service](/reference/glossary#rest-service)
 * [Mempool](#mempool)
 * [Consensus (disabled in fullnodes)](#consensus)
@@ -17,18 +17,18 @@ Each Aptos node comprises several logical components:
 * [Storage](#storage)
 * [State synchronizer](#state-synchronizer)
 
-The [Aptos-core](/reference/glossary#aptos-core) software can be configured to run as a validator node or as a fullnode.
+The [Pont-core](/reference/glossary#pont-core) software can be configured to run as a validator node or as a fullnode.
 
 # Overview
 
-When a transaction is submitted to the Aptos blockchain, validator nodes run a distributed [consensus protocol](/reference/glossary#consensus-protocol), execute the transaction, and store the transaction and the execution results on the blockchain. Validator nodes decide which transactions will be added to the blockchain and in which order.
+When a transaction is submitted to the Pont blockchain, validator nodes run a distributed [consensus protocol](/reference/glossary#consensus-protocol), execute the transaction, and store the transaction and the execution results on the blockchain. Validator nodes decide which transactions will be added to the blockchain and in which order.
 
-The Aptos blockchain uses a Byzantine Fault Tolerance (BFT) consensus protocol for validator nodes to agree on the ledger of finalized transactions and their execution results. Validator nodes process these transactions and include them in their local copy of the blockchain database. This means that up-to-date validator nodes always maintain a copy of the current [state](/reference/glossary#state) of the blockchain, locally.
+The Pont blockchain uses a Byzantine Fault Tolerance (BFT) consensus protocol for validator nodes to agree on the ledger of finalized transactions and their execution results. Validator nodes process these transactions and include them in their local copy of the blockchain database. This means that up-to-date validator nodes always maintain a copy of the current [state](/reference/glossary#state) of the blockchain, locally.
 
 Validator nodes communicate directly with other validator nodes over a private network. [Fullnodes](basics-fullnodes.md) are an external validation and/or dissemination resource for the finalized transaction history. They receive transactions from peers and may re-execute them locally (the same way a validator executes transactions). Fullnodes store the results of re-executed transactions to local storage. In doing so, they can challenge any foul-play by validators and provide evidence if there is any attempt to re-write or modify the blockchain history. This helps to mitigate against validator corruption and/or collusion.
 
 <BlockQuote type="info">
-The AptosBFT consensus protocol provides fault tolerance of up to one-third of malicious validator nodes.
+The PontBFT consensus protocol provides fault tolerance of up to one-third of malicious validator nodes.
 </BlockQuote>
 
 ## Validator node components

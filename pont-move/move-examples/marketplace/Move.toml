@@ -1,0 +1,11 @@
+[package]
+name = "MarketPlace"
+version = "0.0.1"
+
+[dependencies]
+PontFramework = { local = "../../framework/pont-framework" }
+PontToken = { local = "../../framework/pont-token" }
+
+[addresses]
+std = "0x1"
+marketplace = "_"

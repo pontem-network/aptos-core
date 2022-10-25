@@ -1,13 +1,13 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_infallible::Mutex;
 use cfg_if::cfg_if;
 use collectors::{
     CollectorLatencyCollector, CpuMetricsCollector, DiskMetricsCollector, LoadAvgCollector,
     MemoryMetricsCollector, NetworkMetricsCollector, ProcessMetricsCollector,
 };
 use once_cell::sync::Lazy;
+use pont_infallible::Mutex;
 
 mod collectors;
 

@@ -29,7 +29,7 @@ pub struct Block {
 pub struct BcsBlock {
     /// The block height (number of the block from 0)
     pub block_height: u64,
-    pub block_hash: aptos_crypto::HashValue,
+    pub block_hash: pont_crypto::HashValue,
     /// The block timestamp in Unix epoch microseconds
     pub block_timestamp: u64,
     /// The first ledger version of the block inclusive

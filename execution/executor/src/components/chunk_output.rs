@@ -5,14 +5,14 @@
 
 use crate::{components::apply_chunk_output::ApplyChunkOutput, metrics};
 use anyhow::Result;
-use aptos_logger::{trace, warn};
-use aptos_types::{
+use executor_types::ExecutedChunk;
+use fail::fail_point;
+use pont_logger::{trace, warn};
+use pont_types::{
     account_config::CORE_CODE_ADDRESS,
     transaction::{ExecutionStatus, Transaction, TransactionOutput, TransactionStatus},
 };
-use aptos_vm::{AptosVM, VMExecutor};
-use executor_types::ExecutedChunk;
-use fail::fail_point;
+use pont_vm::{PontVM, VMExecutor};
 use storage_interface::{
     cached_state_view::{CachedStateView, StateCache},
     ExecutedTrees,
@@ -102,7 +102,7 @@ pub fn update_counters_for_processed_chunk(
     transaction_outputs: &[TransactionOutput],
     process_type: &str,
 ) {
-    let detailed_counters = AptosVM::get_processed_transactions_detailed_counters();
+    let detailed_counters = PontVM::get_processed_transactions_detailed_counters();
     let detailed_counters_label = if detailed_counters { "true" } else { "false" };
     if transactions.len() != transaction_outputs.len() {
         warn!(
@@ -179,17 +179,17 @@ pub fn update_counters_for_processed_chunk(
 
         if let Transaction::UserTransaction(user_txn) = txn {
             match user_txn.payload() {
-                aptos_types::transaction::TransactionPayload::Script(_script) => {
+                pont_types::transaction::TransactionPayload::Script(_script) => {
                     metrics::APTOS_PROCESSED_USER_TRANSACTIONS_PAYLOAD_TYPE
                         .with_label_values(&[process_type, "script", state])
                         .inc();
                 }
-                aptos_types::transaction::TransactionPayload::ModuleBundle(_module) => {
+                pont_types::transaction::TransactionPayload::ModuleBundle(_module) => {
                     metrics::APTOS_PROCESSED_USER_TRANSACTIONS_PAYLOAD_TYPE
                         .with_label_values(&[process_type, "module", state])
                         .inc();
                 }
-                aptos_types::transaction::TransactionPayload::EntryFunction(function) => {
+                pont_types::transaction::TransactionPayload::EntryFunction(function) => {
                     metrics::APTOS_PROCESSED_USER_TRANSACTIONS_PAYLOAD_TYPE
                         .with_label_values(&[process_type, "function", state])
                         .inc();

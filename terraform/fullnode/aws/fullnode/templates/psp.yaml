@@ -12,10 +12,10 @@ subjects:
   namespace: {{ .Release.Namespace }}
 {{- range $i, $e := until (int .Values.service.fullnode.numFullnodes) }}
 - kind: ServiceAccount
-  name: pfn{{ $e }}-aptos-fullnode
+  name: pfn{{ $e }}-pont-fullnode
   namespace: {{ $.Release.Namespace }}
 {{- end }}
 - kind: ServiceAccount
-  name: pfn-pfn-aptos-logger
+  name: pfn-pfn-pont-logger
   namespace: {{ $.Release.Namespace }}
 

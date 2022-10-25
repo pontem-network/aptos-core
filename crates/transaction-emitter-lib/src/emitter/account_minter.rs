@@ -7,14 +7,19 @@ use crate::{
     query_sequence_number, EmitJobRequest, EmitModeParams,
 };
 use anyhow::{anyhow, format_err, Context, Result};
-use aptos::common::types::EncodingType;
-use aptos::common::utils::prompt_yes;
-use aptos_crypto::ed25519::{Ed25519PrivateKey, Ed25519PublicKey};
-use aptos_infallible::Mutex;
-use aptos_logger::{debug, info, sample, sample::SampleRate, warn};
-use aptos_rest_client::{aptos_api_types::AptosError, Client as RestClient};
-use aptos_sdk::{
-    transaction_builder::{aptos_stdlib, TransactionFactory},
+use core::{
+    cmp::min,
+    result::Result::{Err, Ok},
+};
+use futures::StreamExt;
+use pont::common::types::EncodingType;
+use pont::common::utils::prompt_yes;
+use pont_crypto::ed25519::{Ed25519PrivateKey, Ed25519PublicKey};
+use pont_infallible::Mutex;
+use pont_logger::{debug, info, sample, sample::SampleRate, warn};
+use pont_rest_client::{pont_api_types::PontError, Client as RestClient};
+use pont_sdk::{
+    transaction_builder::{pont_stdlib, TransactionFactory},
     types::{
         transaction::{
             authenticator::{AuthenticationKey, AuthenticationKeyPreimage},
@@ -23,11 +28,6 @@ use aptos_sdk::{
         AccountKey, LocalAccount,
     },
 };
-use core::{
-    cmp::min,
-    result::Result::{Err, Ok},
-};
-use futures::StreamExt;
 use rand::{rngs::StdRng, seq::SliceRandom};
 use rand_core::SeedableRng;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -77,7 +77,7 @@ impl<'t> AccountMinter<'t> {
         let coins_per_account = (req.expected_max_txns / total_requested_accounts as u64)
             .checked_mul(SEND_AMOUNT + req.expected_gas_per_txn)
             .unwrap()
-            .checked_add(aptos_global_constants::MAX_GAS_AMOUNT * req.gas_price)
+            .checked_add(pont_global_constants::MAX_GAS_AMOUNT * req.gas_price)
             .unwrap(); // extra coins for secure to pay none zero gas price
         let txn_factory = self.txn_factory.clone();
         let expected_children_per_seed_account =
@@ -85,12 +85,12 @@ impl<'t> AccountMinter<'t> {
         let coins_per_seed_account = (expected_children_per_seed_account as u64)
             .checked_mul(coins_per_account + req.expected_gas_per_txn)
             .unwrap()
-            .checked_add(aptos_global_constants::MAX_GAS_AMOUNT * req.gas_price)
+            .checked_add(pont_global_constants::MAX_GAS_AMOUNT * req.gas_price)
             .unwrap();
         let coins_for_source = coins_per_seed_account
             .checked_mul(expected_num_seed_accounts as u64)
             .unwrap()
-            .checked_add(aptos_global_constants::MAX_GAS_AMOUNT * req.gas_price)
+            .checked_add(pont_global_constants::MAX_GAS_AMOUNT * req.gas_price)
             .unwrap();
         info!(
             "Account creation plan created for {} accounts with {} balance each.",
@@ -233,11 +233,11 @@ impl<'t> AccountMinter<'t> {
     pub async fn mint_to_root(&mut self, rest_clients: &[RestClient], amount: u64) -> Result<()> {
         info!("Minting new coins to root");
 
-        let txn = self
-            .source_account
-            .sign_with_transaction_builder(self.txn_factory.payload(
-                aptos_stdlib::aptos_coin_mint(self.source_account.address(), amount),
-            ));
+        let txn =
+            self.source_account
+                .sign_with_transaction_builder(self.txn_factory.payload(
+                    pont_stdlib::pont_coin_mint(self.source_account.address(), amount),
+                ));
         execute_and_wait_transactions(
             &self.pick_mint_client(rest_clients).clone(),
             self.source_account,
@@ -445,13 +445,13 @@ pub fn create_and_fund_account_request(
     let preimage = AuthenticationKeyPreimage::ed25519(pubkey);
     let auth_key = AuthenticationKey::from_preimage(&preimage);
     creation_account.sign_with_transaction_builder(txn_factory.payload(
-        aptos_stdlib::aptos_account_transfer(auth_key.derived_address(), amount),
+        pont_stdlib::pont_account_transfer(auth_key.derived_address(), amount),
     ))
 }
 
 struct SubmittingTxnState {
     pub txns: Vec<SignedTransaction>,
-    pub failures: Vec<Option<AptosError>>,
+    pub failures: Vec<Option<PontError>>,
 }
 
 pub async fn execute_and_wait_transactions(

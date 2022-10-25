@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{ensure, format_err, Context, Result};
-use aptos_config::config::{
+use executor::db_bootstrapper::calculate_genesis;
+use pont_config::config::{
     RocksdbConfigs, BUFFERED_STATE_TARGET_ITEMS, DEFAULT_MAX_NUM_NODES_PER_LRU_CACHE_SHARD,
     NO_OP_STORAGE_PRUNER_CONFIG,
 };
-use aptos_types::{transaction::Transaction, waypoint::Waypoint};
-use aptos_vm::AptosVM;
-use aptosdb::AptosDB;
-use executor::db_bootstrapper::calculate_genesis;
+use pont_types::{transaction::Transaction, waypoint::Waypoint};
+use pont_vm::PontVM;
+use pontdb::PontDB;
 use std::{
     fs::File,
     io::Read,
@@ -49,7 +49,7 @@ fn main() -> Result<()> {
 
     // Opening the DB exclusively, it's not allowed to run this tool alongside a running node which
     // operates on the same DB.
-    let db = AptosDB::open(
+    let db = PontDB::open(
         &opt.db_dir,
         false,
         NO_OP_STORAGE_PRUNER_CONFIG, /* pruner */
@@ -75,7 +75,7 @@ fn main() -> Result<()> {
         )
     }
 
-    let committer = calculate_genesis::<AptosVM>(&db, executed_trees, &genesis_txn)
+    let committer = calculate_genesis::<PontVM>(&db, executed_trees, &genesis_txn)
         .with_context(|| format_err!("Failed to calculate genesis."))?;
     println!(
         "Successfully calculated genesis. Got waypoint: {}",

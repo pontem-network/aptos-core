@@ -18,10 +18,10 @@ data:
     apiVersion: 1
     providers:
     - name: 'default'
-      folder: 'aptos'
+      folder: 'pont'
       type: file
       options:
-        path: /etc/grafana/dashboards/aptos
+        path: /etc/grafana/dashboards/pont
   
   grafana.ini: |-
 {{ (tpl (.Files.Get "files/grafana.ini") .) | indent 4 }}
@@ -228,7 +228,7 @@ spec:
         image: {{ .grafana.image.repo }}:{{ .grafana.image.tag }}
         imagePullPolicy: {{ .grafana.image.pullPolicy }}
         command: ["/bin/sh", "-c"]
-        args: ["cp /dashboards/* /etc/grafana/dashboards/aptos && gunzip -f /etc/grafana/dashboards/aptos/*.json.gz && exec /run.sh"]
+        args: ["cp /dashboards/* /etc/grafana/dashboards/pont && gunzip -f /etc/grafana/dashboards/pont/*.json.gz && exec /run.sh"]
         resources:
           {{- toYaml .grafana.resources | nindent 10 }}
         ports:
@@ -250,7 +250,7 @@ spec:
         - name: grafana-dashboards-archive
           mountPath: /dashboards
         - name: grafana-dashboards
-          mountPath: /etc/grafana/dashboards/aptos
+          mountPath: /etc/grafana/dashboards/pont
         - name: grafana-data
           mountPath: /var/lib/grafana
         securityContext:

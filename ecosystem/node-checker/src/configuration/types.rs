@@ -19,13 +19,13 @@ use crate::{
     runner::BlockingRunnerArgs,
 };
 use anyhow::{bail, format_err, Context, Result};
-use aptos_config::config::RoleType;
-use aptos_crypto::{x25519, ValidCryptoMaterialStringExt};
-use aptos_rest_client::{aptos_api_types::IndexResponse, Client as AptosRestClient};
-use aptos_sdk::types::{chain_id::ChainId, network_address::NetworkAddress};
 use clap::Parser;
 use once_cell::sync::Lazy;
 use poem_openapi::{types::Example, Object as PoemObject};
+use pont_config::config::RoleType;
+use pont_crypto::{x25519, ValidCryptoMaterialStringExt};
+use pont_rest_client::{pont_api_types::IndexResponse, Client as PontRestClient};
+use pont_sdk::types::{chain_id::ChainId, network_address::NetworkAddress};
 use reqwest::cookie::Jar;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -308,14 +308,14 @@ impl NodeAddress {
             .unwrap()
     }
 
-    pub fn get_api_client(&self, timeout: Duration) -> AptosRestClient {
+    pub fn get_api_client(&self, timeout: Duration) -> PontRestClient {
         let client = reqwest::ClientBuilder::new()
             .timeout(timeout)
             .cookie_provider(self.cookie_store.clone())
             .build()
             .unwrap();
 
-        AptosRestClient::from((client, self.get_api_url()))
+        PontRestClient::from((client, self.get_api_url()))
     }
 
     /// Gets the NodeAddress as a NetworkAddress. If the URL is a domain name,
@@ -344,7 +344,7 @@ impl NodeAddress {
             );
         }
         if socket_addrs.len() > 1 {
-            aptos_logger::warn!(
+            pont_logger::warn!(
                 "NodeAddress {} resolved to multiple SocketAddrs, but we're only checking the first one: {:?}",
                 self.url,
                 socket_addrs,

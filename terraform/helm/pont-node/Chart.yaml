@@ -1,0 +1,8 @@
+apiVersion: v2
+name: pont-node
+version: 0.1.0
+appVersion: 0.1.0
+description: Pont blockchain node deployment
+home: https://pontlabs.com/
+sources:
+- https://github.com/aptos-labs/pont-core

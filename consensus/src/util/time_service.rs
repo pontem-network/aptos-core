@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::counters;
-use aptos_logger::prelude::*;
 use async_trait::async_trait;
 use futures::{
     future::{AbortHandle, Abortable},
     Future, FutureExt, SinkExt,
 };
+use pont_logger::prelude::*;
 use std::{pin::Pin, time::Duration};
 use tokio::{runtime::Handle, time::sleep};
 
@@ -119,7 +119,7 @@ impl TimeService for ClockTimeService {
     }
 
     fn get_current_timestamp(&self) -> Duration {
-        aptos_infallible::duration_since_epoch()
+        pont_infallible::duration_since_epoch()
     }
 
     async fn sleep(&self, t: Duration) {

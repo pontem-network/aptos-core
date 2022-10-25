@@ -1,10 +1,10 @@
 [package]
-name = "aptos-vault-client"
+name = "pont-vault-client"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-repository = "https://github.com/aptos-labs/aptos-core"
-description = "Aptos's Restful Vault Client"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+repository = "https://github.com/aptos-labs/pont-core"
+description = "Pont's Restful Vault Client"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -20,15 +20,15 @@ serde_json = "1.0.81"
 thiserror = "1.0.31"
 ureq = { version = "1.5.4", features = ["json", "native-tls"], default-features = false }
 
-aptos-crypto = { path = "../../../crates/aptos-crypto" }
-aptos-proptest-helpers = { path = "../../../crates/aptos-proptest-helpers", optional = true }
-aptos-types = { path = "../../../types", optional = true }
+pont-crypto = { path = "../../../crates/pont-crypto" }
+pont-proptest-helpers = { path = "../../../crates/pont-proptest-helpers", optional = true }
+pont-types = { path = "../../../types", optional = true }
 
 [dev-dependencies]
 proptest = "1.0.0"
 
-aptos-proptest-helpers = { path = "../../../crates/aptos-proptest-helpers" }
-aptos-types = { path = "../../../types", features = ["fuzzing"] }
+pont-proptest-helpers = { path = "../../../crates/pont-proptest-helpers" }
+pont-types = { path = "../../../types", features = ["fuzzing"] }
 
 [features]
-fuzzing = ["proptest", "aptos-proptest-helpers", "aptos-types", "aptos-types/fuzzing"]
+fuzzing = ["proptest", "pont-proptest-helpers", "pont-types", "pont-types/fuzzing"]

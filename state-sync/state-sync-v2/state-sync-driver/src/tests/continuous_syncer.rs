@@ -17,9 +17,6 @@ use crate::{
         },
     },
 };
-use aptos_config::config::ContinuousSyncingMode;
-use aptos_infallible::Mutex;
-use aptos_types::transaction::{TransactionOutputListWithProof, Version};
 use claims::assert_matches;
 use consensus_notifications::ConsensusSyncNotification;
 use data_streaming_service::{
@@ -28,6 +25,9 @@ use data_streaming_service::{
 };
 use futures::SinkExt;
 use mockall::{predicate::eq, Sequence};
+use pont_config::config::ContinuousSyncingMode;
+use pont_infallible::Mutex;
+use pont_types::transaction::{TransactionOutputListWithProof, Version};
 use std::sync::Arc;
 use storage_service_types::Epoch;
 
@@ -291,7 +291,7 @@ fn create_continuous_syncer(
     current_epoch: Epoch,
 ) -> ContinuousSyncer<MockStorageSynchronizer, MockStreamingClient> {
     // Initialize the logger for tests
-    aptos_logger::Logger::init_for_testing();
+    pont_logger::Logger::init_for_testing();
 
     // Create the mock storage synchronizer
     let mock_storage_synchronizer = create_ready_storage_synchronizer(expect_reset_executor);

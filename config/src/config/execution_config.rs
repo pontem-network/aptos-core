@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::config::{Error, RootPath};
-use aptos_types::transaction::Transaction;
+use pont_types::transaction::Transaction;
 use serde::{Deserialize, Serialize};
 use std::{
     fs::File,
@@ -117,8 +117,8 @@ impl ExecutionConfig {
 #[cfg(test)]
 mod test {
     use super::*;
-    use aptos_temppath::TempPath;
-    use aptos_types::{
+    use pont_temppath::TempPath;
+    use pont_types::{
         transaction::{ChangeSet, Transaction, WriteSetPayload},
         write_set::WriteSetMut,
     };

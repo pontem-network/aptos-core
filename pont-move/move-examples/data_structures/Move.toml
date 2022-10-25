@@ -1,0 +1,9 @@
+[package]
+name = "DataStructure"
+version = "0.0.1"
+
+[dependencies]
+PontStdlib = { local = "../../framework/pont-stdlib" }
+
+[addresses]
+std = "0x1"

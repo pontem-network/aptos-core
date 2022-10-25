@@ -8,14 +8,14 @@ use crate::requests::DataRequest::{
 };
 use crate::responses::Error::DegenerateRangeError;
 use crate::{Epoch, StorageServiceRequest, COMPRESSION_SUFFIX_LABEL};
-use aptos_compression::metrics::CompressionClient;
-use aptos_compression::{CompressedData, CompressionError};
-use aptos_config::config::{StorageServiceConfig, MAX_APPLICATION_MESSAGE_SIZE};
-use aptos_types::epoch_change::EpochChangeProof;
-use aptos_types::ledger_info::LedgerInfoWithSignatures;
-use aptos_types::state_store::state_value::StateValueChunkWithProof;
-use aptos_types::transaction::{TransactionListWithProof, TransactionOutputListWithProof, Version};
 use num_traits::{PrimInt, Zero};
+use pont_compression::metrics::CompressionClient;
+use pont_compression::{CompressedData, CompressionError};
+use pont_config::config::{StorageServiceConfig, MAX_APPLICATION_MESSAGE_SIZE};
+use pont_types::epoch_change::EpochChangeProof;
+use pont_types::ledger_info::LedgerInfoWithSignatures;
+use pont_types::state_store::state_value::StateValueChunkWithProof;
+use pont_types::transaction::{TransactionListWithProof, TransactionOutputListWithProof, Version};
 #[cfg(test)]
 use proptest::prelude::{any, Arbitrary, BoxedStrategy, Strategy};
 use serde::{Deserialize, Serialize};
@@ -58,7 +58,7 @@ impl StorageServiceResponse {
         if perform_compression {
             let raw_data = bcs::to_bytes(&data_response)
                 .map_err(|error| Error::UnexpectedErrorEncountered(error.to_string()))?;
-            let compressed_data = aptos_compression::compress(
+            let compressed_data = pont_compression::compress(
                 raw_data,
                 CompressionClient::StateSync,
                 MAX_APPLICATION_MESSAGE_SIZE,
@@ -77,7 +77,7 @@ impl StorageServiceResponse {
     pub fn get_data_response(&self) -> Result<DataResponse, Error> {
         match self {
             StorageServiceResponse::CompressedResponse(_, compressed_data) => {
-                let raw_data = aptos_compression::decompress(
+                let raw_data = pont_compression::decompress(
                     compressed_data,
                     CompressionClient::StateSync,
                     MAX_APPLICATION_MESSAGE_SIZE,

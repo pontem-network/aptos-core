@@ -5,21 +5,21 @@ slug: "run-validator-node-using-docker"
 
 # Using Docker
 
-This is a step-by-step guide to install an Aptos node using Docker. Follow these steps to configure a validator node and a validator fullnode on separate machines. Use the `fullnode.yaml` to run a validator fullnode. See [Step 11](#docker-vfn).
+This is a step-by-step guide to install an Pont node using Docker. Follow these steps to configure a validator node and a validator fullnode on separate machines. Use the `fullnode.yaml` to run a validator fullnode. See [Step 11](#docker-vfn).
 
 ## Before you proceed
 
 Make sure the following are installed on your local computer:
-   - **Aptos CLI**: https://aptos.dev/cli-tools/aptos-cli-tool/install-aptos-cli
+   - **Pont CLI**: https://pont.dev/cli-tools/pont-cli-tool/install-pont-cli
    - **Docker and Docker-compose:** https://docs.docker.com/engine/install/
 
 :::caution Note on Apple M1
 
-Docker method has only been tested on Linux, Windows, and Intel macOS. If you are on M1 macOS, use the [Aptos-core source approach](/nodes/validator-node/operator/running-validator-node/run-validator-node-using-source).
+Docker method has only been tested on Linux, Windows, and Intel macOS. If you are on M1 macOS, use the [Pont-core source approach](/nodes/validator-node/operator/running-validator-node/run-validator-node-using-source).
 
 :::
 
-1. Create a directory for your Aptos node composition, and pick a username for your node. e.g.
+1. Create a directory for your Pont node composition, and pick a username for your node. e.g.
     ```bash
     export WORKSPACE=mainnet
     export USERNAME=alice
@@ -32,7 +32,7 @@ Docker method has only been tested on Linux, Windows, and Intel macOS. If you ar
 3. Generate the key pairs (node owner, voter, operator key, consensus key and networking key) in your working directory.
 
     ```bash
-    aptos genesis generate-keys --output-dir ~/$WORKSPACE/keys
+    pont genesis generate-keys --output-dir ~/$WORKSPACE/keys
     ```
 
     This will create 4 key files under `~/$WORKSPACE/keys` directory: 
@@ -50,7 +50,7 @@ Docker method has only been tested on Linux, Windows, and Intel macOS. If you ar
 
     ```bash
     cd ~/$WORKSPACE
-    aptos genesis set-validator-configuration \
+    pont genesis set-validator-configuration \
         --local-repository-dir ~/$WORKSPACE \
         --username $USERNAME \
         --owner-public-identity-file ~/$WORKSPACE/keys/public-keys.yaml \
@@ -60,7 +60,7 @@ Docker method has only been tested on Linux, Windows, and Intel macOS. If you ar
 
     # for example, with IP:
 
-    aptos genesis set-validator-configuration \
+    pont genesis set-validator-configuration \
         --local-repository-dir ~/$WORKSPACE \
         --username $USERNAME \
         --owner-public-identity-file ~/$WORKSPACE/keys/public-keys.yaml \
@@ -70,12 +70,12 @@ Docker method has only been tested on Linux, Windows, and Intel macOS. If you ar
 
     # For example, with DNS:
 
-    aptos genesis set-validator-configuration \
+    pont genesis set-validator-configuration \
         --local-repository-dir ~/$WORKSPACE \
         --username $USERNAME \
         --owner-public-identity-file ~/$WORKSPACE/keys/public-keys.yaml \
-        --validator-host bot.aptosdev.com:6180 \
-        --full-node-host fn.bot.aptosdev.com:6182 \
+        --validator-host bot.pontdev.com:6180 \
+        --full-node-host fn.bot.pontdev.com:6182 \
         --stake-amount 100000000000000
     ```
 

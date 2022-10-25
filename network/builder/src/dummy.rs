@@ -4,16 +4,8 @@
 //! Integration tests for validator_network.
 
 use crate::builder::NetworkBuilder;
-use aptos_config::{
-    config::{Peer, PeerRole, PeerSet, RoleType, NETWORK_CHANNEL_SIZE},
-    network_id::{NetworkContext, NetworkId},
-};
-use aptos_crypto::{test_utils::TEST_SEED, x25519, Uniform};
-use aptos_infallible::RwLock;
-use aptos_time_service::TimeService;
-use aptos_types::{chain_id::ChainId, network_address::NetworkAddress, PeerId};
 use async_trait::async_trait;
-use channel::aptos_channel;
+use channel::pont_channel;
 use futures::{executor::block_on, StreamExt};
 use netcore::transport::ConnectionOrigin;
 use network::{
@@ -31,6 +23,14 @@ use network::{
     },
     ProtocolId,
 };
+use pont_config::{
+    config::{Peer, PeerRole, PeerSet, RoleType, NETWORK_CHANNEL_SIZE},
+    network_id::{NetworkContext, NetworkId},
+};
+use pont_crypto::{test_utils::TEST_SEED, x25519, Uniform};
+use pont_infallible::RwLock;
+use pont_time_service::TimeService;
+use pont_types::{chain_id::ChainId, network_address::NetworkAddress, PeerId};
 use rand::{rngs::StdRng, SeedableRng};
 use serde::{Deserialize, Serialize};
 use std::{
@@ -49,7 +49,7 @@ pub struct DummyMsg(pub Vec<u8>);
 pub fn network_endpoint_config() -> AppConfig {
     AppConfig::p2p(
         [TEST_RPC_PROTOCOL, TEST_DIRECT_SEND_PROTOCOL],
-        aptos_channel::Config::new(NETWORK_CHANNEL_SIZE),
+        pont_channel::Config::new(NETWORK_CHANNEL_SIZE),
     )
 }
 

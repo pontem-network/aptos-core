@@ -6,15 +6,15 @@ use crate::{
     tests::{new_test_context, TestContext},
 };
 
-use aptos_api_test_context::current_function_name;
-use aptos_protos::extractor::v1::{
+use pont_api_test_context::current_function_name;
+use pont_protos::extractor::v1::{
     transaction::{TransactionType, TxnData},
     transaction_payload::{Payload, Type as PayloadType},
     write_set_change::Change::WriteTableItem,
     Transaction as TransactionPB,
 };
 
-use aptos_sdk::types::{account_config::aptos_test_root_address, LocalAccount};
+use pont_sdk::types::{account_config::pont_test_root_address, LocalAccount};
 
 use move_core_types::{account_address::AccountAddress, value::MoveValue};
 use move_package::BuildConfig;
@@ -37,7 +37,7 @@ async fn test_genesis_works() {
     if let TxnData::Genesis(txn) = txn.txn_data.unwrap() {
         assert_eq!(
             txn.events[0].key.clone().unwrap().account_address,
-            aptos_test_root_address().to_string()
+            pont_test_root_address().to_string()
         );
     }
 }

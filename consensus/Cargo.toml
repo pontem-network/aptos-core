@@ -1,10 +1,10 @@
 [package]
 name = "consensus"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos consensus"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont consensus"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -31,17 +31,17 @@ serde_json = "1.0.81"
 thiserror = "1.0.31"
 tokio = { version = "1.21.0", features = ["full"] }
 
-aptos-bitvec = { path = "../crates/aptos-bitvec" }
-aptos-config = { path = "../config" }
-aptos-crypto = { path = "../crates/aptos-crypto" }
-aptos-infallible = { path = "../crates/aptos-infallible" }
-aptos-logger = { path = "../crates/aptos-logger" }
-aptos-mempool = { path = "../mempool" }
-aptos-metrics-core = { path = "../crates/aptos-metrics-core" }
-aptos-secure-storage = { path = "../secure/storage" }
-aptos-temppath = { path = "../crates/aptos-temppath" }
-aptos-types = { path = "../types" }
-aptos-vm = { path = "../aptos-move/aptos-vm" }
+pont-bitvec = { path = "../crates/pont-bitvec" }
+pont-config = { path = "../config" }
+pont-crypto = { path = "../crates/pont-crypto" }
+pont-infallible = { path = "../crates/pont-infallible" }
+pont-logger = { path = "../crates/pont-logger" }
+pont-mempool = { path = "../mempool" }
+pont-metrics-core = { path = "../crates/pont-metrics-core" }
+pont-secure-storage = { path = "../secure/storage" }
+pont-temppath = { path = "../crates/pont-temppath" }
+pont-types = { path = "../types" }
+pont-vm = { path = "../pont-move/pont-vm" }
 
 channel = { path = "../crates/channel" }
 consensus-notifications = { path = "../state-sync/inter-component/consensus-notifications" }
@@ -61,17 +61,17 @@ claims = "0.7"
 proptest = "1.0.0"
 tempfile = "3.3.0"
 
-aptos-config = { path = "../config", features = ["fuzzing"] }
-aptos-keygen = { path = "../crates/aptos-keygen" }
-aptos-mempool = { path = "../mempool", features = ["fuzzing"] }
+pont-config = { path = "../config", features = ["fuzzing"] }
+pont-keygen = { path = "../crates/pont-keygen" }
+pont-mempool = { path = "../mempool", features = ["fuzzing"] }
 consensus-types = { path = "consensus-types", default-features = false, features = ["fuzzing"] }
 executor-test-helpers = { path = "../execution/executor-test-helpers" }
-move-deps = { path = "../aptos-move/move-deps", features = ["address32"] }
+move-deps = { path = "../pont-move/move-deps", features = ["address32"] }
 network = { path = "../network", features = ["fuzzing"] }
 safety-rules = { path = "safety-rules", features = ["testing"] }
 vm-validator = { path = "../vm-validator" }
 
 [features]
 default = []
-fuzzing = ["consensus-types/fuzzing", "aptos-config/fuzzing", "aptos-crypto/fuzzing", "aptos-mempool/fuzzing", "aptos-types/fuzzing", "safety-rules/testing"]
+fuzzing = ["consensus-types/fuzzing", "pont-config/fuzzing", "pont-crypto/fuzzing", "pont-mempool/fuzzing", "pont-types/fuzzing", "safety-rules/testing"]
 failpoints = ["fail/failpoints"]

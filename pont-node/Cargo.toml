@@ -1,0 +1,71 @@
+[package]
+name = "pont-node"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont node"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.58"
+bcs = { git = "https://github.com/aptos-labs/bcs", rev = "2cde3e8446c460cb17b0c1d6bac7e27e964ac169" }
+clap = "3.1.8"
+fail = "0.5.0"
+futures = "0.3.21"
+hex = "0.4.3"
+rand = "0.7.3"
+rayon = "1.5.2"
+tokio = { version = "1.21.0", features = ["full"] }
+tokio-stream = "0.1.8"
+
+pont-api = { path = "../api" }
+pont-build-info = { path = "../crates/pont-build-info" }
+pont-config = { path = "../config" }
+pont-crypto = { path = "../crates/pont-crypto" }
+pont-data-client = { path = "../state-sync/pont-data-client" }
+pont-fh-stream = { path = "../ecosystem/sf-indexer/firehose-stream" }
+pont-genesis = { path = "../crates/pont-genesis", features = ["testing"] }
+pont-indexer = { path = "../crates/indexer", optional = true }
+pont-infallible = { path = "../crates/pont-infallible" }
+pont-logger = { path = "../crates/pont-logger" }
+pont-mempool = { path = "../mempool" }
+pont-secure-storage = { path = "../secure/storage" }
+pont-state-view = { path = "../storage/state-view" }
+pont-telemetry = { path = "../crates/pont-telemetry" }
+pont-temppath = { path = "../crates/pont-temppath" }
+pont-time-service = { path = "../crates/pont-time-service" }
+pont-types = { path = "../types" }
+pont-vm = { path = "../pont-move/pont-vm" }
+
+pontdb = { path = "../storage/pontdb" }
+backup-service = { path = "../storage/backup/backup-service" }
+cached-packages = { path = "../pont-move/framework/cached-packages" }
+consensus = { path = "../consensus" }
+consensus-notifications = { path = "../state-sync/inter-component/consensus-notifications" }
+crash-handler = { path = "../crates/crash-handler" }
+data-streaming-service = { path = "../state-sync/state-sync-v2/data-streaming-service" }
+event-notifications = { path = "../state-sync/inter-component/event-notifications" }
+executor = { path = "../execution/executor" }
+executor-types = { path = "../execution/executor-types" }
+framework = { path = "../pont-move/framework" }
+inspection-service = { path = "../crates/inspection-service" }
+mempool-notifications = { path = "../state-sync/inter-component/mempool-notifications" }
+network = { path = "../network" }
+network-builder = { path = "../network/builder" }
+state-sync-driver = { path = "../state-sync/state-sync-v2/state-sync-driver" }
+storage-interface = { path = "../storage/storage-interface" }
+storage-service-client = { path = "../state-sync/storage-service/client" }
+storage-service-server = { path = "../state-sync/storage-service/server" }
+
+[target.'cfg(unix)'.dependencies]
+jemallocator = { version = "0.3.2", features = ["profiling", "unprefixed_malloc_on_supported_platforms"] }
+
+[features]
+default = []
+assert-private-keys-not-cloneable = ["pont-crypto/assert-private-keys-not-cloneable"]
+failpoints = ["fail/failpoints", "consensus/failpoints", "executor/failpoints", "pont-mempool/failpoints", "pont-api/failpoints"]
+indexer = ["pont-indexer"]
+check-vm-features = []

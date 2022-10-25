@@ -3,11 +3,11 @@
 
 use crate::utils::error_notes::ErrorNotes;
 use anyhow::Result;
-use aptos_crypto::HashValue;
-use aptos_types::transaction::Version;
-use aptosdb::backup::backup_handler::DbState;
 use clap::Parser;
 use futures::TryStreamExt;
+use pont_crypto::HashValue;
+use pont_types::transaction::Version;
+use pontdb::backup::backup_handler::DbState;
 use tokio::io::{AsyncRead, AsyncReadExt};
 use tokio_util::compat::FuturesAsyncReadCompatExt;
 
@@ -16,7 +16,7 @@ pub struct BackupServiceClientOpt {
     #[clap(
         long = "backup-service-address",
         default_value = "http://localhost:6186",
-        help = "Backup service address. By default a Aptos Node runs the backup service serving \
+        help = "Backup service address. By default a Pont Node runs the backup service serving \
         on tcp port 6186 to localhost only."
     )]
     pub address: String,

@@ -8,43 +8,43 @@ import TabItem from '@theme/TabItem';
 
 # Your First Move Module
 
-This tutorial details how to compile, test, publish and interact with Move modules on the Aptos blockchain. The steps in summary are:
+This tutorial details how to compile, test, publish and interact with Move modules on the Pont blockchain. The steps in summary are:
 
-1. Install the precombiled binary for the Aptos CLI.
-2. Create an account on the Aptos blockchain and fund it.
+1. Install the precombiled binary for the Pont CLI.
+2. Create an account on the Pont blockchain and fund it.
 3. Compile and test a Move module.
-4. Publish a Move module to the Aptos blockchain.
+4. Publish a Move module to the Pont blockchain.
 5. Interact with a Move module.
 
 ## Step 1: Install the CLI
 
-[Install the precombiled binary for the Aptos CLI][install_cli].
+[Install the precombiled binary for the Pont CLI][install_cli].
 
 ---
 
 ## Step 2: Create an account and fund it 
 
-After installing the CLI binary, next step is to create and fund an account on the Aptos blockchain. 
+After installing the CLI binary, next step is to create and fund an account on the Pont blockchain. 
 
 1. Begin by starting a new terminal and run the below command to initialize a new local account: 
 
 ```bash
-aptos init
+pont init
 ```
 
 The output will be similar to below. 
 ```text
-Enter your rest endpoint [Current: None | No input: https://fullnode.devnet.aptoslabs.com/v1]
+Enter your rest endpoint [Current: None | No input: https://fullnode.devnet.pontlabs.com/v1]
 
-No rest url given, using https://fullnode.devnet.aptoslabs.com/v1...
-Enter your faucet endpoint [Current: None | No input: https://faucet.devnet.aptoslabs.com | 'skip' to not use a faucet]
+No rest url given, using https://fullnode.devnet.pontlabs.com/v1...
+Enter your faucet endpoint [Current: None | No input: https://faucet.devnet.pontlabs.com | 'skip' to not use a faucet]
 
-No faucet url given, using https://faucet.devnet.aptoslabs.com...
+No faucet url given, using https://faucet.devnet.pontlabs.com...
 Enter your private key as a hex literal (0x...) [Current: None | No input: Generate new key (or keep one if present)]
 
 No key given, generating key...
 Account a345dbfb0c94416589721360f207dcc92ecfe4f06d8ddc1c286f569d59721e5a doesn't exist, creating it and funding it with 10000 coins
-Aptos is now set up for account a345dbfb0c94416589721360f207dcc92ecfe4f06d8ddc1c286f569d59721e5a!  Run `aptos help` for more information about commands
+Pont is now set up for account a345dbfb0c94416589721360f207dcc92ecfe4f06d8ddc1c286f569d59721e5a!  Run `pont help` for more information about commands
 {
   "Result": "Success"
 }
@@ -55,7 +55,7 @@ The account address in the above output:  `a345dbfb0c94416589721360f207dcc92ecfe
 2. Now fund this account by running this command: 
 
 ```bash
-aptos account fund-with-faucet --account default
+pont account fund-with-faucet --account default
 ```
 You will see an output similar to the below:
 ```
@@ -68,25 +68,25 @@ You will see an output similar to the below:
 
 ## Step 3: Compile and test the module
 
-Several example Move modules are available in the [aptos-core/aptos-move/move-examples](https://github.com/aptos-labs/aptos-core/tree/main/aptos-move/move-examples) directory. Open a terminal and change directories into the `hello_blockchain` directory: 
+Several example Move modules are available in the [pont-core/pont-move/move-examples](https://github.com/aptos-labs/pont-core/tree/main/pont-move/move-examples) directory. Open a terminal and change directories into the `hello_blockchain` directory: 
 
 ```bash
-cd aptos-core/aptos-move/move-examples/hello_blockchain
+cd pont-core/pont-move/move-examples/hello_blockchain
 ```
 
 Run the below command to compile the `hello_blockchain` module: 
 
 ```bash
-aptos move compile --named-addresses hello_blockchain=default
+pont move compile --named-addresses hello_blockchain=default
 ```
 
 To test the module run: 
 
 ```bash
-aptos move test --named-addresses hello_blockchain=default
+pont move test --named-addresses hello_blockchain=default
 ```
 
-The CLI entry must contain `--named-addresses` because the [`Move.toml`](https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/move-examples/hello_blockchain/Move.toml) file leaves this as undefined (see below). To prepare the module for the account created in the previous step, we specify that the named address `hello_blockchain` is set to our account address, using the `default` profile alias.
+The CLI entry must contain `--named-addresses` because the [`Move.toml`](https://github.com/aptos-labs/pont-core/blob/main/pont-move/move-examples/hello_blockchain/Move.toml) file leaves this as undefined (see below). To prepare the module for the account created in the previous step, we specify that the named address `hello_blockchain` is set to our account address, using the `default` profile alias.
 
 ```toml
 [addresses]
@@ -100,7 +100,7 @@ hello_blockchain = "_"
 After the code was compiled and tested, we can publish the module to the account created for this tutorial. Run this below command:
 
 ```bash
-aptos move publish --named-addresses hello_blockchain=default
+pont move publish --named-addresses hello_blockchain=default
 ```
 
 You will see the output similar to the below:
@@ -123,7 +123,7 @@ package size 1631 bytes
 }
 ```
 
-At this point, the module is now stored on the account in the Aptos blockchain.
+At this point, the module is now stored on the account in the Pont blockchain.
 
 ---
 
@@ -132,7 +132,7 @@ At this point, the module is now stored on the account in the Aptos blockchain.
 Move modules expose access points, also referred as `entry functions`. These access points can be called via transactions. The CLI allows for seamless access to these access points. The example Move module `hello_blockchain` exposes a `set_message` entry function that takes in a `string`. This can be called via the CLI:
 
 ```bash
-aptos move run \
+pont move run \
   --function-id 'default::message::set_message' \
   --args 'string:hello, blockchain'
 ```
@@ -160,7 +160,7 @@ The `set_message` function modifies the `hello_blockchain` `MessageHolder` resou
 
 ```bash
 
-https://fullnode.devnet.aptoslabs.com/v1/accounts/a345dbfb0c94416589721360f207dcc92ecfe4f06d8ddc1c286f569d59721e5a/resource/0xa345dbfb0c94416589721360f207dcc92ecfe4f06d8ddc1c286f569d59721e5a::message::MessageHolder
+https://fullnode.devnet.pontlabs.com/v1/accounts/a345dbfb0c94416589721360f207dcc92ecfe4f06d8ddc1c286f569d59721e5a/resource/0xa345dbfb0c94416589721360f207dcc92ecfe4f06d8ddc1c286f569d59721e5a::message::MessageHolder
 ```
 
 which, after the first execution contains the following:
@@ -213,7 +213,7 @@ Other accounts can reuse the published module by calling the exact same function
 :::
 
 [account_basics]: /concepts/basics-accounts
-[alice_account_rest]: https://fullnode.devnet.aptoslabs.com/v1/accounts/a52671f10dc3479b09d0a11ce47694c0/
-[bob_account_explorer]: https://explorer.aptoslabs.com/account/ec6ec14e4abe10aaa6ad53b0b63a1806
-[install_cli]: /cli-tools/aptos-cli-tool/install-aptos-cli#download-precompiled-binary
-[rest_spec]: https://fullnode.devnet.aptoslabs.com/v1/spec#/
+[alice_account_rest]: https://fullnode.devnet.pontlabs.com/v1/accounts/a52671f10dc3479b09d0a11ce47694c0/
+[bob_account_explorer]: https://explorer.pontlabs.com/account/ec6ec14e4abe10aaa6ad53b0b63a1806
+[install_cli]: /cli-tools/pont-cli-tool/install-pont-cli#download-precompiled-binary
+[rest_spec]: https://fullnode.devnet.pontlabs.com/v1/spec#/

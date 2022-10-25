@@ -6,8 +6,6 @@ use std::sync::Arc;
 use anyhow::Result;
 use clap::Parser;
 
-use aptos_logger::{prelude::*, Level, Logger};
-use aptos_push_metrics::MetricsPusher;
 use backup_cli::{
     backup_types::{
         epoch_ending::backup::{EpochEndingBackupController, EpochEndingBackupOpt},
@@ -22,6 +20,8 @@ use backup_cli::{
         ConcurrentDownloadsOpt, GlobalBackupOpt,
     },
 };
+use pont_logger::{prelude::*, Level, Logger};
+use pont_push_metrics::MetricsPusher;
 
 #[derive(Parser)]
 #[clap(about = "Ledger backup tool.")]
@@ -113,7 +113,7 @@ enum BackupType {
 enum CoordinatorCommand {
     #[clap(
         about = "Run the backup coordinator which backs up blockchain data continuously off \
-    a Aptos Node."
+    a Pont Node."
     )]
     Run(CoordinatorRunOpt),
 }

@@ -1,0 +1,40 @@
+[package]
+name = "pont-genesis"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "A tool to manage genesis"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+bcs = { git = "https://github.com/aptos-labs/bcs", rev = "2cde3e8446c460cb17b0c1d6bac7e27e964ac169" }
+rand = "0.7.3"
+serde = { version = "1.0.137", features = ["rc"], default-features = false }
+serde_yaml = "0.8.24"
+
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../pont-crypto" }
+pont-keygen = { path = "../pont-keygen" }
+pont-logger = { path = "../pont-logger" }
+pont-state-view =  { path = "../../storage/state-view" }
+pont-temppath = { path = "../pont-temppath" }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../../pont-move/pont-vm" }
+
+pontdb = { path = "../../storage/pontdb" }
+cached-packages = { path = "../../pont-move/framework/cached-packages" }
+executor = { path = "../../execution/executor" }
+framework = { path = "../../pont-move/framework" }
+storage-interface = { path = "../../storage/storage-interface" }
+vm-genesis = { path = "../../pont-move/vm-genesis" }
+
+[dev-dependencies]
+pont-config = { path = "../../config", features = ["fuzzing"] }
+
+[features]
+testing = []
+fuzzing = ["pont-config/fuzzing"]

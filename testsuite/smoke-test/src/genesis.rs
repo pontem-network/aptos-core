@@ -9,11 +9,11 @@ use crate::{
     workspace_builder::workspace_root,
 };
 use anyhow::anyhow;
-use aptos_config::config::NodeConfig;
-use aptos_temppath::TempPath;
-use aptos_types::{transaction::Transaction, waypoint::Waypoint};
 use forge::{get_highest_synced_version, LocalNode, Node, NodeExt, SwarmExt};
 use move_deps::move_core_types::language_storage::CORE_CODE_ADDRESS;
+use pont_config::config::NodeConfig;
+use pont_temppath::TempPath;
+use pont_types::{transaction::Transaction, waypoint::Waypoint};
 use regex::Regex;
 use std::{fs, process::Command, str::FromStr, time::Duration};
 
@@ -32,7 +32,7 @@ fn update_node_config_restart(validator: &mut LocalNode, mut config: NodeConfig)
 /// 4. Test a node lagging behind can sync to the waypoint
 async fn test_genesis_transaction_flow() {
     let db_bootstrapper = workspace_builder::get_bin("db-bootstrapper");
-    let aptos_cli = workspace_builder::get_bin("aptos");
+    let pont_cli = workspace_builder::get_bin("pont");
 
     // prebuild tools.
     workspace_builder::get_bin("db-backup");
@@ -43,7 +43,7 @@ async fn test_genesis_transaction_flow() {
 
     let num_nodes = 5;
     let (mut env, cli, _) = SwarmBuilder::new_local(num_nodes)
-        .with_aptos()
+        .with_pont()
         .build_with_cli(0)
         .await;
 
@@ -85,14 +85,14 @@ async fn test_genesis_transaction_flow() {
     let script = format!(
         r#"
         script {{
-            use aptos_framework::stake;
-            use aptos_framework::aptos_governance;
-            use aptos_framework::block;
+            use pont_framework::stake;
+            use pont_framework::pont_governance;
+            use pont_framework::block;
 
             fun main(vm_signer: &signer, framework_signer: &signer) {{
                 stake::remove_validators(framework_signer, &vector[@0x{:?}]);
                 block::emit_writeset_block_event(vm_signer, @0x1);
-                aptos_governance::reconfigure(framework_signer);
+                pont_governance::reconfigure(framework_signer);
             }}
     }}
     "#,
@@ -108,7 +108,7 @@ async fn test_genesis_transaction_flow() {
     let genesis_blob_path = TempPath::new();
     genesis_blob_path.create_as_file().unwrap();
 
-    Command::new(aptos_cli.as_path())
+    Command::new(pont_cli.as_path())
         .current_dir(workspace_root())
         .args(&vec![
             "genesis",

@@ -5,9 +5,9 @@
 //! This module is to contain all networking logging information.
 //!
 //! ```
-//! use aptos_config::network_id::NetworkContext;
-//! use aptos_logger::info;
-//! use aptos_types::{PeerId, network_address::NetworkAddress};
+//! use pont_config::network_id::NetworkContext;
+//! use pont_logger::info;
+//! use pont_types::{PeerId, network_address::NetworkAddress};
 //! use network::logging::NetworkSchema;
 //!
 //! info!(
@@ -24,10 +24,10 @@ use crate::{
     connectivity_manager::DiscoverySource,
     transport::{ConnectionId, ConnectionMetadata},
 };
-use aptos_config::network_id::NetworkContext;
-use aptos_logger::Schema;
-use aptos_types::{network_address::NetworkAddress, PeerId};
 use netcore::transport::ConnectionOrigin;
+use pont_config::network_id::NetworkContext;
+use pont_logger::Schema;
+use pont_types::{network_address::NetworkAddress, PeerId};
 
 #[derive(Schema)]
 pub struct NetworkSchema<'a> {

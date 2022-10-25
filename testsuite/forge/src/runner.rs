@@ -119,7 +119,7 @@ pub type NodeConfigFn = Arc<dyn Fn(&mut serde_yaml::Value) + Send + Sync>;
 pub type GenesisConfigFn = Arc<dyn Fn(&mut serde_yaml::Value) + Send + Sync>;
 
 pub struct ForgeConfig<'cfg> {
-    aptos_tests: Vec<&'cfg dyn AptosTest>,
+    pont_tests: Vec<&'cfg dyn PontTest>,
     admin_tests: Vec<&'cfg dyn AdminTest>,
     network_tests: Vec<&'cfg dyn NetworkTest>,
 
@@ -153,8 +153,8 @@ impl<'cfg> ForgeConfig<'cfg> {
         Self::default()
     }
 
-    pub fn with_aptos_tests(mut self, aptos_tests: Vec<&'cfg dyn AptosTest>) -> Self {
-        self.aptos_tests = aptos_tests;
+    pub fn with_pont_tests(mut self, pont_tests: Vec<&'cfg dyn PontTest>) -> Self {
+        self.pont_tests = pont_tests;
         self
     }
 
@@ -222,7 +222,7 @@ impl<'cfg> ForgeConfig<'cfg> {
     }
 
     pub fn number_of_tests(&self) -> usize {
-        self.admin_tests.len() + self.network_tests.len() + self.aptos_tests.len()
+        self.admin_tests.len() + self.network_tests.len() + self.pont_tests.len()
     }
 
     pub fn all_tests(&self) -> impl Iterator<Item = &'_ dyn Test> {
@@ -230,7 +230,7 @@ impl<'cfg> ForgeConfig<'cfg> {
             .iter()
             .map(|t| t as &dyn Test)
             .chain(self.network_tests.iter().map(|t| t as &dyn Test))
-            .chain(self.aptos_tests.iter().map(|t| t as &dyn Test))
+            .chain(self.pont_tests.iter().map(|t| t as &dyn Test))
     }
 }
 
@@ -256,7 +256,7 @@ impl<'cfg> Default for ForgeConfig<'cfg> {
             )
         };
         Self {
-            aptos_tests: vec![],
+            pont_tests: vec![],
             admin_tests: vec![],
             network_tests: vec![],
             initial_validator_count: NonZeroUsize::new(1).unwrap(),
@@ -354,14 +354,14 @@ impl<'cfg, F: Factory> Forge<'cfg, F> {
                 self.tests.node_helm_config_fn.clone(),
             ))?;
 
-            // Run AptosTests
-            for test in self.filter_tests(self.tests.aptos_tests.iter()) {
-                let mut aptos_ctx = AptosContext::new(
+            // Run PontTests
+            for test in self.filter_tests(self.tests.pont_tests.iter()) {
+                let mut pont_ctx = PontContext::new(
                     CoreContext::from_rng(&mut rng),
-                    swarm.chain_info().into_aptos_public_info(),
+                    swarm.chain_info().into_pont_public_info(),
                     &mut report,
                 );
-                let result = run_test(|| runtime.block_on(test.run(&mut aptos_ctx)));
+                let result = run_test(|| runtime.block_on(test.run(&mut pont_ctx)));
                 report.report_text(result.to_string());
                 summary.handle_result(test.name().to_owned(), result)?;
             }

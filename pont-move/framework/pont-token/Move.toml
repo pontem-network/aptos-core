@@ -1,0 +1,12 @@
+[package]
+name = "PontToken"
+version = "1.0.0"
+
+[addresses]
+std = "0x1"
+pont_framework = "0x1"
+pont_token = "0x3"
+
+[dependencies]
+MoveStdlib = { local = "../move-stdlib" }
+PontFramework = { local = "../pont-framework"}

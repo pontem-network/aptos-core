@@ -1,0 +1,35 @@
+[package]
+name = "language-e2e-tests"
+version = "0.1.0"
+edition = "2021"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Move language e2e testing framework"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+anyhow = "1.0.57"
+bcs = { git = "https://github.com/aptos-labs/bcs", rev = "2cde3e8446c460cb17b0c1d6bac7e27e964ac169" }
+goldenfile = "1.1.0"
+hex = "0.4.3"
+num_cpus = "1.13.1"
+once_cell = "1.10.0"
+proptest = "1.0.0"
+proptest-derive = "0.3.0"
+rand = "0.7.3"
+serde = { version = "1.0.137", default-features = false }
+
+pont-bitvec = { path = "../../crates/pont-bitvec" }
+pont-crypto = { path = "../../crates/pont-crypto", features = ["fuzzing"] }
+pont-gas = { path = "../pont-gas" }
+pont-keygen = { path = "../../crates/pont-keygen" }
+pont-proptest-helpers = { path = "../../crates/pont-proptest-helpers" }
+pont-state-view = { path = "../../storage/state-view" }
+pont-types = { path = "../../types", features = ["fuzzing"] }
+pont-vm = { path = "../pont-vm", features = ["fuzzing"] }
+cached-packages = { path = "../framework/cached-packages" }
+framework = { path = "../framework" }
+move-deps = { path = "../move-deps", features = ["address32"] }
+vm-genesis = { path = "../vm-genesis" }

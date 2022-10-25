@@ -27,7 +27,7 @@ impl NetworkTest for NonZeroGasPrice {
             ctx,
             &all_validators,
             duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )?;
         ctx.report
             .report_txn_stats(self.name().to_string(), &txn_stat, duration);

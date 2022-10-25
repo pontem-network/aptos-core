@@ -1,7 +1,6 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_infallible::Mutex;
 use bytes::{Buf, Bytes};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
@@ -11,6 +10,7 @@ use futures::{
     task::{Context, Poll},
 };
 use once_cell::sync::Lazy;
+use pont_infallible::Mutex;
 use std::{collections::HashMap, num::NonZeroU16, pin::Pin};
 
 /// A global switch board of all in-memory socket servers

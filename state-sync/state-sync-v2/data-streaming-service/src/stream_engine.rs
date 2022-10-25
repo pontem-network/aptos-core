@@ -20,11 +20,11 @@ use crate::{
         Epoch, GetAllEpochEndingLedgerInfosRequest, GetAllStatesRequest, StreamRequest,
     },
 };
-use aptos_data_client::{AdvertisedData, GlobalDataSummary, ResponsePayload};
-use aptos_id_generator::{IdGenerator, U64IdGenerator};
-use aptos_logger::prelude::*;
-use aptos_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
 use enum_dispatch::enum_dispatch;
+use pont_data_client::{AdvertisedData, GlobalDataSummary, ResponsePayload};
+use pont_id_generator::{IdGenerator, U64IdGenerator};
+use pont_logger::prelude::*;
+use pont_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
 use std::{cmp, sync::Arc};
 
 macro_rules! invalid_client_request {
@@ -58,7 +58,7 @@ macro_rules! invalid_stream_request {
 #[enum_dispatch]
 pub trait DataStreamEngine {
     /// Creates a batch of data client requests (up to `max_number_of_requests`)
-    /// that can be sent to the aptos data client to progress the stream.
+    /// that can be sent to the pont data client to progress the stream.
     fn create_data_client_requests(
         &mut self,
         max_number_of_requests: u64,
@@ -213,7 +213,7 @@ impl DataStreamEngine for StateStreamEngine {
             Ok(client_requests)
         } else {
             info!(
-                (LogSchema::new(LogEntry::AptosDataClient)
+                (LogSchema::new(LogEntry::PontDataClient)
                     .event(LogEvent::Pending)
                     .message(&format!(
                         "Requested the number of states at version: {:?}",
@@ -472,7 +472,7 @@ impl ContinuousTransactionStreamEngine {
             ),
             response_payload => {
                 // TODO(joshlind): eventually we want to notify the data client of the bad response
-                return Err(Error::AptosDataClientResponseIsInvalid(format!(
+                return Err(Error::PontDataClientResponseIsInvalid(format!(
                     "Expected new transactions or outputs but got: {:?}",
                     response_payload
                 )));
@@ -482,7 +482,7 @@ impl ContinuousTransactionStreamEngine {
         // Calculate the last version
         if num_versions == 0 {
             // TODO(joshlind): eventually we want to notify the data client of the bad response
-            return Err(Error::AptosDataClientResponseIsInvalid(
+            return Err(Error::PontDataClientResponseIsInvalid(
                 "Received an empty transaction or output list!".into(),
             ));
         }
@@ -554,7 +554,7 @@ impl ContinuousTransactionStreamEngine {
                 }
                 response_payload => {
                     // TODO(joshlind): eventually we want to notify the data client of the bad response
-                    Err(Error::AptosDataClientResponseIsInvalid(format!(
+                    Err(Error::PontDataClientResponseIsInvalid(format!(
                         "Received an incorrect number of epoch ending ledger infos. Response: {:?}",
                         response_payload
                     )))
@@ -562,7 +562,7 @@ impl ContinuousTransactionStreamEngine {
             }
         } else {
             // TODO(joshlind): eventually we want to notify the data client of the bad response
-            Err(Error::AptosDataClientResponseIsInvalid(format!(
+            Err(Error::PontDataClientResponseIsInvalid(format!(
                 "Expected an epoch ending ledger response but got: {:?}",
                 response_payload
             )))
@@ -706,7 +706,7 @@ impl DataStreamEngine for ContinuousTransactionStreamEngine {
                 if target_ledger_info.ledger_info().epoch() > next_request_epoch {
                     // There was an epoch change. Request an epoch ending ledger info.
                     info!(
-                        (LogSchema::new(LogEntry::AptosDataClient)
+                        (LogSchema::new(LogEntry::PontDataClient)
                             .event(LogEvent::Pending)
                             .message(&format!(
                                 "Requested an epoch ending ledger info for epoch: {:?}",

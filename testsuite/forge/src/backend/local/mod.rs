@@ -3,10 +3,10 @@
 
 use crate::{Factory, GenesisConfig, GenesisConfigFn, NodeConfigFn, Result, Swarm, Version};
 use anyhow::{bail, Context};
-use aptos_config::config::NodeConfig;
-use aptos_genesis::builder::{InitConfigFn, InitGenesisConfigFn};
-use aptos_infallible::Mutex;
 use framework::ReleaseBundle;
+use pont_config::config::NodeConfig;
+use pont_genesis::builder::{InitConfigFn, InitGenesisConfigFn};
+use pont_infallible::Mutex;
 use rand::rngs::StdRng;
 use std::time::Duration;
 use std::{
@@ -57,7 +57,7 @@ impl LocalFactory {
 
     pub fn from_workspace() -> Result<Self> {
         let mut versions = HashMap::new();
-        let new_version = cargo::get_aptos_node_binary_from_worktree().map(|(revision, bin)| {
+        let new_version = cargo::get_pont_node_binary_from_worktree().map(|(revision, bin)| {
             let version = Version::new(usize::max_value(), revision);
             LocalVersion { bin, version }
         })?;
@@ -69,7 +69,7 @@ impl LocalFactory {
     pub fn from_revision(revision: &str) -> Result<Self> {
         let mut versions = HashMap::new();
         let new_version =
-            cargo::get_aptos_node_binary_at_revision(revision).map(|(revision, bin)| {
+            cargo::get_pont_node_binary_at_revision(revision).map(|(revision, bin)| {
                 let version = Version::new(usize::max_value(), revision);
                 LocalVersion { bin, version }
             })?;
@@ -79,12 +79,12 @@ impl LocalFactory {
     }
 
     pub fn with_revision_and_workspace(revision: &str) -> Result<Self> {
-        let workspace = cargo::get_aptos_node_binary_from_worktree().map(|(revision, bin)| {
+        let workspace = cargo::get_pont_node_binary_from_worktree().map(|(revision, bin)| {
             let version = Version::new(usize::max_value(), revision);
             LocalVersion { bin, version }
         })?;
         let revision =
-            cargo::get_aptos_node_binary_at_revision(revision).map(|(revision, bin)| {
+            cargo::get_pont_node_binary_at_revision(revision).map(|(revision, bin)| {
                 let version = Version::new(usize::min_value(), revision);
                 LocalVersion { bin, version }
             })?;
@@ -95,14 +95,14 @@ impl LocalFactory {
         Ok(Self::new(versions))
     }
 
-    /// Create a LocalFactory with a aptos-node version built at the tip of upstream/main and the
+    /// Create a LocalFactory with a pont-node version built at the tip of upstream/main and the
     /// current workspace, suitable for compatibility testing.
     pub fn with_upstream_and_workspace() -> Result<Self> {
         let upstream_main = cargo::git_get_upstream_remote().map(|r| format!("{}/main", r))?;
         Self::with_revision_and_workspace(&upstream_main)
     }
 
-    /// Create a LocalFactory with a aptos-node version built at merge-base of upstream/main and the
+    /// Create a LocalFactory with a pont-node version built at merge-base of upstream/main and the
     /// current workspace, suitable for compatibility testing.
     pub fn with_upstream_merge_base_and_workspace() -> Result<Self> {
         let upstream_main = cargo::git_get_upstream_remote().map(|r| format!("{}/main", r))?;

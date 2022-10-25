@@ -11,7 +11,7 @@
 
 use crate::schema::TABLE_INFO_CF_NAME;
 use anyhow::Result;
-use aptos_types::state_store::table::{TableHandle, TableInfo};
+use pont_types::state_store::table::{TableHandle, TableInfo};
 use schemadb::{
     define_schema,
     schema::{KeyCodec, ValueCodec},

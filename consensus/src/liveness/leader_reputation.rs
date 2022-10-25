@@ -11,15 +11,15 @@ use crate::{
     liveness::proposer_election::{choose_index, ProposerElection},
 };
 use anyhow::{ensure, Result};
-use aptos_bitvec::BitVec;
-use aptos_infallible::{Mutex, MutexGuard};
-use aptos_logger::prelude::*;
-use aptos_types::{
+use consensus_types::common::{Author, Round};
+use pont_bitvec::BitVec;
+use pont_infallible::{Mutex, MutexGuard};
+use pont_logger::prelude::*;
+use pont_types::{
     account_config::{new_block_event_key, NewBlockEvent},
     epoch_change::EpochChangeProof,
     epoch_state::EpochState,
 };
-use consensus_types::common::{Author, Round};
 use std::{
     collections::{HashMap, HashSet},
     convert::TryFrom,
@@ -34,19 +34,19 @@ pub trait MetadataBackend: Send + Sync {
     fn get_block_metadata(&self, target_epoch: u64, target_round: Round) -> Vec<NewBlockEvent>;
 }
 
-pub struct AptosDBBackend {
+pub struct PontDBBackend {
     window_size: usize,
     seek_len: usize,
-    aptos_db: Arc<dyn DbReader>,
+    pont_db: Arc<dyn DbReader>,
     db_result: Mutex<(Vec<NewBlockEvent>, u64, bool)>,
 }
 
-impl AptosDBBackend {
-    pub fn new(window_size: usize, seek_len: usize, aptos_db: Arc<dyn DbReader>) -> Self {
+impl PontDBBackend {
+    pub fn new(window_size: usize, seek_len: usize, pont_db: Arc<dyn DbReader>) -> Self {
         Self {
             window_size,
             seek_len,
-            aptos_db,
+            pont_db,
             db_result: Mutex::new((vec![], 0u64, true)),
         }
     }
@@ -67,7 +67,7 @@ impl AptosDBBackend {
         // we cannot reorder those two functions, as if get_events is first,
         // and then new entry gets added before get_latest_version is called,
         // we would incorrectly think that we have a newer version.
-        let events = self.aptos_db.get_events(
+        let events = self.pont_db.get_events(
             &new_block_event_key(),
             u64::max_value(),
             Order::Descending,
@@ -132,7 +132,7 @@ impl AptosDBBackend {
     }
 }
 
-impl MetadataBackend for AptosDBBackend {
+impl MetadataBackend for PontDBBackend {
     // assume the target_round only increases
     fn get_block_metadata(&self, target_epoch: u64, target_round: Round) -> Vec<NewBlockEvent> {
         let locked = self.db_result.lock();
@@ -143,7 +143,7 @@ impl MetadataBackend for AptosDBBackend {
         let has_larger = events.first().map_or(false, |e| {
             (e.epoch(), e.round()) >= (target_epoch, target_round)
         });
-        let latest_db_version = self.aptos_db.get_latest_version().unwrap_or(0);
+        let latest_db_version = self.pont_db.get_latest_version().unwrap_or(0);
         // check if fresher data has potential to give us different result
         if !has_larger && version < latest_db_version {
             let fresh_db_result = self.refresh_db_result(locked, latest_db_version);

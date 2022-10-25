@@ -19,8 +19,8 @@ use std::{
     task::{Context, Poll},
 };
 
-use aptos_crypto::{noise, x25519};
-use aptos_logger::prelude::*;
+use pont_crypto::{noise, x25519};
+use pont_logger::prelude::*;
 
 //
 // NoiseStream
@@ -551,14 +551,14 @@ mod test {
         noise::{AntiReplayTimestamps, HandshakeAuthMode, NoiseUpgrader},
         testutils::fake_socket::{ReadOnlyTestSocket, ReadWriteTestSocket},
     };
-    use aptos_config::network_id::NetworkContext;
-    use aptos_crypto::{test_utils::TEST_SEED, traits::Uniform as _, x25519};
     use futures::{
         executor::block_on,
         future::join,
         io::{AsyncReadExt, AsyncWriteExt},
     };
     use memsocket::MemorySocket;
+    use pont_config::network_id::NetworkContext;
+    use pont_crypto::{test_utils::TEST_SEED, traits::Uniform as _, x25519};
     use rand::SeedableRng as _;
     use std::io;
 
@@ -571,11 +571,11 @@ mod test {
 
         let client_private = x25519::PrivateKey::generate(&mut rng);
         let client_public = client_private.public_key();
-        let client_peer_id = aptos_types::account_address::from_identity_public_key(client_public);
+        let client_peer_id = pont_types::account_address::from_identity_public_key(client_public);
 
         let server_private = x25519::PrivateKey::generate(&mut rng);
         let server_public = server_private.public_key();
-        let server_peer_id = aptos_types::account_address::from_identity_public_key(server_public);
+        let server_peer_id = pont_types::account_address::from_identity_public_key(server_public);
 
         let client = NoiseUpgrader::new(
             NetworkContext::mock_with_peer_id(client_peer_id),

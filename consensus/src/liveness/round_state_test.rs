@@ -8,12 +8,6 @@ use crate::{
     util::mock_time_service::SimulatedTimeService,
 };
 
-use aptos_crypto::HashValue;
-use aptos_types::aggregate_signature::AggregateSignature;
-use aptos_types::{
-    block_info::BlockInfo,
-    ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
-};
 use consensus_types::{
     common::Round,
     quorum_cert::QuorumCert,
@@ -22,6 +16,12 @@ use consensus_types::{
     vote_data::VoteData,
 };
 use futures::StreamExt;
+use pont_crypto::HashValue;
+use pont_types::aggregate_signature::AggregateSignature;
+use pont_types::{
+    block_info::BlockInfo,
+    ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
+};
 use std::{sync::Arc, time::Duration};
 
 #[test]

@@ -7,11 +7,11 @@ use crate::{
     test_utils::{consensus_runtime, timed_block_on},
     twins::twins_node::SMRNode,
 };
-use aptos_types::on_chain_config::ProposerElectionType::{
-    FixedProposer, RotatingProposer, RoundProposer,
-};
 use consensus_types::{block::Block, common::Round};
 use futures::StreamExt;
+use pont_types::on_chain_config::ProposerElectionType::{
+    FixedProposer, RotatingProposer, RoundProposer,
+};
 use std::collections::HashMap;
 
 #[test]
@@ -75,7 +75,7 @@ fn basic_start_test() {
 ///
 /// Run the test:
 /// cargo xtest -p consensus drop_config_test -- --nocapture
-#[ignore] // TODO: https://github.com/aptos-labs/aptos-core/issues/8767
+#[ignore] // TODO: https://github.com/aptos-labs/pont-core/issues/8767
 fn drop_config_test() {
     let mut runtime = consensus_runtime();
     let mut playground = NetworkPlayground::new(runtime.handle().clone());
@@ -257,7 +257,7 @@ fn twins_proposer_test() {
 }
 
 #[test]
-#[ignore] // TODO: https://github.com/aptos-labs/aptos-core/issues/6615
+#[ignore] // TODO: https://github.com/aptos-labs/pont-core/issues/6615
 /// This test checks that when a node and its twin are both leaders
 /// for a round, only one of the two proposals gets committed
 ///

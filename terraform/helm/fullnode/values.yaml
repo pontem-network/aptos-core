@@ -4,16 +4,16 @@ chain:
   genesisConfigmap:
   genesisSecret:
 
-aptos_chains:
+pont_chains:
   devnet:
-    waypoint_txt_url: https://devnet.aptoslabs.com/waypoint.txt
-    genesis_blob_url: https://devnet.aptoslabs.com/genesis.blob
+    waypoint_txt_url: https://devnet.pontlabs.com/waypoint.txt
+    genesis_blob_url: https://devnet.pontlabs.com/genesis.blob
   testnet:
-    waypoint_txt_url: https://raw.githubusercontent.com/aptos-labs/aptos-genesis-waypoint/main/testnet/waypoint.txt
-    genesis_blob_url: https://raw.githubusercontent.com/aptos-labs/aptos-genesis-waypoint/main/testnet/genesis.blob
+    waypoint_txt_url: https://raw.githubusercontent.com/aptos-labs/pont-genesis-waypoint/main/testnet/waypoint.txt
+    genesis_blob_url: https://raw.githubusercontent.com/aptos-labs/pont-genesis-waypoint/main/testnet/genesis.blob
   ait3:
-    waypoint_txt_url: https://raw.githubusercontent.com/aptos-labs/aptos-ait3/main/waypoint.txt
-    genesis_blob_url: https://raw.githubusercontent.com/aptos-labs/aptos-ait3/main/genesis.blob
+    waypoint_txt_url: https://raw.githubusercontent.com/aptos-labs/pont-ait3/main/waypoint.txt
+    genesis_blob_url: https://raw.githubusercontent.com/aptos-labs/pont-ait3/main/genesis.blob
 
 # fullnode network config
 fullnode_identity:
@@ -37,7 +37,7 @@ continuous_syncing_mode: ApplyTransactionOutputs
 rust_log: info
 
 image:
-  repo: aptoslabs/validator
+  repo: pontlabs/validator
   tag: devnet
   pullPolicy: IfNotPresent
 
@@ -59,7 +59,7 @@ storage:
   size: 1000Gi
 
 service:
-  # Change this to LoadBalancer to expose the REST API, aptosnet endpoint externally
+  # Change this to LoadBalancer to expose the REST API, pontnet endpoint externally
   type: ClusterIP
   externalTrafficPolicy:
   loadBalancerSourceRanges: []
@@ -68,7 +68,7 @@ service:
 ingress:
   #change enabled to true and fill out the rest of the fields to expose the REST API externally via your ingress controller
   enabled: false
-  hostName: #aptos-fullnode.example.com
+  hostName: #pont-fullnode.example.com
   #leaving class empty will result in an ingress that implicity uses the default ingress class
   ingressClassName: #nginx
   annotations: {}
@@ -87,7 +87,7 @@ logging:
 
 backup:
   image:
-    repo: aptoslabs/tools
+    repo: pontlabs/tools
     tag: devnet
     pullPolicy: IfNotPresent
   resources:
@@ -129,7 +129,7 @@ backup_verify:
 
 restore:
   image:
-    repo: aptoslabs/tools
+    repo: pontlabs/tools
     tag: devnet
     pullPolicy: IfNotPresent
   resources:

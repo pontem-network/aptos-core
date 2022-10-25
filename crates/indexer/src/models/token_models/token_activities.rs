@@ -7,9 +7,9 @@
 
 use super::token_utils::{TokenDataIdType, TokenEvent};
 use crate::{schema::token_activities, util::parse_timestamp};
-use aptos_api_types::{Event as APIEvent, Transaction as APITransaction};
 use bigdecimal::{BigDecimal, Zero};
 use field_count::FieldCount;
+use pont_api_types::{Event as APIEvent, Transaction as APITransaction};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, FieldCount, Identifiable, Insertable, Serialize)]

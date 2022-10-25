@@ -1,0 +1,66 @@
+[package]
+name = "pontdb"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont database"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+arc-swap = "1.5.0"
+arr_macro = "0.1.3"
+bcs = { git = "https://github.com/aptos-labs/bcs", rev = "2cde3e8446c460cb17b0c1d6bac7e27e964ac169" }
+byteorder = "1.4.3"
+itertools = "0.10.0"
+lru = "0.7.7"
+num-derive = "0.3.3"
+once_cell = "1.10.0"
+proptest = { version = "1.0.0", optional = true }
+proptest-derive = { version = "0.3.0", optional = true }
+rayon = "1.5.2"
+serde = "1.0.137"
+thiserror = "1.0.31"
+
+accumulator = { path = "../accumulator" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-infallible = { path = "../../crates/pont-infallible" }
+pont-jellyfish-merkle = { path = "../jellyfish-merkle" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-metrics-core = { path = "../../crates/pont-metrics-core" }
+pont-proptest-helpers = { path = "../../crates/pont-proptest-helpers", optional = true }
+pont-rocksdb-options = { path = "../rocksdb-options" }
+pont-state-view = { path = "../state-view" }
+pont-temppath = { path = "../../crates/pont-temppath", optional = true }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../../pont-move/pont-vm" }
+pontdb-indexer = { path = "../indexer" }
+
+executor-types = { path = "../../execution/executor-types" }
+schemadb = { path = "../schemadb" }
+scratchpad = { path = "../scratchpad" }
+storage-interface = { path = "../storage-interface" }
+
+move-core-types = { git = "https://github.com/move-language/move", rev = "6a32284d6e04ea5bfa5919df9aac2ccb3ffa010e", features = ["address32"] }
+move-resource-viewer = { git = "https://github.com/move-language/move", rev = "6a32284d6e04ea5bfa5919df9aac2ccb3ffa010e" }
+
+[dev-dependencies]
+proptest = "1.0.0"
+proptest-derive = "0.3.0"
+rand = "0.7.3"
+
+pont-jellyfish-merkle = { path = "../jellyfish-merkle", features = ["fuzzing"] }
+pont-proptest-helpers = { path = "../../crates/pont-proptest-helpers" }
+pont-temppath = { path = "../../crates/pont-temppath" }
+pont-types = { path = "../../types", features = ["fuzzing"] }
+executor-types = { path = "../../execution/executor-types", features = ["fuzzing"] }
+schemadb = { path = "../schemadb", features = ["fuzzing"] }
+scratchpad = { path = "../scratchpad", features = ["fuzzing"] }
+
+[features]
+default = []
+fuzzing = ["proptest", "proptest-derive", "pont-proptest-helpers", "pont-temppath", "pont-crypto/fuzzing", "pont-jellyfish-merkle/fuzzing", "pont-types/fuzzing", "executor-types/fuzzing", "schemadb/fuzzing", "scratchpad/fuzzing"]

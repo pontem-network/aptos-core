@@ -3,8 +3,8 @@
 
 use crate::generate_traffic;
 use anyhow::bail;
-use aptos_logger::info;
 use forge::{get_highest_synced_version, NetworkContext, NetworkTest, Result, SwarmExt, Test};
+use pont_logger::info;
 use std::time::Instant;
 use tokio::{runtime::Runtime, time::Duration};
 
@@ -58,7 +58,7 @@ impl NetworkTest for StateSyncFullnodePerformance {
             ctx,
             &all_fullnodes,
             emit_txn_duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )?;
 
         // Wait for all nodes to synchronize. We time bound this to ensure
@@ -138,7 +138,7 @@ impl NetworkTest for StateSyncValidatorPerformance {
             ctx,
             &all_validators,
             emit_txn_duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )?;
 
         // Wait for all nodes to synchronize and stabilize.

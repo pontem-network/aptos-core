@@ -1,20 +1,20 @@
 ---
 id: contributing
-title: Contributing to Aptos Core
+title: Contributing to Pont Core
 ---
 
 # Contributing
 
-Our goal is to make contributing to Aptos Core easy and transparent.
+Our goal is to make contributing to Pont Core easy and transparent.
 
-## Aptos Core
+## Pont Core
 
-To contribute to the Aptos Core implementation, first start with the proper development copy.
+To contribute to the Pont Core implementation, first start with the proper development copy.
 
 To get the development installation with all the necessary dependencies for linting, testing, and building the documentation, run the following:
 ```bash
-git clone https://github.com/aptos-labs/aptos-core.git
-cd aptos-core
+git clone https://github.com/aptos-labs/pont-core.git
+cd pont-core
 ./scripts/dev_setup.sh
 cargo build
 cargo test
@@ -24,13 +24,13 @@ cargo test
 
 ### Code Style, Hints, and Testing
 
-Refer to our [Coding Guidelines](https://github.com/aptos-labs/aptos-core/blob/main/documentation/coding_guidelines.md) for detailed guidance about how to contribute to the project.
+Refer to our [Coding Guidelines](https://github.com/aptos-labs/pont-core/blob/main/documentation/coding_guidelines.md) for detailed guidance about how to contribute to the project.
 
 ### Documentation
 
-Aptos Core's developer website is also open source (the code can be found in this [repository](https://github.com/aptos-labs/aptos-core/blob/main/developers-docs-sitee/)).  It is built using [Docusaurus](https://docusaurus.io/):
+Pont Core's developer website is also open source (the code can be found in this [repository](https://github.com/aptos-labs/pont-core/blob/main/developers-docs-sitee/)).  It is built using [Docusaurus](https://docusaurus.io/):
 
-If you know Markdown, you can already contribute! How to contribute can be found in the [website repo](https://github.com/aptos-labs/aptos-core/blob/main/CONTRIBUTING.md).
+If you know Markdown, you can already contribute! How to contribute can be found in the [website repo](https://github.com/aptos-labs/pont-core/blob/main/CONTRIBUTING.md).
 
 ## Developer Workflow
 
@@ -111,4 +111,4 @@ It is important that the project history is bisect-able so that when regressions
 
 # Issues
 
-Aptos Core uses [GitHub issues](https://github.com/aptos-labs/aptos-core/issues) to track bugs. Please include necessary information and instructions to reproduce your issue.
+Pont Core uses [GitHub issues](https://github.com/aptos-labs/pont-core/issues) to track bugs. Please include necessary information and instructions to reproduce your issue.

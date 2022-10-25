@@ -2,17 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::add_accounts_impl;
-use aptos_config::{
+use pont_config::{
     config::{RocksdbConfigs, NO_OP_STORAGE_PRUNER_CONFIG},
     utils::get_genesis_txn,
 };
 
-use aptos_config::config::{
+use executor::db_bootstrapper::{generate_waypoint, maybe_bootstrap};
+use pont_config::config::{
     PrunerConfig, BUFFERED_STATE_TARGET_ITEMS, DEFAULT_MAX_NUM_NODES_PER_LRU_CACHE_SHARD,
 };
-use aptos_vm::AptosVM;
-use aptosdb::AptosDB;
-use executor::db_bootstrapper::{generate_waypoint, maybe_bootstrap};
+use pont_vm::PontVM;
+use pontdb::PontDB;
 use std::{fs, path::Path};
 use storage_interface::DbReaderWriter;
 
@@ -51,12 +51,12 @@ pub fn run(
 }
 
 fn bootstrap_with_genesis(db_dir: impl AsRef<Path>) {
-    let (config, _genesis_key) = aptos_genesis::test_utils::test_config();
+    let (config, _genesis_key) = pont_genesis::test_utils::test_config();
     // Create executor.
     let mut rocksdb_configs = RocksdbConfigs::default();
     rocksdb_configs.state_merkle_db_config.max_open_files = -1;
     let (_db, db_rw) = DbReaderWriter::wrap(
-        AptosDB::open(
+        PontDB::open(
             &db_dir,
             false, /* readonly */
             NO_OP_STORAGE_PRUNER_CONFIG,
@@ -69,6 +69,6 @@ fn bootstrap_with_genesis(db_dir: impl AsRef<Path>) {
     );
 
     // Bootstrap db with genesis
-    let waypoint = generate_waypoint::<AptosVM>(&db_rw, get_genesis_txn(&config).unwrap()).unwrap();
-    maybe_bootstrap::<AptosVM>(&db_rw, get_genesis_txn(&config).unwrap(), waypoint).unwrap();
+    let waypoint = generate_waypoint::<PontVM>(&db_rw, get_genesis_txn(&config).unwrap()).unwrap();
+    maybe_bootstrap::<PontVM>(&db_rw, get_genesis_txn(&config).unwrap(), waypoint).unwrap();
 }

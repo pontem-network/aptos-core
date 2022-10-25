@@ -5,16 +5,16 @@ use crate::{proof_fetcher::ProofFetcher, DbReader};
 
 use crate::metrics::TIMER;
 use anyhow::{anyhow, Result};
-use aptos_crypto::{hash::CryptoHash, HashValue};
-use aptos_logger::{error, sample, sample::SampleRate};
-use aptos_types::{
+use crossbeam_channel::{unbounded, Receiver, Sender};
+use once_cell::sync::Lazy;
+use pont_crypto::{hash::CryptoHash, HashValue};
+use pont_logger::{error, sample, sample::SampleRate};
+use pont_types::{
     proof::SparseMerkleProofExt,
     state_store::{state_key::StateKey, state_value::StateValue},
     transaction::Version,
 };
-use aptos_vm::AptosVM;
-use crossbeam_channel::{unbounded, Receiver, Sender};
-use once_cell::sync::Lazy;
+use pont_vm::PontVM;
 use std::{
     collections::HashMap,
     sync::{
@@ -26,7 +26,7 @@ use std::{
 
 static IO_POOL: Lazy<rayon::ThreadPool> = Lazy::new(|| {
     rayon::ThreadPoolBuilder::new()
-        .num_threads(AptosVM::get_num_proof_reading_threads())
+        .num_threads(PontVM::get_num_proof_reading_threads())
         .thread_name(|index| format!("proof_reader_{}", index))
         .build()
         .unwrap()

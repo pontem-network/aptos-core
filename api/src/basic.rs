@@ -7,8 +7,8 @@ use crate::response::InternalError;
 use crate::response::ServiceUnavailableError;
 use crate::{generate_error_response, generate_success_response, ApiTags};
 use anyhow::Context as AnyhowContext;
-use aptos_api_types::AptosErrorCode;
 use poem_openapi::{param::Query, payload::Html, Object, OpenApi};
+use pont_api_types::PontErrorCode;
 use serde::{Deserialize, Serialize};
 use std::ops::Sub;
 use std::{
@@ -37,7 +37,7 @@ pub struct HealthCheckSuccess {
 impl HealthCheckSuccess {
     pub fn new() -> Self {
         Self {
-            message: "aptos-node:ok".to_string(),
+            message: "pont-node:ok".to_string(),
         }
     }
 }
@@ -95,7 +95,7 @@ impl BasicApi {
                 .map_err(|err| {
                     HealthCheckError::internal_with_code(
                         err,
-                        AptosErrorCode::InternalError,
+                        PontErrorCode::InternalError,
                         &ledger_info,
                     )
                 })?;
@@ -103,7 +103,7 @@ impl BasicApi {
             if timestamp < expectation {
                 return Err(HealthCheckError::service_unavailable_with_code(
                     "The latest ledger info timestamp is less than the expected timestamp",
-                    AptosErrorCode::HealthCheckFailed,
+                    PontErrorCode::HealthCheckFailed,
                     &ledger_info,
                 ));
             }

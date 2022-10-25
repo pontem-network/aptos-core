@@ -2,18 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::metrics;
-use aptos_protos::extractor::v1 as extractor;
+use pont_protos::extractor::v1 as extractor;
 
 use crate::convert::convert_transaction;
-use aptos_api::context::Context;
-use aptos_api_types::{AsConverter, Transaction};
-use aptos_config::config::NodeConfig;
-use aptos_logger::{debug, error, warn};
-use aptos_mempool::MempoolClientSender;
-use aptos_types::chain_id::ChainId;
-use aptos_vm::data_cache::StorageAdapterOwned;
 use extractor::Transaction as TransactionPB;
 use futures::channel::mpsc::channel;
+use pont_api::context::Context;
+use pont_api_types::{AsConverter, Transaction};
+use pont_config::config::NodeConfig;
+use pont_logger::{debug, error, warn};
+use pont_mempool::MempoolClientSender;
+use pont_types::chain_id::ChainId;
+use pont_vm::data_cache::StorageAdapterOwned;
 use prost::Message;
 use std::{convert::TryInto, sync::Arc, time::Duration};
 use storage_interface::{state_view::DbStateView, DbReader};
@@ -102,9 +102,9 @@ impl FirehoseStreamer {
     }
 
     pub async fn start(&mut self) {
-        // Format is FIRE INIT aptos-node <PACKAGE_VERSION> <MAJOR_VERSION> <MINOR_VERSION> <CHAIN_ID>
+        // Format is FIRE INIT pont-node <PACKAGE_VERSION> <MAJOR_VERSION> <MINOR_VERSION> <CHAIN_ID>
         println!(
-            "\nFIRE INIT aptos-node {} aptos 0 0 {}",
+            "\nFIRE INIT pont-node {} pont 0 0 {}",
             env!("CARGO_PKG_VERSION"),
             self.context.chain_id().id(),
         );
@@ -193,7 +193,7 @@ impl FirehoseStreamer {
                     }
                     Err(err) => {
                         if retries == 0 {
-                            aptos_logger::debug!(
+                            pont_logger::debug!(
                                 "Could not convert onchain transaction, trying again with updated resolver",
                             );
                         } else {

@@ -2,16 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::Result;
-use aptos_state_view::account_with_state_view::AsAccountWithStateView;
-use aptos_types::{
+use fail::fail_point;
+use pont_state_view::account_with_state_view::AsAccountWithStateView;
+use pont_types::{
     account_address::AccountAddress,
     account_config::AccountSequenceInfo,
     account_view::AccountView,
     on_chain_config::OnChainConfigPayload,
     transaction::{SignedTransaction, VMValidatorResult},
 };
-use aptos_vm::AptosVM;
-use fail::fail_point;
+use pont_vm::PontVM;
 use std::sync::Arc;
 use storage_interface::state_view::DbStateView;
 use storage_interface::{
@@ -23,7 +23,7 @@ use storage_interface::{
 mod vm_validator_test;
 
 pub trait TransactionValidation: Send + Sync + Clone {
-    type ValidationInstance: aptos_vm::VMValidator;
+    type ValidationInstance: pont_vm::VMValidator;
 
     /// Validate a txn from client
     fn validate_transaction(&self, _txn: SignedTransaction) -> Result<VMValidatorResult>;
@@ -38,7 +38,7 @@ pub trait TransactionValidation: Send + Sync + Clone {
 pub struct VMValidator {
     db_reader: Arc<dyn DbReader>,
     state_view: CachedDbStateView,
-    vm: AptosVM,
+    vm: PontVM,
 }
 
 impl Clone for VMValidator {
@@ -53,7 +53,7 @@ impl VMValidator {
             .latest_state_checkpoint_view()
             .expect("Get db view cannot fail");
 
-        let vm = AptosVM::new_for_validation(&db_state_view);
+        let vm = PontVM::new_for_validation(&db_state_view);
         VMValidator {
             db_reader,
             state_view: db_state_view.into(),
@@ -63,7 +63,7 @@ impl VMValidator {
 }
 
 impl TransactionValidation for VMValidator {
-    type ValidationInstance = AptosVM;
+    type ValidationInstance = PontVM;
 
     fn validate_transaction(&self, txn: SignedTransaction) -> Result<VMValidatorResult> {
         fail_point!("vm_validator::validate_transaction", |_| {
@@ -71,7 +71,7 @@ impl TransactionValidation for VMValidator {
                 "Injected error in vm_validator::validate_transaction"
             ))
         });
-        use aptos_vm::VMValidator;
+        use pont_vm::VMValidator;
 
         Ok(self.vm.validate_transaction(txn, &self.state_view))
     }
@@ -79,7 +79,7 @@ impl TransactionValidation for VMValidator {
     fn restart(&mut self, _config: OnChainConfigPayload) -> Result<()> {
         self.notify_commit();
 
-        self.vm = AptosVM::new_for_validation(&self.state_view);
+        self.vm = PontVM::new_for_validation(&self.state_view);
         Ok(())
     }
 

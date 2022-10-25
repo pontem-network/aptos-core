@@ -1,10 +1,10 @@
 [package]
 name = "executor-types"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos executor interface types"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont executor interface types"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -17,14 +17,14 @@ once_cell = "1.10.0"
 serde = { version = "1.0.137", default-features = false }
 thiserror = "1.0.31"
 
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-secure-net = { path = "../../secure/net" }
-aptos-state-view = { path = "../../storage/state-view" }
-aptos-types = { path = "../../types" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-secure-net = { path = "../../secure/net" }
+pont-state-view = { path = "../../storage/state-view" }
+pont-types = { path = "../../types" }
 
 scratchpad = { path = "../../storage/scratchpad" }
 storage-interface = { path = "../../storage/storage-interface" }
 
 [features]
 default = []
-fuzzing = ["aptos-crypto/fuzzing", "aptos-types/fuzzing"]
+fuzzing = ["pont-crypto/fuzzing", "pont-types/fuzzing"]

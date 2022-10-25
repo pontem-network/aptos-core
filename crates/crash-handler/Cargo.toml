@@ -1,10 +1,10 @@
 [package]
 name = "crash-handler"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos crash handler"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont crash handler"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -14,5 +14,5 @@ backtrace = "0.3.58"
 serde = { version = "1.0.137", features = ["derive"] }
 toml = "0.5.9"
 
-aptos-logger = { path = "../../crates/aptos-logger" }
+pont-logger = { path = "../../crates/pont-logger" }
 

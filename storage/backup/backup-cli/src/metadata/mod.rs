@@ -6,7 +6,7 @@ pub mod view;
 
 use crate::storage::{FileHandle, ShellSafeName, TextLine};
 use anyhow::Result;
-use aptos_types::transaction::Version;
+use pont_types::transaction::Version;
 use serde::{Deserialize, Serialize};
 use std::convert::TryInto;
 

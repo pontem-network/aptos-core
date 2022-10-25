@@ -8,10 +8,10 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Operator
 
-If you are an operator participating in the Aptos network, then use this document to perform the operator tasks such as deploying a validator node and validator fullnode, registering the nodes on the Aptos community platform, and performing the validation. 
+If you are an operator participating in the Pont network, then use this document to perform the operator tasks such as deploying a validator node and validator fullnode, registering the nodes on the Pont community platform, and performing the validation. 
 
 :::tip Both validator node and validator fullnode are required for mainnet
-For participating in the Aptos mainnet, you must deploy both a validator node and a validator fullnode. 
+For participating in the Pont mainnet, you must deploy both a validator node and a validator fullnode. 
 :::
 
 ## Deploy the nodes and register
@@ -26,6 +26,6 @@ The [Petra wallet](/docs/guides/install-petra-wallet.md) is supported only on th
 
 **Step 2:** **Deploy the nodes**. Follow the detailed node installation steps provided in [**Running Validator Node**](running-validator-node/index.md) and deploy a validator node and a validator fullnode.
 
-## Connect to Aptos network
+## Connect to Pont network
 
-See [Connecting to Aptos Network](/nodes/validator-node/operator/connect-to-aptos-network) for detailed steps.
+See [Connecting to Pont Network](/nodes/validator-node/operator/connect-to-pont-network) for detailed steps.

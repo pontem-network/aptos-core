@@ -13,7 +13,7 @@ pub const DEFAULT_MAX_NUM_NODES_PER_LRU_CACHE_SHARD: usize = 1 << 13;
 
 pub const BUFFERED_STATE_TARGET_ITEMS: usize = 100_000;
 
-/// Port selected RocksDB options for tuning underlying rocksdb instance of AptosDB.
+/// Port selected RocksDB options for tuning underlying rocksdb instance of PontDB.
 /// see <https://github.com/facebook/rocksdb/blob/master/include/rocksdb/options.h>
 /// for detailed explanations.
 #[derive(Copy, Clone, Debug, Deserialize, PartialEq, Eq, Serialize)]
@@ -77,7 +77,7 @@ pub struct StorageConfig {
     pub storage_pruner_config: PrunerConfig,
     #[serde(skip)]
     data_dir: PathBuf,
-    /// AptosDB persists the state authentication structure off the critical path
+    /// PontDB persists the state authentication structure off the critical path
     /// of transaction execution and batch up recent changes for performance. Once
     /// the number of buffered state updates exceeds this config, a dump of all
     /// buffered values into a snapshot is triggered. (Alternatively, if too many
@@ -236,7 +236,7 @@ impl Default for StorageConfig {
             // conservatively safe minimal prune window. It'll take a few Gigabytes of disk space
             // depending on the size of an average account blob.
             storage_pruner_config: PrunerConfig::default(),
-            data_dir: PathBuf::from("/opt/aptos/data"),
+            data_dir: PathBuf::from("/opt/pont/data"),
             rocksdb_configs: RocksdbConfigs::default(),
             enable_indexer: false,
             buffered_state_target_items: BUFFERED_STATE_TARGET_ITEMS,

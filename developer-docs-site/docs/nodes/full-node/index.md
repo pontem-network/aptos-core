@@ -6,15 +6,15 @@ hidden: false
 
 # Public Fullnode
 
-This section explains how to install a public fullnode to connect to the Aptos networks. Note, to connect to different network, make sure you have correct version of:
+This section explains how to install a public fullnode to connect to the Pont networks. Note, to connect to different network, make sure you have correct version of:
 
 - Docker image tag (e.g. devnet, testnet)
 - Source code branch (if you build the binary directly)
-- Genesis blob and waypoint, full list of networks can be found [here](https://github.com/aptos-labs/aptos-genesis-waypoint)
+- Genesis blob and waypoint, full list of networks can be found [here](https://github.com/aptos-labs/pont-genesis-waypoint)
 
-## [Using Aptos source and Docker](fullnode-source-code-or-docker.md)
+## [Using Pont source and Docker](fullnode-source-code-or-docker.md)
 
-- [Fullnode Using Aptos Source or Docker](fullnode-source-code-or-docker.md)
+- [Fullnode Using Pont Source or Docker](fullnode-source-code-or-docker.md)
 
 - [Update Fullnode With New Releases](update-fullnode-with-new-releases.md)
 

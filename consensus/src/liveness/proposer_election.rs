@@ -24,7 +24,7 @@ pub trait ProposerElection {
 // next consumes seed and returns random deterministic u64 value in [0, max) range
 fn next_in_range(state: Vec<u8>, max: u128) -> u128 {
     // hash = SHA-3-256(state)
-    let hash = aptos_crypto::HashValue::sha3_256_of(&state).to_vec();
+    let hash = pont_crypto::HashValue::sha3_256_of(&state).to_vec();
     let mut temp = [0u8; 16];
     copy_slice_to_vec(&hash[..16], &mut temp).expect("next failed");
     // return hash[0..16]

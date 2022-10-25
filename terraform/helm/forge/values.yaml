@@ -2,7 +2,7 @@
 forge:
   helmBucket:
   image:
-    repo: aptos/forge
+    repo: pont/forge
     tag:
     pullPolicy: IfNotPresent
   resources:

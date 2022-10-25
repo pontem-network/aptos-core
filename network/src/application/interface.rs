@@ -9,10 +9,10 @@ use crate::{
     error::NetworkError,
     protocols::network::{ApplicationNetworkSender, Message, RpcError},
 };
-use aptos_config::network_id::{NetworkId, PeerNetworkId};
-use aptos_types::PeerId;
 use async_trait::async_trait;
 use itertools::Itertools;
+use pont_config::network_id::{NetworkId, PeerNetworkId};
+use pont_types::PeerId;
 use std::{collections::HashMap, fmt::Debug, hash::Hash, marker::PhantomData, time::Duration};
 
 /// A generic `NetworkInterface` for applications to connect to networking

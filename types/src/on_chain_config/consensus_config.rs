@@ -71,7 +71,7 @@ impl OnChainConfig for OnChainConsensusConfig {
 
     /// The Move resource is
     /// ```ignore
-    /// struct AptosConsensusConfig has copy, drop, store {
+    /// struct PontConsensusConfig has copy, drop, store {
     ///    config: vector<u8>,
     /// }
     /// ```

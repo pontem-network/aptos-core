@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::new_test_context;
-use aptos_api_test_context::current_function_name;
-use aptos_api_types::Address;
-use aptos_crypto::ed25519::Ed25519PrivateKey;
-use aptos_sdk::types::LocalAccount;
+use pont_api_test_context::current_function_name;
+use pont_api_types::Address;
+use pont_crypto::ed25519::Ed25519PrivateKey;
+use pont_sdk::types::LocalAccount;
 use serde_json::json;
 
 use std::convert::TryInto;

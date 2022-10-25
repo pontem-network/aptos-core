@@ -10,9 +10,9 @@ use super::{
     tokens::{TableHandleToOwner, TableMetadataForToken},
 };
 use crate::schema::current_token_pending_claims;
-use aptos_api_types::{DeleteTableItem as APIDeleteTableItem, WriteTableItem as APIWriteTableItem};
 use bigdecimal::{BigDecimal, Zero};
 use field_count::FieldCount;
+use pont_api_types::{DeleteTableItem as APIDeleteTableItem, WriteTableItem as APIWriteTableItem};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, FieldCount, Identifiable, Insertable, Serialize)]
@@ -90,7 +90,7 @@ impl CurrentTokenPendingClaim {
                         last_transaction_timestamp: txn_timestamp,
                     }));
                 } else {
-                    aptos_logger::warn!(
+                    pont_logger::warn!(
                         transaction_version = txn_version,
                         table_handle = table_handle,
                         "Missing table handle metadata for TokenClaim. {:?}",
@@ -98,7 +98,7 @@ impl CurrentTokenPendingClaim {
                     );
                 }
             } else {
-                aptos_logger::warn!(
+                pont_logger::warn!(
                     transaction_version = txn_version,
                     value_type = table_item_data.value_type,
                     value = table_item_data.value,

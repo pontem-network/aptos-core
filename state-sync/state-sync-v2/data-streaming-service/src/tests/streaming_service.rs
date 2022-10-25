@@ -10,15 +10,15 @@ use crate::{
     },
     streaming_service::DataStreamingService,
     tests::utils::{
-        create_ledger_info, get_data_notification, initialize_logger, MockAptosDataClient,
+        create_ledger_info, get_data_notification, initialize_logger, MockPontDataClient,
         MAX_ADVERTISED_EPOCH_END, MAX_ADVERTISED_STATES, MAX_ADVERTISED_TRANSACTION,
         MAX_ADVERTISED_TRANSACTION_OUTPUT, MAX_REAL_EPOCH_END, MAX_REAL_TRANSACTION,
         MAX_REAL_TRANSACTION_OUTPUT, MIN_ADVERTISED_EPOCH_END, MIN_ADVERTISED_STATES,
         MIN_ADVERTISED_TRANSACTION, MIN_ADVERTISED_TRANSACTION_OUTPUT, TOTAL_NUM_STATE_VALUES,
     },
 };
-use aptos_config::config::DataStreamingServiceConfig;
 use claims::{assert_le, assert_matches, assert_ok, assert_some};
+use pont_config::config::DataStreamingServiceConfig;
 
 macro_rules! unexpected_payload_type {
     ($received:expr) => {
@@ -1511,7 +1511,7 @@ pub fn create_streaming_client_and_server(
     skip_emulate_network_latencies: bool,
 ) -> (
     StreamingServiceClient,
-    DataStreamingService<MockAptosDataClient>,
+    DataStreamingService<MockPontDataClient>,
 ) {
     initialize_logger();
 
@@ -1520,7 +1520,7 @@ pub fn create_streaming_client_and_server(
         new_streaming_service_client_listener_pair();
 
     // Create a mock data client
-    let aptos_data_client = MockAptosDataClient::new(
+    let pont_data_client = MockPontDataClient::new(
         data_beyond_highest_advertised,
         limit_chunk_sizes,
         skip_emulate_network_latencies,
@@ -1536,7 +1536,7 @@ pub fn create_streaming_client_and_server(
     // Create the streaming service and connect it to the listener
     let streaming_service = DataStreamingService::new(
         data_streaming_service_config,
-        aptos_data_client,
+        pont_data_client,
         streaming_service_listener,
     );
 

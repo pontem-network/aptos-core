@@ -7,36 +7,36 @@ id: "using-cli-to-run-a-local-testnet"
 
 :::tip Using source or Docker run a local testnet
 
-If you want to use Docker or `aptos-core` source to start and run a local testnet, see [Run a Local Testnet with Validator](./run-a-local-testnet).
+If you want to use Docker or `pont-core` source to start and run a local testnet, see [Run a Local Testnet with Validator](./run-a-local-testnet).
 :::
 
-You can run a local testnet of the Aptos blockchain. This local testnet will not be connected to the Aptos devnet. It will run on your local machine, independent of other Aptos networks. You can use this local testnet for testing and development purposes. A local testnet is a great tool for doing local development against a known version of the codebase without having to interact with a live network or deal with the real world costs of a live network.
+You can run a local testnet of the Pont blockchain. This local testnet will not be connected to the Pont devnet. It will run on your local machine, independent of other Pont networks. You can use this local testnet for testing and development purposes. A local testnet is a great tool for doing local development against a known version of the codebase without having to interact with a live network or deal with the real world costs of a live network.
 
-:::tip Aptos CLI documentation
-If you are new to Aptos CLI, then see this comprehensive [Aptos CLI documentation](/cli-tools/aptos-cli-tool/index.md).
+:::tip Pont CLI documentation
+If you are new to Pont CLI, then see this comprehensive [Pont CLI documentation](/cli-tools/pont-cli-tool/index.md).
 :::
 
 ## Starting a local testnet with a faucet
 
-You can start a local testnet using the following Aptos CLI command:
+You can start a local testnet using the following Pont CLI command:
 
 ```bash
-aptos node run-local-testnet --with-faucet
+pont node run-local-testnet --with-faucet
 ```
 
 The above command will start a local validator node and will display a terminal output similar to the following:
 
 ```bash
 Completed generating configuration:
-        Log file: "/Users/greg/.aptos/testnet/validator.log"
-        Test dir: "/Users/greg/.aptos/testnet"
-        Aptos root key path: "/Users/greg/.aptos/testnet/mint.key"
+        Log file: "/Users/greg/.pont/testnet/validator.log"
+        Test dir: "/Users/greg/.pont/testnet"
+        Pont root key path: "/Users/greg/.pont/testnet/mint.key"
         Waypoint: 0:74c9d14285ec19e6bd15fbe851007ea8b66efbd772f613c191aa78721cadac25
         ChainId: TESTING
         REST API endpoint: 0.0.0.0:8080
         Fullnode network: /ip4/0.0.0.0/tcp/6181
 
-Aptos is running, press ctrl-c to exit
+Pont is running, press ctrl-c to exit
 
 Faucet is running.  Faucet endpoint: 0.0.0.0:8081
 ```
@@ -49,14 +49,14 @@ Note that two instances of the same command cannot run at the same time. This wi
 
 ## Test with your local testnet
 
-You can use the Aptos CLI for a full range of local testnet operations. See below for how to configure the CLI first.
+You can use the Pont CLI for a full range of local testnet operations. See below for how to configure the CLI first.
 
-### Configuring your Aptos CLI to use the local testnet
+### Configuring your Pont CLI to use the local testnet
 
 You can add a separate profile, as shown below:
 
 ```bash
-aptos init --profile local --rest-url http://localhost:8080 --faucet-url http://localhost:8081
+pont init --profile local --rest-url http://localhost:8080 --faucet-url http://localhost:8081
 ```
 
 and you will get an output like below. At the `Enter your private key...` command prompt press enter to generate a random new key.
@@ -73,7 +73,7 @@ This will create a new account and fund it with the default amount of coins, as 
 ```bash
 No key given, generating key...
 Account 7100C5295ED4F9F39DCC28D309654E291845984518307D3E2FE00AEA5F8CACC1 doesn't exist, creating it and funding it with 10000 coins
-Aptos is now set up for account 7100C5295ED4F9F39DCC28D309654E291845984518307D3E2FE00AEA5F8CACC1!  Run `aptos help` for more information about commands
+Pont is now set up for account 7100C5295ED4F9F39DCC28D309654E291845984518307D3E2FE00AEA5F8CACC1!  Run `pont help` for more information about commands
 {
   "Result": "Success"
 }
@@ -87,19 +87,19 @@ To create new accounts on the local testnet, we recommend using the above instru
 
 ```bash
 PROFILE=local
-aptos init --profile $PROFILE --rest-url http://localhost:8080 --faucet-url http://localhost:8081
+pont init --profile $PROFILE --rest-url http://localhost:8080 --faucet-url http://localhost:8081
 ```
 
 To fund accounts:
 
 ```bash
-aptos account fund --profile $PROFILE --account $PROFILE
+pont account fund --profile $PROFILE --account $PROFILE
 ```
 
 To create resource accounts:
 
 ```bash
-aptos account create-resource-account --profile $PROFILE --seed 1
+pont account create-resource-account --profile $PROFILE --seed 1
 ```
 
 ## Publishing modules to the local testnet
@@ -107,7 +107,7 @@ aptos account create-resource-account --profile $PROFILE --seed 1
 You can run any command by adding the `--profile $PROFILE` flag.  In this case, we also use `$PROFILE` as the named address in the `HelloBlockchain` example.
 
 ```bash
-aptos move publish --profile $PROFILE --package-dir /opt/git/aptos-core/aptos-move/move-examples/hello_blockchain --named-addresses HelloBlockchain=$PROFILE
+pont move publish --profile $PROFILE --package-dir /opt/git/pont-core/pont-move/move-examples/hello_blockchain --named-addresses HelloBlockchain=$PROFILE
 {
   "Result": {
     "changes": [
@@ -145,7 +145,7 @@ If you updated your codebase with backwards incompatible changes, or just want t
 the command with the `--force-restart` flag:
 
 ```bash
-aptos node run-local-testnet --with-faucet --force-restart
+pont node run-local-testnet --with-faucet --force-restart
 ```
 
 It will then prompt you if you really want to restart the chain, to ensure that you do not delete your work by accident.
@@ -178,7 +178,7 @@ lsof -i :$PORT
 More CLI help can be found by running the command:
 
 ```bash
-aptos node run-local-testnet --help
+pont node run-local-testnet --help
 ```
 
 which will provide information about each of the flags for the command.

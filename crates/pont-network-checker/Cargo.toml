@@ -1,0 +1,23 @@
+[package]
+name = "pont-network-checker"
+version = "0.0.1"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont network checker"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../pont-crypto" }
+pont-logger = { path = "../pont-logger" }
+pont-types = { path = "../../types" }
+clap = "3.2.17"
+futures = "0.3.21"
+network = { path = "../../network" }
+serde = { version = "1.0.137", features = ["derive"] }
+tokio = { version = "1.21.0" }
+

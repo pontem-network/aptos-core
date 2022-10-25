@@ -1,0 +1,63 @@
+module pont_framework::pont_account {
+    use std::error;
+
+    use pont_framework::account;
+    use pont_framework::pont_coin::PontCoin;
+    use pont_framework::coin;
+
+    friend pont_framework::genesis;
+    friend pont_framework::resource_account;
+
+    /// Account does not exist.
+    const EACCOUNT_NOT_FOUND: u64 = 1;
+    /// Account is not registered to receive APT.
+    const EACCOUNT_NOT_REGISTERED_FOR_APT: u64 = 2;
+
+    ///////////////////////////////////////////////////////////////////////////
+    /// Basic account creation methods.
+    ///////////////////////////////////////////////////////////////////////////
+
+    public entry fun create_account(auth_key: address) {
+        let signer = account::create_account(auth_key);
+        coin::register<PontCoin>(&signer);
+    }
+
+    public entry fun transfer(source: &signer, to: address, amount: u64) {
+        if (!account::exists_at(to)) {
+            create_account(to)
+        };
+        coin::transfer<PontCoin>(source, to, amount)
+    }
+
+    public fun assert_account_exists(addr: address) {
+        assert!(account::exists_at(addr), error::not_found(EACCOUNT_NOT_FOUND));
+    }
+
+    public fun assert_account_is_registered_for_apt(addr: address) {
+        assert_account_exists(addr);
+        assert!(coin::is_account_registered<PontCoin>(addr), error::not_found(EACCOUNT_NOT_REGISTERED_FOR_APT));
+    }
+
+    #[test(alice = @0xa11ce, core = @0x1)]
+    public fun test_transfer(alice: signer, core: signer) {
+        use std::signer;
+        use pont_std::from_bcs;
+
+        let bob = from_bcs::to_address(x"0000000000000000000000000000000000000000000000000000000000000b0b");
+        let carol = from_bcs::to_address(x"00000000000000000000000000000000000000000000000000000000000ca501");
+
+        let (burn_cap, mint_cap) = pont_framework::pont_coin::initialize_for_test(&core);
+        create_account(signer::address_of(&alice));
+        coin::deposit(signer::address_of(&alice), coin::mint(10000, &mint_cap));
+        transfer(&alice, bob, 500);
+        assert!(coin::balance<PontCoin>(bob) == 500, 0);
+        transfer(&alice, carol, 500);
+        assert!(coin::balance<PontCoin>(carol) == 500, 1);
+        transfer(&alice, carol, 1500);
+        assert!(coin::balance<PontCoin>(carol) == 2000, 2);
+
+        coin::destroy_burn_cap(burn_cap);
+        coin::destroy_mint_cap(mint_cap);
+        let _bob = bob;
+    }
+}

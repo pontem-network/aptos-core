@@ -5,16 +5,16 @@ slug: "run-validator-node-using-gcp"
 
 # On GCP
 
-This is a step-by-step guide to install an Aptos node on Google GCP. Follow these steps to configure a validator node and a validator fullnode on separate machines. 
+This is a step-by-step guide to install an Pont node on Google GCP. Follow these steps to configure a validator node and a validator fullnode on separate machines. 
 
 :::danger Did you set up your GCP account and created a project?
-This guide assumes you already have GCP account setup, and have created a new project for deploying Aptos node. If you are not familiar with GCP (Google Cloud Platform), checkout this [Prerequisites section](https://aptos.dev/tutorials/run-a-fullnode-on-gcp#prerequisites) for GCP account setup.
+This guide assumes you already have GCP account setup, and have created a new project for deploying Pont node. If you are not familiar with GCP (Google Cloud Platform), checkout this [Prerequisites section](https://pont.dev/tutorials/run-a-fullnode-on-gcp#prerequisites) for GCP account setup.
 :::
 
 ## Before you proceed
 
 Make sure the following are installed on your local computer:
-  - **Aptos CLI**: https://aptos.dev/cli-tools/aptos-cli-tool/install-aptos-cli
+  - **Pont CLI**: https://pont.dev/cli-tools/pont-cli-tool/install-pont-cli
   - **Terraform 1.2.4**: https://www.terraform.io/downloads.html
   - **Kubernetes CLI**: https://kubernetes.io/docs/tasks/tools/
   - **Google Cloud CLI**: https://cloud.google.com/sdk/docs/install-sdk
@@ -48,7 +48,7 @@ Follow the below instructions **twice**, i.e., first on one machine to run a val
   ```bash
   gsutil mb gs://BUCKET_NAME
   # for example
-  gsutil mb gs://<project-name>-aptos-terraform-dev
+  gsutil mb gs://<project-name>-pont-terraform-dev
   ```
 
 3. Create Terraform file called `main.tf` in your working directory:
@@ -63,24 +63,24 @@ Follow the below instructions **twice**, i.e., first on one machine to run a val
     required_version = "~> 1.2.0"
     backend "gcs" {
       bucket = "BUCKET_NAME" # bucket name created in step 2
-      prefix = "state/aptos-node"
+      prefix = "state/pont-node"
     }
   }
 
-  module "aptos-node" {
-    # download Terraform module from aptos-labs/aptos-core repo
-    source        = "github.com/aptos-labs/aptos-core.git//terraform/aptos-node/gcp?ref=mainnet"
+  module "pont-node" {
+    # download Terraform module from aptos-labs/pont-core repo
+    source        = "github.com/aptos-labs/pont-core.git//terraform/pont-node/gcp?ref=mainnet"
     region        = "us-central1"  # Specify the region
     zone          = "c"            # Specify the zone suffix
     project       = "<GCP Project ID>" # Specify your GCP project ID
     era           = 1              # bump era number to wipe the chain
     chain_id      = 43
     image_tag     = "mainnet" # Specify the docker image tag to use
-    validator_name = "<Name of your validator, no space, e.g. aptosbot>"
+    validator_name = "<Name of your validator, no space, e.g. pontbot>"
   }
   ```
 
-  For the full customization options, see the variables file [here](https://github.com/aptos-labs/aptos-core/blob/main/terraform/aptos-node/gcp/variables.tf), and the [helm values](https://github.com/aptos-labs/aptos-core/blob/main/terraform/helm/aptos-node/values.yaml).
+  For the full customization options, see the variables file [here](https://github.com/aptos-labs/pont-core/blob/main/terraform/pont-node/gcp/variables.tf), and the [helm values](https://github.com/aptos-labs/pont-core/blob/main/terraform/helm/pont-node/values.yaml).
 
 5. Initialize Terraform in the same directory of your `main.tf` file
   ```bash
@@ -105,22 +105,22 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
 
 8. Once Terraform apply finishes, you can check if those resources are created:
 
-    - `gcloud container clusters get-credentials aptos-$WORKSPACE --zone <region/zone> --project <project>` to configure the access for k8s cluster.
+    - `gcloud container clusters get-credentials pont-$WORKSPACE --zone <region/zone> --project <project>` to configure the access for k8s cluster.
     - `kubectl get pods` this should have haproxy, validator and fullnode. with validator and fullnode pod `pending` (require further action in later steps)
     - `kubectl get svc` this should have `validator-lb` and `fullnode-lb`, with an external-IP you can share later for connectivity.
 
 9. Get your node IP info:
 
     ```bash
-    export VALIDATOR_ADDRESS="$(kubectl get svc ${WORKSPACE}-aptos-node-0-validator-lb --output jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+    export VALIDATOR_ADDRESS="$(kubectl get svc ${WORKSPACE}-pont-node-0-validator-lb --output jsonpath='{.status.loadBalancer.ingress[0].ip}')"
 
-    export FULLNODE_ADDRESS="$(kubectl get svc ${WORKSPACE}-aptos-node-0-fullnode-lb --output jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+    export FULLNODE_ADDRESS="$(kubectl get svc ${WORKSPACE}-pont-node-0-fullnode-lb --output jsonpath='{.status.loadBalancer.ingress[0].ip}')"
     ```
 
 10. Generate the key pairs (node owner, voter, operator key, consensus key and networking key) in your working directory.
 
     ```bash
-    aptos genesis generate-keys --output-dir ~/$WORKSPACE/keys
+    pont genesis generate-keys --output-dir ~/$WORKSPACE/keys
     ```
 
     This will create 4 key files under `~/$WORKSPACE/keys` directory: 
@@ -137,7 +137,7 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
 11. Configure the validator information. 
 
     ```bash
-    aptos genesis set-validator-configuration \
+    pont genesis set-validator-configuration \
       --local-repository-dir ~/$WORKSPACE \
       --username $USERNAME \
       --owner-public-identity-file ~/$WORKSPACE/keys/public-keys.yaml \
@@ -152,7 +152,7 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
 12. Download the genesis blob and waypoint for the network you want to connect to. See [Node Files](/nodes/node-files.md) for a full list of files you should download and the download commands. 
 
 13. To summarize, in your working directory you should have a list of files:
-    - `main.tf`: The Terraform files to install the `aptos-node` module (from steps 3 and 4).
+    - `main.tf`: The Terraform files to install the `pont-node` module (from steps 3 and 4).
     - `keys` folder, which includes:
       - `public-keys.yaml`: Public keys for the owner account, consensus, networking (from step 10).
       - `private-keys.yaml`: Private keys for the owner account, consensus, networking (from step 10).
@@ -167,7 +167,7 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
 14. Insert `genesis.blob`, `waypoint.txt` and the identity files as secret into k8s cluster.
 
     ```bash
-    kubectl create secret generic ${WORKSPACE}-aptos-node-0-genesis-e1 \
+    kubectl create secret generic ${WORKSPACE}-pont-node-0-genesis-e1 \
         --from-file=genesis.blob=genesis.blob \
         --from-file=waypoint.txt=waypoint.txt \
         --from-file=validator-identity.yaml=keys/validator-identity.yaml \
@@ -186,9 +186,9 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
     kubectl get pods
 
     NAME                                        READY   STATUS    RESTARTS   AGE
-    node1-aptos-node-0-fullnode-e9-0              1/1     Running   0          4h31m
-    node1-aptos-node-0-haproxy-7cc4c5f74c-l4l6n   1/1     Running   0          4h40m
-    node1-aptos-node-0-validator-0                1/1     Running   0          4h30m
+    node1-pont-node-0-fullnode-e9-0              1/1     Running   0          4h31m
+    node1-pont-node-0-haproxy-7cc4c5f74c-l4l6n   1/1     Running   0          4h40m
+    node1-pont-node-0-validator-0                1/1     Running   0          4h30m
     ```
 
 Now you have successfully completed setting up your node. Make sure that you have set up one machine to run a validator node and a second machine to run a validator fullnode.

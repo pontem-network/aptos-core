@@ -1,4 +1,4 @@
-# SDK for Aptos Node API
+# SDK for Pont Node API
 
 [![Discord][discord-image]][discord-url]
 [![NPM Package Version][npm-image-version]][npm-url]
@@ -6,21 +6,21 @@
 
 ## Quickstart
 
-The public SDK downloaded from [npmjs](https://www.npmjs.com/package/aptos) is compatible with the [Aptos devnet](https://fullnode.devnet.aptoslabs.com). To start building, run below command in your project directory:
+The public SDK downloaded from [npmjs](https://www.npmjs.com/package/pont) is compatible with the [Pont devnet](https://fullnode.devnet.pontlabs.com). To start building, run below command in your project directory:
 
 ```bash
-yarn add aptos
+yarn add pont
 ```
 
 or use the browser bundle
 
 ```
-<script src="https://unpkg.com/aptos@latest/dist/index.global.js" />
+<script src="https://unpkg.com/pont@latest/dist/index.global.js" />
 ```
 
-Then, the SDK can be accessed through `window.aptosSDK`.
+Then, the SDK can be accessed through `window.pontSDK`.
 
-Learn the basics of how to use the SDK by following [this tutorial](https://aptos.dev/tutorials/your-first-transaction-sdk) in the Aptos developer site.
+Learn the basics of how to use the SDK by following [this tutorial](https://pont.dev/tutorials/your-first-transaction-sdk) in the Pont developer site.
 
 ## Usage
 
@@ -65,7 +65,7 @@ See the quickstart above.
 
 ### Working with local node
 
-To develop in a local environment, you need to use the SDK from the [main](https://github.com/aptos-labs/aptos-core/tree/main/ecosystem/typescript/sdk) branch.
+To develop in a local environment, you need to use the SDK from the [main](https://github.com/aptos-labs/pont-core/tree/main/ecosystem/typescript/sdk) branch.
 
 **NOTE**
 SDK from the main branch might not be compatible with the devnet.
@@ -73,7 +73,7 @@ SDK from the main branch might not be compatible with the devnet.
 Run a local node (run from the root of the repo):
 
 ```
-cargo run -p aptos -- node run-local-testnet --with-faucet --faucet-port 8081 --force-restart --assume-yes
+cargo run -p pont -- node run-local-testnet --with-faucet --faucet-port 8081 --force-restart --assume-yes
 ```
 
 Run the SDK tests and make sure they pass. Go to the SDK directory, and setup an env to configure the URLs:
@@ -107,13 +107,13 @@ This project follows [semver](https://semver.org/) as closely as possible.
 
 ## References
 
-[examples]: https://github.com/aptos-labs/aptos-core/blob/main/ecosystem/typescript/sdk/examples/
-[repo]: https://github.com/aptos-labs/aptos-core
-[npm-image-version]: https://img.shields.io/npm/v/aptos.svg
-[npm-image-downloads]: https://img.shields.io/npm/dm/aptos.svg
-[npm-url]: https://npmjs.org/package/aptos
+[examples]: https://github.com/aptos-labs/pont-core/blob/main/ecosystem/typescript/sdk/examples/
+[repo]: https://github.com/aptos-labs/pont-core
+[npm-image-version]: https://img.shields.io/npm/v/pont.svg
+[npm-image-downloads]: https://img.shields.io/npm/dm/pont.svg
+[npm-url]: https://npmjs.org/package/pont
 [discord-image]: https://img.shields.io/discord/945856774056083548?label=Discord&logo=discord&style=flat~~~~
-[discord-url]: https://discord.gg/aptoslabs
+[discord-url]: https://discord.gg/pontlabs
 [api-doc]: https://aptos-labs.github.io/ts-sdk-doc/
 
 ## Release process

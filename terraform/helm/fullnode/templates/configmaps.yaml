@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "aptos-fullnode.fullname" . }}
+  name: {{ include "pont-fullnode.fullname" . }}
   labels:
-    {{- include "aptos-fullnode.labels" . | nindent 4 }}
+    {{- include "pont-fullnode.labels" . | nindent 4 }}
 data:
 {{ (tpl (.Files.Glob "files/*.yaml").AsConfig .) | indent 2 }}

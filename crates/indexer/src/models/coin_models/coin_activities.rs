@@ -15,17 +15,17 @@ use crate::{
     schema::coin_activities,
     util::{parse_timestamp, truncate_str},
 };
-use aptos_api_types::{
+use bigdecimal::BigDecimal;
+use field_count::FieldCount;
+use pont_api_types::{
     Event as APIEvent, Transaction as APITransaction, TransactionInfo as APITransactionInfo,
     TransactionPayload, UserTransactionRequest, WriteSetChange as APIWriteSetChange,
 };
-use aptos_types::APTOS_COIN_TYPE;
-use bigdecimal::BigDecimal;
-use field_count::FieldCount;
+use pont_types::APTOS_COIN_TYPE;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-const GAS_FEE_EVENT: &str = "0x1::aptos_coin::GasFeeEvent";
+const GAS_FEE_EVENT: &str = "0x1::pont_coin::GasFeeEvent";
 // We will never have a negative number on chain so this will avoid collision in postgres
 const BURN_GAS_EVENT_CREATION_NUM: i64 = -1;
 const MAX_ENTRY_FUNCTION_LENGTH: usize = 100;
@@ -69,7 +69,7 @@ impl CoinActivity {
     /// Note, we're not currently tracking supply
     pub fn from_transaction(
         transaction: &APITransaction,
-        maybe_aptos_coin_info: &Option<CoinInfoQuery>,
+        maybe_pont_coin_info: &Option<CoinInfoQuery>,
     ) -> (
         Vec<Self>,
         Vec<CoinBalance>,
@@ -143,7 +143,7 @@ impl CoinActivity {
             let maybe_coin_supply = if let APIWriteSetChange::WriteTableItem(table_item) = &wsc {
                 CoinSupply::from_write_table_item(
                     table_item,
-                    maybe_aptos_coin_info,
+                    maybe_pont_coin_info,
                     txn_version,
                     txn_timestamp,
                     txn_epoch,
@@ -249,7 +249,7 @@ impl CoinActivity {
         entry_function_id_str: &Option<String>,
         transaction_timestamp: chrono::NaiveDateTime,
     ) -> Self {
-        let aptos_coin_burned = BigDecimal::from(
+        let pont_coin_burned = BigDecimal::from(
             txn_info.gas_used.0 * user_transaction_request.gas_unit_price.0 as u64,
         );
 
@@ -260,7 +260,7 @@ impl CoinActivity {
             event_sequence_number: user_transaction_request.sequence_number.0 as i64,
             owner_address: user_transaction_request.sender.to_string(),
             coin_type: APTOS_COIN_TYPE.to_string(),
-            amount: aptos_coin_burned,
+            amount: pont_coin_burned,
             activity_type: GAS_FEE_EVENT.to_string(),
             is_gas_fee: true,
             is_transaction_success: txn_info.success,

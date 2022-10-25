@@ -33,7 +33,7 @@ cd "$SCRIPT_PATH/.." || exit
 
 function usage {
   echo "Usage:"
-  echo "Installs or updates necessary dev tools for aptoslabs/aptos-core."
+  echo "Installs or updates necessary dev tools for pontlabs/pont-core."
   echo "-b batch mode, no user interactions and miminal output"
   echo "-p update ${HOME}/.profile"
   echo "-r install protoc and related tools"
@@ -45,7 +45,7 @@ function usage {
   echo "-i installs an individual tool by name"
   echo "-n will target the /opt/ dir rather than the $HOME dir.  /opt/bin/, /opt/rustup/, and /opt/dotnet/ rather than $HOME/bin/, $HOME/.rustup/, and $HOME/.dotnet/"
   echo "If no toolchain component is selected with -t, -o, -y, or -p, the behavior is as if -t had been provided."
-  echo "This command must be called from the root folder of the Aptos-core project."
+  echo "This command must be called from the root folder of the Pont-core project."
 }
 
 function add_to_profile {
@@ -644,10 +644,10 @@ function install_postgres {
 
 function welcome_message {
 cat <<EOF
-Welcome to Aptos!
+Welcome to Pont!
 
 This script will download and install the necessary dependencies needed to
-build, test and inspect Aptos Core.
+build, test and inspect Pont Core.
 
 Based on your selection, these tools will be included:
 EOF
@@ -787,7 +787,7 @@ if [[ "$INSTALL_BUILD_TOOLS" == "false" ]] && \
 fi
 
 if [ ! -f rust-toolchain ]; then
-	echo "Unknown location. Please run this from the aptos-core repository. Abort."
+	echo "Unknown location. Please run this from the pont-core repository. Abort."
 	exit 1
 fi
 

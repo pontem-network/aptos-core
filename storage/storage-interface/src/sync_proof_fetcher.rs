@@ -3,13 +3,13 @@
 
 use crate::{proof_fetcher::ProofFetcher, DbReader};
 use anyhow::format_err;
-use aptos_crypto::{hash::CryptoHash, HashValue};
-use aptos_types::{
+use parking_lot::RwLock;
+use pont_crypto::{hash::CryptoHash, HashValue};
+use pont_types::{
     proof::SparseMerkleProofExt,
     state_store::{state_key::StateKey, state_value::StateValue},
     transaction::Version,
 };
-use parking_lot::RwLock;
 use std::{collections::HashMap, sync::Arc};
 
 /// An implementation of proof fetcher, which synchronously fetches proofs from the underlying persistent

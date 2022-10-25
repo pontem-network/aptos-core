@@ -1,5 +1,5 @@
-# This compose file defines an Aptos Validator deployment.
-# Read the README.md files for instruction on how to install aptos-node
+# This compose file defines an Pont Validator deployment.
+# Read the README.md files for instruction on how to install pont-node
 
 version: "3.8"
 services:
@@ -48,11 +48,11 @@ networks:
       name: host
 
     shared:
-        name: "aptos-docker-compose-shared"
+        name: "pont-docker-compose-shared"
         ipam:
           config:
             - subnet: 172.16.1.0/24
 
 volumes:
-  aptos-validator:
-    name: aptos-validator
+  pont-validator:
+    name: pont-validator

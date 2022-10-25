@@ -5,11 +5,8 @@
 
 use crate::counters;
 use anyhow::anyhow;
-use aptos_config::network_id::{NetworkId, PeerNetworkId};
-use aptos_logger::prelude::*;
-use aptos_types::{epoch_change::EpochChangeProof, PeerId};
 use async_trait::async_trait;
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use consensus_types::{
     block_retrieval::{BlockRetrievalRequest, BlockRetrievalResponse},
     epoch_retrieval::EpochRetrievalRequest,
@@ -32,6 +29,9 @@ use network::{
     },
     ProtocolId,
 };
+use pont_config::network_id::{NetworkId, PeerNetworkId};
+use pont_logger::prelude::*;
+use pont_types::{epoch_change::EpochChangeProof, PeerId};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, sync::Arc, time::Duration};
 
@@ -124,7 +124,7 @@ pub fn network_endpoint_config() -> AppConfig {
     let protos = RPC.iter().chain(DIRECT_SEND.iter()).copied();
     AppConfig::p2p(
         protos,
-        aptos_channel::Config::new(NETWORK_CHANNEL_SIZE)
+        pont_channel::Config::new(NETWORK_CHANNEL_SIZE)
             .queue_style(QueueStyle::FIFO)
             .counters(&counters::PENDING_CONSENSUS_NETWORK_EVENTS),
     )

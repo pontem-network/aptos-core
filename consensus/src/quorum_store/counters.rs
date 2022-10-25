@@ -1,9 +1,9 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
-use aptos_metrics_core::{
+use once_cell::sync::Lazy;
+use pont_metrics_core::{
     op_counters::DurationHistogram, register_histogram, register_histogram_vec, HistogramVec,
 };
-use once_cell::sync::Lazy;
 use std::time::Duration;
 
 pub const GET_BATCH_LABEL: &str = "get_batch";

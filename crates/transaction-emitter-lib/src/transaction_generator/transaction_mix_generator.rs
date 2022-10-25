@@ -1,9 +1,9 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 use crate::transaction_generator::{TransactionGenerator, TransactionGeneratorCreator};
-use aptos_sdk::types::{transaction::SignedTransaction, LocalAccount};
 use async_trait::async_trait;
 use futures::future::join_all;
+use pont_sdk::types::{transaction::SignedTransaction, LocalAccount};
 use rand::prelude::StdRng;
 use rand::Rng;
 use rand_core::{OsRng, SeedableRng};

@@ -5,9 +5,19 @@ use crate::{
     persistent_safety_storage::PersistentSafetyStorage, serializer::SerializerService, SafetyRules,
     TSafetyRules,
 };
-use aptos_crypto::hash::{CryptoHash, TransactionAccumulatorHasher};
-use aptos_secure_storage::{InMemoryStorage, Storage};
-use aptos_types::{
+use consensus_types::timeout_2chain::TwoChainTimeoutWithPartialSignatures;
+use consensus_types::{
+    block::Block,
+    common::{Payload, Round},
+    quorum_cert::QuorumCert,
+    timeout_2chain::{TwoChainTimeout, TwoChainTimeoutCertificate},
+    vote::Vote,
+    vote_data::VoteData,
+    vote_proposal::VoteProposal,
+};
+use pont_crypto::hash::{CryptoHash, TransactionAccumulatorHasher};
+use pont_secure_storage::{InMemoryStorage, Storage};
+use pont_types::{
     aggregate_signature::{AggregateSignature, PartialSignatures},
     block_info::BlockInfo,
     epoch_change::EpochChangeProof,
@@ -19,16 +29,6 @@ use aptos_types::{
     validator_signer::ValidatorSigner,
     validator_verifier::generate_validator_verifier,
     waypoint::Waypoint,
-};
-use consensus_types::timeout_2chain::TwoChainTimeoutWithPartialSignatures;
-use consensus_types::{
-    block::Block,
-    common::{Payload, Round},
-    quorum_cert::QuorumCert,
-    timeout_2chain::{TwoChainTimeout, TwoChainTimeoutCertificate},
-    vote::Vote,
-    vote_data::VoteData,
-    vote_proposal::VoteProposal,
 };
 
 pub type Proof = AccumulatorExtensionProof<TransactionAccumulatorHasher>;

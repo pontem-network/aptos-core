@@ -1,0 +1,15 @@
+[package]
+name = "pont-protos"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont Protobuf Definitions"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+pbjson = "0.4.0"
+prost = "0.10.4"
+serde = { version = "1.0.137", features = ["derive"], default-features = false }

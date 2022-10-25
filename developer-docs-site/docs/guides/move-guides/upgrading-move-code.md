@@ -8,7 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Upgrading Move Code
 
-The Aptos chain supports _code upgrade_, which means already deployed Move
+The Pont chain supports _code upgrade_, which means already deployed Move
 code can be replaced with newer code. If a code upgrade happens, all 
 consumers of the upgraded code will automatically receive the new code the
 next time their code is executed. 
@@ -30,7 +30,7 @@ discussion of security aspects).
 
 ## How it works
 
-Code upgrade on the Aptos chain happens on [Move package](https://move-language.github.io/move/packages.html) 
+Code upgrade on the Pont chain happens on [Move package](https://move-language.github.io/move/packages.html) 
 level. A package specifies an upgrade policy in the `Move.toml`
 manifest:
 
@@ -42,7 +42,7 @@ upgrade_policy = "compatible"
 ...
 ```
 :::tip Compatibility check
-Aptos checks compatibility at the time a [Move package](https://move-language.github.io/move/packages.html) is published via a dedicated Aptos framework transaction. This transaction aborts if compatibility is not satisfied as specified.
+Pont checks compatibility at the time a [Move package](https://move-language.github.io/move/packages.html) is published via a dedicated Pont framework transaction. This transaction aborts if compatibility is not satisfied as specified.
 :::
 
 ## Upgrade Policies
@@ -83,7 +83,7 @@ care.
 
 - The safest dependency is, of course, to an `immutable` package. This is 
   guaranteed to never change, including its transitive dependencies (modulo 
-  the Aptos framework). In order to evolve an immutable package, the owner 
+  the Pont framework). In order to evolve an immutable package, the owner 
   would have to introduce a new major version, which is practically like an 
   independent new package. Currently, major versioning would have to be 
   expressed by naming (e.g. `module feature_v1` and `module feature_v2`).
@@ -94,16 +94,16 @@ care.
   recommended that you know and understand the entity publishing the package. 
   The highest level of assurance is that the package is governed by a DAO where 
   no single user can initiate an upgrade, but a vote or similar has 
-  to be taken. This is for example the case for the Aptos framework.
+  to be taken. This is for example the case for the Pont framework.
    
 ## Programmatic upgrade
 
-In general, Aptos offers, via the Move module `aptos_framework::code`, 
+In general, Pont offers, via the Move module `pont_framework::code`, 
 ways to publish code from anywhere in your smart contracts. However,
 notice that code published in the current transaction cannot be executed 
 before that transaction ends.
 
-The Aptos Framework itself, including all the chain administration logic, is
+The Pont Framework itself, including all the chain administration logic, is
 an example for programmatic upgrade. The framework is marked as `compatible`.
 Upgrade happens via specific generated governance scripts. For more details,
-see [Aptos Governance](/concepts/governance.md).
+see [Pont Governance](/concepts/governance.md).

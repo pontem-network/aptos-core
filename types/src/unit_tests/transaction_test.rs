@@ -9,11 +9,11 @@ use crate::{
         TransactionInfo, TransactionListWithProof, TransactionPayload, TransactionWithProof,
     },
 };
-use aptos_crypto::{
+use bcs::test_helpers::assert_canonical_encode_decode;
+use pont_crypto::{
     ed25519::{self, Ed25519PrivateKey, Ed25519Signature},
     PrivateKey, Uniform,
 };
-use bcs::test_helpers::assert_canonical_encode_decode;
 use proptest::prelude::*;
 use std::convert::TryFrom;
 

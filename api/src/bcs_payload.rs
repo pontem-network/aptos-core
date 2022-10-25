@@ -5,11 +5,10 @@
 //! supported. This type just helps with representing BCS bytes in the spec.
 
 // Previously the Bcs payload type took a T, not Vec<u8>. For more information
-// about that effort, see https://github.com/aptos-labs/aptos-core/issues/2277.
+// about that effort, see https://github.com/aptos-labs/pont-core/issues/2277.
 
 use std::ops::{Deref, DerefMut};
 
-use aptos_api_types::mime_types::BCS;
 use poem::{http::header, FromRequest, IntoResponse, Request, RequestBody, Response, Result};
 use poem_openapi::{
     impl_apirequest_for_payload,
@@ -18,6 +17,7 @@ use poem_openapi::{
     types::Type,
     ApiResponse,
 };
+use pont_api_types::mime_types::BCS;
 
 /// A wrapper struct for a payload containing BCS encoded bytes
 #[derive(Debug, Clone, Eq, PartialEq)]

@@ -7,8 +7,8 @@ use crate::accept_type::AcceptType;
 use crate::context::Context;
 use crate::response::{BasicResponse, BasicResponseStatus, BasicResult};
 use crate::ApiTags;
-use aptos_api_types::{IndexResponse, IndexResponseBcs};
 use poem_openapi::OpenApi;
+use pont_api_types::{IndexResponse, IndexResponseBcs};
 
 /// API for the index, to retrieve the ledger information
 pub struct IndexApi {
@@ -39,7 +39,7 @@ impl IndexApi {
                 let index_response = IndexResponse::new(
                     ledger_info.clone(),
                     node_role,
-                    Some(aptos_build_info::get_git_hash()),
+                    Some(pont_build_info::get_git_hash()),
                 );
                 BasicResponse::try_from_json((
                     index_response,

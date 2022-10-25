@@ -29,12 +29,12 @@ The following diagram shows how the Move Adapter fits into the system.
 ![abstract](../images/move_adapter.png)
 
 The **Move Adapter** uses a **[Move Virtual Machine](#Move-VM)** (VM) to
-execute code in the context of the Aptos ecosystem. The Move VM is not aware
-of the structure and semantics of Aptos transactions, nor is it aware of the
-Aptos storage layer; it only knows how to execute Move functions. It is the
-adapter's job to use the VM in a way that honors the Aptos protocol.
+execute code in the context of the Pont ecosystem. The Move VM is not aware
+of the structure and semantics of Pont transactions, nor is it aware of the
+Pont storage layer; it only knows how to execute Move functions. It is the
+adapter's job to use the VM in a way that honors the Pont protocol.
 
-We will describe the Move Adapter and the Move VM architecture in Aptos and how
+We will describe the Move Adapter and the Move VM architecture in Pont and how
 they share responsibilities.
 
 ## Validation
@@ -116,7 +116,7 @@ pub struct RawTransaction {
     /// in the future to indicate that a transaction does not expire.
     expiration_timestamp_secs: u64,
 
-    /// Chain ID of the Aptos network this transaction is intended for.
+    /// Chain ID of the Pont network this transaction is intended for.
     chain_id: ChainId,
 }
 
@@ -245,7 +245,7 @@ successful, this value is returned as the `governance_role` field of the
 transactions.
 
 * If the transaction payload is a `EntryFunction`, check if the on-chain
-Aptos Version number is 2 or later. For version 1, validation will fail with
+Pont Version number is 2 or later. For version 1, validation will fail with
 a `FEATURE_UNDER_GATING` status code.
 
 ### Gas and Size Checks
@@ -290,12 +290,12 @@ specified by the `GasConstants`. If the price is less than
 The rest of the validation is performed in Move code, which is run using the
 Move VM with gas metering disabled. Each kind of transaction payload has a
 corresponding prologue function that is used for validation. These prologue
-functions are defined in the `AptosAccount` module of the Aptos Framework:
+functions are defined in the `PontAccount` module of the Pont Framework:
 
 * Single-agent `EntryFunction` and `Script`: The prologue function is `script_prologue`.
 In addition to the common checks listed below, it also calls the `is_script_allowed`
 function in the `TransactionPublishingOption` module to determine if the script
-should be allowed. A script sent by an account with `has_aptos_root_role` is always
+should be allowed. A script sent by an account with `has_pont_root_role` is always
 allowed. Otherwise, a `Script` payload is allowed if the hash of the
 script bytecode is on the list of allowed scripts published at
 `0x1::TransactionPublishingOption::TransactionPublishingOption.script_allowlist`.
@@ -341,7 +341,7 @@ account. If not, validation fails with an `INVALID_AUTH_KEY` status code.
 * The transaction sender must be able to pay the maximum transaction fee. The
 maximum fee is the product of the transaction's `max_gas_amount` and
 `gas_unit_price` fields. If the sender's account balance
-for the Aptos coin is less than the maximum fee, validation fails with an
+for the Pont coin is less than the maximum fee, validation fails with an
 `INSUFFICIENT_BALANCE_FOR_TRANSACTION_FEE` status code. For `WriteSet`
 transactions, the maximum fee is treated as zero, regardless of the gas
 parameters specified in the transaction.
@@ -419,7 +419,7 @@ updated with the new key. The delay in accepting any transaction for that
 account is a function of the validator latency in refreshing the view. If a
 validator can be "stalled" into a view, a user may be locked out of the system
 and unable to submit transactions. What is a tolerable delay? Can
-administrative accounts (e.g., AptosRoot) be locked out of the system?
+administrative accounts (e.g., PontRoot) be locked out of the system?
 
 * Configuration updates: The validator must be restarted after a configuration
 update, and failure to notice an update may result in inconsistent behavior of
@@ -431,11 +431,11 @@ the entire system.
 
 * Monitoring:
 
-    - `aptos_vm_transactions_validated`: Number of transactions processed by
+    - `pont_vm_transactions_validated`: Number of transactions processed by
       the validator, with either "success" or "failure" labels
-    - `aptos_vm_txn_validation_seconds`: Histogram of validation time (in
+    - `pont_vm_txn_validation_seconds`: Histogram of validation time (in
       seconds) per transaction
-    - `aptos_vm_critical_errors`: Counter for critical internal errors;
+    - `pont_vm_critical_errors`: Counter for critical internal errors;
       intended to trigger alerts, not for display on a dashboard
 
 * Logging on catastrophic events must report enough info to debug.
@@ -564,7 +564,7 @@ vector of bytes. No access path should be included more than once in a single
 `WriteSet`, and a non-existent access path should never be deleted.
 
 * `events`: This is a vector of `ContractEvent` values describing the events
-emitted while executing the transaction. Events in Aptos are stored separately
+emitted while executing the transaction. Events in Pont are stored separately
 from the blockchain state, so these events are not part of the transaction
 `WriteSet`.
 
@@ -620,7 +620,7 @@ invariant for states. If one of those reads fails, the transaction will fail
 with a `STORAGE_ERROR` status code.
 
 * `BlockMetadata`: This transaction is handled by running the `block_prologue`
-function from the `Block` module in the Aptos Framework to record the
+function from the `Block` module in the Pont Framework to record the
 metadata at the start of a new block. The sender of the transaction is set to
 the reserved VM address (zero), and the `round`, `timestamp_usecs`,
 `previous_block_votes` and `proposer` fields are extracted from the
@@ -666,12 +666,12 @@ input transactions are executed.
 After re-validating a user transaction, the adapter processes the payload,
 depending on its contents.
 
-Aptos version 1 had a fixed set of script transactions for general user
+Pont version 1 had a fixed set of script transactions for general user
 transactions, with the script hash values stored in the on-chain allowlist,
-that are now implemented as entry functions in Aptos version 2 and later.
-If the on-chain Aptos Version number is 2 or later, the adapter first checks
+that are now implemented as entry functions in Pont version 2 and later.
+If the on-chain Pont Version number is 2 or later, the adapter first checks
 if the script is one of those special scripts, and if so, remaps it to the
-corresponding entry function. Because this remapping is fixed to Aptos
+corresponding entry function. Because this remapping is fixed to Pont
 version 1 and is never expected to change, the remapping to entry functions
 is hardcoded in the adapter.
 
@@ -693,7 +693,7 @@ schedule before invoking the VM.
 
 If the script or module payload is processed successfully, the Move VM is next
 used to [execute](#Function-Execution) the `epilogue` function from the
-`AptosAccount` module. The epilogue increments the sender's `sequence_number`
+`PontAccount` module. The epilogue increments the sender's `sequence_number`
 and deducts the transaction fee based on the gas price and the amount of gas
 consumed. This function execution is done using the same VM `Session` that was
 used when processing the payload, so that all the side effects are
@@ -728,7 +728,7 @@ of `STORAGE_ERROR`. There are no gas charges for `WriteSet` transactions.
 
 Instead of the standard epilogue function, for `WriteSet` transactions the
 adapter executes the special `writeset_epilogue` function from the
-`AptosAccount` module. The `writeset_epilogue` calls the standard epilogue to
+`PontAccount` module. The `writeset_epilogue` calls the standard epilogue to
 increment the `sequence_number`, emits an `AdminTransactionEvent`, and if the
 `WriteSetPayload` is a `Direct` value, it also emits a `NewEpochEvent` to
 trigger reconfiguration. For a `Script` value in the `WriteSetPayload`, it is
@@ -768,14 +768,14 @@ certain error type.
 
 * Monitoring:
 
-    - `aptos_vm_user_transactions_executed`: Number of user transactions executed,
+    - `pont_vm_user_transactions_executed`: Number of user transactions executed,
       with either "success" or "failure" labels
-    - `aptos_vm_system_transactions_executed`: Number of system transactions
+    - `pont_vm_system_transactions_executed`: Number of system transactions
       executed, with either "success" or "failure" labels
-    - `aptos_vm_txn_total_seconds`: Histogram of execution time (in seconds) per
+    - `pont_vm_txn_total_seconds`: Histogram of execution time (in seconds) per
       user transaction
-    - `aptos_vm_num_txns_per_block`: Histogram of number of transactions per block
-    - `aptos_vm_critical_errors`: Counter for critical internal errors; intended
+    - `pont_vm_num_txns_per_block`: Histogram of number of transactions per block
+    - `pont_vm_critical_errors`: Counter for critical internal errors; intended
       to trigger alerts, not for display on a dashboard
 
 * Logging on catastrophic events must report enough info to debug.
@@ -803,7 +803,7 @@ loading/linking because of different code paths. The consistency of the
 invocation is guaranteed before execution starts. Obviously runtime errors are
 still possible and "expected".
 
-This model fits well Aptos requirements:
+This model fits well Pont requirements:
 
 * Validation uses only few functions published at genesis. Once loaded, code is
 always fetched from the cache and immediately available.
@@ -813,15 +813,15 @@ view. As such code is stable too, and it is important to optimize the process
 of loading. Also, transactions are reasonably homogeneous and reuse of code
 leads to significant improvements in performance and stability.
 
-The VM in its current form is optimized for Aptos, and it offers an API that is
+The VM in its current form is optimized for Pont, and it offers an API that is
 targeted for that environment. In particular the VM has an internal
-implementation for a data cache that relieves the Aptos client from an
+implementation for a data cache that relieves the Pont client from an
 important responsibility (data cache consistency). That abstraction is behind
 a `Session` which is the only way to talk to the runtime.
 
 The objective of a `Session` is to create and manage the data cache for a set
 of invocations into the VM. It is also intended to return side effects in a
-format that is suitable to the adapter, and in line with Aptos and the
+format that is suitable to the adapter, and in line with Pont and the
 generation of a `WriteSet`.
 A `Session` forwards calls to the `Runtime` which is where the logic and
 implementation of the VM lives and starts.
@@ -846,7 +846,7 @@ So a reference to a loaded module does not perform any fetching from the
 network, or verification, or transformations into runtime structures
 (e.g. linking).
 
-In Aptos, consistency of the code cache can be broken by a system transaction
+In Pont, consistency of the code cache can be broken by a system transaction
 that performs a hard upgrade, requiring the adapter to stop processing
 transactions until a restart takes place. Other clients may have different
 "code models" (e.g. some form of versioning).
@@ -900,7 +900,7 @@ module is valid.
 
 The VM allows the execution of [scripts](#Binary-Format). A script is a
 Move function declared in a `script` block that performs
-calls into the Aptos Framework to accomplish a
+calls into the Pont Framework to accomplish a
 logical transaction. A script is not saved in storage and
 it cannot be invoked by other scripts or modules.
 
@@ -1259,7 +1259,7 @@ A `SignatureToken` is 1 byte, and it is one of:
 * `0x2`: `U8` - a U8 (byte)
 * `0x3`: `U64` - a 64-bit unsigned integer
 * `0x4`: `U128` - a 128-bit unsigned integer
-* `0x5`: `ADDRESS` - an `AccountAddress` in Aptos, which is a 128-bit unsigned integer
+* `0x5`: `ADDRESS` - an `AccountAddress` in Pont, which is a 128-bit unsigned integer
 * `0x6`: `REFERENCE` - a reference; must be followed by another SignatureToken
 representing the type referenced
 * `0x7`: `MUTABLE_REFERENCE` - a mutable reference; must be followed by another

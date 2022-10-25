@@ -1,10 +1,10 @@
 [package]
 name = "transaction-emitter"
 version = "0.0.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos transaction emitter for testing"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont transaction emitter for testing"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -18,8 +18,8 @@ rand = "0.7.3"
 rand_core = "0.5.1"
 tokio = { version = "1.21.0", features = ["full"] }
 
-aptos-global-constants = { path = "../../config/global-constants" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-sdk = { path = "../../sdk" }
+pont-global-constants = { path = "../../config/global-constants" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-sdk = { path = "../../sdk" }
 
 transaction-emitter-lib = { path = "../../crates/transaction-emitter-lib" }

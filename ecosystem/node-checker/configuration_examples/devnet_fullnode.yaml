@@ -1,7 +1,7 @@
-# Base config generated with: target/debug/aptos-node-checker configuration create --configuration-name devnet_fullnode --configuration-name-pretty Devnet Fullnode Checker --url http://fullnode.devnet.aptoslabs.com --api-port 80 --evaluators api_latency api_transaction_availability state_sync_version --target-tps 1200
+# Base config generated with: target/debug/pont-node-checker configuration create --configuration-name devnet_fullnode --configuration-name-pretty Devnet Fullnode Checker --url http://fullnode.devnet.pontlabs.com --api-port 80 --evaluators api_latency api_transaction_availability state_sync_version --target-tps 1200
 ---
 node_address:
-  url: "http://fullnode.devnet.aptoslabs.com/"
+  url: "http://fullnode.devnet.pontlabs.com/"
   metrics_port: 9101
   api_port: 80
   noise_port: 6180

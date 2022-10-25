@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::quorum_store::direct_mempool_quorum_store::DirectMempoolQuorumStore;
-use aptos_mempool::{QuorumStoreRequest, QuorumStoreResponse};
 use consensus_types::{
     common::{Payload, PayloadFilter},
     request_response::{ConsensusRequest, ConsensusResponse},
@@ -11,6 +10,7 @@ use futures::{
     channel::{mpsc, oneshot},
     StreamExt,
 };
+use pont_mempool::{QuorumStoreRequest, QuorumStoreResponse};
 use std::time::Duration;
 use tokio::time::timeout;
 

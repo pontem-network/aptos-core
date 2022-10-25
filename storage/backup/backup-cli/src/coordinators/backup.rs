@@ -19,11 +19,11 @@ use crate::{
     },
 };
 use anyhow::{anyhow, ensure, Result};
-use aptos_logger::prelude::*;
-use aptos_types::transaction::Version;
-use aptosdb::backup::backup_handler::DbState;
 use clap::Parser;
 use futures::{stream, Future, StreamExt};
+use pont_logger::prelude::*;
+use pont_types::transaction::Version;
+use pontdb::backup::backup_handler::DbState;
 use std::{fmt::Debug, sync::Arc};
 use tokio::{
     sync::watch,
@@ -371,7 +371,7 @@ fn get_next_snapshot(last_in_backup: Option<u64>, db_state: DbState, interval: u
 #[cfg(test)]
 mod tests {
     use crate::coordinators::backup::{get_batch_range, get_next_snapshot};
-    use aptosdb::backup::backup_handler::DbState;
+    use pontdb::backup::backup_handler::DbState;
 
     #[test]
     fn test_get_batch_range() {

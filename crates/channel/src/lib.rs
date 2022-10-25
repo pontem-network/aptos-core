@@ -4,30 +4,30 @@
 #![forbid(unsafe_code)]
 
 //! Provides an mpsc (multi-producer single-consumer) channel wrapped in an
-//! [`IntGauge`](aptos_metrics::IntGauge) that counts the number of currently
+//! [`IntGauge`](pont_metrics::IntGauge) that counts the number of currently
 //! queued items. While there is only one [`Receiver`], there can be
 //! many [`Sender`]s, which are also cheap to clone.
 //!
-//! This channel differs from our other channel implementation, [`aptos_channel`],
+//! This channel differs from our other channel implementation, [`pont_channel`],
 //! in that it is just a single queue (vs. different queues for different keys)
 //! with backpressure (senders will block if the queue is full instead of evicting
 //! another item in the queue) that only implements FIFO (vs. LIFO or KLAST).
 
-use aptos_metrics_core::IntGauge;
 use futures::{
     channel::mpsc,
     sink::Sink,
     stream::{FusedStream, Stream},
     task::{Context, Poll},
 };
+use pont_metrics_core::IntGauge;
 use std::pin::Pin;
 
 #[cfg(test)]
 mod test;
 
-pub mod aptos_channel;
+pub mod pont_channel;
 #[cfg(test)]
-mod aptos_channel_test;
+mod pont_channel_test;
 
 pub mod message_queues;
 #[cfg(test)]

@@ -1,6 +1,6 @@
 # Docker
 
-This directory contains [Docker](https://www.docker.com/) configuration for building Aptos docker images.
+This directory contains [Docker](https://www.docker.com/) configuration for building Pont docker images.
 
 To build these images run this from the repository root:
 

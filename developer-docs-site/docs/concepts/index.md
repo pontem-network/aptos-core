@@ -1,12 +1,12 @@
 ---
-title: "Aptos Concepts"
-slug: "aptos-concepts"
+title: "Pont Concepts"
+slug: "pont-concepts"
 hidden: false
 ---
 
-# Aptos Concepts
+# Pont Concepts
 
-Start here to get into the core concepts of the Aptos blockchain.
+Start here to get into the core concepts of the Pont blockchain.
 
 - ### [Transactions and States](basics-txns-states.md)
 - ### [Accounts](basics-accounts.md)

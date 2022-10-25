@@ -34,17 +34,17 @@ use crate::{
     },
     ProtocolId,
 };
-use aptos_config::network_id::{NetworkContext, PeerNetworkId};
-use aptos_logger::prelude::*;
-use aptos_time_service::{TimeService, TimeServiceTrait};
-use aptos_types::PeerId;
 use async_trait::async_trait;
 use bytes::Bytes;
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use futures::{
     channel::oneshot,
     stream::{FuturesUnordered, StreamExt},
 };
+use pont_config::network_id::{NetworkContext, PeerNetworkId};
+use pont_logger::prelude::*;
+use pont_time_service::{TimeService, TimeServiceTrait};
+use pont_types::PeerId;
 use rand::{rngs::SmallRng, Rng, SeedableRng};
 use serde::{Deserialize, Serialize};
 use short_hex_str::AsShortHexStr;
@@ -80,7 +80,7 @@ pub struct HealthCheckerNetworkSender {
 pub fn network_endpoint_config() -> AppConfig {
     AppConfig::p2p(
         [ProtocolId::HealthCheckerRpc],
-        aptos_channel::Config::new(NETWORK_CHANNEL_SIZE)
+        pont_channel::Config::new(NETWORK_CHANNEL_SIZE)
             .queue_style(QueueStyle::LIFO)
             .counters(&counters::PENDING_HEALTH_CHECKER_NETWORK_EVENTS),
     )

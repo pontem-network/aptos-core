@@ -10,8 +10,6 @@ use crate::{
     },
     test_utils::{consensus_runtime, RandomComputeResultStateComputer},
 };
-use aptos_crypto::HashValue;
-use aptos_types::{ledger_info::LedgerInfo, validator_verifier::random_validator_verifier};
 use consensus_types::{
     block::{block_test_utils::certificate_for_genesis, Block},
     common::Payload,
@@ -19,6 +17,8 @@ use consensus_types::{
     quorum_cert::QuorumCert,
 };
 use executor_types::{Error, StateComputeResult};
+use pont_crypto::HashValue;
+use pont_types::{ledger_info::LedgerInfo, validator_verifier::random_validator_verifier};
 use std::sync::Arc;
 
 pub fn prepare_execution_phase() -> (HashValue, ExecutionPhase) {

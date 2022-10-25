@@ -13,16 +13,16 @@ use crate::{
         },
     },
 };
-use aptos_config::{
-    config::{NodeConfig, PeerRole},
-    network_id::{NetworkId, PeerNetworkId},
-};
-use aptos_types::{transaction::SignedTransaction, PeerId};
 use netcore::transport::ConnectionOrigin;
 use network::{
     peer_manager::{PeerManagerNotification, PeerManagerRequest},
     ProtocolId,
 };
+use pont_config::{
+    config::{NodeConfig, PeerRole},
+    network_id::{NetworkId, PeerNetworkId},
+};
+use pont_types::{transaction::SignedTransaction, PeerId};
 use rand::{rngs::StdRng, SeedableRng};
 use std::collections::{HashMap, HashSet};
 

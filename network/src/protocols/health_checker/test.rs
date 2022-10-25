@@ -14,31 +14,29 @@ use crate::{
     transport::ConnectionMetadata,
     ProtocolId,
 };
-use aptos_time_service::{MockTimeService, TimeService};
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use futures::{executor::block_on, future};
+use pont_time_service::{MockTimeService, TimeService};
 
 const PING_INTERVAL: Duration = Duration::from_secs(1);
 const PING_TIMEOUT: Duration = Duration::from_millis(500);
 
 struct TestHarness {
     mock_time: MockTimeService,
-    peer_mgr_reqs_rx: aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
-    peer_mgr_notifs_tx: aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
-    connection_reqs_rx: aptos_channel::Receiver<PeerId, ConnectionRequest>,
+    peer_mgr_reqs_rx: pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
+    peer_mgr_notifs_tx: pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
+    connection_reqs_rx: pont_channel::Receiver<PeerId, ConnectionRequest>,
     connection_notifs_tx: conn_notifs_channel::Sender,
 }
 
 impl TestHarness {
     fn new_permissive(ping_failures_tolerated: u64) -> (Self, HealthChecker) {
-        ::aptos_logger::Logger::init_for_testing();
+        ::pont_logger::Logger::init_for_testing();
         let mock_time = TimeService::mock();
 
-        let (peer_mgr_reqs_tx, peer_mgr_reqs_rx) = aptos_channel::new(QueueStyle::FIFO, 1, None);
-        let (connection_reqs_tx, connection_reqs_rx) =
-            aptos_channel::new(QueueStyle::FIFO, 1, None);
-        let (peer_mgr_notifs_tx, peer_mgr_notifs_rx) =
-            aptos_channel::new(QueueStyle::FIFO, 1, None);
+        let (peer_mgr_reqs_tx, peer_mgr_reqs_rx) = pont_channel::new(QueueStyle::FIFO, 1, None);
+        let (connection_reqs_tx, connection_reqs_rx) = pont_channel::new(QueueStyle::FIFO, 1, None);
+        let (peer_mgr_notifs_tx, peer_mgr_notifs_rx) = pont_channel::new(QueueStyle::FIFO, 1, None);
         let (connection_notifs_tx, connection_notifs_rx) = conn_notifs_channel::new();
 
         let hc_network_tx = HealthCheckerNetworkSender::new(

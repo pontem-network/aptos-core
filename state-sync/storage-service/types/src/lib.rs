@@ -34,7 +34,7 @@ pub enum StorageServiceError {
     InvalidRequest(String),
 }
 
-/// A single storage service message sent or received over AptosNet.
+/// A single storage service message sent or received over PontNet.
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[allow(clippy::large_enum_variant)]
 pub enum StorageServiceMessage {

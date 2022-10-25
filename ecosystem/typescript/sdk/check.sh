@@ -6,7 +6,7 @@
 set -e
 
 # Get the latest version of the package on npm.js
-PUBLISHED_VERSION=`npm show aptos version`
+PUBLISHED_VERSION=`npm show pont version`
 
 # Get the version from the local package.json file.
 NEW_VERSION=`node -p -e "require('./package.json').version"`

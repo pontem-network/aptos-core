@@ -2,14 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{data_notification::DataNotification, data_stream::DataStreamListener, error::Error};
-use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
-use aptos_data_client::{
-    AdvertisedData, AptosDataClient, GlobalDataSummary, OptimalChunkSizes, Response,
+use async_trait::async_trait;
+use futures::StreamExt;
+use pont_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
+use pont_data_client::{
+    AdvertisedData, GlobalDataSummary, OptimalChunkSizes, PontDataClient, Response,
     ResponseCallback, ResponseContext, ResponseError,
 };
-use aptos_logger::Level;
-use aptos_types::aggregate_signature::AggregateSignature;
-use aptos_types::{
+use pont_logger::Level;
+use pont_types::aggregate_signature::AggregateSignature;
+use pont_types::{
     account_address::AccountAddress,
     block_info::BlockInfo,
     chain_id::ChainId,
@@ -27,8 +29,6 @@ use aptos_types::{
     },
     write_set::WriteSet,
 };
-use async_trait::async_trait;
-use futures::StreamExt;
 use rand::{rngs::OsRng, Rng};
 use std::{collections::HashMap, thread, time::Duration};
 use storage_service_types::responses::CompleteDataRange;
@@ -55,9 +55,9 @@ pub const MAX_RESPONSE_ID: u64 = 100000;
 /// Test timeout constant
 pub const MAX_NOTIFICATION_TIMEOUT_SECS: u64 = 40;
 
-/// A simple mock of the Aptos Data Client
+/// A simple mock of the Pont Data Client
 #[derive(Clone, Debug)]
-pub struct MockAptosDataClient {
+pub struct MockPontDataClient {
     pub advertised_epoch_ending_ledger_infos: HashMap<Epoch, LedgerInfoWithSignatures>,
     pub advertised_synced_ledger_infos: Vec<LedgerInfoWithSignatures>,
     pub data_beyond_highest_advertised: bool, // If true, data exists beyond the highest advertised
@@ -66,7 +66,7 @@ pub struct MockAptosDataClient {
     pub skip_emulate_network_latencies: bool, // If true, skips network latency emulation
 }
 
-impl MockAptosDataClient {
+impl MockPontDataClient {
     pub fn new(
         data_beyond_highest_advertised: bool,
         limit_chunk_sizes: bool,
@@ -114,9 +114,9 @@ impl MockAptosDataClient {
         thread::sleep(Duration::from_millis(create_range_random_u64(10, 50)));
     }
 
-    fn emulate_subscription_expiration(&self) -> aptos_data_client::Error {
+    fn emulate_subscription_expiration(&self) -> pont_data_client::Error {
         thread::sleep(Duration::from_secs(MAX_NOTIFICATION_TIMEOUT_SECS));
-        aptos_data_client::Error::TimeoutWaitingForResponse("RPC timed out!".into())
+        pont_data_client::Error::TimeoutWaitingForResponse("RPC timed out!".into())
     }
 
     fn calculate_last_index(&self, start_index: u64, end_index: u64) -> u64 {
@@ -136,7 +136,7 @@ impl MockAptosDataClient {
 }
 
 #[async_trait]
-impl AptosDataClient for MockAptosDataClient {
+impl PontDataClient for MockPontDataClient {
     fn get_global_data_summary(&self) -> GlobalDataSummary {
         // Create a random set of optimal chunk sizes to emulate changing environments
         let optimal_chunk_sizes = OptimalChunkSizes {
@@ -179,7 +179,7 @@ impl AptosDataClient for MockAptosDataClient {
         _version: Version,
         start_index: u64,
         end_index: u64,
-    ) -> Result<Response<StateValueChunkWithProof>, aptos_data_client::Error> {
+    ) -> Result<Response<StateValueChunkWithProof>, pont_data_client::Error> {
         self.emulate_network_latencies();
 
         // Calculate the last index based on if we should limit the chunk size
@@ -211,7 +211,7 @@ impl AptosDataClient for MockAptosDataClient {
         &self,
         start_epoch: Epoch,
         end_epoch: Epoch,
-    ) -> Result<Response<Vec<LedgerInfoWithSignatures>>, aptos_data_client::Error> {
+    ) -> Result<Response<Vec<LedgerInfoWithSignatures>>, pont_data_client::Error> {
         self.emulate_network_latencies();
 
         // Calculate the last epoch based on if we should limit the chunk size
@@ -238,7 +238,7 @@ impl AptosDataClient for MockAptosDataClient {
         known_epoch: Epoch,
     ) -> Result<
         Response<(TransactionOutputListWithProof, LedgerInfoWithSignatures)>,
-        aptos_data_client::Error,
+        pont_data_client::Error,
     > {
         self.emulate_network_latencies();
 
@@ -285,7 +285,7 @@ impl AptosDataClient for MockAptosDataClient {
         include_events: bool,
     ) -> Result<
         Response<(TransactionListWithProof, LedgerInfoWithSignatures)>,
-        aptos_data_client::Error,
+        pont_data_client::Error,
     > {
         self.emulate_network_latencies();
 
@@ -330,7 +330,7 @@ impl AptosDataClient for MockAptosDataClient {
     async fn get_number_of_states(
         &self,
         _version: Version,
-    ) -> Result<Response<u64>, aptos_data_client::Error> {
+    ) -> Result<Response<u64>, pont_data_client::Error> {
         Ok(create_data_client_response(TOTAL_NUM_STATE_VALUES))
     }
 
@@ -339,7 +339,7 @@ impl AptosDataClient for MockAptosDataClient {
         _proof_version: Version,
         start_version: Version,
         end_version: Version,
-    ) -> Result<Response<TransactionOutputListWithProof>, aptos_data_client::Error> {
+    ) -> Result<Response<TransactionOutputListWithProof>, pont_data_client::Error> {
         self.emulate_network_latencies();
 
         // Calculate the last version based on if we should limit the chunk size
@@ -364,7 +364,7 @@ impl AptosDataClient for MockAptosDataClient {
         start_version: Version,
         end_version: Version,
         include_events: bool,
-    ) -> Result<Response<TransactionListWithProof>, aptos_data_client::Error> {
+    ) -> Result<Response<TransactionListWithProof>, pont_data_client::Error> {
         self.emulate_network_latencies();
 
         // Calculate the last version based on if we should limit the chunk size
@@ -543,9 +543,9 @@ fn create_range_random_u64(min_value: u64, max_value: u64) -> u64 {
     rng.gen_range(min_value, max_value)
 }
 
-/// Initializes the Aptos logger for tests
+/// Initializes the Pont logger for tests
 pub fn initialize_logger() {
-    aptos_logger::Logger::builder()
+    pont_logger::Logger::builder()
         .is_async(false)
         .level(Level::Info)
         .build();

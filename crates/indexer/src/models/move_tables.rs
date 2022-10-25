@@ -5,8 +5,8 @@ use crate::{
     models::transactions::Transaction,
     schema::{table_items, table_metadatas},
 };
-use aptos_api_types::{DeleteTableItem, WriteTableItem};
 use field_count::FieldCount;
+use pont_api_types::{DeleteTableItem, WriteTableItem};
 use serde::{Deserialize, Serialize};
 
 #[derive(

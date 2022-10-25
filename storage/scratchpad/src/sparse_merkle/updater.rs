@@ -9,12 +9,12 @@ use crate::{
     },
     ProofRead,
 };
-use aptos_crypto::{
+use pont_crypto::{
     hash::{CryptoHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use aptos_types::proof::definition::NodeInProof;
-use aptos_types::proof::{SparseMerkleLeafNode, SparseMerkleProofExt};
+use pont_types::proof::definition::NodeInProof;
+use pont_types::proof::{SparseMerkleLeafNode, SparseMerkleProofExt};
 use std::cmp::Ordering;
 
 type Result<T> = std::result::Result<T, UpdateError>;

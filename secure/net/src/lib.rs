@@ -15,9 +15,9 @@
 //! Internally both the client and server leverage a NetworkStream that communications in blocks
 //! where a block is a length prefixed array of bytes.
 
-use aptos_logger::{info, trace, warn, Schema};
-use aptos_metrics_core::{register_int_counter_vec, IntCounterVec};
 use once_cell::sync::Lazy;
+use pont_logger::{info, trace, warn, Schema};
+use pont_metrics_core::{register_int_counter_vec, IntCounterVec};
 use serde::Serialize;
 use std::{
     io::{Read, Write},
@@ -78,7 +78,7 @@ impl NetworkMode {
 
 static EVENT_COUNTER: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_secure_net_events",
+        "pont_secure_net_events",
         "Outcome of secure net events",
         &["service", "mode", "method", "result"]
     )
@@ -517,7 +517,7 @@ impl NetworkStream {
 #[cfg(test)]
 mod test {
     use super::*;
-    use aptos_config::utils;
+    use pont_config::utils;
     use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
     /// Read, Write, Connect timeout in milliseconds.

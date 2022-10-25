@@ -3,7 +3,7 @@
 
 use crate::storage::FileHandle;
 use anyhow::{ensure, Result};
-use aptos_types::waypoint::Waypoint;
+use pont_types::waypoint::Waypoint;
 use serde::{Deserialize, Serialize};
 
 /// A chunk of an epoch ending backup manifest, representing the

@@ -5,7 +5,7 @@ slug: "install-petra-wallet-extension"
 
 # Install Petra Extension
 
-[Petra (Aptos Wallet)](https://petra.app/) is now available on the Chrome store. To install the Petra extension on your Chrome browser, you can chose either of the following options:
+[Petra (Pont Wallet)](https://petra.app/) is now available on the Chrome store. To install the Petra extension on your Chrome browser, you can chose either of the following options:
 
 ## Install from the Chrome Web Store
 
@@ -20,7 +20,7 @@ For the latest stable release, install the extension from the Chrome Web Store:
 
 For the latest development release, install the extension from GitHub:
 
-1. Download the latest [Petra Wallet release](https://github.com/aptos-labs/aptos-core/releases?q=wallet&expanded=true) and unzip it.
+1. Download the latest [Petra Wallet release](https://github.com/aptos-labs/pont-core/releases?q=wallet&expanded=true) and unzip it.
 1. Open a Chrome window and navigate to the *Extensions* using any of the below methods:
     - At the top-right corner of the browser window, click the three vertical dots and then **More tools** > **Extensions**
     - On a new tab or window type `chrome://extensions` in the URL field and press return.
@@ -32,7 +32,7 @@ For the latest development release, install the extension from GitHub:
 See the [Petra docs](https://petra.app/docs/petra-intro) for developer and user instructions.
 
 :::tip
-If you would like to restore an existing Aptos wallet account in Petra, you must first create a new account in Petra, then you can switch and import the account.
+If you would like to restore an existing Pont wallet account in Petra, you must first create a new account in Petra, then you can switch and import the account.
 :::
 
 ## Start development

@@ -9,15 +9,6 @@ use crate::{
     persistent_safety_storage::PersistentSafetyStorage,
     t_safety_rules::TSafetyRules,
 };
-use aptos_crypto::{bls12381, hash::CryptoHash};
-use aptos_logger::prelude::*;
-use aptos_types::{
-    epoch_change::EpochChangeProof,
-    epoch_state::EpochState,
-    ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
-    validator_signer::ValidatorSigner,
-    waypoint::Waypoint,
-};
 use consensus_types::{
     block_data::BlockData,
     common::{Author, Round},
@@ -27,6 +18,15 @@ use consensus_types::{
     vote::Vote,
     vote_data::VoteData,
     vote_proposal::VoteProposal,
+};
+use pont_crypto::{bls12381, hash::CryptoHash};
+use pont_logger::prelude::*;
+use pont_types::{
+    epoch_change::EpochChangeProof,
+    epoch_state::EpochState,
+    ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
+    validator_signer::ValidatorSigner,
+    waypoint::Waypoint,
 };
 use serde::Serialize;
 use std::cmp::Ordering;

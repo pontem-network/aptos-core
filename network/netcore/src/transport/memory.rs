@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::transport::Transport;
-use aptos_types::{
+use futures::{future, stream::Stream};
+use memsocket::{MemoryListener, MemorySocket};
+use pont_types::{
     network_address::{parse_memory, NetworkAddress, Protocol},
     PeerId,
 };
-use futures::{future, stream::Stream};
-use memsocket::{MemoryListener, MemorySocket};
 use std::{
     io,
     pin::Pin,
@@ -101,13 +101,13 @@ impl Stream for Listener {
 #[cfg(test)]
 mod test {
     use crate::transport::{memory::MemoryTransport, Transport};
-    use aptos_types::PeerId;
     use futures::{
         executor::block_on,
         future::join,
         io::{AsyncReadExt, AsyncWriteExt},
         stream::StreamExt,
     };
+    use pont_types::PeerId;
 
     #[test]
     fn simple_listen_and_dial() -> Result<(), ::std::io::Error> {

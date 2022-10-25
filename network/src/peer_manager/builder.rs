@@ -11,26 +11,26 @@ use crate::{
         PeerManagerNotification, PeerManagerRequest, PeerManagerRequestSender,
     },
     protocols::{network::AppConfig, wire::handshake::v1::ProtocolIdSet},
-    transport::{self, AptosNetTransport, Connection, APTOS_TCP_TRANSPORT},
+    transport::{self, Connection, PontNetTransport, APTOS_TCP_TRANSPORT},
     ProtocolId,
 };
-use aptos_config::{
-    config::{PeerSet, RateLimitConfig, HANDSHAKE_VERSION},
-    network_id::NetworkContext,
-};
-use aptos_crypto::x25519;
-use aptos_infallible::RwLock;
-use aptos_logger::prelude::*;
-use aptos_rate_limiter::rate_limit::TokenBucketRateLimiter;
-use aptos_time_service::TimeService;
-use aptos_types::{chain_id::ChainId, network_address::NetworkAddress, PeerId};
-use channel::{self, aptos_channel, message_queues::QueueStyle};
+use channel::{self, message_queues::QueueStyle, pont_channel};
 #[cfg(any(test, feature = "testing", feature = "fuzzing"))]
 use netcore::transport::memory::MemoryTransport;
 use netcore::transport::{
     tcp::{TCPBufferCfg, TcpSocket, TcpTransport},
     Transport,
 };
+use pont_config::{
+    config::{PeerSet, RateLimitConfig, HANDSHAKE_VERSION},
+    network_id::NetworkContext,
+};
+use pont_crypto::x25519;
+use pont_infallible::RwLock;
+use pont_logger::prelude::*;
+use pont_rate_limiter::rate_limit::TokenBucketRateLimiter;
+use pont_time_service::TimeService;
+use pont_types::{chain_id::ChainId, network_address::NetworkAddress, PeerId};
 use std::{clone::Clone, collections::HashMap, fmt::Debug, net::IpAddr, sync::Arc};
 use tokio::runtime::Handle;
 
@@ -64,15 +64,15 @@ impl TransportContext {
 
 struct PeerManagerContext {
     // TODO(philiphayes): better support multiple listening addrs
-    pm_reqs_tx: aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerRequest>,
-    pm_reqs_rx: aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
-    connection_reqs_tx: aptos_channel::Sender<PeerId, ConnectionRequest>,
-    connection_reqs_rx: aptos_channel::Receiver<PeerId, ConnectionRequest>,
+    pm_reqs_tx: pont_channel::Sender<(PeerId, ProtocolId), PeerManagerRequest>,
+    pm_reqs_rx: pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
+    connection_reqs_tx: pont_channel::Sender<PeerId, ConnectionRequest>,
+    connection_reqs_rx: pont_channel::Receiver<PeerId, ConnectionRequest>,
 
     peer_metadata_storage: Arc<PeerMetadataStorage>,
     trusted_peers: Arc<RwLock<PeerSet>>,
     upstream_handlers:
-        HashMap<ProtocolId, aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>>,
+        HashMap<ProtocolId, pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>>,
     connection_event_handlers: Vec<conn_notifs_channel::Sender>,
 
     max_concurrent_network_reqs: usize,
@@ -88,16 +88,16 @@ struct PeerManagerContext {
 impl PeerManagerContext {
     #[allow(clippy::too_many_arguments)]
     fn new(
-        pm_reqs_tx: aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerRequest>,
-        pm_reqs_rx: aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
-        connection_reqs_tx: aptos_channel::Sender<PeerId, ConnectionRequest>,
-        connection_reqs_rx: aptos_channel::Receiver<PeerId, ConnectionRequest>,
+        pm_reqs_tx: pont_channel::Sender<(PeerId, ProtocolId), PeerManagerRequest>,
+        pm_reqs_rx: pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
+        connection_reqs_tx: pont_channel::Sender<PeerId, ConnectionRequest>,
+        connection_reqs_rx: pont_channel::Receiver<PeerId, ConnectionRequest>,
 
         peer_metadata_storage: Arc<PeerMetadataStorage>,
         trusted_peers: Arc<RwLock<PeerSet>>,
         upstream_handlers: HashMap<
             ProtocolId,
-            aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
+            pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
         >,
         connection_event_handlers: Vec<conn_notifs_channel::Sender>,
 
@@ -135,7 +135,7 @@ impl PeerManagerContext {
     fn add_upstream_handler(
         &mut self,
         protocol_id: ProtocolId,
-        channel: aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
+        channel: pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
     ) -> &mut Self {
         self.upstream_handlers.insert(protocol_id, channel);
         self
@@ -150,8 +150,8 @@ impl PeerManagerContext {
 
 #[cfg(any(test, feature = "testing", feature = "fuzzing"))]
 type MemoryPeerManager =
-    PeerManager<AptosNetTransport<MemoryTransport>, NoiseStream<memsocket::MemorySocket>>;
-type TcpPeerManager = PeerManager<AptosNetTransport<TcpTransport>, NoiseStream<TcpSocket>>;
+    PeerManager<PontNetTransport<MemoryTransport>, NoiseStream<memsocket::MemorySocket>>;
+type TcpPeerManager = PeerManager<PontNetTransport<TcpTransport>, NoiseStream<TcpSocket>>;
 
 enum TransportPeerManager {
     #[cfg(any(test, feature = "testing", feature = "fuzzing"))]
@@ -192,14 +192,14 @@ impl PeerManagerBuilder {
         tcp_buffer_cfg: TCPBufferCfg,
     ) -> Self {
         // Setup channel to send requests to peer manager.
-        let (pm_reqs_tx, pm_reqs_rx) = aptos_channel::new(
+        let (pm_reqs_tx, pm_reqs_rx) = pont_channel::new(
             QueueStyle::FIFO,
             channel_size,
             Some(&counters::PENDING_PEER_MANAGER_REQUESTS),
         );
         // Setup channel to send connection requests to peer manager.
         let (connection_reqs_tx, connection_reqs_rx) =
-            aptos_channel::new(QueueStyle::FIFO, channel_size, None);
+            pont_channel::new(QueueStyle::FIFO, channel_size, None);
 
         Self {
             network_context,
@@ -238,7 +238,7 @@ impl PeerManagerBuilder {
         self.listen_address.clone()
     }
 
-    pub fn connection_reqs_tx(&self) -> aptos_channel::Sender<PeerId, ConnectionRequest> {
+    pub fn connection_reqs_tx(&self) -> pont_channel::Sender<PeerId, ConnectionRequest> {
         self.peer_manager_context
             .as_ref()
             .expect("Cannot access connection_reqs once PeerManager has been built")
@@ -261,7 +261,7 @@ impl PeerManagerBuilder {
     /// Create the configured transport and start PeerManager.
     /// Return the actual NetworkAddress over which this peer is listening.
     pub fn build(&mut self, executor: &Handle) -> &mut Self {
-        use aptos_types::network_address::Protocol::*;
+        use pont_types::network_address::Protocol::*;
 
         let transport_context = self
             .transport_context
@@ -283,15 +283,15 @@ impl PeerManagerBuilder {
             ),
         };
 
-        let mut aptos_tcp_transport = APTOS_TCP_TRANSPORT.clone();
+        let mut pont_tcp_transport = APTOS_TCP_TRANSPORT.clone();
         let tcp_cfg = self.get_tcp_buffers_cfg();
-        aptos_tcp_transport.set_tcp_buffers(&tcp_cfg);
+        pont_tcp_transport.set_tcp_buffers(&tcp_cfg);
 
         self.peer_manager = match self.listen_address.as_slice() {
             [Ip4(_), Tcp(_)] | [Ip6(_), Tcp(_)] => {
                 Some(TransportPeerManager::Tcp(self.build_with_transport(
-                    AptosNetTransport::new(
-                        aptos_tcp_transport,
+                    PontNetTransport::new(
+                        pont_tcp_transport,
                         self.network_context,
                         self.time_service.clone(),
                         key,
@@ -306,7 +306,7 @@ impl PeerManagerBuilder {
             }
             #[cfg(any(test, feature = "testing", feature = "fuzzing"))]
             [Memory(_)] => Some(TransportPeerManager::Memory(self.build_with_transport(
-                AptosNetTransport::new(
+                PontNetTransport::new(
                     MemoryTransport,
                     self.network_context,
                     self.time_service.clone(),
@@ -430,7 +430,7 @@ impl PeerManagerBuilder {
     ) -> (
         (PeerManagerRequestSender, ConnectionRequestSender),
         (
-            aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerNotification>,
+            pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerNotification>,
             conn_notifs_channel::Receiver,
         ),
     ) {
@@ -456,7 +456,7 @@ impl PeerManagerBuilder {
         &mut self,
         config: &AppConfig,
     ) -> (
-        aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerNotification>,
+        pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerNotification>,
         conn_notifs_channel::Receiver,
     ) {
         self.transport_context().add_protocols(&config.protocols);

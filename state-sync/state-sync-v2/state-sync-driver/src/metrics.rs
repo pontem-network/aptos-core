@@ -1,11 +1,11 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_metrics_core::{
+use once_cell::sync::Lazy;
+use pont_metrics_core::{
     register_histogram_vec, register_int_counter_vec, register_int_gauge_vec, HistogramTimer,
     HistogramVec, IntCounterVec, IntGaugeVec,
 };
-use once_cell::sync::Lazy;
 
 /// Useful metric labels
 pub const DRIVER_CLIENT_NOTIFICATION: &str = "driver_client_notification";
@@ -59,7 +59,7 @@ impl StorageSynchronizerOperations {
 /// Counter for state sync bootstrapper errors
 pub static BOOTSTRAPPER_ERRORS: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_state_sync_bootstrapper_errors",
+        "pont_state_sync_bootstrapper_errors",
         "Counters related to state sync bootstrapper errors",
         &["error_label"]
     )
@@ -69,7 +69,7 @@ pub static BOOTSTRAPPER_ERRORS: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for state sync continuous syncer errors
 pub static CONTINUOUS_SYNCER_ERRORS: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_state_sync_continuous_syncer_errors",
+        "pont_state_sync_continuous_syncer_errors",
         "Counters related to state sync continuous syncer errors",
         &["error_label"]
     )
@@ -79,7 +79,7 @@ pub static CONTINUOUS_SYNCER_ERRORS: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counters related to the state sync driver
 pub static DRIVER_COUNTERS: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_state_sync_driver_counters",
+        "pont_state_sync_driver_counters",
         "Counters related to the state sync driver",
         &["label"]
     )
@@ -89,7 +89,7 @@ pub static DRIVER_COUNTERS: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counters related to the currently executing component
 pub static EXECUTING_COMPONENT: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_state_sync_executing_component_counters",
+        "pont_state_sync_executing_component_counters",
         "Counters related to the currently executing component",
         &["label"]
     )
@@ -99,7 +99,7 @@ pub static EXECUTING_COMPONENT: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for storage synchronizer errors
 pub static STORAGE_SYNCHRONIZER_ERRORS: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_state_sync_storage_synchronizer_errors",
+        "pont_state_sync_storage_synchronizer_errors",
         "Counters related to storage synchronizer errors",
         &["error_label"]
     )
@@ -109,7 +109,7 @@ pub static STORAGE_SYNCHRONIZER_ERRORS: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Gauges related to the storage synchronizer
 pub static STORAGE_SYNCHRONIZER_GAUGES: Lazy<IntGaugeVec> = Lazy::new(|| {
     register_int_gauge_vec!(
-        "aptos_state_sync_storage_synchronizer_gauges",
+        "pont_state_sync_storage_synchronizer_gauges",
         "Gauges related to the storage synchronizer",
         &["label"]
     )
@@ -119,7 +119,7 @@ pub static STORAGE_SYNCHRONIZER_GAUGES: Lazy<IntGaugeVec> = Lazy::new(|| {
 /// Counter for tracking storage synchronizer latencies
 pub static STORAGE_SYNCHRONIZER_LATENCIES: Lazy<HistogramVec> = Lazy::new(|| {
     register_histogram_vec!(
-        "aptos_state_sync_storage_synchronizer_latencies",
+        "pont_state_sync_storage_synchronizer_latencies",
         "Counters related to the storage synchronizer latencies",
         &["label"]
     )
@@ -129,7 +129,7 @@ pub static STORAGE_SYNCHRONIZER_LATENCIES: Lazy<HistogramVec> = Lazy::new(|| {
 /// Gauges for the storage synchronizer operations
 pub static STORAGE_SYNCHRONIZER_OPERATIONS: Lazy<IntGaugeVec> = Lazy::new(|| {
     register_int_gauge_vec!(
-        "aptos_state_sync_version",
+        "pont_state_sync_version",
         "The versions processed by the storage synchronizer operations",
         &["type"]
     )

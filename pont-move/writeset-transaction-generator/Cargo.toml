@@ -1,0 +1,28 @@
+[package]
+name = "pont-writeset-generator"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Generating writesets used for incident management"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+bcs = { git = "https://github.com/aptos-labs/bcs", rev = "2cde3e8446c460cb17b0c1d6bac7e27e964ac169" }
+handlebars = "4.2.2"
+serde = { version = "1.0.137", default-features = false }
+tempfile = "3.3.0"
+
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-crypto-derive = { path = "../../crates/pont-crypto-derive" }
+pont-gas = { path = "../pont-gas" }
+pont-state-view = { path = "../../storage/state-view" }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../pont-vm" }
+
+cached-packages =  { path = "../framework/cached-packages" }
+framework =  { path = "../framework" }
+move-deps = { path = "../../pont-move/move-deps", features = ["address32", "table-extension"] }

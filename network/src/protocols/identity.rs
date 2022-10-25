@@ -48,10 +48,10 @@ mod tests {
         },
         ProtocolId,
     };
-    use aptos_config::network_id::NetworkId;
-    use aptos_types::chain_id::ChainId;
     use futures::{executor::block_on, future::join};
     use memsocket::MemorySocket;
+    use pont_config::network_id::NetworkId;
+    use pont_types::chain_id::ChainId;
     use std::{collections::BTreeMap, iter::FromIterator};
 
     fn build_test_connection() -> (MemorySocket, MemorySocket) {

@@ -12,24 +12,24 @@ use crate::{
     transaction_committer::TransactionCommitter, transaction_executor::TransactionExecutor,
     transaction_generator::TransactionGenerator,
 };
-use aptos_config::config::{
+use pont_config::config::{
     NodeConfig, PrunerConfig, RocksdbConfigs, BUFFERED_STATE_TARGET_ITEMS,
     DEFAULT_MAX_NUM_NODES_PER_LRU_CACHE_SHARD, NO_OP_STORAGE_PRUNER_CONFIG,
 };
-use aptos_jellyfish_merkle::metrics::{
+use pont_jellyfish_merkle::metrics::{
     APTOS_JELLYFISH_INTERNAL_ENCODED_BYTES, APTOS_JELLYFISH_LEAF_ENCODED_BYTES,
 };
-use aptosdb::AptosDB;
+use pontdb::PontDB;
 
 use crate::pipeline::Pipeline;
-use aptos_vm::AptosVM;
 use executor::block_executor::BlockExecutor;
+use pont_vm::PontVM;
 use std::{fs, path::Path};
 use storage_interface::DbReaderWriter;
 
-pub fn init_db_and_executor(config: &NodeConfig) -> (DbReaderWriter, BlockExecutor<AptosVM>) {
+pub fn init_db_and_executor(config: &NodeConfig) -> (DbReaderWriter, BlockExecutor<PontVM>) {
     let db = DbReaderWriter::new(
-        AptosDB::open(
+        PontDB::open(
             &config.storage.dir(),
             false, /* readonly */
             config.storage.storage_pruner_config,
@@ -53,7 +53,7 @@ fn create_checkpoint(source_dir: impl AsRef<Path>, checkpoint_dir: impl AsRef<Pa
     }
     std::fs::create_dir_all(checkpoint_dir.as_ref()).unwrap();
 
-    AptosDB::open(
+    PontDB::open(
         &source_dir,
         false,                       /* readonly */
         NO_OP_STORAGE_PRUNER_CONFIG, /* pruner */
@@ -78,7 +78,7 @@ pub fn run_benchmark(
 ) {
     create_checkpoint(source_dir.as_ref(), checkpoint_dir.as_ref());
 
-    let (mut config, genesis_key) = aptos_genesis::test_utils::test_config();
+    let (mut config, genesis_key) = pont_genesis::test_utils::test_config();
     config.storage.dir = checkpoint_dir.as_ref().to_path_buf();
     config.storage.storage_pruner_config = pruner_config;
 
@@ -134,7 +134,7 @@ fn add_accounts_impl(
     pruner_config: PrunerConfig,
     verify_sequence_numbers: bool,
 ) {
-    let (mut config, genesis_key) = aptos_genesis::test_utils::test_config();
+    let (mut config, genesis_key) = pont_genesis::test_utils::test_config();
     config.storage.dir = output_dir.as_ref().to_path_buf();
     config.storage.storage_pruner_config = pruner_config;
     let (db, executor) = init_db_and_executor(&config);
@@ -189,8 +189,8 @@ fn add_accounts_impl(
 
 #[cfg(test)]
 mod tests {
-    use aptos_config::config::NO_OP_STORAGE_PRUNER_CONFIG;
-    use aptos_temppath::TempPath;
+    use pont_config::config::NO_OP_STORAGE_PRUNER_CONFIG;
+    use pont_temppath::TempPath;
 
     #[test]
     fn test_benchmark() {

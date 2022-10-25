@@ -3,10 +3,10 @@
 
 use crate::{Result, Version};
 use anyhow::anyhow;
-use aptos_config::{config::NodeConfig, network_id::NetworkId};
-use aptos_rest_client::Client as RestClient;
-use aptos_sdk::types::PeerId;
 use inspection_service::inspection_client::InspectionClient;
+use pont_config::{config::NodeConfig, network_id::NetworkId};
+use pont_rest_client::Client as RestClient;
+use pont_sdk::types::PeerId;
 use std::{
     collections::HashMap,
     time::{Duration, Instant},
@@ -205,7 +205,7 @@ pub trait NodeExt: Node {
         if let Some(direction) = direction {
             map.insert("direction".to_string(), direction.to_string());
         }
-        self.get_metric_with_fields_i64("aptos_connections", map)
+        self.get_metric_with_fields_i64("pont_connections", map)
             .await
     }
 

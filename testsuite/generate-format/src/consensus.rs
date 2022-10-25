@@ -1,18 +1,16 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::{
+use move_deps::move_core_types::language_storage;
+use pont_crypto::{
     bls12381,
     ed25519::Ed25519PrivateKey,
     multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature},
     traits::{SigningKey, Uniform},
     PrivateKey,
 };
-use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
-use aptos_types::{
-    contract_event, event, state_store::state_key::StateKey, transaction, write_set,
-};
-use move_deps::move_core_types::language_storage;
+use pont_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use pont_types::{contract_event, event, state_store::state_key::StateKey, transaction, write_set};
 use rand::{rngs::StdRng, SeedableRng};
 use serde::{Deserialize, Serialize};
 use serde_reflection::{Registry, Result, Samples, Tracer, TracerConfig};
@@ -24,11 +22,11 @@ pub fn output_file() -> Option<&'static str> {
 
 /// This aims at signing canonically serializable BCS data
 #[derive(CryptoHasher, BCSCryptoHash, Serialize, Deserialize)]
-struct TestAptosCrypto(String);
+struct TestPontCrypto(String);
 
 /// Record sample values for crypto types used by consensus.
 fn trace_crypto_values(tracer: &mut Tracer, samples: &mut Samples) -> Result<()> {
-    let message = TestAptosCrypto("Hello, World".to_string());
+    let message = TestPontCrypto("Hello, World".to_string());
 
     let mut rng: StdRng = SeedableRng::from_seed([0; 32]);
 

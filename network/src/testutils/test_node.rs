@@ -11,26 +11,26 @@ use crate::{
     transport::ConnectionMetadata,
     DisconnectReason, ProtocolId,
 };
-use aptos_config::{
-    config::{PeerRole, RoleType},
-    network_id::{NetworkContext, NetworkId, PeerNetworkId},
-};
-use aptos_types::PeerId;
 use async_trait::async_trait;
 use futures::StreamExt;
 use netcore::transport::ConnectionOrigin;
+use pont_config::{
+    config::{PeerRole, RoleType},
+    network_id::{NetworkContext, NetworkId, PeerNetworkId},
+};
+use pont_types::PeerId;
 use std::{collections::HashMap, sync::Arc, time::Duration};
 
 /// A sender to a node to mock an inbound network message from [`PeerManager`]
 pub type InboundMessageSender =
-    channel::aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>;
+    channel::pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>;
 
 /// A sender to a node to mock an inbound connection from [`PeerManager`]
 pub type ConnectionUpdateSender = crate::peer_manager::conn_notifs_channel::Sender;
 
 /// A receiver to get outbound network messages to [`PeerManager`]
 pub type OutboundMessageReceiver =
-    channel::aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>;
+    channel::pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>;
 
 /// A connection handle describing the network for a node.
 ///

@@ -20,10 +20,10 @@ use crate::{
         RocksdbOpt, TrustedWaypointOpt,
     },
 };
-use aptos_temppath::TempPath;
-use aptos_types::transaction::Version;
-use aptosdb::AptosDB;
 use executor_test_helpers::integration_test_impl::test_execution_with_storage_impl;
+use pont_temppath::TempPath;
+use pont_types::transaction::Version;
+use pontdb::PontDB;
 use proptest::{prelude::*, sample::Index};
 use std::{convert::TryInto, sync::Arc};
 use storage_interface::DbReader;
@@ -31,7 +31,7 @@ use tokio::time::Duration;
 
 #[derive(Debug)]
 struct TestData {
-    db: Arc<AptosDB>,
+    db: Arc<PontDB>,
     txn_start_ver: Version,
     state_snapshot_epoch: Option<u64>,
     state_snapshot_ver: Option<u64>,
@@ -159,7 +159,7 @@ fn test_end_to_end_impl(d: TestData) {
     .unwrap();
 
     // Check
-    let tgt_db = AptosDB::new_readonly_for_test(&tgt_db_dir);
+    let tgt_db = PontDB::new_readonly_for_test(&tgt_db_dir);
     assert_eq!(
         d.db.get_transactions(
             d.txn_start_ver,

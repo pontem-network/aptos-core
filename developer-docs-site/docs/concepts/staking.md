@@ -17,16 +17,16 @@ In a distributed system like blockchain, executing a transaction is different fr
 
 A validator can participate in the consensus process. However, the validator can acquire the voting power only when they stake, i.e., place their utility coin into escrow. To encourage validators to participate in the consensus process, each validator's vote weight is made proportionate to the amount of validator's stake. In exchange, the validator is rewarded in proportion to the amount of validator's stake. Hence, the performance of the network, i.e., consensus, is aligned with the validator's interest, i.e., rewards.   
 
-However, when a validator stakes a very large amount of the utility coin into escrow, it gives the validator a vote weight large enough to control the consensus outcome. This gives the validator the power to threaten the security of the blockchain network, for example, by approving a fraudulent transaction. In the Aptos blockchain, there is a limit to the amount any validator can stake, to prevent any single validator from turning rogue. Furthermore, staking mitigates such security attacks because fraudulent validators would have to be willing to forego rewards and even the valuation of their assets in order to attack the network.
+However, when a validator stakes a very large amount of the utility coin into escrow, it gives the validator a vote weight large enough to control the consensus outcome. This gives the validator the power to threaten the security of the blockchain network, for example, by approving a fraudulent transaction. In the Pont blockchain, there is a limit to the amount any validator can stake, to prevent any single validator from turning rogue. Furthermore, staking mitigates such security attacks because fraudulent validators would have to be willing to forego rewards and even the valuation of their assets in order to attack the network.
 
-In this way, staking in the Aptos blockchain drives the consensus while securing the blockchain network. 
+In this way, staking in the Pont blockchain drives the consensus while securing the blockchain network. 
 
-The rest of this document presents how staking works on the Aptos blockchain.
+The rest of this document presents how staking works on the Pont blockchain.
 
-## Staking on the Aptos blockchain
+## Staking on the Pont blockchain
 
 <!---
-Below is a summary flow diagram of how staking on the Aptos blockchain works. The sections following the summary describe it in detail. 
+Below is a summary flow diagram of how staking on the Pont blockchain works. The sections following the summary describe it in detail. 
 
 <ThemedImage
   alt="Staking Flow"
@@ -37,17 +37,17 @@ Below is a summary flow diagram of how staking on the Aptos blockchain works. Th
 /> --->
 
 
-### How a custodian can stake on Aptos
+### How a custodian can stake on Pont
 
-The Aptos staking module defines a capability that represents ownership. See [https://github.com/aptos-labs/aptos-core/blob/0daade4f734d1ba29a896b00d7ddde2249e87970/aptos-move/framework/aptos-framework/sources/configs/stake.move#L85](https://github.com/aptos-labs/aptos-core/blob/0daade4f734d1ba29a896b00d7ddde2249e87970/aptos-move/framework/aptos-framework/sources/configs/stake.move#L85).
+The Pont staking module defines a capability that represents ownership. See [https://github.com/aptos-labs/pont-core/blob/0daade4f734d1ba29a896b00d7ddde2249e87970/pont-move/framework/pont-framework/sources/configs/stake.move#L85](https://github.com/aptos-labs/pont-core/blob/0daade4f734d1ba29a896b00d7ddde2249e87970/pont-move/framework/pont-framework/sources/configs/stake.move#L85).
 
-This `OwnerCapability` resource can be used to control the stake pool. Three personas: the owner, the operator and the voter, are supported. Using this owner-operator-voter model, a custodian can assume the owner persona and stake on the Aptos blockchain, and participate in the Aptos governance. This model allows delegations and staking services to be built as the owner can provide funds to the validator and the voter personas.
+This `OwnerCapability` resource can be used to control the stake pool. Three personas: the owner, the operator and the voter, are supported. Using this owner-operator-voter model, a custodian can assume the owner persona and stake on the Pont blockchain, and participate in the Pont governance. This model allows delegations and staking services to be built as the owner can provide funds to the validator and the voter personas.
 
 This section describes how this works, using Bob and Alice in the example. 
 
 #### Owner
 
-The owner is the owner of the funds. For example, Bob creates an account on the Aptos blockchain. Now Bob has the `OwnerCapability` resource. Bob can assign his account’s operator address to the account of Alice, a trusted node operator, to appoint Alice as a validator.
+The owner is the owner of the funds. For example, Bob creates an account on the Pont blockchain. Now Bob has the `OwnerCapability` resource. Bob can assign his account’s operator address to the account of Alice, a trusted node operator, to appoint Alice as a validator.
 
 As an owner:
 
@@ -73,12 +73,12 @@ As an operator:
 An owner can designate a voter. This enables the voter to participate in governance. The voter  will use the voter key to sign the governance votes in the transactions.
 
 :::tip Governance
-This document describes staking. See [Governance](governance.md) for how to participate in the Aptos on-chain governance using the owner-voter model.
+This document describes staking. See [Governance](governance.md) for how to participate in the Pont on-chain governance using the owner-voter model.
 :::
 
-## Validation on the Aptos blockchain
+## Validation on the Pont blockchain
 
-The following is a high-level description of how validation works on the Aptos blockchain:
+The following is a high-level description of how validation works on the Pont blockchain:
 
 - Throughout the duration of an epoch, the following flow of events occurs several times (thousands of times):
   - A validator leader is selected by a deterministic formula based on the validator reputation determined by validator's performance (including whether the validator has voted in the past or not) and stake. **This leader selection is not done by voting.**
@@ -88,15 +88,15 @@ The following is a high-level description of how validation works on the Aptos b
 
 ## Joining the validator set
 
-Participating as a validator node on the Aptos network works like this: 
+Participating as a validator node on the Pont network works like this: 
 
 1. Run a validator node and configure the on-chain settings appropriately.
-2. Deposit your Aptos coins funds as stake or have funds assigned by a staking service. The stake must be at least the minimum amount required.
+2. Deposit your Pont coins funds as stake or have funds assigned by a staking service. The stake must be at least the minimum amount required.
 3. Validate and gain rewards. 
-4. Your stake will automatically be locked up for a fixed duration (set by the Aptos governance) and will be automatically renewed at expiration. You cannot withdraw any of your staked amount until your lockup period expires. See [https://github.com/aptos-labs/aptos-core/blob/00a234cc233b01f1a7e1680f81b72214a7af91a9/aptos-move/framework/aptos-framework/sources/stake.move#L728](https://github.com/aptos-labs/aptos-core/blob/00a234cc233b01f1a7e1680f81b72214a7af91a9/aptos-move/framework/aptos-framework/sources/stake.move#L728).
+4. Your stake will automatically be locked up for a fixed duration (set by the Pont governance) and will be automatically renewed at expiration. You cannot withdraw any of your staked amount until your lockup period expires. See [https://github.com/aptos-labs/pont-core/blob/00a234cc233b01f1a7e1680f81b72214a7af91a9/pont-move/framework/pont-framework/sources/stake.move#L728](https://github.com/aptos-labs/pont-core/blob/00a234cc233b01f1a7e1680f81b72214a7af91a9/pont-move/framework/pont-framework/sources/stake.move#L728).
 
 :::tip Joining the validator set
-For step-by-step instructions on how to join the validator set, see: [Joining Validator Set](/nodes/validator-node/operator/connect-to-aptos-network#joining-validator-set).
+For step-by-step instructions on how to join the validator set, see: [Joining Validator Set](/nodes/validator-node/operator/connect-to-pont-network#joining-validator-set).
 :::
 
 ### Minimum and maximum stake
@@ -109,7 +109,7 @@ The owner can withdraw part of the stake and leave their balance below the requi
 
 ### Automatic lockup duration
 
-When you join the validator set, your stake will automatically be locked up for a fixed duration that is set by the Aptos governance. 
+When you join the validator set, your stake will automatically be locked up for a fixed duration that is set by the Pont governance. 
 
 ### Automatic lockup renewal
 
@@ -125,21 +125,21 @@ When the lockup period expires, it is automatically renewed by the network. Howe
 
 :::tip Set by the governance
 
-The lockup duration is decided by the Aptos governance, i.e., by the covenants that the Aptos community members vote on, and not by any special entity like the Aptos Labs. 
+The lockup duration is decided by the Pont governance, i.e., by the covenants that the Pont community members vote on, and not by any special entity like the Pont Labs. 
 :::
 
 ## Epoch
 
-An epoch in the Aptos blockchain is defined as a duration of time, in seconds, during which a number of blocks are voted on by the validators, the validator set is updated, and the rewards are distributed to the validators. 
+An epoch in the Pont blockchain is defined as a duration of time, in seconds, during which a number of blocks are voted on by the validators, the validator set is updated, and the rewards are distributed to the validators. 
 
 :::tip
-For the AIT-3 an epoch on the Aptos blockchain is defined as 7200 seconds (two hours).
+For the AIT-3 an epoch on the Pont blockchain is defined as 7200 seconds (two hours).
 :::
 
 ### Triggers at the epoch start
 
 :::tip
-See [https://github.com/aptos-labs/aptos-core/blob/0daade4f734d1ba29a896b00d7ddde2249e87970/aptos-move/framework/aptos-framework/sources/configs/stake.move#L862](https://github.com/aptos-labs/aptos-core/blob/0daade4f734d1ba29a896b00d7ddde2249e87970/aptos-move/framework/aptos-framework/sources/configs/stake.move#L862) for the full code.
+See [https://github.com/aptos-labs/pont-core/blob/0daade4f734d1ba29a896b00d7ddde2249e87970/pont-move/framework/pont-framework/sources/configs/stake.move#L862](https://github.com/aptos-labs/pont-core/blob/0daade4f734d1ba29a896b00d7ddde2249e87970/pont-move/framework/pont-framework/sources/configs/stake.move#L862) for the full code.
 :::
 
 At the start of each epoch, the following key events are triggered:
@@ -157,13 +157,13 @@ Rewards for staking are calculated by using:
 
 1. The `rewards_rate`, an annual percentage yield (APY), i.e., rewards accrue as a compound interest on your current staked amount.
 2. Your staked amount, and 
-3. Your proposer performance in the Aptos governance.
+3. Your proposer performance in the Pont governance.
 
 :::tip Set by the governance
-The `rewards_rate` is set by the Aptos governance.
+The `rewards_rate` is set by the Pont governance.
 :::
 
-Also see [Validation on the Aptos blockchain](#validation-on-the-aptos-blockchain).
+Also see [Validation on the Pont blockchain](#validation-on-the-pont-blockchain).
 
 ### Rewards formula
 
@@ -188,7 +188,7 @@ All the validator rewards are also subject to lockup period as they are added to
 ## Leaving the validator set
 
 :::tip
-See the Aptos Stake module in Move language here: [https://github.com/aptos-labs/aptos-core/blob/00a234cc233b01f1a7e1680f81b72214a7af91a9/aptos-move/framework/aptos-framework/sources/stake.move](https://github.com/aptos-labs/aptos-core/blob/00a234cc233b01f1a7e1680f81b72214a7af91a9/aptos-move/framework/aptos-framework/sources/stake.move)
+See the Pont Stake module in Move language here: [https://github.com/aptos-labs/pont-core/blob/00a234cc233b01f1a7e1680f81b72214a7af91a9/pont-move/framework/pont-framework/sources/stake.move](https://github.com/aptos-labs/pont-core/blob/00a234cc233b01f1a7e1680f81b72214a7af91a9/pont-move/framework/pont-framework/sources/stake.move)
 :::
 
 - At any time you can call the following sequence of functions to leave the validator set:
@@ -196,7 +196,7 @@ See the Aptos Stake module in Move language here: [https://github.com/aptos-labs
     - Either call `Stake::withdraw` to withdraw your staked amount at the next epoch, or call `Stake::leave_validator_set`.
 
 :::tip Leaving the validator set
-For step-by-step instructions on how to leave the validator set, see: [Leaving Validator Set](https://aptos.dev/nodes/ait/connect-to-testnet#leaving-validator-set).
+For step-by-step instructions on how to leave the validator set, see: [Leaving Validator Set](https://pont.dev/nodes/ait/connect-to-testnet#leaving-validator-set).
 :::
 
 ## Rejoining the validator set

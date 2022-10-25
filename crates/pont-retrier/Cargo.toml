@@ -1,0 +1,16 @@
+[package]
+name = "pont-retrier"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Generic retry and exponential backoff"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.21.0", features = ["time"] }
+
+pont-logger = { path = "../../crates/pont-logger" }
+

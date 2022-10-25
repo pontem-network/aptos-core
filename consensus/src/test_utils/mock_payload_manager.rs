@@ -5,16 +5,16 @@ use crate::{
     error::QuorumStoreError, payload_manager::QuorumStoreClient, state_replication::PayloadManager,
 };
 use anyhow::Result;
-use aptos_types::{
-    transaction::{ExecutionStatus, TransactionStatus},
-    vm_status::StatusCode,
-};
 use consensus_types::{
     block::block_test_utils::random_payload,
     common::{Payload, PayloadFilter},
     request_response::ConsensusRequest,
 };
 use futures::{channel::mpsc, future::BoxFuture};
+use pont_types::{
+    transaction::{ExecutionStatus, TransactionStatus},
+    vm_status::StatusCode,
+};
 use rand::Rng;
 
 pub struct MockPayloadManager {

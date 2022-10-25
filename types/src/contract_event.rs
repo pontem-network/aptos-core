@@ -7,8 +7,8 @@ use crate::{
     transaction::Version,
 };
 use anyhow::{Error, Result};
-use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
 use move_core_types::{language_storage::TypeTag, move_resource::MoveStructType};
+use pont_crypto_derive::{BCSCryptoHash, CryptoHasher};
 
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;

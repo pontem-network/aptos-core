@@ -10,13 +10,13 @@ mod json_encoder;
 #[cfg(test)]
 mod unit_tests;
 
-use aptos_logger::prelude::*;
-use aptos_metrics_core::{register_int_counter_vec, IntCounterVec};
 use once_cell::sync::Lazy;
+use pont_logger::prelude::*;
+use pont_metrics_core::{register_int_counter_vec, IntCounterVec};
 
 pub static NUM_METRICS: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_metrics",
+        "pont_metrics",
         "Number of metrics in certain states",
         &["type"]
     )
@@ -24,7 +24,7 @@ pub static NUM_METRICS: Lazy<IntCounterVec> = Lazy::new(|| {
 });
 
 pub fn gather_metrics() -> Vec<prometheus::proto::MetricFamily> {
-    let metric_families = aptos_metrics_core::gather();
+    let metric_families = pont_metrics_core::gather();
     let mut total: u64 = 0;
     let mut families_over_1000: u64 = 0;
 

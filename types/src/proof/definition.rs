@@ -12,7 +12,7 @@ use crate::{
     transaction::{TransactionInfo, Version},
 };
 use anyhow::{bail, ensure, format_err, Context, Result};
-use aptos_crypto::{
+use pont_crypto::{
     hash::{
         CryptoHash, CryptoHasher, EventAccumulatorHasher, TransactionAccumulatorHasher,
         SPARSE_MERKLE_PLACEHOLDER_HASH,
@@ -23,7 +23,7 @@ use serde::{Deserialize, Serialize};
 use std::{any::type_name, marker::PhantomData};
 
 #[cfg(any(test, feature = "fuzzing"))]
-use aptos_crypto::hash::TestOnlyHasher;
+use pont_crypto::hash::TestOnlyHasher;
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 

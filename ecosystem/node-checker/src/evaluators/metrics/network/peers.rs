@@ -31,7 +31,7 @@ use serde::{Deserialize, Serialize};
 // Common stuff.
 //////////////////////////////////////////////////////////////////////////////
 
-const METRIC: &str = "aptos_connections";
+const METRIC: &str = "pont_connections";
 
 static INBOUND_LABEL: Lazy<Label> = Lazy::new(|| Label {
     key: "direction",
@@ -176,9 +176,7 @@ impl NetworkMinimumPeersEvaluator {
                 ),
                 50,
                 format!("{} Try setting explicit peers.", explanation),
-                vec![
-                    "https://aptos.dev/nodes/full-node/troubleshooting-fullnode-setup".to_string(),
-                ],
+                vec!["https://pont.dev/nodes/full-node/troubleshooting-fullnode-setup".to_string()],
             )
         }
     }

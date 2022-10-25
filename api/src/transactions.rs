@@ -20,16 +20,21 @@ use crate::{
     ApiTags,
 };
 use anyhow::{anyhow, Context as AnyhowContext};
-use aptos_api_types::{
-    verify_function_identifier, verify_module_identifier, Address, AptosError, AptosErrorCode,
-    AsConverter, EncodeSubmissionRequest, GasEstimation, GasEstimationBcs, HashValue,
-    HexEncodedBytes, LedgerInfo, MoveType, PendingTransaction, SubmitTransactionRequest,
+use poem_openapi::{
+    param::{Path, Query},
+    payload::Json,
+    ApiRequest, OpenApi,
+};
+use pont_api_types::{
+    verify_function_identifier, verify_module_identifier, Address, AsConverter,
+    EncodeSubmissionRequest, GasEstimation, GasEstimationBcs, HashValue, HexEncodedBytes,
+    LedgerInfo, MoveType, PendingTransaction, PontError, PontErrorCode, SubmitTransactionRequest,
     Transaction, TransactionData, TransactionOnChainData, TransactionsBatchSingleSubmissionFailure,
     TransactionsBatchSubmissionResult, UserTransaction, VerifyInput, VerifyInputWithRecursion,
     MAX_RECURSIVE_TYPES_ALLOWED, U64,
 };
-use aptos_crypto::{hash::CryptoHash, signing_message};
-use aptos_types::{
+use pont_crypto::{hash::CryptoHash, signing_message};
+use pont_types::{
     account_config::CoinStoreResource,
     account_view::AccountView,
     mempool_status::MempoolStatusCode,
@@ -39,12 +44,7 @@ use aptos_types::{
     },
     vm_status::StatusCode,
 };
-use aptos_vm::AptosVM;
-use poem_openapi::{
-    param::{Path, Query},
-    payload::Json,
-    ApiRequest, OpenApi,
-};
+use pont_vm::PontVM;
 use std::sync::Arc;
 
 generate_success_response!(SubmitTransactionResponse, (202, Accepted));
@@ -86,8 +86,8 @@ pub enum SubmitTransactionPost {
 
     // TODO: Since I don't want to impl all the Poem derives on SignedTransaction,
     // find a way to at least indicate in the spec that it expects a SignedTransaction.
-    // TODO: https://github.com/aptos-labs/aptos-core/issues/2275
-    #[oai(content_type = "application/x.aptos.signed_transaction+bcs")]
+    // TODO: https://github.com/aptos-labs/pont-core/issues/2275
+    #[oai(content_type = "application/x.pont.signed_transaction+bcs")]
     Bcs(Bcs),
 }
 
@@ -109,8 +109,8 @@ pub enum SubmitTransactionsBatchPost {
 
     // TODO: Since I don't want to impl all the Poem derives on SignedTransaction,
     // find a way to at least indicate in the spec that it expects a SignedTransaction.
-    // TODO: https://github.com/aptos-labs/aptos-core/issues/2275
-    #[oai(content_type = "application/x.aptos.signed_transaction+bcs")]
+    // TODO: https://github.com/aptos-labs/pont-core/issues/2275
+    #[oai(content_type = "application/x.pont.signed_transaction+bcs")]
     Bcs(Bcs),
 }
 
@@ -180,7 +180,7 @@ impl TransactionsApi {
     /// looks the transaction up by hash in the mempool (pending, not yet committed).
     ///
     /// To create a transaction hash by yourself, do the following:
-    ///   1. Hash message bytes: "RawTransaction" bytes + BCS bytes of [Transaction](https://aptos-labs.github.io/aptos-core/aptos_types/transaction/enum.Transaction.html).
+    ///   1. Hash message bytes: "RawTransaction" bytes + BCS bytes of [Transaction](https://aptos-labs.github.io/pont-core/pont_types/transaction/enum.Transaction.html).
     ///   2. Apply hash algorithm `SHA3-256` to the hash message bytes.
     ///   3. Hex-encode the hash bytes with `0x` prefix.
     // TODO: Include a link to an example of how to do this ^
@@ -281,7 +281,7 @@ impl TransactionsApi {
     ///
     /// To submit a transaction as BCS, you must submit a SignedTransaction
     /// encoded as BCS. See SignedTransaction in types/src/transaction/mod.rs.
-    /// Make sure to use the `application/x.aptos.signed_transaction+bcs` Content-Type.
+    /// Make sure to use the `application/x.pont.signed_transaction+bcs` Content-Type.
     // TODO: Point to examples of both of these flows, in multiple languages.
     #[oai(
         path = "/transactions",
@@ -299,7 +299,7 @@ impl TransactionsApi {
             .map_err(|err| {
                 SubmitTransactionError::bad_request_with_code_no_info(
                     err,
-                    AptosErrorCode::InvalidInput,
+                    PontErrorCode::InvalidInput,
                 )
             })?;
         fail_point_poem("endpoint_submit_transaction")?;
@@ -335,7 +335,7 @@ impl TransactionsApi {
     ///
     /// To submit a transaction as BCS, you must submit a SignedTransaction
     /// encoded as BCS. See SignedTransaction in types/src/transaction/mod.rs.
-    /// Make sure to use the `application/x.aptos.signed_transaction+bcs` Content-Type.
+    /// Make sure to use the `application/x.pont.signed_transaction+bcs` Content-Type.
     #[oai(
         path = "/transactions/batch",
         method = "post",
@@ -352,7 +352,7 @@ impl TransactionsApi {
             .map_err(|err| {
                 SubmitTransactionError::bad_request_with_code_no_info(
                     err,
-                    AptosErrorCode::InvalidInput,
+                    PontErrorCode::InvalidInput,
                 )
             })?;
         fail_point_poem("endpoint_submit_batch_transactions")?;
@@ -370,7 +370,7 @@ impl TransactionsApi {
                     signed_transactions_batch.len(),
                     self.context.max_submit_transaction_batch_size(),
                 ),
-                AptosErrorCode::InvalidInput,
+                PontErrorCode::InvalidInput,
                 &ledger_info,
             ));
         }
@@ -416,7 +416,7 @@ impl TransactionsApi {
             .map_err(|err| {
                 SubmitTransactionError::bad_request_with_code_no_info(
                     err,
-                    AptosErrorCode::InvalidInput,
+                    PontErrorCode::InvalidInput,
                 )
             })?;
         fail_point_poem("endpoint_simulate_transaction")?;
@@ -464,7 +464,7 @@ impl TransactionsApi {
                 .ok_or_else(|| {
                     SubmitTransactionError::bad_request_with_code(
                         "Account not found",
-                        AptosErrorCode::InvalidInput,
+                        PontErrorCode::InvalidInput,
                         &ledger_info,
                     )
                 })?;
@@ -481,7 +481,7 @@ impl TransactionsApi {
                 .map_err(|err| {
                     SubmitTransactionError::internal_with_code(
                         format!("Failed to get coin store resource {}", err),
-                        AptosErrorCode::InternalError,
+                        PontErrorCode::InternalError,
                         &ledger_info,
                     )
                 })?;
@@ -558,7 +558,7 @@ impl TransactionsApi {
             .verify()
             .context("'UserTransactionRequest' invalid")
             .map_err(|err| {
-                BasicError::bad_request_with_code_no_info(err, AptosErrorCode::InvalidInput)
+                BasicError::bad_request_with_code_no_info(err, PontErrorCode::InvalidInput)
             })?;
         fail_point_poem("endpoint_encode_submission")?;
         self.context
@@ -625,7 +625,7 @@ impl TransactionsApi {
             .map_err(|err| {
                 BasicErrorWith404::internal_with_code(
                     err,
-                    AptosErrorCode::InternalError,
+                    PontErrorCode::InternalError,
                     &latest_ledger_info,
                 )
             })?;
@@ -664,7 +664,7 @@ impl TransactionsApi {
             .map_err(|err| {
                 BasicErrorWith404::internal_with_code(
                     err,
-                    AptosErrorCode::InternalError,
+                    PontErrorCode::InternalError,
                     &ledger_info,
                 )
             })?
@@ -687,7 +687,7 @@ impl TransactionsApi {
             .map_err(|err| {
                 BasicErrorWith404::internal_with_code(
                     err,
-                    AptosErrorCode::InternalError,
+                    PontErrorCode::InternalError,
                     &ledger_info,
                 )
             })?
@@ -722,7 +722,7 @@ impl TransactionsApi {
                             .map_err(|err| {
                                 BasicErrorWith404::internal_with_code(
                                     err,
-                                    AptosErrorCode::InternalError,
+                                    PontErrorCode::InternalError,
                                     ledger_info,
                                 )
                             })?
@@ -734,7 +734,7 @@ impl TransactionsApi {
                         .map_err(|err| {
                             BasicErrorWith404::internal_with_code(
                                 err,
-                                AptosErrorCode::InternalError,
+                                PontErrorCode::InternalError,
                                 ledger_info,
                             )
                         })?,
@@ -772,7 +772,7 @@ impl TransactionsApi {
     /// it means the transaction is still pending.
     async fn get_by_hash(
         &self,
-        hash: aptos_crypto::HashValue,
+        hash: pont_crypto::HashValue,
         ledger_info: &LedgerInfo,
     ) -> anyhow::Result<Option<TransactionData>> {
         let from_db = self
@@ -835,7 +835,7 @@ impl TransactionsApi {
                         .map_err(|err| {
                             SubmitTransactionError::bad_request_with_code(
                                 err,
-                                AptosErrorCode::InvalidInput,
+                                PontErrorCode::InvalidInput,
                                 ledger_info,
                             )
                         })?;
@@ -847,7 +847,7 @@ impl TransactionsApi {
                             .map_err(|err| {
                                 SubmitTransactionError::bad_request_with_code(
                                     err,
-                                    AptosErrorCode::InvalidInput,
+                                    PontErrorCode::InvalidInput,
                                     ledger_info,
                                 )
                             })?;
@@ -857,7 +857,7 @@ impl TransactionsApi {
                             .map_err(|err| {
                                 SubmitTransactionError::bad_request_with_code(
                                     err,
-                                    AptosErrorCode::InvalidInput,
+                                    PontErrorCode::InvalidInput,
                                     ledger_info,
                                 )
                             })?;
@@ -868,7 +868,7 @@ impl TransactionsApi {
                                 .map_err(|err| {
                                     SubmitTransactionError::bad_request_with_code(
                                         err,
-                                        AptosErrorCode::InvalidInput,
+                                        PontErrorCode::InvalidInput,
                                         ledger_info,
                                     )
                                 })?;
@@ -878,7 +878,7 @@ impl TransactionsApi {
                         if script.code().is_empty() {
                             return Err(SubmitTransactionError::bad_request_with_code(
                                 "Script payload bytecode must not be empty",
-                                AptosErrorCode::InvalidInput,
+                                PontErrorCode::InvalidInput,
                                 ledger_info,
                             ));
                         }
@@ -890,7 +890,7 @@ impl TransactionsApi {
                                 .map_err(|err| {
                                     SubmitTransactionError::bad_request_with_code(
                                         err,
-                                        AptosErrorCode::InvalidInput,
+                                        PontErrorCode::InvalidInput,
                                         ledger_info,
                                     )
                                 })?;
@@ -911,7 +911,7 @@ impl TransactionsApi {
                 .map_err(|err| {
                     SubmitTransactionError::bad_request_with_code(
                         err,
-                        AptosErrorCode::InvalidInput,
+                        PontErrorCode::InvalidInput,
                         ledger_info,
                     )
                 }),
@@ -931,7 +931,7 @@ impl TransactionsApi {
                     .map_err(|err| {
                         SubmitTransactionError::bad_request_with_code(
                             err,
-                            AptosErrorCode::InvalidInput,
+                            PontErrorCode::InvalidInput,
                             ledger_info,
                         )
                     })?;
@@ -950,7 +950,7 @@ impl TransactionsApi {
                         .map_err(|err| {
                             SubmitTransactionError::bad_request_with_code(
                                 err,
-                                AptosErrorCode::InvalidInput,
+                                PontErrorCode::InvalidInput,
                                 ledger_info,
                             )
                         })
@@ -960,53 +960,53 @@ impl TransactionsApi {
     }
 
     /// Submits a single transaction, and converts mempool codes to errors
-    async fn create_internal(&self, txn: SignedTransaction) -> Result<(), AptosError> {
+    async fn create_internal(&self, txn: SignedTransaction) -> Result<(), PontError> {
         let (mempool_status, vm_status_opt) = self
             .context
             .submit_transaction(txn)
             .await
             .context("Mempool failed to initially evaluate submitted transaction")
             .map_err(|err| {
-                aptos_api_types::AptosError::new_with_error_code(err, AptosErrorCode::InternalError)
+                pont_api_types::PontError::new_with_error_code(err, PontErrorCode::InternalError)
             })?;
         match mempool_status.code {
             MempoolStatusCode::Accepted => Ok(()),
             MempoolStatusCode::MempoolIsFull | MempoolStatusCode::TooManyTransactions => {
-                Err(AptosError::new_with_error_code(
+                Err(PontError::new_with_error_code(
                     &mempool_status.message,
-                    AptosErrorCode::MempoolIsFull,
+                    PontErrorCode::MempoolIsFull,
                 ))
             }
             MempoolStatusCode::VmError => {
                 if let Some(status) = vm_status_opt {
-                    Err(AptosError::new_with_vm_status(
+                    Err(PontError::new_with_vm_status(
                         format!(
                             "Invalid transaction: Type: {:?} Code: {:?}",
                             status.status_type(),
                             status
                         ),
-                        AptosErrorCode::VmError,
+                        PontErrorCode::VmError,
                         status,
                     ))
                 } else {
-                    Err(AptosError::new_with_vm_status(
+                    Err(PontError::new_with_vm_status(
                         "Invalid transaction: unknown",
-                        AptosErrorCode::VmError,
+                        PontErrorCode::VmError,
                         StatusCode::UNKNOWN_STATUS,
                     ))
                 }
             }
-            MempoolStatusCode::InvalidSeqNumber => Err(AptosError::new_with_error_code(
+            MempoolStatusCode::InvalidSeqNumber => Err(PontError::new_with_error_code(
                 mempool_status.message,
-                AptosErrorCode::SequenceNumberTooOld,
+                PontErrorCode::SequenceNumberTooOld,
             )),
-            MempoolStatusCode::InvalidUpdate => Err(AptosError::new_with_error_code(
+            MempoolStatusCode::InvalidUpdate => Err(PontError::new_with_error_code(
                 mempool_status.message,
-                AptosErrorCode::InvalidTransactionUpdate,
+                PontErrorCode::InvalidTransactionUpdate,
             )),
-            MempoolStatusCode::UnknownStatus => Err(AptosError::new_with_error_code(
+            MempoolStatusCode::UnknownStatus => Err(PontError::new_with_error_code(
                 format!("Transaction was rejected with status {}", mempool_status,),
-                AptosErrorCode::InternalError,
+                PontErrorCode::InternalError,
             )),
         }
     }
@@ -1028,7 +1028,7 @@ impl TransactionsApi {
                         .map_err(|e| {
                             SubmitTransactionError::internal_with_code(
                                 e,
-                                AptosErrorCode::InternalError,
+                                PontErrorCode::InternalError,
                                 ledger_info,
                             )
                         })?;
@@ -1040,7 +1040,7 @@ impl TransactionsApi {
                             .context("Failed to build PendingTransaction from mempool response, even though it said the request was accepted")
                             .map_err(|err| SubmitTransactionError::internal_with_code(
                                 err,
-                                AptosErrorCode::InternalError,
+                                PontErrorCode::InternalError,
                                 ledger_info,
                             ))?;
                     SubmitTransactionResponse::try_from_json((
@@ -1059,21 +1059,21 @@ impl TransactionsApi {
                 )),
             },
             Err(error) => match error.error_code {
-                AptosErrorCode::InternalError => Err(
-                    SubmitTransactionError::internal_from_aptos_error(error, ledger_info),
+                PontErrorCode::InternalError => Err(
+                    SubmitTransactionError::internal_from_pont_error(error, ledger_info),
                 ),
-                AptosErrorCode::VmError
-                | AptosErrorCode::SequenceNumberTooOld
-                | AptosErrorCode::InvalidTransactionUpdate => Err(
-                    SubmitTransactionError::bad_request_from_aptos_error(error, ledger_info),
+                PontErrorCode::VmError
+                | PontErrorCode::SequenceNumberTooOld
+                | PontErrorCode::InvalidTransactionUpdate => Err(
+                    SubmitTransactionError::bad_request_from_pont_error(error, ledger_info),
                 ),
-                AptosErrorCode::MempoolIsFull => Err(
-                    SubmitTransactionError::insufficient_storage_from_aptos_error(
+                PontErrorCode::MempoolIsFull => Err(
+                    SubmitTransactionError::insufficient_storage_from_pont_error(
                         error,
                         ledger_info,
                     ),
                 ),
-                _ => Err(SubmitTransactionError::internal_from_aptos_error(
+                _ => Err(SubmitTransactionError::internal_from_pont_error(
                     error,
                     ledger_info,
                 )),
@@ -1117,7 +1117,7 @@ impl TransactionsApi {
         ))
     }
 
-    // TODO: This function leverages a lot of types from aptos_types, use the
+    // TODO: This function leverages a lot of types from pont_types, use the
     // local API types and just return those directly, instead of converting
     // from these types in render_transactions.
     /// Simulate a transaction in the VM
@@ -1134,14 +1134,14 @@ impl TransactionsApi {
         if txn.signature_is_valid() {
             return Err(SubmitTransactionError::bad_request_with_code(
                 "Simulated transactions must have a non-valid signature",
-                AptosErrorCode::InvalidInput,
+                PontErrorCode::InvalidInput,
                 &ledger_info,
             ));
         }
 
         // Simulate transaction
         let move_resolver = self.context.move_resolver_poem(&ledger_info)?;
-        let (_, output_ext) = AptosVM::simulate_signed_transaction(&txn, &move_resolver);
+        let (_, output_ext) = PontVM::simulate_signed_transaction(&txn, &move_resolver);
         let version = ledger_info.version();
 
         // Apply transaction outputs to build up a transaction
@@ -1159,9 +1159,9 @@ impl TransactionsApi {
 
         // Build up a transaction from the outputs
         // All state hashes are invalid, and will be filled with 0s
-        let txn = aptos_types::transaction::Transaction::UserTransaction(txn);
-        let zero_hash = aptos_crypto::HashValue::zero();
-        let info = aptos_types::transaction::TransactionInfo::new(
+        let txn = pont_types::transaction::Transaction::UserTransaction(txn);
+        let zero_hash = pont_crypto::HashValue::zero();
+        let info = pont_types::transaction::TransactionInfo::new(
             txn.hash(),
             zero_hash,
             zero_hash,
@@ -1193,7 +1193,7 @@ impl TransactionsApi {
                         _ => {
                             return Err(SubmitTransactionError::internal_with_code(
                                 "Simulation transaction resulted in a non-UserTransaction",
-                                AptosErrorCode::InternalError,
+                                PontErrorCode::InternalError,
                                 &ledger_info,
                             ))
                         }
@@ -1221,7 +1221,7 @@ impl TransactionsApi {
         if accept_type == &AcceptType::Bcs {
             return Err(BasicError::bad_request_with_code_no_info(
                 "BCS is not supported for encode submission",
-                AptosErrorCode::BcsNotSupported,
+                PontErrorCode::BcsNotSupported,
             ));
         }
 
@@ -1232,7 +1232,7 @@ impl TransactionsApi {
             .try_into_raw_transaction_poem(request.transaction, self.context.chain_id())
             .context("The given transaction is invalid")
             .map_err(|err| {
-                BasicError::bad_request_with_code(err, AptosErrorCode::InvalidInput, &ledger_info)
+                BasicError::bad_request_with_code(err, PontErrorCode::InvalidInput, &ledger_info)
             })?;
 
         let raw_message = match request.secondary_signers {
@@ -1247,7 +1247,7 @@ impl TransactionsApi {
             )
             .context("Invalid transaction to generate signing message")
             .map_err(|err| {
-                BasicError::bad_request_with_code(err, AptosErrorCode::InvalidInput, &ledger_info)
+                BasicError::bad_request_with_code(err, PontErrorCode::InvalidInput, &ledger_info)
             })?,
             None => raw_txn
                 .signing_message()
@@ -1255,7 +1255,7 @@ impl TransactionsApi {
                 .map_err(|err| {
                     BasicError::bad_request_with_code(
                         err,
-                        AptosErrorCode::InvalidInput,
+                        PontErrorCode::InvalidInput,
                         &ledger_info,
                     )
                 })?,

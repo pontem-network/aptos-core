@@ -3,8 +3,8 @@
 # This script syncs the grafana dashboards from the grafana server to the local copy of this repo.
 # It is intended to be run from the root of the repo.
 
-DASHBOARD_FOLDER=${DASHBOARD_FOLDER:-aptos-core}
-GRAFANA_URL=${GRAFANA_URL:-https://o11y.aptosdev.com}
+DASHBOARD_FOLDER=${DASHBOARD_FOLDER:-pont-core}
+GRAFANA_URL=${GRAFANA_URL:-https://o11y.pontdev.com}
 LOCAL_DASHBOARD_FOLDER=${LOCAL_DASHBOARD_FOLDER:-"./dashboards"}
 
 ### Install grafana-sync tool

@@ -1,10 +1,10 @@
 [package]
 name = "storage-service-types"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Common types offered by the Aptos storage service"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Common types offered by the Pont storage service"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -15,10 +15,10 @@ num-traits = { version = "0.2.15", default-features = false }
 serde = { version = "1.0.137", default-features = false }
 thiserror = "1.0.31"
 
-aptos-compression = { path = "../../../crates/aptos-compression" }
-aptos-config = { path = "../../../config" }
-aptos-crypto = { path = "../../../crates/aptos-crypto" }
-aptos-types = { path = "../../../types" }
+pont-compression = { path = "../../../crates/pont-compression" }
+pont-config = { path = "../../../config" }
+pont-crypto = { path = "../../../crates/pont-crypto" }
+pont-types = { path = "../../../types" }
 
 [dev-dependencies]
 claims = "0.7"

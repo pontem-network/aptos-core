@@ -31,7 +31,7 @@ on: # build on main branch OR when a PR is labeled with `CICD:build-images`
       - "developer-docs-site/**"
       - ".github/**"
   # For PR that modify .github, run from that PR
-  # This will fail to get secrets if you are not from aptos
+  # This will fail to get secrets if you are not from pont
   pull_request:
     types: [labeled, opened, synchronize, reopened, auto_merge_enabled]
     paths:

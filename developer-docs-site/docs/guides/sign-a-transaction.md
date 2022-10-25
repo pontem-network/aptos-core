@@ -10,29 +10,29 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Creating a Signed Transaction
 
-All transactions executed on the Aptos blockchain must be signed. This requirement is enforced by the chain for security reasons.
+All transactions executed on the Pont blockchain must be signed. This requirement is enforced by the chain for security reasons.
 
 ## Generating the signing message
 
 The first step in signing a transaction is to generate the signing message from the transaction. To generate such a signing message, you can use:
 
-- The Aptos node's [REST API](https://fullnode.devnet.aptoslabs.com/v1/spec#/). The Aptos node will generate the signing message, the transaction signature and will submit the signed transaction to the Aptos blockchain. However, this approach is not secure.
+- The Pont node's [REST API](https://fullnode.devnet.pontlabs.com/v1/spec#/). The Pont node will generate the signing message, the transaction signature and will submit the signed transaction to the Pont blockchain. However, this approach is not secure.
   - Also see the tutorial [Your First Transaction](../tutorials/first-transaction.md) that explains this approach.
 - However, you may prefer instead that your client application, for example, a hardware security module (HSM), be responsible for generating the signed transaction. In this approach, before submitting transactions, a client must:
   - Serialize the transactions into bytes, and
   - Sign the bytes with the account private key. See [Accounts][account] for how account and private key works.
 
-This guide will introduce the concepts behind constructing a transaction, generating the appropriate message to sign using the BCS-serialization, and various methods for signing within Aptos.
+This guide will introduce the concepts behind constructing a transaction, generating the appropriate message to sign using the BCS-serialization, and various methods for signing within Pont.
 
 :::tip
 
-We strongly recommend that you use the BCS format for submitting transactions to the Aptos blockchain.
+We strongly recommend that you use the BCS format for submitting transactions to the Pont blockchain.
 
 :::
 
 ## Overview
 
-Creating a transaction that is ready to be executed on the Aptos blockchain requires the following four steps:
+Creating a transaction that is ready to be executed on the Pont blockchain requires the following four steps:
 
 1. Create a raw transaction, `RawTransaction`, also called unsigned transaction.
 2. Generate the signing message containing the appropriate salt (`prefix_bytes`), and generate the signature of the raw transaction by using the client's private key.
@@ -53,13 +53,13 @@ sources={{
   }}
 />
 
-Unsigned transactions are known as `RawTransaction`s. They contain all the information about how to execute an operation on an account within Aptos. But they lack the appropriate authorization with a signature or `Authenticator`.
+Unsigned transactions are known as `RawTransaction`s. They contain all the information about how to execute an operation on an account within Pont. But they lack the appropriate authorization with a signature or `Authenticator`.
 
-In Aptos blockchain, all the data is encoded as [BCS][bcs] (Binary Canonical Serialization).
+In Pont blockchain, all the data is encoded as [BCS][bcs] (Binary Canonical Serialization).
 
-Aptos supports many different approaches to signing a transaction but defaults to a single signer using [Ed25519][ed25519].
+Pont supports many different approaches to signing a transaction but defaults to a single signer using [Ed25519][ed25519].
 
-The `Authenticator` produced during the signing of the transaction gives authorization to the Aptos blockchain to execute the transaction on behalf of the account owner.
+The `Authenticator` produced during the signing of the transaction gives authorization to the Pont blockchain to execute the transaction on behalf of the account owner.
 
 ## Key concepts
 
@@ -69,7 +69,7 @@ A raw transaction consists of the following fields:
 
 - **sender** (Address): Account address of the sender.
 - **sequence_number** (uint64): Sequence number of this transaction. This must match the sequence number stored in the sender's account at the time the transaction executes.
-- **payload**: Instructions for the Aptos blockchain, including publishing a module, execute a script function or execute a script payload.
+- **payload**: Instructions for the Pont blockchain, including publishing a module, execute a script function or execute a script payload.
 - **max_gas_amount** (uint64): Maximum total gas to spend for this transaction. The account must have more than this gas or the transaction will be discarded during validation.
 - **gas_unit_price** (uint64): Price to be paid per gas unit. During execution the `total_gas_amount`, calculated as: `total_gas_amount = total_gas_units_consumed * gas_unit_price`, must not exceed `max_gas_amount` or the transaction will abort during the execution. `total_gas_units_consumed` represents the total units of gas consumed when executing the transaction.
 - **expiration_timestamp_secs** (uint64): The blockchain timestamp at which the blockchain would discard this transaction.
@@ -85,7 +85,7 @@ An example of how BCS serializes a string is shown below:
 
 ```typescript
 // A string is serialized as: byte length + byte representation of the string. The byte length is required for deserialization. Without it, no way the deserializer knows how many bytes to deserialize.
-const bytes: Uint8Array = bcs_serialize_string("aptos");
+const bytes: Uint8Array = bcs_serialize_string("pont");
 assert(bytes == [5, 0x61, 0x70, 0x74, 0x6f, 0x73]);
 ```
 
@@ -93,7 +93,7 @@ assert(bytes == [5, 0x61, 0x70, 0x74, 0x6f, 0x73]);
 
 The bytes of a BCS-serialized raw transaction are referred as a **signing message**.
 
-In addition, in Aptos, any content that is signed or hashed is salted with a unique prefix to distinguish it from other types of messages. This is done to ensure that the content can only be used in the intended scenarios. The signing message of a RawTransaction is prefixed with `prefix_bytes`, which is `sha3_256("APTOS::RawTransaction")`. Therefore:
+In addition, in Pont, any content that is signed or hashed is salted with a unique prefix to distinguish it from other types of messages. This is done to ensure that the content can only be used in the intended scenarios. The signing message of a RawTransaction is prefixed with `prefix_bytes`, which is `sha3_256("APTOS::RawTransaction")`. Therefore:
 
 `signing_message = prefix_bytes | bcs_bytes_of_raw_transaction.`. `|` denotes concatenation.
 
@@ -105,10 +105,10 @@ The prefixing step is not shown in the diagram in the [Overview](#overview) sect
 
 ### Signature
 
-A signature is the result of hashing the signing message with the client's private key. By default Aptos uses the [Ed25519][ed25519] scheme to generate the signature of the raw transaction.
+A signature is the result of hashing the signing message with the client's private key. By default Pont uses the [Ed25519][ed25519] scheme to generate the signature of the raw transaction.
 
-- By signing a signing message with the private key, clients prove to the Aptos blockchain that they have authorized the transaction be executed.
-- Aptos blockchain will validate the signature with client account's public key to ensure that the transaction submitted is indeed signed by the client.
+- By signing a signing message with the private key, clients prove to the Pont blockchain that they have authorized the transaction be executed.
+- Pont blockchain will validate the signature with client account's public key to ensure that the transaction submitted is indeed signed by the client.
 
 ### Signed transaction
 
@@ -117,15 +117,15 @@ A signed transaction consists of:
 - A raw transaction, and
 - An authenticator. The authenticator contains a client's public key and the signature of the raw transaction.
 
-This signed transaction is further BCS-serialized (not shown in the diagram in [Overview](#overview) section), after which the signed transaction is ready for submission to the [Aptos REST interface](https://fullnode.devnet.aptoslabs.com/v1/spec#/).
+This signed transaction is further BCS-serialized (not shown in the diagram in [Overview](#overview) section), after which the signed transaction is ready for submission to the [Pont REST interface](https://fullnode.devnet.pontlabs.com/v1/spec#/).
 
 ### Multisignature transactions
 
-The Aptos blockchain supports several signing methods for transactions, including the single signature, the K-of-N multisig, and more.
+The Pont blockchain supports several signing methods for transactions, including the single signature, the K-of-N multisig, and more.
 
 A K-of-N multisig transaction means that for such a transaction to be executed, at least K out of the N authorized signers have signed the transaction and passed the check conducted by the chain.
 
-Transaction signatures are wrapped in `Authenticator`. The Aptos blockchain validates the transactions submitted by clients by using the Authenticator data. See a few examples below:
+Transaction signatures are wrapped in `Authenticator`. The Pont blockchain validates the transactions submitted by clients by using the Authenticator data. See a few examples below:
 
 In Typescript, this is how a single signer authenticator looks like:
 
@@ -203,7 +203,7 @@ function createRawTransaction(): RawTransaction {
   const payload: ScriptFunction = {
     module: {
       address: hexToAccountAddress("0x01"),
-      name: "AptosCoin",
+      name: "PontCoin",
     },
     function: "transfer",
     ty_args: [],
@@ -310,12 +310,12 @@ Finally, submitting the transaction with the required header "Content-Type".
 To submit a signed transaction in the BCS format, the client must pass in a specific header, as shown in the below example:
 
 ```
-curl -X POST -H "Content-Type: application/x.aptos.signed_transaction+bcs" --data-binary "@path/to/file_contains_bcs_bytes_of_signed_txn" https://some_domain/transactions
+curl -X POST -H "Content-Type: application/x.pont.signed_transaction+bcs" --data-binary "@path/to/file_contains_bcs_bytes_of_signed_txn" https://some_domain/transactions
 ```
 
 [first_transaction]: /tutorials/first-transaction
 [account]: /concepts/basics-accounts
-[rest_spec]: https://fullnode.devnet.aptoslabs.com/v1/spec#/
+[rest_spec]: https://fullnode.devnet.pontlabs.com/v1/spec#/
 [bcs]: https://docs.rs/bcs/latest/bcs/
 [sha3]: https://en.wikipedia.org/wiki/SHA-3
 [ed25519]: https://ed25519.cr.yp.to/

@@ -6,16 +6,16 @@ use crate::test_utils::{
     proof_reader::ProofReader,
     proptest_helpers::{arb_smt_correctness_case, test_smt_correctness_impl},
 };
-use aptos_crypto::{
+use once_cell::sync::Lazy;
+use pont_crypto::{
     hash::{CryptoHash, TestOnlyHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use aptos_types::proof::definition::NodeInProof;
-use aptos_types::{
+use pont_types::proof::definition::NodeInProof;
+use pont_types::{
     proof::{SparseMerkleLeafNode, SparseMerkleProofExt},
     state_store::state_value::StateValue,
 };
-use once_cell::sync::Lazy;
 use proptest::prelude::*;
 use std::collections::VecDeque;
 
@@ -26,7 +26,7 @@ fn update_byte(original_key: &HashValue, n: usize, byte: u8) -> HashValue {
 }
 
 fn hash_internal(left_child: HashValue, right_child: HashValue) -> HashValue {
-    aptos_types::proof::SparseMerkleInternalNode::new(left_child, right_child).hash()
+    pont_types::proof::SparseMerkleInternalNode::new(left_child, right_child).hash()
 }
 
 fn hash_leaf(key: HashValue, value_hash: HashValue) -> HashValue {

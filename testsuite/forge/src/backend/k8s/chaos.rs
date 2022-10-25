@@ -4,7 +4,7 @@
 use std::process::{Command, Stdio};
 
 use anyhow::bail;
-use aptos_logger::info;
+use pont_logger::info;
 use tempfile::TempDir;
 
 use crate::{

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "aptos-fullnode.fullname" . }}
+  name: {{ include "pont-fullnode.fullname" . }}
   labels:
-    {{- include "aptos-fullnode.labels" . | nindent 4 }}
+    {{- include "pont-fullnode.labels" . | nindent 4 }}
     app.kubernetes.io/name: fullnode
 spec:
-  serviceName: {{ include "aptos-fullnode.fullname" . }}
+  serviceName: {{ include "pont-fullnode.fullname" . }}
   replicas: 1
   podManagementPolicy: Parallel
   selector:
     matchLabels:
-      {{- include "aptos-fullnode.selectorLabels" . | nindent 6 }}
+      {{- include "pont-fullnode.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/name: fullnode
   template:
     metadata:
       labels:
-        {{- include "aptos-fullnode.selectorLabels" . | nindent 8 }}
+        {{- include "pont-fullnode.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/name: fullnode
       annotations:
         seccomp.security.alpha.kubernetes.io/pod: runtime/default
@@ -35,11 +35,11 @@ spec:
           set -e
           {{- if and (not .Values.chain.genesisConfigmap) (not .Values.chain.genesisSecret) }}
           # Download genesis and waypoint if necessary
-          curl -o /opt/aptos/genesis/waypoint.txt {{ (get .Values.aptos_chains .Values.chain.name).waypoint_txt_url }}
-          curl -o /opt/aptos/genesis/genesis.blob {{ (get .Values.aptos_chains .Values.chain.name).genesis_blob_url }}
+          curl -o /opt/pont/genesis/waypoint.txt {{ (get .Values.pont_chains .Values.chain.name).waypoint_txt_url }}
+          curl -o /opt/pont/genesis/genesis.blob {{ (get .Values.pont_chains .Values.chain.name).genesis_blob_url }}
           {{- end }}
           # Start the node
-          /usr/local/bin/aptos-node -f /opt/aptos/etc/fullnode.yaml
+          /usr/local/bin/pont-node -f /opt/pont/etc/fullnode.yaml
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         env:
@@ -58,12 +58,12 @@ spec:
         - name: RUST_BACKTRACE
           value: "0"
         volumeMounts:
-        - name: aptos-config
-          mountPath: /opt/aptos/etc
-        - name: aptos-genesis
-          mountPath: /opt/aptos/genesis
-        - name: aptos-data
-          mountPath: /opt/aptos/data
+        - name: pont-config
+          mountPath: /opt/pont/etc
+        - name: pont-genesis
+          mountPath: /opt/pont/genesis
+        - name: pont-data
+          mountPath: /opt/pont/data
         - name: tmp
           mountPath: /tmp
         ports:
@@ -105,10 +105,10 @@ spec:
         runAsGroup: 6180
         fsGroup: 6180
       volumes:
-      - name: aptos-config
+      - name: pont-config
         configMap:
-          name: {{ include "aptos-fullnode.fullname" . }}
-      - name: aptos-genesis
+          name: {{ include "pont-fullnode.fullname" . }}
+      - name: pont-genesis
       {{- if .Values.chain.genesisConfigmap }}
         configMap:
           name: {{ .Values.chain.genesisConfigmap }}
@@ -118,12 +118,12 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
-      - name: aptos-data
+      - name: pont-data
         persistentVolumeClaim:
-          claimName: {{ include "aptos-fullnode.fullname" . }}-e{{ .Values.chain.era }}
+          claimName: {{ include "pont-fullnode.fullname" . }}-e{{ .Values.chain.era }}
       - name: tmp
         emptyDir: {}
-      serviceAccountName: {{ include "aptos-fullnode.serviceAccountName" . }}
+      serviceAccountName: {{ include "pont-fullnode.serviceAccountName" . }}
       {{- if .Values.imagePullSecret }}
       imagePullSecrets:
       - name: {{.Values.imagePullSecret}}

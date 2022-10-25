@@ -3,13 +3,13 @@
 
 use crate::{HashReader, MerkleAccumulator, MerkleAccumulatorView};
 use anyhow::{ensure, format_err, Result};
-use aptos_crypto::hash::{HashValue, TestOnlyHasher, ACCUMULATOR_PLACEHOLDER_HASH};
-use aptos_types::proof::{definition::LeafCount, position::Position};
+use pont_crypto::hash::{HashValue, TestOnlyHasher, ACCUMULATOR_PLACEHOLDER_HASH};
+use pont_types::proof::{definition::LeafCount, position::Position};
 use proptest::{collection::vec, prelude::*};
 use std::collections::HashMap;
 
 pub(crate) type InMemoryAccumulator =
-    aptos_types::proof::accumulator::InMemoryAccumulator<TestOnlyHasher>;
+    pont_types::proof::accumulator::InMemoryAccumulator<TestOnlyHasher>;
 pub(crate) type TestAccumulator = MerkleAccumulator<MockHashStore, TestOnlyHasher>;
 
 pub(crate) struct MockHashStore {

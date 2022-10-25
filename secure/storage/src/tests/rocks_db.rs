@@ -5,7 +5,7 @@ use crate::rocks_db::database_schema::{SecureStorageKey, SecureStorageSchema, Se
 use crate::rocks_db::RocksDbStorage;
 use crate::tests::suite;
 use crate::{GetResponse, Storage};
-use aptos_temppath::TempPath;
+use pont_temppath::TempPath;
 use schemadb::schema::fuzzing::assert_encode_decode;
 
 #[test]

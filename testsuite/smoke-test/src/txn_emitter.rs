@@ -1,12 +1,12 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::smoke_test_environment::new_local_swarm_with_aptos;
+use crate::smoke_test_environment::new_local_swarm_with_pont;
 use anyhow::ensure;
-use aptos_sdk::{transaction_builder::TransactionFactory, types::PeerId};
 use forge::{
     EmitJobMode, EmitJobRequest, NodeExt, Result, Swarm, TransactionType, TxnEmitter, TxnStats,
 };
+use pont_sdk::{transaction_builder::TransactionFactory, types::PeerId};
 use rand::{rngs::OsRng, SeedableRng};
 use std::time::Duration;
 use tokio::runtime::Builder;
@@ -49,7 +49,7 @@ pub async fn generate_traffic(
 #[ignore]
 #[tokio::test]
 async fn test_txn_emmitter() {
-    let mut swarm = new_local_swarm_with_aptos(1).await;
+    let mut swarm = new_local_swarm_with_pont(1).await;
 
     let all_validators = swarm.validators().map(|v| v.peer_id()).collect::<Vec<_>>();
 

@@ -1,0 +1,17 @@
+[package]
+name = "pont-metrics-core"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont metrics shortcuts"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+prometheus = { version = "0.13.0", default-features = false }
+
+[dev-dependencies]
+claims = "0.7"

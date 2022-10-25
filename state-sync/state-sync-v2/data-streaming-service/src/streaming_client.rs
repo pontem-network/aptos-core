@@ -3,13 +3,13 @@
 
 use crate::data_stream::DataStreamId;
 use crate::{data_notification::NotificationId, data_stream::DataStreamListener, error::Error};
-use aptos_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
 use async_trait::async_trait;
 use futures::{
     channel::{mpsc, oneshot},
     stream::FusedStream,
     SinkExt, Stream,
 };
+use pont_types::{ledger_info::LedgerInfoWithSignatures, transaction::Version};
 use std::{
     pin::Pin,
     task::{Context, Poll},
@@ -17,7 +17,7 @@ use std::{
 
 pub type Epoch = u64;
 
-/// The streaming client used by state sync to fetch data from the Aptos network
+/// The streaming client used by state sync to fetch data from the Pont network
 /// to synchronize local state.
 ///
 /// Notes:

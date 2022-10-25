@@ -8,7 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Owner 
 
-This document describes how to use [Aptos CLI](/docs/cli-tools/aptos-cli-tool/index.md) to perform owner operations during validation.
+This document describes how to use [Pont CLI](/docs/cli-tools/pont-cli-tool/index.md) to perform owner operations during validation.
 
 :::tip Petra on Chrome browser only
 The [Petra wallet extension](/docs/guides/install-petra-wallet.md) is supported only on the Chrome browser. However, the extensions for [Brave browser](https://brave.com/) and [Kiwi browser](https://kiwibrowser.com/) and [Microsoft Edge browser](https://www.microsoft.com/en-us/edge) will also work.
@@ -17,7 +17,7 @@ The [Petra wallet extension](/docs/guides/install-petra-wallet.md) is supported 
 ## Owner operations with CLI
 
 :::tip Testnet vs Mainnet
-The below CLI command examples use mainnet. See the `--rest-url` value for testnet and devnet in [Aptos Blockchain Deployments](/docs/nodes/aptos-deployments.md).
+The below CLI command examples use mainnet. See the `--rest-url` value for testnet and devnet in [Pont Blockchain Deployments](/docs/nodes/pont-deployments.md).
 :::
 
 ### Initialize CLI
@@ -25,8 +25,8 @@ The below CLI command examples use mainnet. See the `--rest-url` value for testn
 Initialize CLI with your Petra wallet private key or create new wallet. 
 
 ```bash
-aptos init --profile mainnet-owner \
-  --rest-url https://fullnode.mainnet.aptoslabs.com/v1
+pont init --profile mainnet-owner \
+  --rest-url https://fullnode.mainnet.pontlabs.com/v1
 ```
 
 You can either enter the private key from an existing wallet, or create new wallet address.
@@ -34,7 +34,7 @@ You can either enter the private key from an existing wallet, or create new wall
 ### Initialize staking pool
 
 ```bash
-aptos stake initialize-stake-owner \
+pont stake initialize-stake-owner \
   --initial-stake-amount 100000000000000 \
   --operator-address <operator-address> \
   --voter-address <voter-address> \
@@ -44,7 +44,7 @@ aptos stake initialize-stake-owner \
 ### Transfer coin between accounts
 
 ```bash
-aptos account transfer \
+pont account transfer \
   --account <operator-address> \
   --amount <amount> \
   --profile mainnet-owner
@@ -53,7 +53,7 @@ aptos account transfer \
 ### Switch operator
 
 ```bash
-aptos stake set-operator \
+pont stake set-operator \
   --operator-address <new-operator-address> \ 
   --profile mainnet-owner
 ```
@@ -61,7 +61,7 @@ aptos stake set-operator \
 ### Switch voter
 
 ```bash
-aptos stake set-delegated-voter \
+pont stake set-delegated-voter \
   --voter-address <new-voter-address> \ 
   --profile mainnet-owner
 ```
@@ -69,7 +69,7 @@ aptos stake set-delegated-voter \
 ### Add stake
 
 ```bash
-aptos stake add-stake \
+pont stake add-stake \
   --amount <amount> \
   --profile mainnet-owner
 ```
@@ -77,13 +77,13 @@ aptos stake add-stake \
 ### Increase stake lockup
 
 ```bash
-aptos stake increase-lockup --profile mainnet-owner
+pont stake increase-lockup --profile mainnet-owner
 ```
 
 ### Unlock stake
 
 ```bash
-aptos stake unlock-stake \
+pont stake unlock-stake \
   --amount <amount> \
   --profile mainnet-owner
 ```
@@ -91,7 +91,7 @@ aptos stake unlock-stake \
 ### Withdraw stake
 
 ```bash
-aptos stake withdraw-stake \
+pont stake withdraw-stake \
   --amount <amount> \
   --profile mainnet-owner
 ```

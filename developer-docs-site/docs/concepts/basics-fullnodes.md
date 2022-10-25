@@ -2,11 +2,11 @@
 title: "Fullnodes"
 slug: "basics-fullnodes"
 ---
-An Aptos node is an entity of the Aptos ecosystem that tracks the [state](/reference/glossary#state) of the Aptos blockchain. Clients interact with the blockchain via Aptos nodes. There are two types of nodes:
+An Pont node is an entity of the Pont ecosystem that tracks the [state](/reference/glossary#state) of the Pont blockchain. Clients interact with the blockchain via Pont nodes. There are two types of nodes:
 * [Validator nodes](basics-validator-nodes.md)
 * Fullnodes
 
-Each Aptos node comprises several logical components:
+Each Pont node comprises several logical components:
 * [REST service](/reference/glossary#rest-service)
 * [Mempool](basics-validator-nodes.md#mempool)
 * [Execution](basics-validator-nodes.md#execution)
@@ -14,11 +14,11 @@ Each Aptos node comprises several logical components:
 * [Storage](basics-validator-nodes.md#storage)
 * [State synchronizer](basics-validator-nodes.md#state-synchronizer)
 
-The [Aptos-core](/reference/glossary#aptos-core) software can be configured to run as a validator node or as a fullnode.
+The [Pont-core](/reference/glossary#pont-core) software can be configured to run as a validator node or as a fullnode.
 
 ## Overview
 
-Fullnodes can be run by anyone. Fullnodes re-execute all transactions in the history of the Aptos blockchain. Fullnodes replicate the entire state of the blockchain by synchronizing with upstream participants, e.g., other fullnodes or validator nodes. To verify blockchain state, fullnodes receive the set of transactions and the [accumulator hash root](/reference/glossary#accumulator-root-hash) of the ledger signed by the validators. In addition, fullnodes accept transactions submitted by Aptos clients and forward them directly (or indirectly) to validator nodes. While fullnodes and validators share the same code, fullnodes do not participate in consensus.
+Fullnodes can be run by anyone. Fullnodes re-execute all transactions in the history of the Pont blockchain. Fullnodes replicate the entire state of the blockchain by synchronizing with upstream participants, e.g., other fullnodes or validator nodes. To verify blockchain state, fullnodes receive the set of transactions and the [accumulator hash root](/reference/glossary#accumulator-root-hash) of the ledger signed by the validators. In addition, fullnodes accept transactions submitted by Pont clients and forward them directly (or indirectly) to validator nodes. While fullnodes and validators share the same code, fullnodes do not participate in consensus.
 
 Depending on the fullnode upstream, a fullnode can be called as a validator fullnode, or a public fullnode:
 * **Validator fullnode** state sync from a validator node directly.
@@ -28,7 +28,7 @@ There's no difference in their functionality, only whether their upstream node i
 
 Third-party blockchain explorers, wallets, exchanges, and DApps may run a local fullnode to:
 * Leverage the REST interface for blockchain interactions.
-* Get a consistent view of the Aptos ledger.
+* Get a consistent view of the Pont ledger.
 * Avoid rate limitations on read traffic.
 * Run custom analytics on historical data.
 * Get notifications about particular on-chain events.

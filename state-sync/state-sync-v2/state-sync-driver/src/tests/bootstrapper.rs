@@ -18,12 +18,6 @@ use crate::{
         },
     },
 };
-use aptos_config::config::BootstrappingMode;
-use aptos_data_client::GlobalDataSummary;
-use aptos_types::{
-    transaction::{TransactionOutputListWithProof, Version},
-    waypoint::Waypoint,
-};
 use claims::{assert_matches, assert_none, assert_ok};
 use data_streaming_service::{
     data_notification::{DataNotification, DataPayload},
@@ -31,6 +25,12 @@ use data_streaming_service::{
 };
 use futures::{channel::oneshot, FutureExt, SinkExt};
 use mockall::{predicate::eq, Sequence};
+use pont_config::config::BootstrappingMode;
+use pont_data_client::GlobalDataSummary;
+use pont_types::{
+    transaction::{TransactionOutputListWithProof, Version},
+    waypoint::Waypoint,
+};
 use std::sync::Arc;
 
 #[tokio::test]
@@ -951,7 +951,7 @@ fn create_bootstrapper(
     expect_reset_executor: bool,
 ) -> Bootstrapper<MockMetadataStorage, MockStorageSynchronizer, MockStreamingClient> {
     // Initialize the logger for tests
-    aptos_logger::Logger::init_for_testing();
+    pont_logger::Logger::init_for_testing();
 
     // Create the mock storage synchronizer
     let mock_storage_synchronizer = create_ready_storage_synchronizer(expect_reset_executor);
@@ -992,7 +992,7 @@ fn create_bootstrapper_with_storage(
     expect_reset_executor: bool,
 ) -> Bootstrapper<MockMetadataStorage, MockStorageSynchronizer, MockStreamingClient> {
     // Initialize the logger for tests
-    aptos_logger::Logger::init_for_testing();
+    pont_logger::Logger::init_for_testing();
 
     // Create the mock storage synchronizer
     let mock_storage_synchronizer = create_ready_storage_synchronizer(expect_reset_executor);

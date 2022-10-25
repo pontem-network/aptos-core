@@ -1,11 +1,11 @@
 [package]
-name = "aptos-node-checker"
+name = "pont-node-checker"
 version = "0.1.1"
-description = "Aptos Node Health Checker"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
+description = "Pont Node Health Checker"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
 edition = "2021"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 
@@ -29,16 +29,16 @@ thiserror = "1.0.31"
 tokio = { version = "1.21.0", features = ["full"] }
 url = { version = "2.2.2", features = ["serde"] }
 
-aptos-api = { path = "../../api" }
-aptos-config = { path = "../../config" }
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-network-checker = { path = "../../crates/aptos-network-checker" }
-aptos-rest-client = { path = "../../crates/aptos-rest-client" }
-aptos-sdk = { path = "../../sdk" }
+pont-api = { path = "../../api" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-network-checker = { path = "../../crates/pont-network-checker" }
+pont-rest-client = { path = "../../crates/pont-rest-client" }
+pont-sdk = { path = "../../sdk" }
 
 transaction-emitter-lib = { path = "../../crates/transaction-emitter-lib" }
 
 [lib]
-name = "aptos_node_checker_lib"
+name = "pont_node_checker_lib"
 path = "src/lib.rs"

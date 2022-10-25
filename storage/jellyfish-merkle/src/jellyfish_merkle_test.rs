@@ -10,9 +10,9 @@ use crate::{
         test_get_with_proof, test_get_with_proof_with_distinct_last_nibble, ValueBlob,
     },
 };
-use aptos_crypto::HashValue;
-use aptos_types::nibble::Nibble;
 use mock_tree_store::MockTreeStore;
+use pont_crypto::HashValue;
+use pont_types::nibble::Nibble;
 use proptest::{collection::hash_set, prelude::*};
 use rand::{rngs::StdRng, Rng, SeedableRng};
 use std::collections::HashMap;

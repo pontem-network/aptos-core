@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::Result;
-use aptos_logger::{prelude::*, Level, Logger};
-use aptos_push_metrics::MetricsPusher;
 use backup_cli::{
     coordinators::verify::VerifyCoordinator,
     metadata::cache::MetadataCacheOpt,
@@ -11,6 +9,8 @@ use backup_cli::{
     utils::{ConcurrentDownloadsOpt, TrustedWaypointOpt},
 };
 use clap::Parser;
+use pont_logger::{prelude::*, Level, Logger};
+use pont_push_metrics::MetricsPusher;
 
 #[derive(Parser)]
 struct Opt {

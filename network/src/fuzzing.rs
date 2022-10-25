@@ -8,9 +8,9 @@ use crate::{
     },
     testutils::fake_socket::ReadOnlyTestSocketVec,
 };
-use aptos_config::network_id::NetworkId;
-use aptos_types::chain_id::ChainId;
 use futures::executor::block_on;
+use pont_config::network_id::NetworkId;
+use pont_types::chain_id::ChainId;
 use proptest::{collection::btree_map, prelude::*};
 
 //

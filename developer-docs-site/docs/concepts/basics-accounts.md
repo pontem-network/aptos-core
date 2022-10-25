@@ -5,9 +5,9 @@ id: "basics-accounts"
 
 # Accounts
 
-An account on the Aptos blockchain contains blockchain assets. These assets, for example, coins and NFTs, are by nature scarce and must be access-controlled. Any such asset is represented in the blockchain account as a **resource**. A resource is a Move language primitive that emphasizes access control and scarcity in its representation. However, a resource can also be used to represent other on-chain capabilities, identifying information, and access control. 
+An account on the Pont blockchain contains blockchain assets. These assets, for example, coins and NFTs, are by nature scarce and must be access-controlled. Any such asset is represented in the blockchain account as a **resource**. A resource is a Move language primitive that emphasizes access control and scarcity in its representation. However, a resource can also be used to represent other on-chain capabilities, identifying information, and access control. 
 
-Each account on the Aptos blockchain is identified by a 32-byte account address. An account can store data and it stores this data in resources. The initial resource is the account data itself (authentication key and sequence number). Additional resources like currency or NFTs are added after creating the account. 
+Each account on the Pont blockchain is identified by a 32-byte account address. An account can store data and it stores this data in resources. The initial resource is the account data itself (authentication key and sequence number). Additional resources like currency or NFTs are added after creating the account. 
 
 :::tip Account address example
 Account addresses are 32-bytes. They are usually shown as 64 hex characters, with each hex character a nibble. See the [Your First Transaction](/tutorials/first-transaction.md#output) for an example of how an address looks like, reproduced below:
@@ -19,7 +19,7 @@ Bob: 19aadeca9388e009d136245b9a67423f3eee242b03142849eb4f81a4a409e59c
 
 ## Creating an account
 
-When a user requests to create an account, for example by using the [Aptos SDK](https://aptos-labs.github.io/ts-sdk-doc/classes/AptosAccount.html), the following cryptographic steps are executed:
+When a user requests to create an account, for example by using the [Pont SDK](https://aptos-labs.github.io/ts-sdk-doc/classes/PontAccount.html), the following cryptographic steps are executed:
 
 - Start by generating a new private key, public key pair.
 - From the user get the preferred signature scheme for the account: If the account should use a single signature or if it should require multiple signatures for signing a transaction. 
@@ -33,7 +33,7 @@ From now on, the user should use the private key for signing the transactions wi
 
 The sequence number for an account indicates the number of transactions that have been submitted and committed on chain from that account. It is incremented every time a transaction sent from that account is executed or aborted and stored in the blockchain.
 
-Every transaction submitted must contain the current sequence number for the sender account. When the Aptos blockchain processes the transaction, it looks at the sequence number in the transaction and compares it with the sequence number in the account (as stored on the blockchain at the current ledger version). The transaction is executed only if the sequence number in the transaction is the same as the sequence number for the sender account, and rejects if they do not match. In this way past transactions, which necessarily contain older sequence numbers, cannot be replayed, hence preventing replay attacks. 
+Every transaction submitted must contain the current sequence number for the sender account. When the Pont blockchain processes the transaction, it looks at the sequence number in the transaction and compares it with the sequence number in the account (as stored on the blockchain at the current ledger version). The transaction is executed only if the sequence number in the transaction is the same as the sequence number for the sender account, and rejects if they do not match. In this way past transactions, which necessarily contain older sequence numbers, cannot be replayed, hence preventing replay attacks. 
 
 These transactions will be held in mempool until they are the next sequence number for that account (or until they expire). When the transaction is applied, the sequence number of the account will be incremented by 1. The account has a strictly increasing sequence number.
 
@@ -45,13 +45,13 @@ However, the authentication key may subsequently change, for example, when you g
 
 ## Signature schemes
 
-An account can send transactions. The Aptos blockchain supports the following signature schemes: 
+An account can send transactions. The Pont blockchain supports the following signature schemes: 
 
 1. The [Ed25519](https://ed25519.cr.yp.to/) for single signature transactions, and
 2. The MultiEd25519, for multi-signature transactions. 
 
 :::note
-The Aptos blockchain defaults to single signature transactions.
+The Pont blockchain defaults to single signature transactions.
 :::
 
 ## Signature scheme identifiers
@@ -65,7 +65,7 @@ Generating the authentication key for an account requires that you provide one o
 
 To generate an authentication key and the account address for a single signature account:
 
-1. **Generate a key-pair**: Generate a fresh key-pair (`privkey_A`, `pubkey_A`). The Aptos blockchain uses the PureEdDSA scheme over the Ed25519 curve, as defined in RFC 8032.
+1. **Generate a key-pair**: Generate a fresh key-pair (`privkey_A`, `pubkey_A`). The Pont blockchain uses the PureEdDSA scheme over the Ed25519 curve, as defined in RFC 8032.
 2. **Derive a 32-byte authentication key**: Derive a 32-byte authentication key from the `pubkey_A`:
      ```
      auth_key = sha3-256(pubkey_A | 0x00)
@@ -88,13 +88,13 @@ To generate a K-of-N multisig account's authentication key and the account addre
     The `0x01` is the 1-byte multisig scheme identifier.
 4. Use this initial authentication key as the permanent account address.
 
-:::tip Accounts on Aptos Testnet
-In order to create accounts, the Aptos testnet requires the account's public key and an amount of `Coin<TestCoin>` to add to that account, resulting in the creation of a new account with those two resources.
+:::tip Accounts on Pont Testnet
+In order to create accounts, the Pont testnet requires the account's public key and an amount of `Coin<TestCoin>` to add to that account, resulting in the creation of a new account with those two resources.
 :::
 
 ## Access control with signer
 
-The sender of a transaction is represented by a signer. When a function in a Move module takes `signer` as an argument, then the Aptos Move VM translates the identity of the account that signed the transaction into a signer in a Move module entry point. See the below Move example code with `signer` in the `initialize` and `withdraw` functions. When a `signer` is not specified in a function, for example, the below `deposit` function, then no access controls exist for this function:
+The sender of a transaction is represented by a signer. When a function in a Move module takes `signer` as an argument, then the Pont Move VM translates the identity of the account that signed the transaction into a signer in a Move module entry point. See the below Move example code with `signer` in the `initialize` and `withdraw` functions. When a `signer` is not specified in a function, for example, the below `deposit` function, then no access controls exist for this function:
 
 ```rust
 module Test::Coin {
@@ -122,5 +122,5 @@ module Test::Coin {
 
 The state of each account comprises both the code (Move modules) and the data (Move resources). An account may contain an arbitrary number of Move modules and Move resources:
 
-- **Move modules**: Move modules contain code, for example, type and procedure declarations, but they do not contain data. A Move module encodes the rules for updating the Aptos blockchain's global state.
-- **Move resources**: Move resources contain data but no code. Every resource value has a type that is declared in a module published in the Aptos blockchain's distributed database.
+- **Move modules**: Move modules contain code, for example, type and procedure declarations, but they do not contain data. A Move module encodes the rules for updating the Pont blockchain's global state.
+- **Move resources**: Move resources contain data but no code. Every resource value has a type that is declared in a module published in the Pont blockchain's distributed database.

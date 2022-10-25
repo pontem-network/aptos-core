@@ -8,8 +8,8 @@ use crate::{
     counters,
     logging::{LogEntry, LogSchema},
 };
-use aptos_logger::prelude::*;
-use aptos_types::account_address::AccountAddress;
+use pont_logger::prelude::*;
+use pont_types::account_address::AccountAddress;
 use rand::seq::SliceRandom;
 use std::{
     cmp::Ordering,

@@ -14,10 +14,10 @@ use crate::{
     runner::Runner,
 };
 use anyhow::anyhow;
-use aptos_crypto::x25519;
-use aptos_crypto::ValidCryptoMaterialStringExt;
 use poem::{http::StatusCode, Error as PoemError, Result as PoemResult};
 use poem_openapi::{param::Query, payload::Json, Object as PoemObject, OpenApi, OpenApiService};
+use pont_crypto::x25519;
+use pont_crypto::ValidCryptoMaterialStringExt;
 use url::Url;
 
 pub struct PreconfiguredNode<M: MetricCollector> {
@@ -252,5 +252,5 @@ pub fn build_openapi_service<M: MetricCollector, R: Runner>(
     let url: Url = server_args
         .try_into()
         .expect("Failed to parse listen address");
-    OpenApiService::new(api, "Aptos Node Checker", version).server(url)
+    OpenApiService::new(api, "Pont Node Checker", version).server(url)
 }

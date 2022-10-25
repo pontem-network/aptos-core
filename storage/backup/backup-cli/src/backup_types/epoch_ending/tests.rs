@@ -15,16 +15,16 @@ use crate::{
         ConcurrentDownloadsOpt, GlobalBackupOpt, GlobalRestoreOpt, RocksdbOpt, TrustedWaypointOpt,
     },
 };
-use aptos_config::utils::get_available_port;
-use aptos_temppath::TempPath;
-use aptos_types::aggregate_signature::AggregateSignature;
-use aptos_types::{
+use backup_service::start_backup_service;
+use pont_config::utils::get_available_port;
+use pont_temppath::TempPath;
+use pont_types::aggregate_signature::AggregateSignature;
+use pont_types::{
     ledger_info::LedgerInfoWithSignatures,
     proptest_types::{AccountInfoUniverse, LedgerInfoWithSignaturesGen},
     waypoint::Waypoint,
 };
-use aptosdb::AptosDB;
-use backup_service::start_backup_service;
+use pontdb::PontDB;
 use proptest::{collection::vec, prelude::*};
 use std::{
     convert::TryInto,
@@ -105,7 +105,7 @@ fn end_to_end() {
         .map(|li| li.ledger_info().next_block_epoch())
         .unwrap_or(0);
 
-    let tgt_db = AptosDB::new_for_test(&tgt_db_dir);
+    let tgt_db = PontDB::new_for_test(&tgt_db_dir);
     assert_eq!(
         tgt_db
             .get_epoch_ending_ledger_infos(0, target_version_next_block_epoch)

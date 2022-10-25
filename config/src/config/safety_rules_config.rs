@@ -5,8 +5,8 @@ use crate::{
     config::{IdentityBlob, LoggerConfig, SecureBackend, WaypointConfig},
     keys::ConfigKey,
 };
-use aptos_crypto::{bls12381, Uniform};
-use aptos_types::{network_address::NetworkAddress, waypoint::Waypoint, PeerId};
+use pont_crypto::{bls12381, Uniform};
+use pont_types::{network_address::NetworkAddress, waypoint::Waypoint, PeerId};
 use rand::rngs::StdRng;
 use serde::{Deserialize, Serialize};
 use std::{

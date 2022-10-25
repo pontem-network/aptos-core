@@ -1,10 +1,10 @@
 [package]
 name = "executor-test-helpers"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos executor test helpers"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont executor test helpers"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -13,19 +13,19 @@ edition = "2021"
 anyhow = "1.0.57"
 rand = "0.7.3"
 
-aptos-config = { path = "../../config" }
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-genesis = { path = "../../crates/aptos-genesis", features = ["testing"] }
-aptos-sdk = { path = "../../sdk" }
-aptos-state-view = { path = "../../storage/state-view" }
-aptos-temppath = { path = "../../crates/aptos-temppath" }
-aptos-types = { path = "../../types", features = ["fuzzing"] }
-aptos-vm = { path = "../../aptos-move/aptos-vm" }
-aptosdb = { path = "../../storage/aptosdb", features = ["fuzzing"] }
-cached-packages = { path = "../../aptos-move/framework/cached-packages" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-genesis = { path = "../../crates/pont-genesis", features = ["testing"] }
+pont-sdk = { path = "../../sdk" }
+pont-state-view = { path = "../../storage/state-view" }
+pont-temppath = { path = "../../crates/pont-temppath" }
+pont-types = { path = "../../types", features = ["fuzzing"] }
+pont-vm = { path = "../../pont-move/pont-vm" }
+pontdb = { path = "../../storage/pontdb", features = ["fuzzing"] }
+cached-packages = { path = "../../pont-move/framework/cached-packages" }
 consensus-types = { path = "../../consensus/consensus-types" }
 executor = { path = "../executor" }
 executor-types = { path = "../executor-types" }
-move-deps = { path = "../../aptos-move/move-deps", features = ["address32"] }
+move-deps = { path = "../../pont-move/move-deps", features = ["address32"] }
 storage-interface = { path = "../../storage/storage-interface" }
-vm-genesis = { path = "../../aptos-move/vm-genesis" }
+vm-genesis = { path = "../../pont-move/vm-genesis" }

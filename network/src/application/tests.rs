@@ -10,8 +10,8 @@ use crate::{
     protocols::health_checker::HealthCheckerMsg,
     transport::ConnectionMetadata,
 };
-use aptos_config::network_id::{NetworkId, PeerNetworkId};
-use aptos_types::PeerId;
+use pont_config::network_id::{NetworkId, PeerNetworkId};
+use pont_types::PeerId;
 use std::{collections::hash_map::Entry, sync::Arc};
 
 #[derive(Clone)]

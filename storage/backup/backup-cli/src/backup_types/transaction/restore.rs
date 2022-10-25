@@ -21,16 +21,6 @@ use crate::{
     },
 };
 use anyhow::{anyhow, ensure, Result};
-use aptos_logger::prelude::*;
-use aptos_types::write_set::WriteSet;
-use aptos_types::{
-    contract_event::ContractEvent,
-    ledger_info::LedgerInfoWithSignatures,
-    proof::{TransactionAccumulatorRangeProof, TransactionInfoListWithProof},
-    transaction::{Transaction, TransactionInfo, TransactionListWithProof, Version},
-};
-use aptos_vm::AptosVM;
-use aptosdb::backup::restore_handler::RestoreHandler;
 use clap::Parser;
 use executor::chunk_executor::ChunkExecutor;
 use executor_types::TransactionReplayer;
@@ -42,6 +32,16 @@ use futures::{
     StreamExt,
 };
 use itertools::zip_eq;
+use pont_logger::prelude::*;
+use pont_types::write_set::WriteSet;
+use pont_types::{
+    contract_event::ContractEvent,
+    ledger_info::LedgerInfoWithSignatures,
+    proof::{TransactionAccumulatorRangeProof, TransactionInfoListWithProof},
+    transaction::{Transaction, TransactionInfo, TransactionListWithProof, Version},
+};
+use pont_vm::PontVM;
+use pontdb::backup::restore_handler::RestoreHandler;
 use std::{
     cmp::{max, min},
     pin::Pin,
@@ -225,7 +225,7 @@ impl TransactionRestoreBatchController {
             .await?;
 
         if let RestoreRunMode::Restore { restore_handler } = self.global_opt.run_mode.as_ref() {
-            AptosVM::set_concurrency_level_once(self.global_opt.replay_concurrency_level);
+            PontVM::set_concurrency_level_once(self.global_opt.replay_concurrency_level);
             let txns_to_execute_stream = self
                 .save_before_replay_version(first_version, loaded_chunk_stream, restore_handler)
                 .await?;
@@ -427,8 +427,8 @@ impl TransactionRestoreBatchController {
         let first_version = self.replay_from_version.unwrap();
         restore_handler.reset_state_store();
         let replay_start = Instant::now();
-        let db = DbReaderWriter::from_arc(Arc::clone(&restore_handler.aptosdb));
-        let chunk_replayer = Arc::new(ChunkExecutor::<AptosVM>::new(db));
+        let db = DbReaderWriter::from_arc(Arc::clone(&restore_handler.pontdb));
+        let chunk_replayer = Arc::new(ChunkExecutor::<PontVM>::new(db));
 
         let db_commit_stream = txns_to_execute_stream
             .try_chunks(BATCH_SIZE)

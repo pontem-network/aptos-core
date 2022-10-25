@@ -3,7 +3,7 @@ chain:
   name: testnet
   # -- Internal: Bump this number to wipe the underlying storage
   era: 1
-  # -- Aptos Chain ID
+  # -- Pont Chain ID
   chain_id: 4
   # -- If true, genesis will create a resources account that can mint coins.
   is_test: true
@@ -38,19 +38,19 @@ imageTag: testnet
 genesis:
   image:
     # -- Image repo to use for tools image for running genesis
-    repo: aptoslabs/tools
+    repo: pontlabs/tools
     # -- Image tag to use for tools image. If set, overrides `imageTag`
     tag:
     # -- Image pull policy to use for tools image
     pullPolicy: IfNotPresent
   # -- Number of validators to include in genesis
   numValidators: 1
-  # -- If `enable_onchain_discovery` is false, use this kubernetes service name prefix. It should be the fullname for the aptos-node helm release
-  username_prefix: aptos-node
+  # -- If `enable_onchain_discovery` is false, use this kubernetes service name prefix. It should be the fullname for the pont-node helm release
+  username_prefix: pont-node
   # -- If set, the base domain name of the fullnode and validator endpoints
   domain:
   validator:
-    # -- Use External DNS as created by aptos-node helm chart for validator host in genesis
+    # -- Use External DNS as created by pont-node helm chart for validator host in genesis
     enable_onchain_discovery: false
     # -- If `enable_onchain_discovery` is false, use this host suffix for internal kubernetes service name
     internal_host_suffix: validator-lb
@@ -63,12 +63,12 @@ genesis:
     # -- Random seed to generate validator keys in order to make the key generation deterministic
     key_seed:
   fullnode:
-    # -- Use External DNS as created by aptos-node helm chart for fullnode host in genesis
+    # -- Use External DNS as created by pont-node helm chart for fullnode host in genesis
     enable_onchain_discovery: true
     # -- If `enable_onchain_discovery` is false, use this host suffix for internal kubernetes service name
     internal_host_suffix: fullnode-lb
-  # -- The local path for move modules in the docker image. Defaults to the aptos-framework in the aptoslabs/tools docker image
-  moveModulesDir: /aptos-framework/move/modules
+  # -- The local path for move modules in the docker image. Defaults to the pont-framework in the pontlabs/tools docker image
+  moveModulesDir: /pont-framework/move/modules
 
 serviceAccount:
   # -- Specifies whether a service account should be created

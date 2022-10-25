@@ -3,13 +3,13 @@ title: "Telemetry"
 slug: "telemetry"
 ---
 
-At Aptos Labs, we develop software and services for the greater Aptos community and ecosystem. On top of community feedback, we use telemetry to help improve the decentralization of the network by understanding how our software is being deployed and run.
+At Pont Labs, we develop software and services for the greater Pont community and ecosystem. On top of community feedback, we use telemetry to help improve the decentralization of the network by understanding how our software is being deployed and run.
 
-The Aptos node binary collects telemetry such as software version, operating system information, and IP address. See [Types of information collected](#types-of-information-collected).
+The Pont node binary collects telemetry such as software version, operating system information, and IP address. See [Types of information collected](#types-of-information-collected).
 
-The Aptos node binary does **not** collect personal information such as usernames or email addresses.
+The Pont node binary does **not** collect personal information such as usernames or email addresses.
 
-Users can disable telemetry at any point. If telemetry remains enabled, Aptos node binary will send telemetry data in the background.
+Users can disable telemetry at any point. If telemetry remains enabled, Pont node binary will send telemetry data in the background.
 
 # Disabling telemetry
 
@@ -28,7 +28,7 @@ source ~/.profile
 
 # Types of information collected
 
-* **Aptos node information**, e.g., public IP address and core metrics (including node type, synced version and number of network connections).
-* **Aptos tooling usage**, e.g., the commands and subcommands run by the Aptos CLI tool.
+* **Pont node information**, e.g., public IP address and core metrics (including node type, synced version and number of network connections).
+* **Pont tooling usage**, e.g., the commands and subcommands run by the Pont CLI tool.
 * **Rust build information**, e.g., the rust version, cargo version, build target architecture and build tag.
 * **System information**, e.g., operating system information (including versions), hardware information and resource utilization (including CPU, memory and disk).

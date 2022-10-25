@@ -9,7 +9,7 @@ use crate::{
         Script, SignedTransaction, Transaction, TransactionPayload,
     },
 };
-use aptos_crypto::{ed25519::*, traits::*, HashValue};
+use pont_crypto::{ed25519::*, traits::*, HashValue};
 
 const MAX_GAS_AMOUNT: u64 = 1_000_000;
 const TEST_GAS_PRICE: u64 = 100;

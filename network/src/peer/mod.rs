@@ -33,13 +33,8 @@ use crate::{
     transport::{self, Connection, ConnectionMetadata},
     ProtocolId,
 };
-use aptos_config::network_id::NetworkContext;
-use aptos_logger::prelude::*;
-use aptos_rate_limiter::rate_limit::SharedBucket;
-use aptos_time_service::{TimeService, TimeServiceTrait};
-use aptos_types::PeerId;
 use bytes::Bytes;
-use channel::aptos_channel;
+use channel::pont_channel;
 use futures::{
     self,
     channel::oneshot,
@@ -48,6 +43,11 @@ use futures::{
     SinkExt,
 };
 use futures_util::stream::select;
+use pont_config::network_id::NetworkContext;
+use pont_logger::prelude::*;
+use pont_rate_limiter::rate_limit::SharedBucket;
+use pont_time_service::{TimeService, TimeServiceTrait};
+use pont_types::PeerId;
 use serde::Serialize;
 use short_hex_str::AsShortHexStr;
 use std::{fmt, panic, time::Duration};
@@ -123,9 +123,9 @@ pub struct Peer<TSocket> {
     /// Channel to notify PeerManager that we've disconnected.
     connection_notifs_tx: channel::Sender<TransportNotification<TSocket>>,
     /// Channel to receive requests from PeerManager to send messages and rpcs.
-    peer_reqs_rx: aptos_channel::Receiver<ProtocolId, PeerRequest>,
+    peer_reqs_rx: pont_channel::Receiver<ProtocolId, PeerRequest>,
     /// Channel to notifty PeerManager of new inbound messages and rpcs.
-    peer_notifs_tx: aptos_channel::Sender<ProtocolId, PeerNotification>,
+    peer_notifs_tx: pont_channel::Sender<ProtocolId, PeerNotification>,
     /// Inbound rpc request queue for handling requests from remote peer.
     inbound_rpcs: InboundRpcs,
     /// Outbound rpc request queue for sending requests to remote peer and handling responses.
@@ -155,8 +155,8 @@ where
         time_service: TimeService,
         connection: Connection<TSocket>,
         connection_notifs_tx: channel::Sender<TransportNotification<TSocket>>,
-        peer_reqs_rx: aptos_channel::Receiver<ProtocolId, PeerRequest>,
-        peer_notifs_tx: aptos_channel::Sender<ProtocolId, PeerNotification>,
+        peer_reqs_rx: pont_channel::Receiver<ProtocolId, PeerRequest>,
+        peer_notifs_tx: pont_channel::Sender<ProtocolId, PeerNotification>,
         inbound_rpc_timeout: Duration,
         max_concurrent_inbound_rpcs: u32,
         max_concurrent_outbound_rpcs: u32,

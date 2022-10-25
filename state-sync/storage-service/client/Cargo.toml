@@ -1,10 +1,10 @@
 [package]
 name = "storage-service-client"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "The Aptos storage service (client-side)"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "The Pont storage service (client-side)"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -13,8 +13,8 @@ edition = "2021"
 async-trait = "0.1.53"
 thiserror = "1.0.31"
 
-aptos-config = { path = "../../../config" }
-aptos-types = { path = "../../../types" }
+pont-config = { path = "../../../config" }
+pont-types = { path = "../../../types" }
 
 channel = { path = "../../../crates/channel" }
 network = { path = "../../../network" }

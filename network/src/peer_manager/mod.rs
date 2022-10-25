@@ -21,12 +21,7 @@ use crate::{
     },
     ProtocolId,
 };
-use aptos_config::network_id::NetworkContext;
-use aptos_logger::prelude::*;
-use aptos_rate_limiter::rate_limit::TokenBucketRateLimiter;
-use aptos_time_service::{TimeService, TimeServiceTrait};
-use aptos_types::{network_address::NetworkAddress, PeerId};
-use channel::{self, aptos_channel, message_queues::QueueStyle};
+use channel::{self, message_queues::QueueStyle, pont_channel};
 use futures::{
     channel::oneshot,
     io::{AsyncRead, AsyncWrite, AsyncWriteExt},
@@ -34,6 +29,11 @@ use futures::{
     stream::StreamExt,
 };
 use netcore::transport::{ConnectionOrigin, Transport};
+use pont_config::network_id::NetworkContext;
+use pont_logger::prelude::*;
+use pont_rate_limiter::rate_limit::TokenBucketRateLimiter;
+use pont_time_service::{TimeService, TimeServiceTrait};
+use pont_types::{network_address::NetworkAddress, PeerId};
 use short_hex_str::AsShortHexStr;
 use std::{
     collections::{hash_map::Entry, HashMap},
@@ -59,8 +59,8 @@ use crate::{
     peer_manager::transport::{TransportHandler, TransportRequest},
     protocols::network::SerializedRequest,
 };
-use aptos_config::config::{PeerRole, PeerSet};
-use aptos_infallible::RwLock;
+use pont_config::config::{PeerRole, PeerSet};
+use pont_infallible::RwLock;
 pub use senders::*;
 pub use types::*;
 
@@ -86,7 +86,7 @@ where
         PeerId,
         (
             ConnectionMetadata,
-            aptos_channel::Sender<ProtocolId, PeerRequest>,
+            pont_channel::Sender<ProtocolId, PeerRequest>,
         ),
     >,
     /// Shared metadata storage about peers
@@ -94,11 +94,11 @@ where
     /// Known trusted peers from discovery
     trusted_peers: Arc<RwLock<PeerSet>>,
     /// Channel to receive requests from other actors.
-    requests_rx: aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
+    requests_rx: pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
     /// Upstream handlers for RPC and DirectSend protocols. The handlers are promised fair delivery
     /// of messages across (PeerId, ProtocolId).
     upstream_handlers:
-        HashMap<ProtocolId, aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>>,
+        HashMap<ProtocolId, pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>>,
     /// Channels to send NewPeer/LostPeer notifications to.
     connection_event_handlers: Vec<conn_notifs_channel::Sender>,
     /// Channel used to send Dial requests to the ConnectionHandler actor
@@ -106,7 +106,7 @@ where
     /// Sender for connection events.
     transport_notifs_tx: channel::Sender<TransportNotification<TSocket>>,
     /// Receiver for connection requests.
-    connection_reqs_rx: aptos_channel::Receiver<PeerId, ConnectionRequest>,
+    connection_reqs_rx: pont_channel::Receiver<PeerId, ConnectionRequest>,
     /// Receiver for connection events.
     transport_notifs_rx: channel::Receiver<TransportNotification<TSocket>>,
     /// A map of outstanding disconnect requests.
@@ -145,11 +145,11 @@ where
         listen_addr: NetworkAddress,
         peer_metadata_storage: Arc<PeerMetadataStorage>,
         trusted_peers: Arc<RwLock<PeerSet>>,
-        requests_rx: aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
-        connection_reqs_rx: aptos_channel::Receiver<PeerId, ConnectionRequest>,
+        requests_rx: pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerRequest>,
+        connection_reqs_rx: pont_channel::Receiver<PeerId, ConnectionRequest>,
         upstream_handlers: HashMap<
             ProtocolId,
-            aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
+            pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
         >,
         connection_event_handlers: Vec<conn_notifs_channel::Sender>,
         channel_size: usize,
@@ -365,7 +365,7 @@ where
                 self.update_connected_peers_metrics();
             }
             TransportNotification::Disconnected(lost_conn_metadata, reason) => {
-                // See: https://github.com/aptos-labs/aptos-core/issues/3128#issuecomment-605351504 for
+                // See: https://github.com/aptos-labs/pont-core/issues/3128#issuecomment-605351504 for
                 // detailed reasoning on `Disconnected` events should be handled correctly.
                 info!(
                     NetworkSchema::new(&self.network_context)
@@ -663,13 +663,13 @@ where
         let outbound_rate_limiter = self.outbound_rate_limiters.bucket(ip_addr);
 
         // TODO: Add label for peer.
-        let (peer_reqs_tx, peer_reqs_rx) = aptos_channel::new(
+        let (peer_reqs_tx, peer_reqs_rx) = pont_channel::new(
             QueueStyle::FIFO,
             self.channel_size,
             Some(&counters::PENDING_NETWORK_REQUESTS),
         );
         // TODO: Add label for peer.
-        let (peer_notifs_tx, peer_notifs_rx) = aptos_channel::new(
+        let (peer_notifs_tx, peer_notifs_rx) = pont_channel::new(
             QueueStyle::FIFO,
             self.channel_size,
             Some(&counters::PENDING_NETWORK_NOTIFICATIONS),
@@ -731,7 +731,7 @@ where
     fn spawn_peer_network_events_handler(
         &self,
         peer_id: PeerId,
-        network_events: aptos_channel::Receiver<ProtocolId, PeerNotification>,
+        network_events: pont_channel::Receiver<ProtocolId, PeerNotification>,
     ) {
         let mut upstream_handlers = self.upstream_handlers.clone();
         let network_context = self.network_context;
@@ -757,7 +757,7 @@ fn handle_inbound_request(
     peer_id: PeerId,
     upstream_handlers: &mut HashMap<
         ProtocolId,
-        aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
+        pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
     >,
 ) {
     let (protocol_id, notification) = match inbound_event {
@@ -772,7 +772,7 @@ fn handle_inbound_request(
     };
 
     if let Some(handler) = upstream_handlers.get_mut(&protocol_id) {
-        // Send over aptos channel for fairness.
+        // Send over pont channel for fairness.
         if let Err(err) = handler.push((peer_id, protocol_id), notification) {
             warn!(
                 NetworkSchema::new(&network_context),

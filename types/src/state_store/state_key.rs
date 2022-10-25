@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{access_path::AccessPath, state_store::table::TableHandle};
-use aptos_crypto::{
+use num_derive::{FromPrimitive, ToPrimitive};
+use num_traits::FromPrimitive;
+use pont_crypto::{
     hash::{CryptoHash, CryptoHasher},
     HashValue,
 };
-use aptos_crypto_derive::CryptoHasher;
-use num_derive::{FromPrimitive, ToPrimitive};
-use num_traits::FromPrimitive;
+use pont_crypto_derive::CryptoHasher;
 use serde::{Deserialize, Serialize};
 use std::convert::TryInto;
 use thiserror::Error;

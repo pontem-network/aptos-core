@@ -8,10 +8,6 @@ use crate::{
         build_empty_tree, build_simple_tree, consensus_runtime, timed_block_on, TreeInserter,
     },
 };
-use aptos_crypto::{HashValue, PrivateKey};
-use aptos_types::{
-    validator_signer::ValidatorSigner, validator_verifier::random_validator_verifier,
-};
 use consensus_types::{
     block::{
         block_test_utils::{
@@ -23,6 +19,10 @@ use consensus_types::{
     common::{Author, Payload},
     vote::Vote,
     vote_data::VoteData,
+};
+use pont_crypto::{HashValue, PrivateKey};
+use pont_types::{
+    validator_signer::ValidatorSigner, validator_verifier::random_validator_verifier,
 };
 use proptest::prelude::*;
 use std::{cmp::min, collections::HashSet};
@@ -270,7 +270,7 @@ async fn test_path_from_root() {
 
 #[tokio::test]
 async fn test_insert_vote() {
-    ::aptos_logger::Logger::init_for_testing();
+    ::pont_logger::Logger::init_for_testing();
     // Set up enough different authors to support different votes for the same block.
     let (signers, validator_verifier) = random_validator_verifier(11, Some(10), false);
     let my_signer = signers[10].clone();

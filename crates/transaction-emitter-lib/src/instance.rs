@@ -1,7 +1,7 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_rest_client::Client as RestClient;
+use pont_rest_client::Client as RestClient;
 use reqwest::Url;
 use std::fmt;
 

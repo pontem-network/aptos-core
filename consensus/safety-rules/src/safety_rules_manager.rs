@@ -10,9 +10,9 @@ use crate::{
     thread::ThreadService,
     SafetyRules, TSafetyRules,
 };
-use aptos_config::config::{InitialSafetyRulesConfig, SafetyRulesConfig, SafetyRulesService};
-use aptos_infallible::RwLock;
-use aptos_secure_storage::{KVStorage, Storage};
+use pont_config::config::{InitialSafetyRulesConfig, SafetyRulesConfig, SafetyRulesService};
+use pont_infallible::RwLock;
+use pont_secure_storage::{KVStorage, Storage};
 use std::{convert::TryInto, net::SocketAddr, sync::Arc};
 
 pub fn storage(config: &SafetyRulesConfig) -> PersistentSafetyStorage {

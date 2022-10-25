@@ -1,10 +1,10 @@
 [package]
 name = "safety-rules"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos safety rules"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont safety rules"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -17,18 +17,18 @@ serde = { version = "1.0.137", default-features = false }
 serde_json = "1.0.81"
 thiserror = "1.0.31"
 
-aptos-config = { path = "../../config" }
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-global-constants = { path = "../../config/global-constants" }
-aptos-infallible = { path = "../../crates/aptos-infallible" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-metrics-core = { path = "../../crates/aptos-metrics-core" }
-aptos-proptest-helpers = { path = "../../crates/aptos-proptest-helpers", optional = true }
-aptos-secure-net = { path = "../../secure/net" }
-aptos-secure-storage = { path = "../../secure/storage" }
-aptos-temppath = { path = "../../crates/aptos-temppath" }
-aptos-types = { path = "../../types" }
-aptos-vault-client = { path = "../../secure/storage/vault" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-global-constants = { path = "../../config/global-constants" }
+pont-infallible = { path = "../../crates/pont-infallible" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-metrics-core = { path = "../../crates/pont-metrics-core" }
+pont-proptest-helpers = { path = "../../crates/pont-proptest-helpers", optional = true }
+pont-secure-net = { path = "../../secure/net" }
+pont-secure-storage = { path = "../../secure/storage" }
+pont-temppath = { path = "../../crates/pont-temppath" }
+pont-types = { path = "../../types" }
+pont-vault-client = { path = "../../secure/storage/vault" }
 consensus-types = { path = "../consensus-types" }
 
 [dev-dependencies]
@@ -37,9 +37,9 @@ proptest = "1.0.0"
 rusty-fork = "0.3.0"
 tempfile = "3.3.0"
 
-aptos-config = { path = "../../config", features = ["fuzzing"] }
-aptos-proptest-helpers = { path = "../../crates/aptos-proptest-helpers" }
-aptos-secure-storage = { path = "../../secure/storage", features = ["testing"] }
+pont-config = { path = "../../config", features = ["fuzzing"] }
+pont-proptest-helpers = { path = "../../crates/pont-proptest-helpers" }
+pont-secure-storage = { path = "../../secure/storage", features = ["testing"] }
 consensus-types = { path = "../consensus-types", features = ["fuzzing"] }
 
 [[bench]]
@@ -49,5 +49,5 @@ required-features = ["testing"]
 
 [features]
 default = []
-fuzzing = ["consensus-types/fuzzing", "aptos-config/fuzzing", "proptest", "aptos-proptest-helpers"]
-testing = ["aptos-secure-storage/testing"]
+fuzzing = ["consensus-types/fuzzing", "pont-config/fuzzing", "proptest", "pont-proptest-helpers"]
+testing = ["pont-secure-storage/testing"]

@@ -3,15 +3,15 @@
 
 use crate::{consensusdb::ConsensusDB, epoch_manager::LivenessStorageData, error::DbError};
 use anyhow::{format_err, Context, Result};
-use aptos_config::config::NodeConfig;
-use aptos_crypto::HashValue;
-use aptos_logger::prelude::*;
-use aptos_types::{
-    block_info::Round, epoch_change::EpochChangeProof, ledger_info::LedgerInfoWithSignatures,
-    proof::TransactionAccumulatorSummary, transaction::Version,
-};
 use consensus_types::{
     block::Block, quorum_cert::QuorumCert, timeout_2chain::TwoChainTimeoutCertificate, vote::Vote,
+};
+use pont_config::config::NodeConfig;
+use pont_crypto::HashValue;
+use pont_logger::prelude::*;
+use pont_types::{
+    block_info::Round, epoch_change::EpochChangeProof, ledger_info::LedgerInfoWithSignatures,
+    proof::TransactionAccumulatorSummary, transaction::Version,
 };
 use std::{cmp::max, collections::HashSet, sync::Arc};
 use storage_interface::DbReader;
@@ -48,8 +48,8 @@ pub trait PersistentLivenessStorage: Send + Sync {
     /// ValidatorVerifier.
     fn retrieve_epoch_change_proof(&self, version: u64) -> Result<EpochChangeProof>;
 
-    /// Returns a handle of the aptosdb.
-    fn aptos_db(&self) -> Arc<dyn DbReader>;
+    /// Returns a handle of the pontdb.
+    fn pont_db(&self) -> Arc<dyn DbReader>;
 }
 
 #[derive(Clone)]
@@ -153,7 +153,7 @@ impl RootMetadata {
     #[cfg(any(test, feature = "fuzzing"))]
     pub fn new_empty() -> Self {
         Self {
-            accu_hash: *aptos_crypto::hash::ACCUMULATOR_PLACEHOLDER_HASH,
+            accu_hash: *pont_crypto::hash::ACCUMULATOR_PLACEHOLDER_HASH,
             frozen_root_hashes: vec![],
             num_leaves: 0,
         }
@@ -302,13 +302,13 @@ impl RecoveryData {
 /// The proxy we use to persist data in db storage service via grpc.
 pub struct StorageWriteProxy {
     db: Arc<ConsensusDB>,
-    aptos_db: Arc<dyn DbReader>,
+    pont_db: Arc<dyn DbReader>,
 }
 
 impl StorageWriteProxy {
-    pub fn new(config: &NodeConfig, aptos_db: Arc<dyn DbReader>) -> Self {
+    pub fn new(config: &NodeConfig, pont_db: Arc<dyn DbReader>) -> Self {
         let db = Arc::new(ConsensusDB::new(config.storage.dir()));
-        StorageWriteProxy { db, aptos_db }
+        StorageWriteProxy { db, pont_db }
     }
 }
 
@@ -333,7 +333,7 @@ impl PersistentLivenessStorage for StorageWriteProxy {
 
     fn recover_from_ledger(&self) -> LedgerRecoveryData {
         let latest_ledger_info = self
-            .aptos_db
+            .pont_db
             .get_latest_ledger_info()
             .expect("Failed to get latest ledger info.");
         LedgerRecoveryData::new(latest_ledger_info)
@@ -371,11 +371,11 @@ impl PersistentLivenessStorage for StorageWriteProxy {
 
         // find the block corresponding to storage latest ledger info
         let latest_ledger_info = self
-            .aptos_db
+            .pont_db
             .get_latest_ledger_info()
             .expect("Failed to get latest ledger info.");
         let accumulator_summary = self
-            .aptos_db
+            .pont_db
             .get_accumulator_summary(latest_ledger_info.ledger_info().version())
             .expect("Failed to get accumulator summary.");
         let ledger_recovery_data = LedgerRecoveryData::new(latest_ledger_info);
@@ -428,14 +428,14 @@ impl PersistentLivenessStorage for StorageWriteProxy {
 
     fn retrieve_epoch_change_proof(&self, version: u64) -> Result<EpochChangeProof> {
         let (_, proofs) = self
-            .aptos_db
+            .pont_db
             .get_state_proof(version)
             .map_err(DbError::from)?
             .into_inner();
         Ok(proofs)
     }
 
-    fn aptos_db(&self) -> Arc<dyn DbReader> {
-        self.aptos_db.clone()
+    fn pont_db(&self) -> Arc<dyn DbReader> {
+        self.pont_db.clone()
     }
 }

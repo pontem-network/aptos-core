@@ -12,15 +12,15 @@ use crate::{
     txn_notifier::MempoolNotifier,
     util::time_service::ClockTimeService,
 };
-use aptos_config::config::NodeConfig;
-use aptos_logger::prelude::*;
-use aptos_mempool::QuorumStoreRequest;
-use aptos_vm::AptosVM;
 use consensus_notifications::ConsensusNotificationSender;
 use event_notifications::ReconfigNotificationListener;
 use executor::block_executor::BlockExecutor;
 use futures::channel::mpsc;
 use network::application::storage::PeerMetadataStorage;
+use pont_config::config::NodeConfig;
+use pont_logger::prelude::*;
+use pont_mempool::QuorumStoreRequest;
+use pont_vm::PontVM;
 use std::sync::{
     atomic::{AtomicUsize, Ordering},
     Arc,
@@ -35,7 +35,7 @@ pub fn start_consensus(
     network_events: ConsensusNetworkEvents,
     state_sync_notifier: Arc<dyn ConsensusNotificationSender>,
     consensus_to_mempool_sender: mpsc::Sender<QuorumStoreRequest>,
-    aptos_db: DbReaderWriter,
+    pont_db: DbReaderWriter,
     reconfig_events: ReconfigNotificationListener,
     peer_metadata_storage: Arc<PeerMetadataStorage>,
 ) -> Runtime {
@@ -49,7 +49,7 @@ pub fn start_consensus(
         .enable_all()
         .build()
         .expect("Failed to create Tokio runtime!");
-    let storage = Arc::new(StorageWriteProxy::new(node_config, aptos_db.reader.clone()));
+    let storage = Arc::new(StorageWriteProxy::new(node_config, pont_db.reader.clone()));
     let txn_notifier = Arc::new(MempoolNotifier::new(
         consensus_to_mempool_sender.clone(),
         node_config.consensus.mempool_executed_txn_timeout_ms,
@@ -59,7 +59,7 @@ pub fn start_consensus(
     ));
 
     let state_computer = Arc::new(ExecutionProxy::new(
-        Arc::new(BlockExecutor::<AptosVM>::new(aptos_db)),
+        Arc::new(BlockExecutor::<PontVM>::new(pont_db)),
         txn_notifier,
         state_sync_notifier,
         commit_notifier.clone(),

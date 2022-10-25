@@ -23,7 +23,7 @@ use serde::{Deserialize, Serialize};
 // TODO: When we have it, switch to using a crate that unifies metric names.
 // As it is now, this metric name could change and we'd never catch it here
 // at compile time.
-const PROPOSALS_METRIC: &str = "aptos_consensus_proposals_count";
+const PROPOSALS_METRIC: &str = "pont_consensus_proposals_count";
 
 #[derive(Clone, Debug, Deserialize, Parser, PoemObject, Serialize)]
 pub struct ConsensusProposalsEvaluatorArgs {}
@@ -85,7 +85,7 @@ impl ConsensusProposalsEvaluator {
     }
 }
 
-// See https://github.com/aptos-labs/aptos-core/pull/1450 for a discussion on
+// See https://github.com/aptos-labs/pont-core/pull/1450 for a discussion on
 // how this evaluator can be improved.
 #[async_trait::async_trait]
 impl Evaluator for ConsensusProposalsEvaluator {

@@ -1,12 +1,12 @@
-# Aptos Python SDK
+# Pont Python SDK
 [![Discord][discord-image]][discord-url]
 [![PyPI Package Version][pypi-image-version]][pypi-url]
 [![PyPI Package Downloads][pypi-image-downloads]][pypi-url]
 
-You need to connect to an [Aptos](https:/github.com/aptos-labs/aptos-core/) node to use this library, or run one
+You need to connect to an [Pont](https:/github.com/aptos-labs/pont-core/) node to use this library, or run one
 yourself locally.
 
-Currently this is still in development and is unsuitable for directly interfacing with Aptos.
+Currently this is still in development and is unsuitable for directly interfacing with Pont.
 
 ## Requirements
 We use [Poetry](https://python-poetry.org/docs/#installation) for packaging and dependency management:
@@ -22,10 +22,10 @@ make test
 ```
 
 ## E2E testing
-First, run a local testnet (run this from the root of aptos-core):
+First, run a local testnet (run this from the root of pont-core):
 
 ```bash
-cargo run -p aptos -- node run-local-testnet --with-faucet --faucet-port 8081 --force-restart --assume-yes
+cargo run -p pont -- node run-local-testnet --with-faucet --faucet-port 8081 --force-restart --assume-yes
 ```
 
 Next, tell the end-to-end tests to talk to this locally running testnet:
@@ -61,15 +61,15 @@ Currently the team is moving forward with pure python, but leaves the following 
 npm install  -g @apidevtools/swagger-cli
 swagger-cli bundle --dereference ../../../api/doc/v0/openapi.yaml  -t yaml > openapi.yaml
 python3 -m openapi_python_client generate --path openapi.yaml
-mv aptos-dev-api-specification-client/aptos_dev_api_specification_client/ aptos_sdk/openapi
+mv pont-dev-api-specification-client/pont_dev_api_specification_client/ pont_sdk/openapi
 ```
 
 ## Semantic versioning
 This project follows [semver](https://semver.org/) as closely as possible
 
-[repo]: https://github.com/aptos-labs/aptos-core
-[pypi-image-version]: https://img.shields.io/pypi/v/aptos-sdk.svg
-[pypi-image-downloads]: https://img.shields.io/pypi/dm/aptos-sdk.svg
-[pypi-url]: https://pypi.org/project/aptos-sdk
+[repo]: https://github.com/aptos-labs/pont-core
+[pypi-image-version]: https://img.shields.io/pypi/v/pont-sdk.svg
+[pypi-image-downloads]: https://img.shields.io/pypi/dm/pont-sdk.svg
+[pypi-url]: https://pypi.org/project/pont-sdk
 [discord-image]: https://img.shields.io/discord/945856774056083548?label=Discord&logo=discord&style=flat~~~~
-[discord-url]: https://discord.gg/aptoslabs
+[discord-url]: https://discord.gg/pontlabs

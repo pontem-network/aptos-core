@@ -5,23 +5,23 @@ use crate::{
     protocols::wire::handshake::v1::{MessagingProtocolVersion, ProtocolId, ProtocolIdSet},
     transport::*,
 };
-use aptos_config::{
-    config::{Peer, PeerRole, PeerSet, HANDSHAKE_VERSION},
-    network_id::NetworkContext,
-};
-use aptos_crypto::{test_utils::TEST_SEED, traits::Uniform, x25519};
-use aptos_infallible::RwLock;
-use aptos_time_service::MockTimeService;
-use aptos_types::{
-    chain_id::ChainId,
-    network_address::{NetworkAddress, Protocol::*},
-    PeerId,
-};
 use bytes::{Bytes, BytesMut};
 use futures::{future, io::AsyncWriteExt, stream::StreamExt};
 use netcore::{
     framing::{read_u16frame, write_u16frame},
     transport::{memory, ConnectionOrigin, Transport},
+};
+use pont_config::{
+    config::{Peer, PeerRole, PeerSet, HANDSHAKE_VERSION},
+    network_id::NetworkContext,
+};
+use pont_crypto::{test_utils::TEST_SEED, traits::Uniform, x25519};
+use pont_infallible::RwLock;
+use pont_time_service::MockTimeService;
+use pont_types::{
+    chain_id::ChainId,
+    network_address::{NetworkAddress, Protocol::*},
+    PeerId,
 };
 use rand::{rngs::StdRng, SeedableRng};
 use std::{collections::HashMap, io, iter::FromIterator, sync::Arc};
@@ -60,8 +60,8 @@ fn setup<TTransport>(
 ) -> (
     Runtime,
     MockTimeService,
-    (PeerId, AptosNetTransport<TTransport>),
-    (PeerId, AptosNetTransport<TTransport>),
+    (PeerId, PontNetTransport<TTransport>),
+    (PeerId, PontNetTransport<TTransport>),
     Arc<RwLock<PeerSet>>,
     ProtocolIdSet,
 )
@@ -103,11 +103,11 @@ where
                 )
             }
             Auth::MaybeMutual => {
-                let listener_peer_id = aptos_types::account_address::from_identity_public_key(
+                let listener_peer_id = pont_types::account_address::from_identity_public_key(
                     listener_key.public_key(),
                 );
                 let dialer_peer_id =
-                    aptos_types::account_address::from_identity_public_key(dialer_key.public_key());
+                    pont_types::account_address::from_identity_public_key(dialer_key.public_key());
                 let trusted_peers = build_trusted_peers(
                     dialer_peer_id,
                     &dialer_key,
@@ -126,11 +126,11 @@ where
                 )
             }
             Auth::ServerOnly => {
-                let listener_peer_id = aptos_types::account_address::from_identity_public_key(
+                let listener_peer_id = pont_types::account_address::from_identity_public_key(
                     listener_key.public_key(),
                 );
                 let dialer_peer_id =
-                    aptos_types::account_address::from_identity_public_key(dialer_key.public_key());
+                    pont_types::account_address::from_identity_public_key(dialer_key.public_key());
                 let trusted_peers = Arc::new(RwLock::new(HashMap::new()));
 
                 (
@@ -146,7 +146,7 @@ where
     let supported_protocols =
         ProtocolIdSet::from_iter([ProtocolId::ConsensusRpcBcs, ProtocolId::DiscoveryDirectSend]);
     let chain_id = ChainId::default();
-    let listener_transport = AptosNetTransport::new(
+    let listener_transport = PontNetTransport::new(
         base_transport.clone(),
         NetworkContext::mock_with_peer_id(listener_peer_id),
         time_service.clone(),
@@ -158,7 +158,7 @@ where
         false, /* Disable proxy protocol */
     );
 
-    let dialer_transport = AptosNetTransport::new(
+    let dialer_transport = PontNetTransport::new(
         base_transport,
         NetworkContext::mock_with_peer_id(dialer_peer_id),
         time_service.clone(),
@@ -490,7 +490,7 @@ fn test_transport_maybe_mutual<TTransport>(
 }
 
 ////////////////////////////////////////
-// AptosNetTransport<MemoryTransport> //
+// PontNetTransport<MemoryTransport> //
 ////////////////////////////////////////
 
 #[test]
@@ -532,7 +532,7 @@ fn test_memory_transport_maybe_mutual() {
 }
 
 /////////////////////////////////////
-// AptosNetTransport<TcpTransport> //
+// PontNetTransport<TcpTransport> //
 /////////////////////////////////////
 
 #[test]

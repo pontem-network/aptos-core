@@ -3,10 +3,12 @@
 
 #![forbid(unsafe_code)]
 
-use aptos_id_generator::{IdGenerator, U64IdGenerator};
-use aptos_infallible::RwLock;
-use aptos_state_view::account_with_state_view::AsAccountWithStateView;
-use aptos_types::{
+use channel::{message_queues::QueueStyle, pont_channel};
+use futures::{channel::mpsc::SendError, stream::FusedStream, Stream};
+use pont_id_generator::{IdGenerator, U64IdGenerator};
+use pont_infallible::RwLock;
+use pont_state_view::account_with_state_view::AsAccountWithStateView;
+use pont_types::{
     account_config::CORE_CODE_ADDRESS,
     account_view::AccountView,
     contract_event::ContractEvent,
@@ -16,8 +18,6 @@ use aptos_types::{
     on_chain_config::{ConfigID, OnChainConfigPayload},
     transaction::Version,
 };
-use channel::{aptos_channel, message_queues::QueueStyle};
-use futures::{channel::mpsc::SendError, stream::FusedStream, Stream};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::{HashMap, HashSet},
@@ -118,7 +118,7 @@ impl EventSubscriptionService {
         }
 
         let (notification_sender, notification_receiver) =
-            aptos_channel::new(QueueStyle::KLAST, EVENT_NOTIFICATION_CHANNEL_SIZE, None);
+            pont_channel::new(QueueStyle::KLAST, EVENT_NOTIFICATION_CHANNEL_SIZE, None);
 
         // Create a new event subscription
         let subscription_id = self.get_new_subscription_id();
@@ -161,7 +161,7 @@ impl EventSubscriptionService {
     /// subscriber to ensure notifications are processed in a timely manner.
     pub fn subscribe_to_reconfigurations(&mut self) -> Result<ReconfigNotificationListener, Error> {
         let (notification_sender, notification_receiver) =
-            aptos_channel::new(QueueStyle::KLAST, RECONFIG_NOTIFICATION_CHANNEL_SIZE, None);
+            pont_channel::new(QueueStyle::KLAST, RECONFIG_NOTIFICATION_CHANNEL_SIZE, None);
 
         // Create a new reconfiguration subscription
         let subscription_id = self.get_new_subscription_id();
@@ -292,10 +292,10 @@ impl EventSubscriptionService {
                     error
                 ))
             })?;
-        let aptos_framework_account_view =
+        let pont_framework_account_view =
             db_state_view.as_account_with_state_view(&CORE_CODE_ADDRESS);
 
-        let epoch = aptos_framework_account_view
+        let epoch = pont_framework_account_view
             .get_configuration_resource()
             .map_err(|error| {
                 Error::UnexpectedErrorEncountered(format!(
@@ -347,7 +347,7 @@ type SubscriptionId = u64;
 #[derive(Debug)]
 struct EventSubscription {
     pub event_buffer: Vec<ContractEvent>,
-    pub notification_sender: channel::aptos_channel::Sender<(), EventNotification>,
+    pub notification_sender: channel::pont_channel::Sender<(), EventNotification>,
 }
 
 impl EventSubscription {
@@ -371,7 +371,7 @@ impl EventSubscription {
 /// corresponding notifications.
 #[derive(Debug)]
 struct ReconfigSubscription {
-    pub notification_sender: channel::aptos_channel::Sender<(), ReconfigNotification>,
+    pub notification_sender: channel::pont_channel::Sender<(), ReconfigNotification>,
 }
 
 impl ReconfigSubscription {
@@ -414,7 +414,7 @@ pub type ReconfigNotificationListener = NotificationListener<ReconfigNotificatio
 /// The component responsible for listening to subscription notifications.
 #[derive(Debug)]
 pub struct NotificationListener<T> {
-    pub notification_receiver: channel::aptos_channel::Receiver<(), T>,
+    pub notification_receiver: channel::pont_channel::Receiver<(), T>,
 }
 
 impl<T> Stream for NotificationListener<T> {

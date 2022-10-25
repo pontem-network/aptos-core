@@ -1,18 +1,18 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos::test::CliTestFramework;
-use aptos_config::{keys::ConfigKey, utils::get_available_port};
-use aptos_crypto::ed25519::Ed25519PrivateKey;
-use aptos_faucet::FaucetArgs;
-use aptos_genesis::builder::{InitConfigFn, InitGenesisConfigFn};
-use aptos_infallible::Mutex;
-use aptos_logger::prelude::*;
-use aptos_types::{account_config::aptos_test_root_address, chain_id::ChainId};
 use forge::{ActiveNodesGuard, Node};
 use forge::{Factory, LocalFactory, LocalSwarm};
 use framework::ReleaseBundle;
 use once_cell::sync::Lazy;
+use pont::test::CliTestFramework;
+use pont_config::{keys::ConfigKey, utils::get_available_port};
+use pont_crypto::ed25519::Ed25519PrivateKey;
+use pont_faucet::FaucetArgs;
+use pont_genesis::builder::{InitConfigFn, InitGenesisConfigFn};
+use pont_infallible::Mutex;
+use pont_logger::prelude::*;
+use pont_types::{account_config::pont_test_root_address, chain_id::ChainId};
 use rand::rngs::OsRng;
 use std::{num::NonZeroUsize, path::PathBuf, sync::Arc};
 use tokio::task::JoinHandle;
@@ -45,7 +45,7 @@ impl SwarmBuilder {
         Self::new(true, num_validators)
     }
 
-    pub fn with_aptos(mut self) -> Self {
+    pub fn with_pont(mut self) -> Self {
         self.genesis_framework = Some(cached_packages::head_release_bundle().clone());
         self
     }
@@ -67,7 +67,7 @@ impl SwarmBuilder {
 
     // Gas is not enabled with this setup, it's enabled via forge instance.
     pub async fn build_inner(&mut self) -> anyhow::Result<LocalSwarm> {
-        ::aptos_logger::Logger::new().init();
+        ::pont_logger::Logger::new().init();
         info!("Preparing to finish compiling");
         // TODO change to return Swarm trait
         // Add support for forge
@@ -153,9 +153,9 @@ impl SwarmBuilder {
 }
 
 // Gas is not enabled with this setup, it's enabled via forge instance.
-pub async fn new_local_swarm_with_aptos(num_validators: usize) -> LocalSwarm {
+pub async fn new_local_swarm_with_pont(num_validators: usize) -> LocalSwarm {
     SwarmBuilder::new_local(num_validators)
-        .with_aptos()
+        .with_pont()
         .build()
         .await
 }
@@ -163,7 +163,7 @@ pub async fn new_local_swarm_with_aptos(num_validators: usize) -> LocalSwarm {
 #[tokio::test]
 async fn test_prevent_starting_nodes_twice() {
     // Create a validator swarm of 1 validator node
-    let mut swarm = new_local_swarm_with_aptos(1).await;
+    let mut swarm = new_local_swarm_with_pont(1).await;
 
     assert!(swarm.launch().await.is_err());
     let validator = swarm.validators_mut().next().unwrap();
@@ -185,7 +185,7 @@ pub fn launch_faucet(
         server_url: endpoint,
         mint_key_file_path: PathBuf::new(),
         mint_key: Some(ConfigKey::new(mint_key)),
-        mint_account_address: Some(aptos_test_root_address()),
+        mint_account_address: Some(pont_test_root_address()),
         chain_id,
         maximum_amount: None,
         do_not_delegate: true,

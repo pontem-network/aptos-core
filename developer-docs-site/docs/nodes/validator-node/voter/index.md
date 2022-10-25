@@ -12,20 +12,20 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 The [Petra wallet extension](/docs/guides/install-petra-wallet.md) is supported only on the Chrome browser. However, the extensions for [Brave browser](https://brave.com/) and [Kiwi browser](https://kiwibrowser.com/) and [Microsoft Edge browser](https://www.microsoft.com/en-us/edge) will also work.
 :::
 
-If you are a voter, then we recommend strongly that you do not store your Aptos voter keys with a custodian before the custodian supports this function. Until then, we suggest you store your voter keys in an Aptos wallet like [Petra](/docs/guides/install-petra-wallet.md) or [Martian](https://martianwallet.xyz/).
+If you are a voter, then we recommend strongly that you do not store your Pont voter keys with a custodian before the custodian supports this function. Until then, we suggest you store your voter keys in an Pont wallet like [Petra](/docs/guides/install-petra-wallet.md) or [Martian](https://martianwallet.xyz/).
 
-This document describes how to perform voter operations while using an Aptos wallet. 
+This document describes how to perform voter operations while using an Pont wallet. 
 
 ### Steps
 
-To participate as a voter in the Aptos governance, follow the below steps. 
+To participate as a voter in the Pont governance, follow the below steps. 
 
-1. Go to the [**Proposals section** of the Aptos Governance page](https://governance.aptosfoundation.org/).
+1. Go to the [**Proposals section** of the Pont Governance page](https://governance.pontfoundation.org/).
 2. Next you should connect your wallet, but before you click on **CONNECT WALLET** (top-right):
    1. Make sure you selected Mainnnet from the top-right drop-down menu.
-   2. Delete any previous versions of Aptos Wallet you have installed on Chrome.
-   3. **Install** the Petra (Aptos Wallet) extension on your Chrome browser by [following the instructions here](/guides/install-petra-wallet-extension).
-3. Click on **CONNECT WALLET** to connect your wallet to the Aptos Governance. 
+   2. Delete any previous versions of Pont Wallet you have installed on Chrome.
+   3. **Install** the Petra (Pont Wallet) extension on your Chrome browser by [following the instructions here](/guides/install-petra-wallet-extension).
+3. Click on **CONNECT WALLET** to connect your wallet to the Pont Governance. 
 4. Make sure that the Mainnet network is selected on the wallet also. On Petra you can do this by the following:
    - On Petra wallet window, click on the bottom right gear box icon. This will take you to **Settings** page on the wallet.
    - Select **Network** > Mainnet.

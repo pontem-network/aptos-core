@@ -3,13 +3,13 @@
 
 #![forbid(unsafe_code)]
 
-use aptos_types::{account_address::AccountAddress, transaction::Transaction};
 use async_trait::async_trait;
 use futures::{
     channel::{mpsc, oneshot},
     stream::FusedStream,
     Stream,
 };
+use pont_types::{account_address::AccountAddress, transaction::Transaction};
 use serde::{Deserialize, Serialize};
 use std::{
     fmt,
@@ -96,7 +96,7 @@ impl MempoolNotificationSender for MempoolNotifier {
         // Construct a oneshot channel to receive a mempool response
         let (callback, callback_receiver) = oneshot::channel();
         // Mempool needs to be notified about all transactions (user and non-user transactions).
-        // See https://github.com/aptos-labs/aptos-core/issues/1882 for more details.
+        // See https://github.com/aptos-labs/pont-core/issues/1882 for more details.
         let commit_notification = MempoolCommitNotification {
             transactions: user_transactions,
             block_timestamp_usecs,
@@ -213,8 +213,10 @@ enum MempoolNotificationResponse {
 #[cfg(test)]
 mod tests {
     use crate::{CommittedTransaction, Error, MempoolNotificationSender};
-    use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
-    use aptos_types::{
+    use claims::{assert_matches, assert_ok};
+    use futures::{executor::block_on, FutureExt, StreamExt};
+    use pont_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
+    use pont_types::{
         account_address::AccountAddress,
         block_metadata::BlockMetadata,
         chain_id::ChainId,
@@ -224,8 +226,6 @@ mod tests {
         },
         write_set::WriteSetMut,
     };
-    use claims::{assert_matches, assert_ok};
-    use futures::{executor::block_on, FutureExt, StreamExt};
     use tokio::runtime::{Builder, Runtime};
 
     #[test]

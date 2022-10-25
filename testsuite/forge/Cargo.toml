@@ -1,10 +1,10 @@
 [package]
 name = "forge"
 version = "0.0.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos end to end test framework"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont end to end test framework"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -39,19 +39,19 @@ thiserror = "1.0.31"
 tokio = { version = "1.21.0", features = ["full"] }
 url = "2.2.2"
 
-aptos = { path = "../../crates/aptos" }
-aptos-config = { path = "../../config" }
-aptos-genesis = { path = "../../crates/aptos-genesis" }
-aptos-global-constants = { path = "../../config/global-constants" }
-aptos-infallible = { path = "../../crates/aptos-infallible" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-rest-client = { path = "../../crates/aptos-rest-client" }
-aptos-retrier = { path = "../../crates/aptos-retrier" }
-aptos-sdk = { path = "../../sdk" }
-aptos-secure-storage = { path = "../../secure/storage" }
-aptosdb = { path = "../../storage/aptosdb" }
-cached-packages = { path = "../../aptos-move/framework/cached-packages" }
-framework = { path = "../../aptos-move/framework" }
+pont = { path = "../../crates/pont" }
+pont-config = { path = "../../config" }
+pont-genesis = { path = "../../crates/pont-genesis" }
+pont-global-constants = { path = "../../config/global-constants" }
+pont-infallible = { path = "../../crates/pont-infallible" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-rest-client = { path = "../../crates/pont-rest-client" }
+pont-retrier = { path = "../../crates/pont-retrier" }
+pont-sdk = { path = "../../sdk" }
+pont-secure-storage = { path = "../../secure/storage" }
+pontdb = { path = "../../storage/pontdb" }
+cached-packages = { path = "../../pont-move/framework/cached-packages" }
+framework = { path = "../../pont-move/framework" }
 inspection-service = { path = "../../crates/inspection-service" }
 json-patch = "0.2.6"
 state-sync-driver = { path = "../../state-sync/state-sync-v2/state-sync-driver" }
@@ -59,4 +59,4 @@ transaction-emitter-lib = { path = "../../crates/transaction-emitter-lib" }
 
 [features]
 default = []
-testing = ["aptos-global-constants/testing"]
+testing = ["pont-global-constants/testing"]

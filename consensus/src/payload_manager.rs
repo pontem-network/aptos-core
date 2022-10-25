@@ -3,7 +3,6 @@
 
 use crate::{error::QuorumStoreError, monitor, state_replication::PayloadManager};
 use anyhow::Result;
-use aptos_logger::prelude::*;
 use consensus_types::{
     common::{Payload, PayloadFilter},
     request_response::{ConsensusRequest, ConsensusResponse},
@@ -13,6 +12,7 @@ use futures::{
     channel::{mpsc, oneshot},
     future::BoxFuture,
 };
+use pont_logger::prelude::*;
 use std::time::Duration;
 use tokio::time::{sleep, timeout};
 

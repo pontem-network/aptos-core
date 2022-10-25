@@ -3,21 +3,21 @@
 
 use crate::{common::Author, quorum_cert::QuorumCert};
 use anyhow::ensure;
-use aptos_crypto::{bls12381, CryptoMaterialError};
-use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
-use aptos_types::account_address::AccountAddress;
-use aptos_types::aggregate_signature::{AggregateSignature, PartialSignatures};
-use aptos_types::validator_verifier::VerifyError;
-use aptos_types::{
+use itertools::Itertools;
+use pont_crypto::{bls12381, CryptoMaterialError};
+use pont_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use pont_types::account_address::AccountAddress;
+use pont_types::aggregate_signature::{AggregateSignature, PartialSignatures};
+use pont_types::validator_verifier::VerifyError;
+use pont_types::{
     block_info::Round, validator_signer::ValidatorSigner, validator_verifier::ValidatorVerifier,
 };
-use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, HashMap};
 use std::fmt::{Display, Formatter};
 
 /// This structure contains all the information necessary to construct a signature
-/// on the equivalent of a AptosBFT v4 timeout message.
+/// on the equivalent of a PontBFT v4 timeout message.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct TwoChainTimeout {
     /// Epoch number corresponds to the set of validators that are active for this round.
@@ -100,7 +100,7 @@ pub struct TimeoutSigningRepr {
 }
 
 /// TimeoutCertificate is a proof that 2f+1 participants in epoch i
-/// have voted in round r and we can now move to round r+1. AptosBFT v4 requires signature to sign on
+/// have voted in round r and we can now move to round r+1. PontBFT v4 requires signature to sign on
 /// the TimeoutSigningRepr and carry the TimeoutWithHighestQC with highest quorum cert among 2f+1.
 #[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct TwoChainTimeoutCertificate {
@@ -389,13 +389,13 @@ impl AggregateSignatureWithRounds {
 mod tests {
     use crate::quorum_cert::QuorumCert;
     use crate::timeout_2chain::{TwoChainTimeout, TwoChainTimeoutWithPartialSignatures};
-    use aptos_crypto::bls12381;
+    use pont_crypto::bls12381;
 
     #[test]
     fn test_2chain_timeout_certificate() {
         use crate::vote_data::VoteData;
-        use aptos_crypto::hash::CryptoHash;
-        use aptos_types::{
+        use pont_crypto::hash::CryptoHash;
+        use pont_types::{
             aggregate_signature::PartialSignatures,
             block_info::BlockInfo,
             ledger_info::{LedgerInfo, LedgerInfoWithPartialSignatures},

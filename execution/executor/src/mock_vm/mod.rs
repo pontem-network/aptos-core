@@ -4,10 +4,12 @@
 #[cfg(test)]
 mod mock_vm_test;
 
-use aptos_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
-use aptos_gas::LATEST_GAS_FEATURE_VERSION;
-use aptos_state_view::StateView;
-use aptos_types::{
+use move_core_types::{language_storage::TypeTag, move_resource::MoveResource};
+use once_cell::sync::Lazy;
+use pont_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
+use pont_gas::LATEST_GAS_FEATURE_VERSION;
+use pont_state_view::StateView;
+use pont_types::{
     access_path::AccessPath,
     account_address::AccountAddress,
     account_config::CORE_CODE_ADDRESS,
@@ -27,9 +29,7 @@ use aptos_types::{
     vm_status::{StatusCode, VMStatus},
     write_set::{WriteOp, WriteSet, WriteSetMut},
 };
-use aptos_vm::VMExecutor;
-use move_core_types::{language_storage::TypeTag, move_resource::MoveResource};
-use once_cell::sync::Lazy;
+use pont_vm::VMExecutor;
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -48,7 +48,7 @@ enum MockVMTransaction {
 pub static KEEP_STATUS: Lazy<TransactionStatus> =
     Lazy::new(|| TransactionStatus::Keep(ExecutionStatus::Success));
 
-// We use 10 as the assertion error code for insufficient balance within the Aptos coin contract.
+// We use 10 as the assertion error code for insufficient balance within the Pont coin contract.
 pub static DISCARD_STATUS: Lazy<TransactionStatus> =
     Lazy::new(|| TransactionStatus::Discard(StatusCode::INSUFFICIENT_BALANCE_FOR_TRANSACTION_FEE));
 
