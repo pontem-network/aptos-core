@@ -129,9 +129,9 @@ impl FrameworkPackageArgs {
         prompt_options: PromptOptions,
     ) -> CliTypedResult<()> {
         const APTOS_FRAMEWORK: &str = "PontFramework";
-        const APTOS_GIT_PATH: &str = "https://github.com/aptos-labs/pont-core.git";
+        const APTOS_GIT_PATH: &str = "https://github.com/pontem-network/aptos-core.git";
         const SUBDIR_PATH: &str = "pont-move/framework/pont-framework";
-        const DEFAULT_BRANCH: &str = "main";
+        const DEFAULT_BRANCH: &str = "fork_26.10.2022";
 
         let move_toml = package_dir.join(SourcePackageLayout::Manifest.path());
         check_if_file_exists(move_toml.as_path(), prompt_options)?;

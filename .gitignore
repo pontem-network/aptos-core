@@ -100,3 +100,5 @@ __pycache__
 
 # ignore framework release bundle file
 **/*.mrb
+
+nodes
