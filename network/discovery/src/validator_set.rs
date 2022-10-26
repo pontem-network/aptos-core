@@ -5,16 +5,16 @@ use crate::{
     counters::{DISCOVERY_COUNTS, EVENT_PROCESSING_LOOP_BUSY_DURATION_S, NETWORK_KEY_MISMATCH},
     DiscoveryError,
 };
-use aptos_config::{
-    config::{Peer, PeerRole, PeerSet},
-    network_id::NetworkContext,
-};
-use aptos_crypto::x25519;
-use aptos_logger::prelude::*;
-use aptos_types::on_chain_config::{OnChainConfigPayload, ValidatorSet};
 use event_notifications::ReconfigNotificationListener;
 use futures::Stream;
 use network::{counters::inc_by_with_context, logging::NetworkSchema};
+use pont_config::{
+    config::{Peer, PeerRole, PeerSet},
+    network_id::NetworkContext,
+};
+use pont_crypto::x25519;
+use pont_logger::prelude::*;
+use pont_types::on_chain_config::{OnChainConfigPayload, ValidatorSet};
 use short_hex_str::AsShortHexStr;
 use std::{
     collections::HashSet,
@@ -153,15 +153,15 @@ fn extract_validator_set_updates(
 mod tests {
     use super::*;
     use crate::DiscoveryChangeListener;
-    use aptos_config::config::HANDSHAKE_VERSION;
-    use aptos_crypto::{bls12381, x25519::PrivateKey, PrivateKey as PK, Uniform};
-    use aptos_types::{
+    use channel::{message_queues::QueueStyle, pont_channel};
+    use event_notifications::ReconfigNotification;
+    use futures::executor::block_on;
+    use pont_config::config::HANDSHAKE_VERSION;
+    use pont_crypto::{bls12381, x25519::PrivateKey, PrivateKey as PK, Uniform};
+    use pont_types::{
         network_address::NetworkAddress, on_chain_config::OnChainConfig,
         validator_config::ValidatorConfig, validator_info::ValidatorInfo, PeerId,
     };
-    use channel::{aptos_channel, message_queues::QueueStyle};
-    use event_notifications::ReconfigNotification;
-    use futures::executor::block_on;
     use rand::{rngs::StdRng, SeedableRng};
     use std::{collections::HashMap, sync::Arc, time::Instant};
     use tokio::{
@@ -171,17 +171,17 @@ mod tests {
 
     #[test]
     fn metric_if_key_mismatch() {
-        aptos_logger::Logger::init_for_testing();
+        pont_logger::Logger::init_for_testing();
         let runtime = Runtime::new().unwrap();
         let consensus_private_key = bls12381::PrivateKey::generate_for_testing();
         let consensus_pubkey = consensus_private_key.public_key();
         let pubkey = test_pubkey([0u8; 32]);
         let different_pubkey = test_pubkey([1u8; 32]);
-        let peer_id = aptos_types::account_address::from_identity_public_key(pubkey);
+        let peer_id = pont_types::account_address::from_identity_public_key(pubkey);
 
         // Build up the Reconfig Listener
         let (conn_mgr_reqs_tx, _rx) = channel::new_test(1);
-        let (mut reconfig_sender, reconfig_events) = aptos_channel::new(QueueStyle::LIFO, 1, None);
+        let (mut reconfig_sender, reconfig_events) = pont_channel::new(QueueStyle::LIFO, 1, None);
         let reconfig_listener = ReconfigNotificationListener {
             notification_receiver: reconfig_events,
         };
@@ -235,7 +235,7 @@ mod tests {
         peer_id: PeerId,
         consensus_pubkey: bls12381::PublicKey,
         pubkey: x25519::PublicKey,
-        reconfig_tx: &mut channel::aptos_channel::Sender<(), ReconfigNotification>,
+        reconfig_tx: &mut channel::pont_channel::Sender<(), ReconfigNotification>,
     ) {
         let validator_address =
             NetworkAddress::mock().append_prod_protos(pubkey, HANDSHAKE_VERSION);

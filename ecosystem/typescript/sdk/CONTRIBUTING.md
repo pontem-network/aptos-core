@@ -1,7 +1,7 @@
 # Contribution Guidelines for Typescript SDK
 
 - Coding Styles
-  - File names must use Snake case. For example, `aptos_account.ts` .
+  - File names must use Snake case. For example, `pont_account.ts` .
   - Class names must use Pascal case. For example, `class AuthenticationKey` .
   - Function and method names must use Camel case. For example, `derivedAddress(): HexString` .
   - Constants must use all caps (upper case) words separated by `_`. For example, `MAX_U8_NUMBER` .

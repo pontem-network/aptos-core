@@ -3,11 +3,11 @@ id: coding-guidelines
 title: Coding Guidelines
 ---
 
-This document describes the coding guidelines for the Aptos Core Rust codebase.
+This document describes the coding guidelines for the Pont Core Rust codebase.
 
 ## Code formatting
 
-All code formatting is enforced with [rustfmt](https://github.com/rust-lang/rustfmt) with a project-specific configuration.  Below is an example command to adhere to the Aptos Core project conventions.
+All code formatting is enforced with [rustfmt](https://github.com/rust-lang/rustfmt) with a project-specific configuration.  Below is an example command to adhere to the Pont Core project conventions.
 
 ```
 cargo fmt
@@ -53,7 +53,7 @@ struct Point {
 
 ### Terminology
 
-The Aptos codebase uses inclusive terminology (similar to other projects such as [the Linux kernel](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=49decddd39e5f6132ccd7d9fdc3d7c470b0061bb)).  The terms below are recommended when appropriate.
+The Pont codebase uses inclusive terminology (similar to other projects such as [the Linux kernel](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=49decddd39e5f6132ccd7d9fdc3d7c470b0061bb)).  The terms below are recommended when appropriate.
 * allowlist - a set of entities allowed access
 * blocklist - a set of entities that are blocked from access
 * primary/leader/main - a primary entity
@@ -76,8 +76,8 @@ Document the following for each function:
 
 ### README.md for top-level directories and other major components
 
-Each major component of Aptos Core needs to have a `README.md` file. Major components are:
-* top-level directories (e.g. `aptos-core/network`, `aptos-core/language`)
+Each major component of Pont Core needs to have a `README.md` file. Major components are:
+* top-level directories (e.g. `pont-core/network`, `pont-core/language`)
 * the most important crates in the system (e.g. `vm-runtime`)
 
 This file should contain:
@@ -118,14 +118,14 @@ For the external API of this crate refer to [Link to rustdoc API].
 
 ## Contributing
 
-Refer to the Aptos Project contributing guide [LINK].
+Refer to the Pont Project contributing guide [LINK].
 
 ## License
 
-Refer to the Aptos Project License [LINK].
+Refer to the Pont Project License [LINK].
 ```
 
-A good example of README.md is `aptos-core/network/README.md` that describes the networking crate.
+A good example of README.md is `pont-core/network/README.md` that describes the networking crate.
 
 ## Binary, Argument, and Crate Naming
 
@@ -181,8 +181,8 @@ Error handling suggestions follow the [Rust book guidance](https://doc.rust-lang
 
 *Fallible functions*
 
-* `duration_since_epoch()` - to obtain the unix time, call the function provided by `aptos-infallible`.
-* `RwLock` and `Mutex` - Instead of calling `unwrap()` on the standard library implementations of these functions, use the infallible equivalent types that we provide in `aptos-infallible`.
+* `duration_since_epoch()` - to obtain the unix time, call the function provided by `pont-infallible`.
+* `RwLock` and `Mutex` - Instead of calling `unwrap()` on the standard library implementations of these functions, use the infallible equivalent types that we provide in `pont-infallible`.
 
 *Panic*
 
@@ -276,9 +276,9 @@ mod tests {
 
 *Property-based tests*
 
-Aptos contains [property-based tests](https://blog.jessitron.com/2013/04/25/property-based-testing-what-is-it/) written in Rust using the [`proptest` framework](https://github.com/AltSysrq/proptest). Property-based tests generate random test cases and assert that invariants, also called *properties*, hold for the code under test.
+Pont contains [property-based tests](https://blog.jessitron.com/2013/04/25/property-based-testing-what-is-it/) written in Rust using the [`proptest` framework](https://github.com/AltSysrq/proptest). Property-based tests generate random test cases and assert that invariants, also called *properties*, hold for the code under test.
 
-Some examples of properties tested in Aptos:
+Some examples of properties tested in Pont:
 
 * Every serializer and deserializer pair is tested for correctness with random inputs to the serializer. Any pair of functions that are inverses of each other can be tested this way.
 * The results of executing common transactions through the VM are tested using randomly generated scenarios and verified with an *Oracle*.
@@ -293,11 +293,11 @@ References:
 
 *Fuzzing*
 
-Aptos contains harnesses for fuzzing crash-prone code like deserializers, using [`libFuzzer`](https://llvm.org/docs/LibFuzzer.html) through [`cargo fuzz`](https://rust-fuzz.github.io/book/cargo-fuzz.html). For more examples, see the `testsuite/aptos_fuzzer` directory.
+Pont contains harnesses for fuzzing crash-prone code like deserializers, using [`libFuzzer`](https://llvm.org/docs/LibFuzzer.html) through [`cargo fuzz`](https://rust-fuzz.github.io/book/cargo-fuzz.html). For more examples, see the `testsuite/pont_fuzzer` directory.
 
 ### Conditional compilation of tests
 
-Aptos [conditionally
+Pont [conditionally
 compiles](https://doc.rust-lang.org/stable/reference/conditional-compilation.html)
 code that is *only relevant for tests, but does not consist of tests* (unitary
 or otherwise). Examples of this include proptest strategies, implementations
@@ -316,7 +316,7 @@ As a consequence, it is recommended that you set up your test-only code in the f
 
 **For production crates:**
 
-Production crates are defined as the set of crates that create externally published artifacts, e.g. the Aptos validator,
+Production crates are defined as the set of crates that create externally published artifacts, e.g. the Pont validator,
 the Move compiler, and so on.
 
 For the sake of example, we'll consider you are defining a test-only helper function `foo` in `foo_crate`:
@@ -364,7 +364,7 @@ elements in another crate need to activate the "fuzzing" feature through the
 `[features]` section in their `Cargo.toml`. [Integration
 tests](https://doc.rust-lang.org/rust-by-example/testing/integration_testing.html)
 can neither rely on the `test` flag nor do they have a proper `Cargo.toml` for
-feature activation. In the Aptos codebase, we therefore recommend that
+feature activation. In the Pont codebase, we therefore recommend that
 *integration tests which depend on test-only code in their tested crate* be
 extracted to their own test-only crate. See `language/move-binary-format/serializer_tests`
 for an example of such an extracted integration test.

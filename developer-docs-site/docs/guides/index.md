@@ -1,16 +1,16 @@
 ---
 title: "Guides"
-slug: "aptos-guides"
+slug: "pont-guides"
 hidden: false
 ---
 
 # Guides
 
-Start here to get into the core concepts of the Aptos blockchain.
+Start here to get into the core concepts of the Pont blockchain.
 
 - ### [Life of a Transaction](basics-life-of-txn.md)
 - ### [Creating a Signed Transaction](sign-a-transaction.md)
-- ### [Interacting with the Aptos blockchain](interacting-with-the-blockchain.md)
+- ### [Interacting with the Pont blockchain](interacting-with-the-blockchain.md)
 - ### [State Synchronization](state-sync.md)
 - ### [Data Pruning](data-pruning.md)
 - ### [Indexing](indexing)

@@ -6,7 +6,7 @@ use crate::storage::test_util::{
     arb_backups, arb_metadata_files, test_save_and_list_metadata_files_impl,
     test_write_and_read_impl,
 };
-use aptos_temppath::TempPath;
+use pont_temppath::TempPath;
 use proptest::prelude::*;
 use tokio::runtime::Runtime;
 

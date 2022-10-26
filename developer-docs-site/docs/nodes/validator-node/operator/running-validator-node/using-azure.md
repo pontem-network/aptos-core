@@ -5,7 +5,7 @@ slug: "run-validator-node-using-azure"
 
 # On Azure
 
-This is a step-by-step guide to install an Aptos node on Azure. Follow these steps to configure a validator node and a validator fullnode on separate machines. 
+This is a step-by-step guide to install an Pont node on Azure. Follow these steps to configure a validator node and a validator fullnode on separate machines. 
 
 :::danger Did you set up your Azure account?
 This guide assumes that you already have Azure account setup.
@@ -15,7 +15,7 @@ This guide assumes that you already have Azure account setup.
 
 Make sure you complete these prerequisite steps before you proceed:
 
-- **Aptos CLI**: https://aptos.dev/cli-tools/aptos-cli-tool/install-aptos-cli
+- **Pont CLI**: https://pont.dev/cli-tools/pont-cli-tool/install-pont-cli
 - **Terraform 1.2.4**: https://www.terraform.io/downloads.html
 - **Kubernetes CLI**: https://kubernetes.io/docs/tasks/tools/
 - **Azure CLI**: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
@@ -49,9 +49,9 @@ Follow the below instructions **twice**, i.e., first on one machine to run a val
 2. Create a blob storage container for storing the Terraform state on Azure, you can do this on Azure UI or by the command: 
 
     ```bash
-    az group create -l <azure region> -n aptos-$WORKSPACE
-    az storage account create -n <storage account name> -g aptos-$WORKSPACE -l <azure region> --sku Standard_LRS
-    az storage container create -n <container name> --account-name <storage account name> --resource-group aptos-$WORKSPACE
+    az group create -l <azure region> -n pont-$WORKSPACE
+    az storage account create -n <storage account name> -g pont-$WORKSPACE -l <azure region> --sku Standard_LRS
+    az storage container create -n <container name> --account-name <storage account name> --resource-group pont-$WORKSPACE
     ```
 
 3. Create Terraform file called `main.tf` in your working directory:
@@ -72,9 +72,9 @@ Follow the below instructions **twice**, i.e., first on one machine to run a val
       key                  = "state/validator"
     }
   }
-  module "aptos-node" {
-    # download Terraform module from aptos-labs/aptos-core repo
-    source        = "github.com/aptos-labs/aptos-core.git//terraform/aptos-node/azure?ref=mainnet"
+  module "pont-node" {
+    # download Terraform module from aptos-labs/pont-core repo
+    source        = "github.com/aptos-labs/pont-core.git//terraform/pont-node/azure?ref=mainnet"
     region        = <azure region>  # Specify the region
     era           = 1  # bump era number to wipe the chain
     chain_id      = 1  # for mainnet. Use different value for testnet or devnet.
@@ -83,7 +83,7 @@ Follow the below instructions **twice**, i.e., first on one machine to run a val
   }
   ```
 
-    For the full customization options, see the variables file [here](https://github.com/aptos-labs/aptos-core/blob/main/terraform/aptos-node/azure/variables.tf), and the [Helm values](https://github.com/aptos-labs/aptos-core/blob/main/terraform/helm/aptos-node/values.yaml).
+    For the full customization options, see the variables file [here](https://github.com/aptos-labs/pont-core/blob/main/terraform/pont-node/azure/variables.tf), and the [Helm values](https://github.com/aptos-labs/pont-core/blob/main/terraform/helm/pont-node/values.yaml).
 
 5. Initialize Terraform in the same directory of your `main.tf` file.
   ```bash
@@ -106,22 +106,22 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
 
 8. Once terraform apply finishes, you can check if those resources are created:
 
-    - `az aks get-credentials --resource-group aptos-$WORKSPACE --name aptos-$WORKSPACE` to configure access for your k8s cluster.
+    - `az aks get-credentials --resource-group pont-$WORKSPACE --name pont-$WORKSPACE` to configure access for your k8s cluster.
     - `kubectl get pods` this should have haproxy, validator and fullnode. with validator and fullnode pod `pending` (require further action in later steps)
     - `kubectl get svc` this should have `validator-lb` and `fullnode-lb`, with an external-IP you can share later for connectivity.
 
 9. Get your node IP info:
 
     ```bash
-    export VALIDATOR_ADDRESS="$(kubectl get svc ${WORKSPACE}-aptos-node-0-validator-lb --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
+    export VALIDATOR_ADDRESS="$(kubectl get svc ${WORKSPACE}-pont-node-0-validator-lb --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
 
-    export FULLNODE_ADDRESS="$(kubectl get svc ${WORKSPACE}-aptos-node-0-fullnode-lb --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
+    export FULLNODE_ADDRESS="$(kubectl get svc ${WORKSPACE}-pont-node-0-fullnode-lb --output jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
     ```
 
 10. Generate the key pairs (node owner, voter, operator key, consensus key and networking key) in your working directory.
 
     ```bash
-    aptos genesis generate-keys --output-dir ~/$WORKSPACE/keys
+    pont genesis generate-keys --output-dir ~/$WORKSPACE/keys
     ```
 
     This will create 4 key files under `~/$WORKSPACE/keys` directory: 
@@ -138,7 +138,7 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
 11. Configure the validator information.
 
     ```bash
-    aptos genesis set-validator-configuration \
+    pont genesis set-validator-configuration \
       --local-repository-dir ~/$WORKSPACE \
       --username $USERNAME \
       --owner-public-identity-file ~/$WORKSPACE/keys/public-keys.yaml \
@@ -155,7 +155,7 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
     - `waypoint.txt`
 
 13. **Summary:** To summarize, in your working directory you should have a list of files:
-    - `main.tf`: The Terraform files to install the `aptos-node` module (from steps 3 and 4).
+    - `main.tf`: The Terraform files to install the `pont-node` module (from steps 3 and 4).
     - `keys` folder containing:
       - `public-keys.yaml`: Public keys for the owner account, consensus, networking (from step 10).
       - `private-keys.yaml`: Private keys for the owner account, consensus, networking (from step 10).
@@ -170,7 +170,7 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
 14. Insert `genesis.blob`, `waypoint.txt` and the identity files as secret into k8s cluster.
 
     ```bash
-    kubectl create secret generic ${WORKSPACE}-aptos-node-0-genesis-e1 \
+    kubectl create secret generic ${WORKSPACE}-pont-node-0-genesis-e1 \
         --from-file=genesis.blob=genesis.blob \
         --from-file=waypoint.txt=waypoint.txt \
         --from-file=validator-identity.yaml=keys/validator-identity.yaml \
@@ -189,9 +189,9 @@ This will download all the Terraform dependencies for you, in the `.terraform` f
     kubectl get pods
 
     NAME                                        READY   STATUS    RESTARTS   AGE
-    node1-aptos-node-0-fullnode-e9-0              1/1     Running   0          4h31m
-    node1-aptos-node-0-haproxy-7cc4c5f74c-l4l6n   1/1     Running   0          4h40m
-    node1-aptos-node-0-validator-0                1/1     Running   0          4h30m
+    node1-pont-node-0-fullnode-e9-0              1/1     Running   0          4h31m
+    node1-pont-node-0-haproxy-7cc4c5f74c-l4l6n   1/1     Running   0          4h40m
+    node1-pont-node-0-validator-0                1/1     Running   0          4h30m
     ```
 
 Now you have successfully completed setting up your node. Make sure that you have set up one machine to run a validator node and a second machine to run a validator fullnode.

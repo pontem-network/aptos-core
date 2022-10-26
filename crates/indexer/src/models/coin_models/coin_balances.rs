@@ -10,9 +10,9 @@ use super::{
     coin_utils::{CoinInfoType, CoinResource},
 };
 use crate::{schema::coin_balances, schema::current_coin_balances, util::standardize_address};
-use aptos_api_types::WriteResource as APIWriteResource;
 use bigdecimal::BigDecimal;
 use field_count::FieldCount;
+use pont_api_types::WriteResource as APIWriteResource;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

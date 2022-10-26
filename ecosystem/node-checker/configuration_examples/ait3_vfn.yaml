@@ -2,7 +2,7 @@
 # No metrics checks for this one, just API based checks.
 ---
 node_address:
-  url: "https://ait3.aptosdev.com"
+  url: "https://ait3.pontdev.com"
   metrics_port: 9101
   api_port: 443
   noise_port: 6180

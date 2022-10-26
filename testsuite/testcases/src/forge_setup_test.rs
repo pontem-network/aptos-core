@@ -3,8 +3,8 @@
 
 use std::thread;
 
-use aptos_logger::info;
 use forge::{NetworkContext, NetworkTest, Result, Test};
+use pont_logger::info;
 use rand::{
     rngs::{OsRng, StdRng},
     seq::IteratorRandom,
@@ -12,7 +12,7 @@ use rand::{
 };
 use tokio::runtime::Runtime;
 
-const STATE_SYNC_VERSION_COUNTER_NAME: &str = "aptos_state_sync_version";
+const STATE_SYNC_VERSION_COUNTER_NAME: &str = "pont_state_sync_version";
 
 pub struct ForgeSetupTest;
 

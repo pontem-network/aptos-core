@@ -1,0 +1,24 @@
+[package]
+name = "pont-faucet-cli"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "CLI for minting coins directly in testnets"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+clap = "3.1.18"
+serde = { version = "1.0.137", features = ["derive"] }
+serde_yaml = "0.8.24"
+tokio = { version = "1.21.0", features = ["full"] }
+url = "2.2.2"
+
+pont = { path = "../pont" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../pont-crypto" }
+pont-faucet = { path = "../pont-faucet" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-sdk = { path = "../../sdk" }

@@ -3,8 +3,8 @@
 
 use crate::{HexEncodedBytes, U64};
 
-use aptos_types::account_config::AccountResource;
 use poem_openapi::Object;
+use pont_types::account_config::AccountResource;
 use serde::{Deserialize, Serialize};
 
 /// Account data

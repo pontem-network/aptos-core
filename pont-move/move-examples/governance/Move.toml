@@ -1,0 +1,9 @@
+[package]
+name = "Examples"
+version = "0.0.0"
+
+[addresses]
+pont_framework = "0x1"
+
+[dependencies]
+PontFramework = { local = "../../framework/pont-framework" }

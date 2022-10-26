@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::streaming_client::Epoch;
-use aptos_data_client::{Response, ResponsePayload};
-use aptos_types::{
+use pont_data_client::{Response, ResponsePayload};
+use pont_types::{
     ledger_info::LedgerInfoWithSignatures,
     state_store::state_value::StateValueChunkWithProof,
     transaction::{TransactionListWithProof, TransactionOutputListWithProof, Version},
@@ -33,7 +33,7 @@ pub enum DataPayload {
     TransactionsWithProof(TransactionListWithProof),
 }
 
-/// A request that has been sent to the Aptos data client.
+/// A request that has been sent to the Pont data client.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DataClientRequest {
     EpochEndingLedgerInfos(EpochEndingLedgerInfosRequest),
@@ -117,7 +117,7 @@ pub struct TransactionOutputsWithProofRequest {
 /// network and will be available in `client_response` when received.
 pub struct PendingClientResponse {
     pub client_request: DataClientRequest,
-    pub client_response: Option<Result<Response<ResponsePayload>, aptos_data_client::Error>>,
+    pub client_response: Option<Result<Response<ResponsePayload>, pont_data_client::Error>>,
 }
 
 impl Debug for PendingClientResponse {

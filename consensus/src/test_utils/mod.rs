@@ -2,9 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::block_storage::{BlockReader, BlockStore};
-use aptos_crypto::HashValue;
-use aptos_logger::Level;
-use aptos_types::{ledger_info::LedgerInfo, validator_signer::ValidatorSigner};
 use consensus_types::{
     block::{block_test_utils::certificate_for_genesis, Block},
     common::{Author, Round},
@@ -12,6 +9,9 @@ use consensus_types::{
     quorum_cert::QuorumCert,
     sync_info::SyncInfo,
 };
+use pont_crypto::HashValue;
+use pont_logger::Level;
+use pont_types::{ledger_info::LedgerInfo, validator_signer::ValidatorSigner};
 use std::{future::Future, sync::Arc, time::Duration};
 use tokio::{runtime, time::timeout};
 
@@ -21,13 +21,13 @@ mod mock_state_computer;
 mod mock_storage;
 
 use crate::util::mock_time_service::SimulatedTimeService;
-use aptos_types::block_info::BlockInfo;
 use consensus_types::{block::block_test_utils::gen_test_certificate, common::Payload};
 pub use mock_payload_manager::MockPayloadManager;
 pub use mock_state_computer::{
     EmptyStateComputer, MockStateComputer, RandomComputeResultStateComputer,
 };
 pub use mock_storage::{EmptyStorage, MockSharedStorage, MockStorage};
+use pont_types::block_info::BlockInfo;
 
 pub const TEST_TIMEOUT: Duration = Duration::from_secs(60);
 
@@ -195,7 +195,7 @@ fn nocapture() -> bool {
 
 pub fn consensus_runtime() -> runtime::Runtime {
     if nocapture() {
-        ::aptos_logger::Logger::new().level(Level::Debug).init();
+        ::pont_logger::Logger::new().level(Level::Debug).init();
     }
 
     runtime::Builder::new_multi_thread()

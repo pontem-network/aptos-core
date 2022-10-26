@@ -4,10 +4,6 @@
 extern crate core;
 
 #[cfg(test)]
-mod aptos;
-#[cfg(test)]
-mod aptos_cli;
-#[cfg(test)]
 mod client;
 #[cfg(test)]
 mod consensus;
@@ -21,6 +17,10 @@ mod genesis;
 mod indexer;
 #[cfg(test)]
 mod network;
+#[cfg(test)]
+mod pont;
+#[cfg(test)]
+mod pont_cli;
 #[cfg(test)]
 mod rest_api;
 #[cfg(test)]

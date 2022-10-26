@@ -1,10 +1,10 @@
 [package]
 name = "generate-format"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos core type checker to ensure compatibility"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont core type checker to ensure compatibility"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -17,11 +17,11 @@ serde-reflection = { git = "https://github.com/aptos-labs/serde-reflection", rev
 serde_yaml = "0.8.24"
 structopt = "0.3.21"
 
-aptos-api-types = { path = "../../api/types", package = "aptos-api-types" }
-aptos-config = { path = "../../config" }
-aptos-crypto = { path = "../../crates/aptos-crypto", features = ["fuzzing"] }
-aptos-crypto-derive = { path = "../../crates/aptos-crypto-derive" }
-aptos-types = { path = "../../types", features = ["fuzzing"] }
+pont-api-types = { path = "../../api/types", package = "pont-api-types" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../../crates/pont-crypto", features = ["fuzzing"] }
+pont-crypto-derive = { path = "../../crates/pont-crypto-derive" }
+pont-types = { path = "../../types", features = ["fuzzing"] }
 
 consensus = { path = "../../consensus", features = ["fuzzing"] }
 consensus-types = { path = "../../consensus/consensus-types", features = ["fuzzing"] }

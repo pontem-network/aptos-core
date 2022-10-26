@@ -1,4 +1,4 @@
-# Based on config from https://github.com/aptos-labs/aptos-core/blob/main/ecosystem/node-checker/configuration_examples/single_node_validator.yaml
+# Based on config from https://github.com/aptos-labs/pont-core/blob/main/ecosystem/node-checker/configuration_examples/single_node_validator.yaml
 ---
 node_address:
   url: {{ .Values.node_health_checker.baseline_node_url }}

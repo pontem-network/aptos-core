@@ -9,7 +9,7 @@ use crate::proof::{
     AccumulatorRangeProof, SparseMerkleLeafNode, SparseMerkleProof, SparseMerkleRangeProof,
     TransactionAccumulatorSummary,
 };
-use aptos_crypto::{
+use pont_crypto::{
     hash::{CryptoHasher, ACCUMULATOR_PLACEHOLDER_HASH, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };

@@ -11,16 +11,16 @@ use crate::{
     },
     storage_synchronizer::StorageSynchronizer,
 };
-use aptos_config::config::NodeConfig;
-use aptos_data_client::aptosnet::AptosNetDataClient;
-use aptos_infallible::Mutex;
-use aptos_types::{move_resource::MoveStorage, waypoint::Waypoint};
 use consensus_notifications::ConsensusNotificationListener;
 use data_streaming_service::streaming_client::StreamingServiceClient;
 use event_notifications::{EventNotificationSender, EventSubscriptionService};
 use executor_types::ChunkExecutorTrait;
 use futures::{channel::mpsc, executor::block_on};
 use mempool_notifications::MempoolNotificationSender;
+use pont_config::config::NodeConfig;
+use pont_data_client::pontnet::PontNetDataClient;
+use pont_infallible::Mutex;
+use pont_types::{move_resource::MoveStorage, waypoint::Waypoint};
 use std::sync::{
     atomic::{AtomicUsize, Ordering},
     Arc,
@@ -50,7 +50,7 @@ impl DriverFactory {
         metadata_storage: MetadataStorage,
         consensus_listener: ConsensusNotificationListener,
         mut event_subscription_service: EventSubscriptionService,
-        aptos_data_client: AptosNetDataClient,
+        pont_data_client: PontNetDataClient,
         streaming_service_client: StreamingServiceClient,
     ) -> Self {
         // Notify subscribers of the initial on-chain config values
@@ -130,7 +130,7 @@ impl DriverFactory {
             mempool_notification_handler,
             metadata_storage,
             storage_synchronizer,
-            aptos_data_client,
+            pont_data_client,
             streaming_service_client,
             storage.reader,
         );
@@ -158,7 +158,7 @@ impl DriverFactory {
 /// Note: it's useful to maintain separate runtimes because the logger
 /// can prepend all logs with the runtime thread name.
 pub struct StateSyncRuntimes {
-    _aptos_data_client: Runtime,
+    _pont_data_client: Runtime,
     state_sync: DriverFactory,
     _storage_service: Runtime,
     _streaming_service: Runtime,
@@ -166,13 +166,13 @@ pub struct StateSyncRuntimes {
 
 impl StateSyncRuntimes {
     pub fn new(
-        aptos_data_client: Runtime,
+        pont_data_client: Runtime,
         state_sync: DriverFactory,
         storage_service: Runtime,
         streaming_service: Runtime,
     ) -> Self {
         Self {
-            _aptos_data_client: aptos_data_client,
+            _pont_data_client: pont_data_client,
             state_sync,
             _storage_service: storage_service,
             _streaming_service: streaming_service,

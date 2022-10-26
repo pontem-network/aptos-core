@@ -4,19 +4,19 @@
 use std::time::{Duration, Instant};
 
 use anyhow::bail;
-use aptos_config::config::NodeConfig;
-use aptos_rest_client::Client as RestClient;
-use aptos_types::account_address::AccountAddress;
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use forge::NodeExt;
 use forge::Result;
 use forge::Swarm;
+use pont_config::config::NodeConfig;
+use pont_rest_client::Client as RestClient;
+use pont_types::account_address::AccountAddress;
 
-use crate::smoke_test_environment::new_local_swarm_with_aptos;
+use crate::smoke_test_environment::new_local_swarm_with_pont;
 
 #[tokio::test]
 async fn test_indexer() {
-    let mut swarm = new_local_swarm_with_aptos(1).await;
+    let mut swarm = new_local_swarm_with_pont(1).await;
 
     let version = swarm.versions().max().unwrap();
     let fullnode_peer_id = swarm
@@ -39,10 +39,10 @@ async fn test_indexer() {
 
     let client = fullnode.rest_client();
 
-    let mut account1 = swarm.aptos_public_info().random_account();
-    let account2 = swarm.aptos_public_info().random_account();
+    let mut account1 = swarm.pont_public_info().random_account();
+    let account2 = swarm.pont_public_info().random_account();
 
-    let mut chain_info = swarm.chain_info().into_aptos_public_info();
+    let mut chain_info = swarm.chain_info().into_pont_public_info();
     let factory = chain_info.transaction_factory();
     chain_info
         .create_user_account(account1.public_key())
@@ -61,7 +61,7 @@ async fn test_indexer() {
     wait_for_account(&client, account1.address()).await.unwrap();
 
     let txn = account1.sign_with_transaction_builder(
-        factory.payload(aptos_stdlib::aptos_coin_transfer(account2.address(), 10)),
+        factory.payload(pont_stdlib::pont_coin_transfer(account2.address(), 10)),
     );
 
     client.submit_and_wait(&txn).await.unwrap();

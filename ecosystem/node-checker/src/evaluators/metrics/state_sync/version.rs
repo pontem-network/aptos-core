@@ -24,7 +24,7 @@ use serde::{Deserialize, Serialize};
 // TODO: When we have it, switch to using a crate that unifies metric names.
 // As it is now, this metric name could change and we'd never catch it here
 // at compile time.
-const STATE_SYNC_METRIC: &str = "aptos_state_sync_version";
+const STATE_SYNC_METRIC: &str = "pont_state_sync_version";
 
 pub static SYNC_VERSION_METRIC_LABEL: Lazy<Label> = Lazy::new(|| Label {
     key: "type",
@@ -202,7 +202,7 @@ mod test {
     use super::{super::super::parse_metrics, *};
     use std::fmt::Write;
     fn get_metric_string(value: u64) -> String {
-        let mut metric_string = r#"aptos_state_sync_version{type="synced"} "#.to_string();
+        let mut metric_string = r#"pont_state_sync_version{type="synced"} "#.to_string();
         write!(metric_string, "{}", value).unwrap();
         metric_string
     }

@@ -12,9 +12,9 @@
 
 use crate::VerifyInput;
 use anyhow::bail;
-use aptos_types::event::EventKey;
 use move_core_types::identifier::{IdentStr, Identifier};
 use poem_openapi::Object;
+use pont_types::event::EventKey;
 use serde::{Deserialize, Serialize};
 use std::{convert::From, fmt, ops::Deref, str::FromStr};
 

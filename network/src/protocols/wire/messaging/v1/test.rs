@@ -78,7 +78,7 @@ fn stream_message() {
 }
 
 #[test]
-fn aptosnet_wire_test_vectors() {
+fn pontnet_wire_test_vectors() {
     let message = MultiplexMessage::Message(NetworkMessage::DirectSendMsg(DirectSendMsg {
         protocol_id: ProtocolId::MempoolDirectSend,
         priority: 0,

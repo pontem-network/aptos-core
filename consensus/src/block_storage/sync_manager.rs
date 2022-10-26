@@ -11,12 +11,6 @@ use crate::{
     state_replication::StateComputer,
 };
 use anyhow::{bail, Context};
-use aptos_crypto::HashValue;
-use aptos_logger::prelude::*;
-use aptos_types::{
-    account_address::AccountAddress, epoch_change::EpochChangeProof,
-    ledger_info::LedgerInfoWithSignatures,
-};
 use consensus_types::{
     block::Block,
     block_retrieval::{
@@ -28,6 +22,12 @@ use consensus_types::{
     sync_info::SyncInfo,
 };
 use fail::fail_point;
+use pont_crypto::HashValue;
+use pont_logger::prelude::*;
+use pont_types::{
+    account_address::AccountAddress, epoch_change::EpochChangeProof,
+    ledger_info::LedgerInfoWithSignatures,
+};
 use rand::{prelude::*, Rng};
 use std::{clone::Clone, cmp::min, sync::Arc, time::Duration};
 

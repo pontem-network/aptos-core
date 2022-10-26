@@ -1,10 +1,10 @@
 [package]
-name = "aptos-mempool"
+name = "pont-mempool"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos mempool for consuming incoming transactions"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont mempool for consuming incoming transactions"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -26,13 +26,13 @@ thiserror = "1.0.31"
 tokio = { version = "1.21.0", features = ["full"] }
 tokio-stream = "0.1.8"
 
-aptos-config = { path = "../config" }
-aptos-crypto = { path = "../crates/aptos-crypto" }
-aptos-infallible = { path = "../crates/aptos-infallible" }
-aptos-logger = { path = "../crates/aptos-logger" }
-aptos-metrics-core = { path = "../crates/aptos-metrics-core" }
-aptos-proptest-helpers = { path = "../crates/aptos-proptest-helpers", optional = true }
-aptos-types = { path = "../types" }
+pont-config = { path = "../config" }
+pont-crypto = { path = "../crates/pont-crypto" }
+pont-infallible = { path = "../crates/pont-infallible" }
+pont-logger = { path = "../crates/pont-logger" }
+pont-metrics-core = { path = "../crates/pont-metrics-core" }
+pont-proptest-helpers = { path = "../crates/pont-proptest-helpers", optional = true }
+pont-types = { path = "../types" }
 
 bounded-executor = { path = "../crates/bounded-executor" }
 channel = { path = "../crates/channel" }
@@ -49,13 +49,13 @@ vm-validator = { path = "../vm-validator" }
 enum_dispatch = "0.3.8"
 proptest = "1.0.0"
 
-aptos-compression = { path = "../crates/aptos-compression" }
-aptos-config = { path = "../config", features = ["fuzzing"] }
-aptos-id-generator = { path = "../crates/aptos-id-generator" }
+pont-compression = { path = "../crates/pont-compression" }
+pont-config = { path = "../config", features = ["fuzzing"] }
+pont-id-generator = { path = "../crates/pont-id-generator" }
 network = { path = "../network", features = ["fuzzing"] }
 storage-interface = { path = "../storage/storage-interface", features = ["fuzzing"] }
 
 [features]
 default = []
 failpoints = ["fail/failpoints", "vm-validator/failpoints"]
-fuzzing = ["proptest", "aptos-types/fuzzing", "storage-interface/fuzzing", "aptos-config/fuzzing"]
+fuzzing = ["proptest", "pont-types/fuzzing", "storage-interface/fuzzing", "pont-config/fuzzing"]

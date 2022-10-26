@@ -5,7 +5,7 @@ slug: "node-files"
 
 # Node Files For Mainnet
 
-When you are deploying an Aptos node in the **mainnet**, you will need to download the files listed on this page. 
+When you are deploying an Pont node in the **mainnet**, you will need to download the files listed on this page. 
 
 - **Devnet:** If you are deploying in the devnet, download the files from the [Node Files For Devnet](node-files-devnet) page.
 - **Testnet:** If you are deploying in the testnet, download the files from the [Node Files For Testnet](node-files-testnet) page.
@@ -20,65 +20,65 @@ Unless specified, all these files are required for validator node. A file with `
 
 ## docker-compose.yaml
 
-- **Git repo:** `aptos-core`
-- **Git branch:** `mainnet` on https://github.com/aptos-labs/aptos-core
+- **Git repo:** `pont-core`
+- **Git branch:** `mainnet` on https://github.com/aptos-labs/pont-core
 - **Command to download:**
     ```bash
-    wget -O docker-compose.yaml https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/docker-compose.yaml
+    wget -O docker-compose.yaml https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/docker-compose.yaml
     ```
 
 ## validator.yaml
 
-- **Git repo:** `aptos-core`
-- **Git branch:** `mainnet` on https://github.com/aptos-labs/aptos-core
+- **Git repo:** `pont-core`
+- **Git branch:** `mainnet` on https://github.com/aptos-labs/pont-core
 - **Command to download:**
   ```bash
-  wget -O validator.yaml https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/validator.yaml
+  wget -O validator.yaml https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/validator.yaml
   ```
 
 ## genesis.blob 
 
-- **Git repo:** `aptos-networks`
-- **Git branch:** `main` on https://github.com/aptos-labs/aptos-networks
+- **Git repo:** `pont-networks`
+- **Git branch:** `main` on https://github.com/aptos-labs/pont-networks
 - **Command to download:**
   ```bash
-  wget -O genesis.blob https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet/genesis.blob
+  wget -O genesis.blob https://raw.githubusercontent.com/aptos-labs/pont-networks/main/mainnet/genesis.blob
   ```
 
 ## waypoint.txt
 
-- **Git repo:** `aptos-networks`
-- **Git branch:** `main` on https://github.com/aptos-labs/aptos-networks
+- **Git repo:** `pont-networks`
+- **Git branch:** `main` on https://github.com/aptos-labs/pont-networks
 - **Command to download:**
   ```bash
-  wget -O waypoint.txt https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet/waypoint.txt
+  wget -O waypoint.txt https://raw.githubusercontent.com/aptos-labs/pont-networks/main/mainnet/waypoint.txt
   ```
 
 ## docker-compose-src.yaml
 
-- **Git repo:** `aptos-core`
-- **Git branch:** `mainnet` on https://github.com/aptos-labs/aptos-core
+- **Git repo:** `pont-core`
+- **Git branch:** `mainnet` on https://github.com/aptos-labs/pont-core
 - **Command to download:**
   ```bash
-  wget -O docker-compose-src.yaml https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/docker-compose-src.yaml
+  wget -O docker-compose-src.yaml https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/docker-compose-src.yaml
   ```
 
 ## haproxy.cfg
 
-- **Git repo:** `aptos-core`
-- **Git branch:** `mainnet` on https://github.com/aptos-labs/aptos-core
+- **Git repo:** `pont-core`
+- **Git branch:** `mainnet` on https://github.com/aptos-labs/pont-core
 - **Command to download:**
   ```bash
-  wget -O haproxy.cfg https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/haproxy.cfg
+  wget -O haproxy.cfg https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/haproxy.cfg
   ```
 
 ## blocked.ips 
 
-- **Git repo:** `aptos-core`
-- **Git branch:** `mainnet` on https://github.com/aptos-labs/aptos-core
+- **Git repo:** `pont-core`
+- **Git branch:** `mainnet` on https://github.com/aptos-labs/pont-core
 - **Command to download:**
   ```bash
-  wget -O blocked.ips https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/blocked.ips
+  wget -O blocked.ips https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/blocked.ips
   ```
 
 ## docker-compose-fullnode.yaml (fullnode only)
@@ -87,11 +87,11 @@ Unless specified, all these files are required for validator node. A file with `
 Fullnode means either a validator fullnode or a public fullnode.
 :::
 
-- **Git repo:** `aptos-core`
-- **Git branch:** `mainnet` on https://github.com/aptos-labs/aptos-core
+- **Git repo:** `pont-core`
+- **Git branch:** `mainnet` on https://github.com/aptos-labs/pont-core
 - **Command to download:**
   ```bash
-  wget -O docker-compose.yaml https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/docker-compose-fullnode.yaml
+  wget -O docker-compose.yaml https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/docker-compose-fullnode.yaml
   ```
 
 ## fullnode.yaml (fullnode only)
@@ -100,18 +100,18 @@ Fullnode means either a validator fullnode or a public fullnode.
 Fullnode means either a validator fullnode or a public fullnode.
 :::
 
-- **Git repo:** `aptos-core`
-- **Git branch:** `mainnet` on https://github.com/aptos-labs/aptos-core
+- **Git repo:** `pont-core`
+- **Git branch:** `mainnet` on https://github.com/aptos-labs/pont-core
 - **Command to download:**
   ```bash
-  wget -O fullnode.yaml https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/fullnode.yaml
+  wget -O fullnode.yaml https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/fullnode.yaml
   ```
 
 ## haproxy-fullnode.cfg (fullnode only)
 
-- **Git repo:** `aptos-core`
-- **Git branch:** `mainnet` on https://github.com/aptos-labs/aptos-core
+- **Git repo:** `pont-core`
+- **Git branch:** `mainnet` on https://github.com/aptos-labs/pont-core
 - **Command to download:**
   ```bash
-  wget -O haproxy-fullnode.cfg https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/haproxy-fullnode.cfg
+  wget -O haproxy-fullnode.cfg https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/haproxy-fullnode.cfg
   ```

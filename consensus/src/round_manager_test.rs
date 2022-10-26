@@ -21,20 +21,7 @@ use crate::{
     },
     util::time_service::{ClockTimeService, TimeService},
 };
-use aptos_config::{config::ConsensusConfig, network_id::NetworkId};
-use aptos_crypto::HashValue;
-use aptos_infallible::Mutex;
-use aptos_secure_storage::Storage;
-use aptos_types::{
-    epoch_state::EpochState,
-    ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
-    on_chain_config::OnChainConsensusConfig,
-    transaction::SignedTransaction,
-    validator_signer::ValidatorSigner,
-    validator_verifier::{generate_validator_verifier, random_validator_verifier},
-    waypoint::Waypoint,
-};
-use channel::{self, aptos_channel, message_queues::QueueStyle};
+use channel::{self, message_queues::QueueStyle, pont_channel};
 use consensus_types::{
     block::{
         block_test_utils::{certificate_for_genesis, gen_test_certificate},
@@ -61,6 +48,19 @@ use network::{
     },
     transport::ConnectionMetadata,
     ProtocolId,
+};
+use pont_config::{config::ConsensusConfig, network_id::NetworkId};
+use pont_crypto::HashValue;
+use pont_infallible::Mutex;
+use pont_secure_storage::Storage;
+use pont_types::{
+    epoch_state::EpochState,
+    ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
+    on_chain_config::OnChainConsensusConfig,
+    transaction::SignedTransaction,
+    validator_signer::ValidatorSigner,
+    validator_verifier::{generate_validator_verifier, random_validator_verifier},
+    waypoint::Waypoint,
 };
 use safety_rules::{PersistentSafetyStorage, SafetyRulesManager};
 use std::{iter::FromIterator, sync::Arc, time::Duration};
@@ -119,7 +119,7 @@ impl NodeSetup {
             let (initial_data, storage) = MockStorage::start_for_testing((&validators).into());
 
             let safety_storage = PersistentSafetyStorage::initialize(
-                Storage::from(aptos_secure_storage::InMemoryStorage::new()),
+                Storage::from(pont_secure_storage::InMemoryStorage::new()),
                 signer.author(),
                 signer.private_key().clone(),
                 waypoint,
@@ -156,9 +156,9 @@ impl NodeSetup {
             verifier: storage.get_validator_set().into(),
         };
         let validators = epoch_state.verifier.clone();
-        let (network_reqs_tx, network_reqs_rx) = aptos_channel::new(QueueStyle::FIFO, 8, None);
-        let (connection_reqs_tx, _) = aptos_channel::new(QueueStyle::FIFO, 8, None);
-        let (consensus_tx, consensus_rx) = aptos_channel::new(QueueStyle::FIFO, 8, None);
+        let (network_reqs_tx, network_reqs_rx) = pont_channel::new(QueueStyle::FIFO, 8, None);
+        let (connection_reqs_tx, _) = pont_channel::new(QueueStyle::FIFO, 8, None);
+        let (consensus_tx, consensus_rx) = pont_channel::new(QueueStyle::FIFO, 8, None);
         let (_conn_mgr_reqs_tx, conn_mgr_reqs_rx) = channel::new_test(8);
         let (_, conn_status_rx) = conn_notifs_channel::new();
         let mut network_sender = ConsensusNetworkSender::new(
@@ -213,7 +213,7 @@ impl NodeSetup {
             MetricsSafetyRules::new(safety_rules_manager.client(), storage.clone());
         safety_rules.perform_initialize().unwrap();
 
-        let (round_manager_tx, _) = aptos_channel::new(QueueStyle::LIFO, 1, None);
+        let (round_manager_tx, _) = pont_channel::new(QueueStyle::LIFO, 1, None);
 
         let mut round_manager = RoundManager::new(
             epoch_state,
@@ -1058,7 +1058,7 @@ fn safety_rules_crash() {
 
     fn reset_safety_rules(node: &mut NodeSetup) {
         let safety_storage = PersistentSafetyStorage::initialize(
-            Storage::from(aptos_secure_storage::InMemoryStorage::new()),
+            Storage::from(pont_secure_storage::InMemoryStorage::new()),
             node.signer.author(),
             node.signer.private_key().clone(),
             node.round_manager.consensus_state().waypoint(),

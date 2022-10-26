@@ -9,13 +9,13 @@ use crate::{
     quorum_cert::QuorumCert,
     vote_data::VoteData,
 };
-use aptos_crypto::{
+use pont_crypto::{
     bls12381,
     ed25519::Ed25519PrivateKey,
     hash::{CryptoHash, HashValue},
     PrivateKey, Uniform,
 };
-use aptos_types::{
+use pont_types::{
     account_address::AccountAddress,
     block_info::BlockInfo,
     ledger_info::{generate_ledger_info_with_sig, LedgerInfo},
@@ -44,7 +44,7 @@ prop_compose! {
         Block::new_proposal(
             Payload::empty(),
             round,
-            aptos_infallible::duration_since_epoch().as_micros() as u64,
+            pont_infallible::duration_since_epoch().as_micros() as u64,
             parent_qc,
             &signer,
             Vec::new(),
@@ -91,7 +91,7 @@ prop_compose! {
                     block.author().unwrap(),
                     (*block.block_data().failed_authors().unwrap()).clone(),
                     block.round(),
-                    aptos_infallible::duration_since_epoch().as_micros() as u64,
+                    pont_infallible::duration_since_epoch().as_micros() as u64,
                     block.quorum_cert().clone(),
                 ),
                 signature: Some(block.signature().unwrap().clone()),

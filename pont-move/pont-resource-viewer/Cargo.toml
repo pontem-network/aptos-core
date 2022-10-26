@@ -1,0 +1,19 @@
+[package]
+name = "pont-resource-viewer"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont resource viewer"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+
+pont-types = { path = "../../types" }
+pont-vm = { path = "../../pont-move/pont-vm" }
+
+move-core-types = { workspace = true }
+move-resource-viewer = { workspace = true }

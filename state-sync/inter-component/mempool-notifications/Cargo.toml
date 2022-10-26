@@ -1,10 +1,10 @@
 [package]
 name = "mempool-notifications"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-repository = "https://github.com/aptos-labs/aptos-core"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+repository = "https://github.com/aptos-labs/pont-core"
 description = "The notification interface between state sync and mempool"
-homepage = "https://aptoslabs.com"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -16,9 +16,9 @@ serde = { version = "1.0.137", default-features = false }
 thiserror = "1.0.31"
 tokio = { version = "1.21.0" }
 
-aptos-types = { path = "../../../types" }
+pont-types = { path = "../../../types" }
 
 [dev-dependencies]
 claims = "0.7"
 
-aptos-crypto = { path = "../../../crates/aptos-crypto" }
+pont-crypto = { path = "../../../crates/pont-crypto" }

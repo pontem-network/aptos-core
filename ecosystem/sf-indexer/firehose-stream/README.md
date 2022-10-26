@@ -1,13 +1,13 @@
 > :warning: DO* NOT USE THIS, IT'S NOT READY. Go to crates/indexer for a working indexer
 # API
 
-This module provides a StreamingFast Firehose Streamer for pushing protobuf data from the Aptos Blockchain
+This module provides a StreamingFast Firehose Streamer for pushing protobuf data from the Pont Blockchain
 
 ## Overview
 
 ### Models
 
-Models or types are defined in the `aptos-api-types` package (in the directory `/api/types`).
+Models or types are defined in the `pont-api-types` package (in the directory `/api/types`).
 
 These types handle deserialization between internal data types and API response JSON types. These are then used to
 construct the Protobuf messages.
@@ -23,7 +23,7 @@ Handler tests should cover all aspects of features and functions.
 A `TestContext` is implemented to create components' stubs that API handlers are connected to.
 These stubs are more close to real production components, instead of mocks, so that tests can ensure the handlers are
 working well with other components in the systems.
-For example, we use real AptosDB implementation in tests for API layers to interact with the database.
+For example, we use real PontDB implementation in tests for API layers to interact with the database.
 
 Most of the utility functions are provided by the `TestContext`.
 
@@ -35,9 +35,9 @@ Run integration/smoke tests in `testsuite/smoke-test`
 cargo test --test "forge" "api::"
 ```
 
-## Aptos Node Operation
+## Pont Node Operation
 
-The Aptos node generates the following default Firehose-Stream configuration:
+The Pont node generates the following default Firehose-Stream configuration:
 
 ```
 firehose_stream:
@@ -79,17 +79,17 @@ cargo build
 
 ### Connect to Firehose
 
-To test with firehose, we need to build aptos-node
+To test with firehose, we need to build pont-node
 
 ```
-cd ../aptos-node
+cd ../pont-node
 cargo install --path .
 ```
 
-If necessary, set path to aptos-node
+If necessary, set path to pont-node
 
 ```
-export PATH={path to directory containing aptos-core repo}:$PATH
+export PATH={path to directory containing pont-core repo}:$PATH
 ```
 
-Then follow instructions in https://github.com/streamingfast/firehose-aptos
+Then follow instructions in https://github.com/streamingfast/firehose-pont

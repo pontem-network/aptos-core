@@ -2,7 +2,7 @@
 
 ## Overview
 
-This specification describes several common data structures used across various Aptos Payment Network (LPN) specifications.
+This specification describes several common data structures used across various Pont Payment Network (LPN) specifications.
 
 ## Terminology
 
@@ -15,7 +15,7 @@ Similar to all other LPN specifications, we use Rust to describe all data struct
 
 ### AccountAddress
 
-This represents a 128-bit Aptos account address.
+This represents a 128-bit Pont account address.
 
 ```rust
 struct AccountAddress([u8; 16]);

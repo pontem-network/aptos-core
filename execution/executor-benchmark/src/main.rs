@@ -1,11 +1,11 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_config::config::{
+use pont_config::config::{
     EpochSnapshotPrunerConfig, LedgerPrunerConfig, PrunerConfig, StateMerklePrunerConfig,
 };
-use aptos_push_metrics::MetricsPusher;
-use aptos_vm::AptosVM;
+use pont_push_metrics::MetricsPusher;
+use pont_vm::PontVM;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
@@ -149,13 +149,13 @@ fn main() {
     let _mp = MetricsPusher::start();
     let opt = Opt::from_args();
 
-    aptos_logger::Logger::new().init();
+    pont_logger::Logger::new().init();
 
     rayon::ThreadPoolBuilder::new()
         .thread_name(|index| format!("rayon-global-{}", index))
         .build_global()
         .expect("Failed to build rayon global thread pool.");
-    AptosVM::set_concurrency_level_once(opt.concurrency_level());
+    PontVM::set_concurrency_level_once(opt.concurrency_level());
 
     match opt.cmd {
         Command::CreateDb {

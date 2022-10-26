@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::network_id::NetworkId;
-use aptos_secure_storage::{KVStorage, Storage};
-use aptos_types::{waypoint::Waypoint, PeerId};
+use pont_secure_storage::{KVStorage, Storage};
+use pont_types::{waypoint::Waypoint, PeerId};
 use rand::{rngs::StdRng, SeedableRng};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::{
@@ -46,9 +46,9 @@ mod test_config;
 pub use test_config::*;
 mod api_config;
 pub use api_config::*;
-use aptos_crypto::{bls12381, ed25519::Ed25519PrivateKey, x25519};
-use aptos_types::account_address::AccountAddress;
 use poem_openapi::Enum as PoemEnum;
+use pont_crypto::{bls12381, ed25519::Ed25519PrivateKey, x25519};
+use pont_types::account_address::AccountAddress;
 
 /// Represents a deprecated config that provides no field verification.
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Eq, Serialize)]
@@ -108,7 +108,7 @@ pub struct BaseConfig {
 impl Default for BaseConfig {
     fn default() -> BaseConfig {
         BaseConfig {
-            data_dir: PathBuf::from("/opt/aptos/data"),
+            data_dir: PathBuf::from("/opt/pont/data"),
             role: RoleType::Validator,
             waypoint: WaypointConfig::None,
         }
@@ -161,7 +161,7 @@ impl WaypointConfig {
             WaypointConfig::FromStorage(backend) => {
                 let storage: Storage = backend.into();
                 let waypoint = storage
-                    .get::<Waypoint>(aptos_global_constants::WAYPOINT)
+                    .get::<Waypoint>(pont_global_constants::WAYPOINT)
                     .expect("Unable to read waypoint")
                     .value;
                 Some(waypoint)
@@ -176,7 +176,7 @@ impl WaypointConfig {
             WaypointConfig::FromStorage(backend) => {
                 let storage: Storage = backend.into();
                 storage
-                    .get::<Waypoint>(aptos_global_constants::GENESIS_WAYPOINT)
+                    .get::<Waypoint>(pont_global_constants::GENESIS_WAYPOINT)
                     .expect("Unable to read waypoint")
                     .value
             }
@@ -340,7 +340,7 @@ impl NodeConfig {
                 Ok(version) => Some(version),
                 Err(_) => {
                     // Doing this instead of failing. This will allow a processor to have STARTING_VERSION: undefined when deploying
-                    aptos_logger::warn!(
+                    pont_logger::warn!(
                         "Invalid STARTING_VERSION: {}, using {:?} instead",
                         s,
                         self.indexer.starting_version

@@ -2,15 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
-    interface::system_metrics::SystemMetricsThreshold, AptosPublicInfo, ChainInfo, FullNode,
-    NodeExt, Result, SwarmChaos, Validator, Version,
+    interface::system_metrics::SystemMetricsThreshold, ChainInfo, FullNode, NodeExt,
+    PontPublicInfo, Result, SwarmChaos, Validator, Version,
 };
 use anyhow::{anyhow, bail};
-use aptos_config::config::NodeConfig;
-use aptos_logger::info;
-use aptos_rest_client::Client as RestClient;
-use aptos_sdk::types::PeerId;
 use futures::future::{join_all, try_join_all};
+use pont_config::config::NodeConfig;
+use pont_logger::info;
+use pont_rest_client::Client as RestClient;
+use pont_sdk::types::PeerId;
 use prometheus_http_query::response::PromqlResult;
 use std::time::{Duration, Instant};
 use tokio::runtime::Runtime;
@@ -99,14 +99,14 @@ pub trait Swarm: Sync {
         timeout: Option<i64>,
     ) -> Result<PromqlResult>;
 
-    fn aptos_public_info(&mut self) -> AptosPublicInfo<'_> {
-        self.chain_info().into_aptos_public_info()
+    fn pont_public_info(&mut self) -> PontPublicInfo<'_> {
+        self.chain_info().into_pont_public_info()
     }
 
     fn chain_info_for_node(&mut self, idx: usize) -> ChainInfo<'_>;
 
-    fn aptos_public_info_for_node(&mut self, idx: usize) -> AptosPublicInfo<'_> {
-        self.chain_info_for_node(idx).into_aptos_public_info()
+    fn pont_public_info_for_node(&mut self, idx: usize) -> PontPublicInfo<'_> {
+        self.chain_info_for_node(idx).into_pont_public_info()
     }
 }
 

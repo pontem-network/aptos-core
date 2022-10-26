@@ -1,8 +1,8 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::HashValue;
-use aptos_logger::Schema;
+use pont_crypto::HashValue;
+use pont_logger::Schema;
 use serde::Serialize;
 
 #[derive(Schema)]

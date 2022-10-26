@@ -1,6 +1,6 @@
 apiVersion: v2
 name: chaos
-description: Chaos Mesh for Aptos
+description: Chaos Mesh for Pont
 version: 0.1.0
 
 dependencies:

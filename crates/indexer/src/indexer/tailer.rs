@@ -15,8 +15,6 @@ use crate::{
     schema::{ledger_infos, processor_status},
 };
 use anyhow::{ensure, Context, Result};
-use aptos_api::context::Context as ApiContext;
-use aptos_logger::{debug, info};
 use chrono::ParseError;
 use diesel::{
     pg::upsert::excluded,
@@ -25,6 +23,8 @@ use diesel::{
     ExpressionMethods, RunQueryDsl,
 };
 use diesel_migrations::{EmbeddedMigrations, MigrationHarness};
+use pont_api::context::Context as ApiContext;
+use pont_logger::{debug, info};
 use std::{fmt::Debug, sync::Arc};
 use tokio::{sync::Mutex, task::JoinHandle};
 
@@ -304,9 +304,9 @@ mod test {
         models::transactions::TransactionQuery,
         processors::default_processor::DefaultTransactionProcessor,
     };
-    use aptos_api_test_context::new_test_context;
-    use aptos_api_types::{LedgerInfo as APILedgerInfo, Transaction, U64};
     use diesel::RunQueryDsl;
+    use pont_api_test_context::new_test_context;
+    use pont_api_types::{LedgerInfo as APILedgerInfo, Transaction, U64};
     use serde_json::json;
 
     struct FakeFetcher {
@@ -678,7 +678,7 @@ mod test {
         )).unwrap();
         // This is needed because deserializer only parses epoch once so info.epoch is always None
         if let Transaction::BlockMetadataTransaction(ref mut bmt) = block_metadata_transaction {
-            bmt.info.epoch = Some(aptos_api_types::U64::from(1));
+            bmt.info.epoch = Some(pont_api_types::U64::from(1));
         }
 
         tailer
@@ -726,7 +726,7 @@ mod test {
               "expiration_timestamp_secs": "1649713172",
               "payload": {
                 "type": "entry_function_payload",
-                "function": "0x1::aptos_coin::mint",
+                "function": "0x1::pont_coin::mint",
                 "type_arguments": [],
                 "arguments": [
                   "0x45b44793724a5ecc6ad85fa60949d0824cfc7f61d6bd74490b13598379313142",

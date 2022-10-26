@@ -8,9 +8,9 @@ use crate::{
     evaluators::EvaluatorType,
 };
 use anyhow::Result;
-use aptos_rest_client::{aptos_api_types::TransactionData, Client as AptosRestClient};
 use clap::Parser;
 use poem_openapi::Object as PoemObject;
+use pont_rest_client::{pont_api_types::TransactionData, Client as PontRestClient};
 use serde::{Deserialize, Serialize};
 use std::cmp::{max, min};
 
@@ -32,7 +32,7 @@ impl TransactionAvailabilityEvaluator {
 
     /// Fetch a transaction by version and return it.
     async fn get_transaction_by_version(
-        client: &AptosRestClient,
+        client: &PontRestClient,
         version: u64,
         node_name: &str,
     ) -> Result<TransactionData, ApiEvaluatorError> {
@@ -55,7 +55,7 @@ impl TransactionAvailabilityEvaluator {
     /// as returned by the API.
     fn unwrap_accumulator_root_hash(
         transaction_data: &TransactionData,
-    ) -> Result<&aptos_crypto::HashValue, ApiEvaluatorError> {
+    ) -> Result<&pont_crypto::HashValue, ApiEvaluatorError> {
         match transaction_data {
             TransactionData::OnChain(on_chain) => Ok(&on_chain.accumulator_root_hash),
             wildcard => Err(ApiEvaluatorError::EndpointError(

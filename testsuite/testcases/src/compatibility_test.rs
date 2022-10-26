@@ -3,8 +3,8 @@
 
 use crate::{batch_update, generate_traffic};
 use anyhow::bail;
-use aptos_logger::info;
 use forge::{NetworkContext, NetworkTest, Result, SwarmExt, Test};
+use pont_logger::info;
 use tokio::{runtime::Runtime, time::Duration};
 
 pub struct SimpleValidatorUpgrade;
@@ -63,7 +63,7 @@ impl NetworkTest for SimpleValidatorUpgrade {
             ctx,
             &all_validators,
             duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )?;
         ctx.report.report_txn_stats(
             format!("{}::liveness-check", self.name()),
@@ -85,7 +85,7 @@ impl NetworkTest for SimpleValidatorUpgrade {
             ctx,
             &[first_node],
             duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )?;
         ctx.report.report_txn_stats(
             format!("{}::single-validator-upgrade", self.name()),
@@ -107,7 +107,7 @@ impl NetworkTest for SimpleValidatorUpgrade {
             ctx,
             &first_batch,
             duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )?;
         ctx.report.report_txn_stats(
             format!("{}::half-validator-upgrade", self.name()),
@@ -128,7 +128,7 @@ impl NetworkTest for SimpleValidatorUpgrade {
             ctx,
             &second_batch,
             duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )?;
         ctx.report.report_txn_stats(
             format!("{}::rest-validator-upgrade", self.name()),

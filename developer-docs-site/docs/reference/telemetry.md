@@ -3,48 +3,48 @@ title: "Telemetry"
 slug: "telemetry"
 ---
 
-When you operate a node on an Aptos network, your node can be set to send telemetry data to Aptos Labs. You can disable telemetry at any point. If telemetry remains enabled, Aptos node binary will send telemetry data in the background.
+When you operate a node on an Pont network, your node can be set to send telemetry data to Pont Labs. You can disable telemetry at any point. If telemetry remains enabled, Pont node binary will send telemetry data in the background.
 
-The Aptos node binary running on your node collects telemetry data such as software version, operating system information and the IP address of your node. This telemetry data is used to enhance the decentralization of the network.
+The Pont node binary running on your node collects telemetry data such as software version, operating system information and the IP address of your node. This telemetry data is used to enhance the decentralization of the network.
 
 :::tip No personal information is collected
-The Aptos node binary does **not** collect personal information such as usernames or email addresses.
+The Pont node binary does **not** collect personal information such as usernames or email addresses.
 :::
 
 ## Metrics collected
 
 ### Core metrics
 
-- Core metrics: [https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-telemetry/src/core_metrics.rs#L14-L29](https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-telemetry/src/core_metrics.rs#L14-L29).
+- Core metrics: [https://github.com/aptos-labs/pont-core/blob/main/crates/pont-telemetry/src/core_metrics.rs#L14-L29](https://github.com/aptos-labs/pont-core/blob/main/crates/pont-telemetry/src/core_metrics.rs#L14-L29).
 
 ### Node information
 
 The public IP address of the node and core metrics, including node type, synced version and number of network connections.
 
-- **Node configuration as a mapping of string key to JSON map**: [https://github.com/aptos-labs/aptos-core/blob/main/config/src/config/mod.rs#L63-L97](https://github.com/aptos-labs/aptos-core/blob/main/config/src/config/mod.rs#L63-L97).
+- **Node configuration as a mapping of string key to JSON map**: [https://github.com/aptos-labs/pont-core/blob/main/config/src/config/mod.rs#L63-L97](https://github.com/aptos-labs/pont-core/blob/main/config/src/config/mod.rs#L63-L97).
 
 ### CLI telemetry
 
-The commands and subcommands run by the Aptos CLI tool.
+The commands and subcommands run by the Pont CLI tool.
 
-- **CLI metrics**: [https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-telemetry/src/cli_metrics.rs#L12-L15](https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-telemetry/src/cli_metrics.rs#L12-L15).
-- **Build information**: [https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-build-info/src/lib.rs#L8-L20](https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-build-info/src/lib.rs#L8-L20).
+- **CLI metrics**: [https://github.com/aptos-labs/pont-core/blob/main/crates/pont-telemetry/src/cli_metrics.rs#L12-L15](https://github.com/aptos-labs/pont-core/blob/main/crates/pont-telemetry/src/cli_metrics.rs#L12-L15).
+- **Build information**: [https://github.com/aptos-labs/pont-core/blob/main/crates/pont-build-info/src/lib.rs#L8-L20](https://github.com/aptos-labs/pont-core/blob/main/crates/pont-build-info/src/lib.rs#L8-L20).
 
 ### Network metrics
 
-- **Network metrics**: [https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-telemetry/src/network_metrics.rs#L12-L17](https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-telemetry/src/network_metrics.rs#L12-L17).
+- **Network metrics**: [https://github.com/aptos-labs/pont-core/blob/main/crates/pont-telemetry/src/network_metrics.rs#L12-L17](https://github.com/aptos-labs/pont-core/blob/main/crates/pont-telemetry/src/network_metrics.rs#L12-L17).
 
 ### Build information
 
 Rust build information including the versions of Rust, cargo, build target architecture and the build tag.
 
-- **Build information**: [https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-build-info/src/lib.rs#L8-L20](https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-build-info/src/lib.rs#L8-L20)
+- **Build information**: [https://github.com/aptos-labs/pont-core/blob/main/crates/pont-build-info/src/lib.rs#L8-L20](https://github.com/aptos-labs/pont-core/blob/main/crates/pont-build-info/src/lib.rs#L8-L20)
 
 ### System information
 
 System information including operating system information (including versions), hardware information and resource utilization (including CPU, memory and disk).
 
-- **System information**: [https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-telemetry/src/system_information.rs#L14-L32](https://github.com/aptos-labs/aptos-core/blob/main/crates/aptos-telemetry/src/system_information.rs#L14-L32).
+- **System information**: [https://github.com/aptos-labs/pont-core/blob/main/crates/pont-telemetry/src/system_information.rs#L14-L32](https://github.com/aptos-labs/pont-core/blob/main/crates/pont-telemetry/src/system_information.rs#L14-L32).
 
 ### Others
 

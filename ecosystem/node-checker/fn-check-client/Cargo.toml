@@ -1,18 +1,18 @@
 [package]
-name = "aptos-fn-check-client"
+name = "pont-fn-check-client"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Tool to check the health of all VFNs registered in the validator set of an Aptos network or PFNs from a config file"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Tool to check the health of all VFNs registered in the validator set of an Pont network or PFNs from a config file"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
 
 [dependencies]
 anyhow = "1.0.62"
-aptos-node-checker = { path = "../" }
-aptos-sdk = { path = "../../../sdk" }
+pont-node-checker = { path = "../" }
+pont-sdk = { path = "../../../sdk" }
 clap = "3.2.17"
 env_logger = "0.9.0"
 futures = "0.3.21"

@@ -14,15 +14,8 @@ use crate::{
         },
     },
 };
-use aptos_config::{
-    config::{MempoolConfig, PeerRole, RoleType},
-    network_id::{NetworkId, PeerNetworkId},
-};
-use aptos_infallible::Mutex;
-use aptos_logger::prelude::*;
-use aptos_types::{transaction::SignedTransaction, PeerId};
 use async_trait::async_trait;
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use fail::fail_point;
 use itertools::Itertools;
 use netcore::transport::ConnectionOrigin;
@@ -40,6 +33,13 @@ use network::{
     transport::ConnectionMetadata,
     ProtocolId,
 };
+use pont_config::{
+    config::{MempoolConfig, PeerRole, RoleType},
+    network_id::{NetworkId, PeerNetworkId},
+};
+use pont_infallible::Mutex;
+use pont_logger::prelude::*;
+use pont_types::{transaction::SignedTransaction, PeerId};
 use serde::{Deserialize, Serialize};
 use std::collections::hash_map::RandomState;
 use std::collections::BTreeSet;
@@ -99,7 +99,7 @@ pub struct MempoolNetworkSender {
 pub fn network_endpoint_config(max_broadcasts_per_peer: usize) -> AppConfig {
     AppConfig::p2p(
         [ProtocolId::MempoolDirectSend],
-        aptos_channel::Config::new(max_broadcasts_per_peer)
+        pont_channel::Config::new(max_broadcasts_per_peer)
             .queue_style(QueueStyle::KLAST)
             .counters(&counters::PENDING_MEMPOOL_NETWORK_EVENTS),
     )
@@ -626,8 +626,8 @@ impl PrioritizedPeersComparator {
 #[cfg(test)]
 mod test {
     use super::*;
-    use aptos_config::network_id::NetworkId;
-    use aptos_types::PeerId;
+    use pont_config::network_id::NetworkId;
+    use pont_types::PeerId;
 
     #[test]
     fn check_peer_prioritization() {

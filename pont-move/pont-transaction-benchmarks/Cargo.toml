@@ -1,0 +1,27 @@
+[package]
+name = "pont-transaction-benchmarks"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont transaction benchmarks"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+criterion = "0.3.5"
+criterion-cpu-time = "0.1.0"
+num_cpus = "1.13.1"
+proptest = "1.0.0"
+
+pont-bitvec = { path = "../../crates/pont-bitvec" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-types = { path = "../../types", features = ["fuzzing"] }
+pont-vm = { path = "../pont-vm" }
+
+language-e2e-tests = { path = "../e2e-tests" }
+
+[[bench]]
+name = "transaction_benches"
+harness = false

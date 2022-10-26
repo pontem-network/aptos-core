@@ -9,14 +9,14 @@ use crate::{
     responses::{CompleteDataRange, DataSummary, ProtocolMetadata},
     Epoch, StorageServiceRequest,
 };
-use aptos_crypto::hash::HashValue;
-use aptos_types::{
+use claims::{assert_err, assert_ok};
+use pont_crypto::hash::HashValue;
+use pont_types::{
     aggregate_signature::AggregateSignature,
     block_info::BlockInfo,
     ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
     transaction::Version,
 };
-use claims::{assert_err, assert_ok};
 use proptest::{arbitrary::any, prelude::*};
 
 #[test]

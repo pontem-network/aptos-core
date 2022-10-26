@@ -6,22 +6,22 @@ use crate::{
     LocalNode, LocalVersion, Node, Swarm, SwarmChaos, SwarmExt, Validator, Version,
 };
 use anyhow::{anyhow, bail, Result};
-use aptos_config::{
+use framework::ReleaseBundle;
+use pont_config::{
     config::{NetworkConfig, NodeConfig},
     keys::ConfigKey,
     network_id::NetworkId,
 };
-use aptos_genesis::builder::{FullnodeNodeConfig, InitConfigFn, InitGenesisConfigFn};
-use aptos_infallible::Mutex;
-use aptos_logger::{info, warn};
-use aptos_sdk::{
+use pont_genesis::builder::{FullnodeNodeConfig, InitConfigFn, InitGenesisConfigFn};
+use pont_infallible::Mutex;
+use pont_logger::{info, warn};
+use pont_sdk::{
     crypto::ed25519::Ed25519PrivateKey,
     types::{
         chain_id::ChainId, transaction::Transaction, waypoint::Waypoint, AccountKey, LocalAccount,
         PeerId,
     },
 };
-use framework::ReleaseBundle;
 use prometheus_http_query::response::PromqlResult;
 use std::{
     collections::HashMap,
@@ -126,7 +126,7 @@ impl LocalSwarm {
         };
 
         let (root_key, genesis, genesis_waypoint, validators) =
-            aptos_genesis::builder::Builder::new(
+            pont_genesis::builder::Builder::new(
                 &dir_actual,
                 genesis_framework.unwrap_or_else(|| cached_packages::head_release_bundle().clone()),
             )?
@@ -217,7 +217,7 @@ impl LocalSwarm {
 
         let root_key = ConfigKey::new(root_key);
         let root_account = LocalAccount::new(
-            aptos_sdk::types::account_config::aptos_test_root_address(),
+            pont_sdk::types::account_config::pont_test_root_address(),
             AccountKey::from_private_key(root_key.private_key()),
             0,
         );

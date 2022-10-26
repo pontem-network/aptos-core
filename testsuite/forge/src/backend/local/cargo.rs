@@ -3,7 +3,7 @@
 
 use crate::Result;
 use anyhow::{bail, Context};
-use aptos_logger::info;
+use pont_logger::info;
 use serde::Deserialize;
 use std::{
     env, fs,
@@ -34,40 +34,40 @@ pub fn metadata() -> Result<Metadata> {
     serde_json::from_slice(&output.stdout).map_err(Into::into)
 }
 
-/// Get the aptos node binary from the current working directory
-pub fn get_aptos_node_binary_from_worktree() -> Result<(String, PathBuf)> {
+/// Get the pont node binary from the current working directory
+pub fn get_pont_node_binary_from_worktree() -> Result<(String, PathBuf)> {
     let metadata = metadata()?;
     let mut revision = git_rev_parse(&metadata, "HEAD")?;
     if git_is_worktree_dirty()? {
         revision.push_str("-dirty");
     }
 
-    let bin_path = cargo_build_aptos_node(&metadata.workspace_root, &metadata.target_directory)?;
+    let bin_path = cargo_build_pont_node(&metadata.workspace_root, &metadata.target_directory)?;
 
     Ok((revision, bin_path))
 }
 
-/// This function will attempt to build the aptos-node binary at an arbitrary revision.
+/// This function will attempt to build the pont-node binary at an arbitrary revision.
 /// Using the `target/forge` as a working directory it will do the following:
-///     1. Look for a binary named `aptos-node--<revision>`, if it already exists return it
+///     1. Look for a binary named `pont-node--<revision>`, if it already exists return it
 ///     2. If the binary doesn't exist check out the revision to `target/forge/revision` by doing
 ///        `git archive --format=tar <revision> | tar x`
 ///     3. Using the `target/forge/target` directory as a cargo artifact directory, build the
-///        binary and then move it to `target/forge/aptos-node--<revision>`
-pub fn get_aptos_node_binary_at_revision(revision: &str) -> Result<(String, PathBuf)> {
+///        binary and then move it to `target/forge/pont-node--<revision>`
+pub fn get_pont_node_binary_at_revision(revision: &str) -> Result<(String, PathBuf)> {
     let metadata = metadata()?;
     let forge_directory = metadata.target_directory.join("forge");
     let revision = git_rev_parse(&metadata, format!("{}^{{commit}}", revision))?;
     let checkout_dir = forge_directory.join(&revision);
     let forge_target_directory = forge_directory.join("target");
-    let aptos_node_bin = forge_directory.join(format!(
-        "aptos-node--{}{}",
+    let pont_node_bin = forge_directory.join(format!(
+        "pont-node--{}{}",
         revision,
         env::consts::EXE_SUFFIX
     ));
 
-    if aptos_node_bin.exists() {
-        return Ok((revision, aptos_node_bin));
+    if pont_node_bin.exists() {
+        return Ok((revision, pont_node_bin));
     }
 
     fs::create_dir_all(&forge_target_directory)?;
@@ -75,13 +75,13 @@ pub fn get_aptos_node_binary_at_revision(revision: &str) -> Result<(String, Path
     checkout_revision(&metadata, &revision, &checkout_dir)?;
 
     fs::rename(
-        cargo_build_aptos_node(&checkout_dir, &forge_target_directory)?,
-        &aptos_node_bin,
+        cargo_build_pont_node(&checkout_dir, &forge_target_directory)?,
+        &pont_node_bin,
     )?;
 
     let _ = fs::remove_dir_all(&checkout_dir);
 
-    Ok((revision, aptos_node_bin))
+    Ok((revision, pont_node_bin))
 }
 
 fn git_rev_parse<R: AsRef<str>>(metadata: &Metadata, rev: R) -> Result<String> {
@@ -111,13 +111,11 @@ fn git_is_worktree_dirty() -> Result<bool> {
 }
 
 /// Attempt to query the local git repository's remotes for the one that points to the upstream
-/// aptos-labs/aptos-core repository, falling back to "origin" if unable to locate the remote
+/// aptos-labs/pont-core repository, falling back to "origin" if unable to locate the remote
 pub fn git_get_upstream_remote() -> Result<String> {
     let output = Command::new("sh")
         .arg("-c")
-        .arg(
-            "git remote -v | grep \"https://github.com/aptos-labs/aptos-core.* (fetch)\" | cut -f1",
-        )
+        .arg("git remote -v | grep \"https://github.com/aptos-labs/pont-core.* (fetch)\" | cut -f1")
         .output()
         .context("Failed to get upstream remote")?;
 
@@ -152,7 +150,7 @@ pub fn git_merge_base<R: AsRef<str>>(rev: R) -> Result<String> {
     }
 }
 
-fn cargo_build_aptos_node<D, T>(directory: D, target_directory: T) -> Result<PathBuf>
+fn cargo_build_pont_node<D, T>(directory: D, target_directory: T) -> Result<PathBuf>
 where
     D: AsRef<Path>,
     T: AsRef<Path>,
@@ -162,10 +160,10 @@ where
     let target_directory = target_directory.as_ref();
     let directory = directory.as_ref();
 
-    // build the aptos-node package directly to avoid feature unification issues
+    // build the pont-node package directly to avoid feature unification issues
     let mut args = vec![
         "build",
-        "--package=aptos-node",
+        "--package=pont-node",
         "--features=failpoints,indexer",
     ];
     if use_release {
@@ -177,18 +175,18 @@ where
         .env("CARGO_TARGET_DIR", target_directory)
         .args(&args)
         .output()
-        .context("Failed to build aptos-node")?;
+        .context("Failed to build pont-node")?;
 
     if output.status.success() {
         let bin_path = target_directory.join(format!(
             "{}/{}{}",
             if use_release { "release" } else { "debug" },
-            "aptos-node",
+            "pont-node",
             env::consts::EXE_SUFFIX
         ));
         if !bin_path.exists() {
             bail!(
-                "Can't find binary aptos-node at expected path {:?}",
+                "Can't find binary pont-node at expected path {:?}",
                 bin_path
             );
         }
@@ -198,7 +196,7 @@ where
         io::stderr().write_all(&output.stderr)?;
 
         bail!(
-            "Failed to build aptos-node: 'cd {} && CARGO_TARGET_DIR={} cargo build --bin=aptos-node",
+            "Failed to build pont-node: 'cd {} && CARGO_TARGET_DIR={} cargo build --bin=pont-node",
             directory.display(),
             target_directory.display(),
         );

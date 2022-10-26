@@ -1,10 +1,10 @@
 [package]
 name = "network"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos networking stack"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont networking stack"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -31,20 +31,20 @@ tokio = { version = "1.21.0", features = ["full"] }
 tokio-retry = "0.3.0"
 tokio-util = { version = "0.7.2", features = ["compat", "codec"] }
 
-aptos-compression = { path = "../crates/aptos-compression" }
-aptos-config = { path = "../config" }
-aptos-crypto = { path = "../crates/aptos-crypto" }
-aptos-crypto-derive = { path = "../crates/aptos-crypto-derive" }
-aptos-id-generator = { path = "../crates/aptos-id-generator" }
-aptos-infallible = { path = "../crates/aptos-infallible" }
-aptos-logger = { path = "../crates/aptos-logger" }
-aptos-metrics-core = { path = "../crates/aptos-metrics-core" }
-aptos-proptest-helpers = { path = "../crates/aptos-proptest-helpers", optional = true }
-aptos-rate-limiter = { path = "../crates/aptos-rate-limiter" }
-aptos-time-service = { path = "../crates/aptos-time-service", features = ["async"] }
-aptos-types = { path = "../types" }
+pont-compression = { path = "../crates/pont-compression" }
+pont-config = { path = "../config" }
+pont-crypto = { path = "../crates/pont-crypto" }
+pont-crypto-derive = { path = "../crates/pont-crypto-derive" }
+pont-id-generator = { path = "../crates/pont-id-generator" }
+pont-infallible = { path = "../crates/pont-infallible" }
+pont-logger = { path = "../crates/pont-logger" }
+pont-metrics-core = { path = "../crates/pont-metrics-core" }
+pont-proptest-helpers = { path = "../crates/pont-proptest-helpers", optional = true }
+pont-rate-limiter = { path = "../crates/pont-rate-limiter" }
+pont-time-service = { path = "../crates/pont-time-service", features = ["async"] }
+pont-types = { path = "../types" }
 
-bitvec = { path = "../crates/aptos-bitvec", package = "aptos-bitvec" }
+bitvec = { path = "../crates/pont-bitvec", package = "pont-bitvec" }
 channel = { path = "../crates/channel" }
 memsocket = { path = "./memsocket", optional = true }
 netcore = { path = "./netcore" }
@@ -57,15 +57,15 @@ proptest = { version = "1.0.0", default-features = true }
 proptest-derive = { version = "0.3.0" }
 rand_core = "0.5.1"
 
-aptos-config = { path = "../config", features = ["testing"] }
-aptos-proptest-helpers = { path = "../crates/aptos-proptest-helpers" }
-aptos-time-service = { path = "../crates/aptos-time-service", features = ["async", "testing"] }
-aptos-types = { path = "../types", features = ["fuzzing"] }
-bitvec = { path = "../crates/aptos-bitvec", package = "aptos-bitvec", features = ["fuzzing"] }
+pont-config = { path = "../config", features = ["testing"] }
+pont-proptest-helpers = { path = "../crates/pont-proptest-helpers" }
+pont-time-service = { path = "../crates/pont-time-service", features = ["async", "testing"] }
+pont-types = { path = "../types", features = ["fuzzing"] }
+bitvec = { path = "../crates/pont-bitvec", package = "pont-bitvec", features = ["fuzzing"] }
 memsocket = { path = "./memsocket" }
 netcore = { path = "./netcore", features = ["testing"] }
 
 [features]
 default = []
-fuzzing = ["bitvec/fuzzing", "aptos-config/fuzzing", "aptos-crypto/fuzzing", "aptos-types/fuzzing", "aptos-proptest-helpers", "aptos-time-service/testing", "aptos-types/fuzzing", "memsocket/testing", "netcore/fuzzing", "proptest", "proptest-derive"]
-testing = ["aptos-config/testing", "aptos-time-service/testing", "memsocket/testing", "netcore/testing"]
+fuzzing = ["bitvec/fuzzing", "pont-config/fuzzing", "pont-crypto/fuzzing", "pont-types/fuzzing", "pont-proptest-helpers", "pont-time-service/testing", "pont-types/fuzzing", "memsocket/testing", "netcore/fuzzing", "proptest", "proptest-derive"]
+testing = ["pont-config/testing", "pont-time-service/testing", "memsocket/testing", "netcore/testing"]

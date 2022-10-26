@@ -1,10 +1,10 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::AptosPublicInfo;
+use crate::PontPublicInfo;
 use anyhow::Result;
-use aptos_rest_client::Client as RestClient;
-use aptos_sdk::{
+use pont_rest_client::Client as RestClient;
+use pont_sdk::{
     transaction_builder::TransactionFactory,
     types::{chain_id::ChainId, LocalAccount},
 };
@@ -59,7 +59,7 @@ impl<'t> ChainInfo<'t> {
         TransactionFactory::new(self.chain_id())
     }
 
-    pub fn into_aptos_public_info(self) -> AptosPublicInfo<'t> {
-        AptosPublicInfo::new(self.chain_id, self.rest_api_url.clone(), self.root_account)
+    pub fn into_pont_public_info(self) -> PontPublicInfo<'t> {
+        PontPublicInfo::new(self.chain_id, self.rest_api_url.clone(), self.root_account)
     }
 }

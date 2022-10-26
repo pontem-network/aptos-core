@@ -1,19 +1,19 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::smoke_test_environment::{new_local_swarm_with_aptos, SwarmBuilder};
-use aptos::common::types::EncodingType;
-use aptos::test::CliTestFramework;
-use aptos_config::config::Peer;
-use aptos_config::{
+use crate::smoke_test_environment::{new_local_swarm_with_pont, SwarmBuilder};
+use forge::{FullNode, NodeExt, Swarm};
+use pont::common::types::EncodingType;
+use pont::test::CliTestFramework;
+use pont_config::config::Peer;
+use pont_config::{
     config::{DiscoveryMethod, Identity, NetworkConfig, NodeConfig, PeerSet},
     network_id::NetworkId,
 };
-use aptos_crypto::{x25519, x25519::PrivateKey};
-use aptos_genesis::config::HostAndPort;
-use aptos_sdk::move_types::account_address::AccountAddress;
-use aptos_temppath::TempPath;
-use forge::{FullNode, NodeExt, Swarm};
+use pont_crypto::{x25519, x25519::PrivateKey};
+use pont_genesis::config::HostAndPort;
+use pont_sdk::move_types::account_address::AccountAddress;
+use pont_temppath::TempPath;
 use std::{
     collections::HashMap,
     path::Path,
@@ -23,7 +23,7 @@ use std::{
 
 #[tokio::test]
 async fn test_connection_limiting() {
-    let mut swarm = new_local_swarm_with_aptos(1).await;
+    let mut swarm = new_local_swarm_with_pont(1).await;
     let version = swarm.versions().max().unwrap();
     let validator_peer_id = swarm.validators().next().unwrap().peer_id();
 
@@ -131,7 +131,7 @@ async fn test_connection_limiting() {
     );
 }
 
-// Currently this test seems flaky: https://github.com/aptos-labs/aptos-core/issues/670
+// Currently this test seems flaky: https://github.com/aptos-labs/pont-core/issues/670
 #[ignore]
 #[tokio::test]
 async fn test_file_discovery() {
@@ -142,7 +142,7 @@ async fn test_file_discovery() {
     let discovery_file = Arc::new(create_discovery_file(peer_set));
     let discovery_file_for_closure = discovery_file.clone();
     let swarm = SwarmBuilder::new_local(1)
-        .with_aptos()
+        .with_pont()
         .with_init_config(Arc::new(move |_, config, _| {
             let discovery_file_for_closure2 = discovery_file_for_closure.clone();
             modify_network_config(config, &NetworkId::Validator, move |network| {

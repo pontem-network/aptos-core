@@ -1,0 +1,30 @@
+[package]
+name = "pont-fuzz"
+version = "0.1.0"
+edition = "2021"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont fuzzer fuzz"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "=0.3.2"
+once_cell = "1.10.0"
+
+pont-fuzzer = { path = ".." }
+
+[[bin]]
+name = "fuzz_runner"
+path = "fuzz_targets/fuzz_runner.rs"
+test = false
+
+# used for integration with Google OSS-Fuzz (see README)
+[[bin]]
+name = "fuzzer_builder"
+path = "google-oss-fuzz/fuzzer_builder.rs"
+test = false

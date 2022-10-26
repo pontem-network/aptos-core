@@ -14,7 +14,7 @@ on:
       - ".github/workflows/nightly-replay-verify.yaml"
 
 env:
-  BUCKET: aptos-testnet-backup-2223d95b
+  BUCKET: pont-testnet-backup-2223d95b
   SUB_DIR: e1
   HISTORY_START: 142000000
   CONFIG_TEMPLATE_NAME: s3-public.yaml

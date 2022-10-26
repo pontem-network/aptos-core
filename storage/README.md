@@ -1,32 +1,32 @@
 ---
 id: storage
 title: Storage
-custom_edit_url: https://github.com/aptos-labs/aptos-core/edit/main/storage/README.md
+custom_edit_url: https://github.com/aptos-labs/pont-core/edit/main/storage/README.md
 ---
 
 ## Overview
 
 The storage modules implement:
-* the AptosDB which holds the authenticated blockchain data structure within a
-Aptos Node. It serves the current "state" readable by Move contracts being
+* the PontDB which holds the authenticated blockchain data structure within a
+Pont Node. It serves the current "state" readable by Move contracts being
 executed, as well as a configurable length of the blockchain history to fellow
-Aptos Nodes and the Rest API. It takes in new data from either the consensus or
+Pont Nodes and the Rest API. It takes in new data from either the consensus or
 the state sync components to grow the history.
 * the backup system which persists the entire history of transactions. The
 backups are not required for running the blockchain in normal situations, but
-can be critical when emergency happens were an AptosDB needs to be recreated
-a. without the help of widely available healthy running Aptos Nodes b. to
+can be critical when emergency happens were an PontDB needs to be recreated
+a. without the help of widely available healthy running Pont Nodes b. to
 recover a historical state back in time. c. specifically, to do b. in order to
 create an alternative ledger and redistribute the result to overcome
 unforeseeable catastrophic situations (to hard fork)
 
 More to read:
 * To understand the authenticated blockchain data structure, see
-https://github.com/aptos-labs/aptos-core/tree/main/documentation/specifications/common
+https://github.com/aptos-labs/pont-core/tree/main/documentation/specifications/common
 * To know more about the state authentication data structure, see
-https://github.com/aptos-labs/aptos-core/developer-docs-site/static/papers/jellyfish-merkle-tree/2021-01-14.pdf
+https://github.com/aptos-labs/pont-core/developer-docs-site/static/papers/jellyfish-merkle-tree/2021-01-14.pdf
 * To learn more about the backup system including the backup data format, see
-https://github.com/aptos-labs/aptos-core/blob/main/documentation/specifications/db_backup/spec.md
+https://github.com/aptos-labs/pont-core/blob/main/documentation/specifications/db_backup/spec.md
 
 ## System Architecture
 
@@ -38,7 +38,7 @@ Notice that the whole "Execution" block is outside of this folder but highly rel
 
 ##  Configs
 
-As part of the Aptos Node config, these are specific for the storage components.
+As part of the Pont Node config, these are specific for the storage components.
 Notice that to use the default configs one doesn't need to put in anything in
 the config file. Only when one needs to overwrite a certain config value she
 needs put in something. For example, to enable the internal indexer, one can
@@ -51,12 +51,12 @@ storage:
 
 Now here's the full set of configs, with their default values and explanations.
 The default values should work in most cases and generally speaking don't need
-to be changed. Another reason to not overriding them is the developers of Aptos
+to be changed. Another reason to not overriding them is the developers of Pont
 can tune the default configs with new software releases and a override will
 make your node miss it.
 If you do have a reason to change them, probably read the more
 detailed comments in
-https://github.com/aptos-labs/aptos-core/blob/main/config/src/config/storage_config.rs
+https://github.com/aptos-labs/pont-core/blob/main/config/src/config/storage_config.rs
 to understand it better.
 
 ```yaml
@@ -69,12 +69,12 @@ storage:
   # For example, if in the top level config we have
   # ``` yaml
   # base:
-  #   data_dir: /opt/aptos/data
+  #   data_dir: /opt/pont/data
   # ```
   # and this config has the default value (`db`), the DBs will be at
-  # `/opt/aptos/data/db/ledger_db` and  `/opt/aptos/data/db/state_merkle_db`
+  # `/opt/pont/data/db/ledger_db` and  `/opt/pont/data/db/state_merkle_db`
   dir: db
-  # AptosDB persists the state authentication structure off the critical path
+  # PontDB persists the state authentication structure off the critical path
   # of transaction execution and batch up recent changes for performance. Once
   # the number of buffered state updates exceeds this config, a dump of all
   # buffered values into a snapshot is triggered. (Alternatively, if too many
@@ -85,7 +85,7 @@ storage:
   # helps with performance but consumes a lot of memory and can compete with
   # the filesystem cache.
   max_num_nodes_per_lru_cache_shard: 8192
-  # AptosDB keeps recent history of the blockchain ledger and recent versions
+  # PontDB keeps recent history of the blockchain ledger and recent versions
   # of the state trees. And a pruner is responsible for pruning old data. The
   # default values makes sure the network is in good health in terms of
   # data availability and won't occupy too much space on recommended hardware
@@ -155,20 +155,20 @@ storage:
 The DB backup is a concise format to preserve the raw data of the blockchain. It
  means a lot for the data security of the blockchain overall, and provides a way
 to batch process the blockchain data off chain. But it's not the preferred way
-to boot up a AptosDB instance on an empty disk. Use State Sync (it's Fast Sync
+to boot up a PontDB instance on an empty disk. Use State Sync (it's Fast Sync
 mode). Read more about state sync here:
-https://github.com/aptos-labs/aptos-core/blob/main/state-sync/README.md
+https://github.com/aptos-labs/pont-core/blob/main/state-sync/README.md
 
 
 ### Continuously backing up to a cloud storage
 
 The backup coordinator runs continously, talks to the backup service embedded
-inside a Aptos Node and writes backup data automatically to a configured cloud
+inside a Pont Node and writes backup data automatically to a configured cloud
 storage.
 
 One can make a config file for a specific cloud storage position by updating
 one of the examples here
-https://github.com/aptos-labs/aptos-core/tree/main/storage/backup/backup-cli/src/storage/command_adapter/sample_configs/
+https://github.com/aptos-labs/pont-core/tree/main/storage/backup/backup-cli/src/storage/command_adapter/sample_configs/
 
 
 ```bash
@@ -176,14 +176,14 @@ $ cargo run -p backup-cli --bin db-backup coordinator run
     Finished dev [unoptimized + debuginfo] target(s) in 0.52s
      Running `target/debug/db-backup coordinator run`
 db-backup-coordinator-run
-Run the backup coordinator which backs up blockchain data continuously off a Aptos Node.
+Run the backup coordinator which backs up blockchain data continuously off a Pont Node.
 
 USAGE:
     db-backup coordinator run [OPTIONS] <SUBCOMMAND>
 
 OPTIONS:
         --backup-service-address <ADDRESS>
-            Backup service address. By default a Aptos Node runs the backup service serving on tcp
+            Backup service address. By default a Pont Node runs the backup service serving on tcp
             port 6186 to localhost only. [default: http://localhost:6186]
 
         --concurrent-downloads <CONCURRENT_DOWNLOADS>
@@ -227,7 +227,7 @@ SUBCOMMANDS:
                            commands with which it communicates with either a local file system
                            or a remote cloud storage. Compression or other fitlers can be added
                            as part of the commands. See a sample config here: https://github.com/
-                           aptos-labs/aptos-core/tree/main/storage/backup/backup-cli/src/storage/
+                           aptos-labs/pont-core/tree/main/storage/backup/backup-cli/src/storage/
                            command_adapter/sample_configs/
     help               Print this message or the help of the given subcommand(s)
     local-fs           Select the LocalFs backup storage type, which is used mainly for tests.
@@ -246,20 +246,20 @@ $ cargo run -p backup-cli --bin db-backup -- \
 There are other subcommands of the db-backup tool, all of which are experimental
 and can mess up with the backup storage, use only at your own risk.
 
-### Creating an AptosDB with minimal data at the latest epoch ending in a backup
+### Creating an PontDB with minimal data at the latest epoch ending in a backup
 
-It's part of the Aptos API functionality to bootstrap a AptosDB with a backup.
+It's part of the Pont API functionality to bootstrap a PontDB with a backup.
 When emergency happens and the need to do the somewhat manual bootstrapping is
-high, Aptos will provide a backup source in the form of a yaml config file. Otherwise
+high, Pont will provide a backup source in the form of a yaml config file. Otherwise
 one can play with a config created by herself (probably the same one used in the
 backup process described in the previous section.).
 
 ```bash
-aptos-node-bootstrap-db-from-backup 0.3.5
+pont-node-bootstrap-db-from-backup 0.3.5
 Tool to bootstrap DB from backup
 
 USAGE:
-    aptos node bootstrap-db-from-backup [OPTIONS] --config-path <CONFIG_PATH> --target-db-dir <DB_DIR>
+    pont node bootstrap-db-from-backup [OPTIONS] --config-path <CONFIG_PATH> --target-db-dir <DB_DIR>
 
 OPTIONS:
         --concurrent-downloads <CONCURRENT_DOWNLOADS>
@@ -284,9 +284,9 @@ OPTIONS:
             transactions after a state snapshot. [Defaults to number of CPUs]
 
         --target-db-dir <DB_DIR>
-            Target dir where the tool recreates a AptosDB with snapshots and transactions provided
-            in the backup. The data folder can later be used to start an Aptos node. e.g. /opt/
-            aptos/data/db
+            Target dir where the tool recreates a PontDB with snapshots and transactions provided
+            in the backup. The data folder can later be used to start an Pont node. e.g. /opt/
+            pont/data/db
 
     -V, --version
             Print version information
@@ -295,7 +295,7 @@ OPTIONS:
 Example command:
 
 ```bash
-RUST_LOG=info ./aptos \
+RUST_LOG=info ./pont \
 	node bootstrap-db-from-backup \
   --metadata-cache-dir ./mc \
   --config-path s3.yaml \

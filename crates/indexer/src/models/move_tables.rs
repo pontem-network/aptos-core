@@ -6,8 +6,8 @@ use crate::{
     schema::{table_items, table_metadatas},
     util::standardize_address,
 };
-use aptos_api_types::{DeleteTableItem, WriteTableItem};
 use field_count::FieldCount;
+use pont_api_types::{DeleteTableItem, WriteTableItem};
 use serde::{Deserialize, Serialize};
 
 #[derive(

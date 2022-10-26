@@ -1,10 +1,10 @@
 [package]
-name = "aptos-jellyfish-merkle"
+name = "pont-jellyfish-merkle"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos jellyfish merkle"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont jellyfish merkle"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -23,12 +23,12 @@ rayon = "1.5.2"
 serde = { version = "1.0.137", features = ["derive"] }
 thiserror = "1.0.31"
 
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-crypto-derive = { path = "../../crates/aptos-crypto-derive" }
-aptos-infallible = { path = "../../crates/aptos-infallible" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-metrics-core = { path = "../../crates/aptos-metrics-core" }
-aptos-types = { path = "../../types" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-crypto-derive = { path = "../../crates/pont-crypto-derive" }
+pont-infallible = { path = "../../crates/pont-infallible" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-metrics-core = { path = "../../crates/pont-metrics-core" }
+pont-types = { path = "../../types" }
 storage-interface = { path = "../storage-interface" }
 
 [dev-dependencies]
@@ -36,10 +36,10 @@ proptest = "1.0.0"
 proptest-derive = "0.3.0"
 rand = "0.7.3"
 
-aptos-crypto = { path = "../../crates/aptos-crypto", features = ["fuzzing"] }
-aptos-types = { path = "../../types", features = ["fuzzing"] }
-aptosdb = { path = "../aptosdb", features = ["fuzzing"] }
+pont-crypto = { path = "../../crates/pont-crypto", features = ["fuzzing"] }
+pont-types = { path = "../../types", features = ["fuzzing"] }
+pontdb = { path = "../pontdb", features = ["fuzzing"] }
 
 [features]
 default = []
-fuzzing = ["proptest", "proptest-derive", "aptos-crypto/fuzzing", "aptos-types/fuzzing"]
+fuzzing = ["proptest", "proptest-derive", "pont-crypto/fuzzing", "pont-types/fuzzing"]

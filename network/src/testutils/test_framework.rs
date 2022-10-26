@@ -10,11 +10,11 @@ use crate::{
         OutboundMessageReceiver,
     },
 };
-use aptos_config::{
+use channel::message_queues::QueueStyle;
+use pont_config::{
     config::NodeConfig,
     network_id::{NetworkId, PeerNetworkId},
 };
-use channel::message_queues::QueueStyle;
 use std::{collections::HashMap, hash::Hash, sync::Arc, vec::Vec};
 
 /// A trait describing a test framework for a specific application
@@ -74,9 +74,9 @@ fn setup_network<NetworkSender: NewNetworkSender, NetworkEvents: NewNetworkEvent
     InboundNetworkHandle,
     OutboundMessageReceiver,
 ) {
-    let (reqs_inbound_sender, reqs_inbound_receiver) = aptos_channel();
-    let (reqs_outbound_sender, reqs_outbound_receiver) = aptos_channel();
-    let (connection_outbound_sender, _connection_outbound_receiver) = aptos_channel();
+    let (reqs_inbound_sender, reqs_inbound_receiver) = pont_channel();
+    let (reqs_outbound_sender, reqs_outbound_receiver) = pont_channel();
+    let (connection_outbound_sender, _connection_outbound_receiver) = pont_channel();
     let (connection_inbound_sender, connection_inbound_receiver) =
         crate::peer_manager::conn_notifs_channel::new();
     let network_sender = NetworkSender::new(
@@ -96,11 +96,11 @@ fn setup_network<NetworkSender: NewNetworkSender, NetworkEvents: NewNetworkEvent
     )
 }
 
-/// A generic FIFO Aptos channel
-fn aptos_channel<K: Eq + Hash + Clone, T>() -> (
-    channel::aptos_channel::Sender<K, T>,
-    channel::aptos_channel::Receiver<K, T>,
+/// A generic FIFO Pont channel
+fn pont_channel<K: Eq + Hash + Clone, T>() -> (
+    channel::pont_channel::Sender<K, T>,
+    channel::pont_channel::Receiver<K, T>,
 ) {
     static MAX_QUEUE_SIZE: usize = 8;
-    channel::aptos_channel::new(QueueStyle::FIFO, MAX_QUEUE_SIZE, None)
+    channel::pont_channel::new(QueueStyle::FIFO, MAX_QUEUE_SIZE, None)
 }

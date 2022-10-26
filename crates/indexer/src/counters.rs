@@ -1,11 +1,11 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_metrics_core::{
+use once_cell::sync::Lazy;
+use pont_metrics_core::{
     register_int_counter, register_int_counter_vec, register_int_gauge_vec, IntCounter,
     IntCounterVec, IntGaugeVec,
 };
-use once_cell::sync::Lazy;
 
 /// Number of times a given processor has been invoked
 pub static PROCESSOR_INVOCATIONS: Lazy<IntCounterVec> = Lazy::new(|| {

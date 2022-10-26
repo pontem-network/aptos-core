@@ -22,10 +22,10 @@ use crate::{
     },
     schema,
 };
-use aptos_api_types::Transaction;
 use async_trait::async_trait;
 use diesel::{result::Error, PgConnection};
 use field_count::FieldCount;
+use pont_api_types::Transaction;
 use std::fmt::Debug;
 
 pub const NAME: &str = "default_processor";
@@ -61,7 +61,7 @@ fn insert_to_db(
     wscs: Vec<WriteSetChangeModel>,
     wsc_details: Vec<WriteSetChangeDetail>,
 ) -> Result<(), diesel::result::Error> {
-    aptos_logger::trace!(
+    pont_logger::trace!(
         name = name,
         start_version = start_version,
         end_version = end_version,

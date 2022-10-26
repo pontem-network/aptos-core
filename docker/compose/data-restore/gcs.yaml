@@ -1,6 +1,6 @@
 env_vars:
   - key: "BUCKET"
-    value: "aptos-sherry-backup-8e146203"
+    value: "pont-sherry-backup-8e146203"
   - key: "SUB_DIR"
     value: "e4"
 commands:

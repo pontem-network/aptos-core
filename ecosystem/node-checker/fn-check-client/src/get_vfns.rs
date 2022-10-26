@@ -5,15 +5,15 @@
 //! converting it into the format expected by check.rs
 
 use anyhow::{Context, Result};
-use aptos_sdk::{
-    rest_client::Client as AptosClient,
+use clap::Parser;
+use log::info;
+use pont_sdk::{
+    rest_client::Client as PontClient,
     types::{
         account_address::AccountAddress, account_config::CORE_CODE_ADDRESS,
         on_chain_config::ValidatorSet, validator_info::ValidatorInfo,
     },
 };
-use clap::Parser;
-use log::info;
 use reqwest::Url;
 use std::collections::HashMap;
 
@@ -36,7 +36,7 @@ pub struct GetValidatorFullNodes {
 impl GetValidatorFullNodes {
     /// Get all the on chain validator info.
     async fn get_validator_infos(&self) -> Result<Vec<ValidatorInfo>> {
-        let client = AptosClient::new(self.node_address.clone());
+        let client = PontClient::new(self.node_address.clone());
         let response = client
             .get_account_resource_bcs::<ValidatorSet>(CORE_CODE_ADDRESS, "0x1::stake::ValidatorSet")
             .await?;

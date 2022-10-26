@@ -15,10 +15,10 @@ use crate::{
     util::standardize_address,
 };
 use anyhow::Context;
-use aptos_api_types::WriteTableItem as APIWriteTableItem;
 use bigdecimal::BigDecimal;
 use diesel::{prelude::*, ExpressionMethods};
 use field_count::FieldCount;
+use pont_api_types::WriteTableItem as APIWriteTableItem;
 use serde::{Deserialize, Serialize};
 
 const QUERY_RETRIES: u32 = 5;

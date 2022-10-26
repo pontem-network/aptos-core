@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::utils;
-use aptos_logger::{Level, CHANNEL_SIZE};
+use pont_logger::{Level, CHANNEL_SIZE};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Eq, Serialize)]
@@ -31,7 +31,7 @@ impl Default for LoggerConfig {
             is_async: true,
             level: Level::Info,
             // This is the default port used by tokio-console
-            // setting console_port to None will disable tokio console even if aptos-console
+            // setting console_port to None will disable tokio console even if pont-console
             // feature is enabled
             console_port: Some(6669),
             enable_telemetry_remote_log: true,

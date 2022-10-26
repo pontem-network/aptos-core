@@ -3,8 +3,6 @@
 
 use crate::error::{QuorumStoreError, StateSyncError};
 use anyhow::Result;
-use aptos_crypto::HashValue;
-use aptos_types::{epoch_state::EpochState, ledger_info::LedgerInfoWithSignatures};
 use consensus_types::{
     block::Block,
     common::{Payload, PayloadFilter},
@@ -12,6 +10,8 @@ use consensus_types::{
 };
 use executor_types::{Error as ExecutionError, StateComputeResult};
 use futures::future::BoxFuture;
+use pont_crypto::HashValue;
+use pont_types::{epoch_state::EpochState, ledger_info::LedgerInfoWithSignatures};
 use std::sync::Arc;
 
 pub type StateComputerCommitCallBackType =

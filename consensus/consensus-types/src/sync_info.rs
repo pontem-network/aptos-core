@@ -3,7 +3,7 @@
 
 use crate::{common::Round, quorum_cert::QuorumCert, timeout_2chain::TwoChainTimeoutCertificate};
 use anyhow::{ensure, Context};
-use aptos_types::{block_info::BlockInfo, validator_verifier::ValidatorVerifier};
+use pont_types::{block_info::BlockInfo, validator_verifier::ValidatorVerifier};
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Display, Formatter};
 

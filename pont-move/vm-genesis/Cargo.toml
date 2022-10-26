@@ -1,0 +1,40 @@
+[package]
+name = "vm-genesis"
+version = "0.1.0"
+edition = "2021"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont vm genesis"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+anyhow = "1.0.57"
+bcs = { git = "https://github.com/aptos-labs/bcs", rev = "2cde3e8446c460cb17b0c1d6bac7e27e964ac169" }
+once_cell = "1.10.0"
+rand = "0.7.3"
+serde = { version = "1.0.137", default-features = false }
+
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-gas = { path = "../pont-gas" }
+pont-state-view = { path = "../../storage/state-view" }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../pont-vm" }
+cached-packages =  { path = "../framework/cached-packages" }
+framework =  { path = "../framework" }
+
+move-core-types = { workspace = true }
+move-vm-types = { workspace = true }
+
+[dev-dependencies]
+proptest = "1.0.0"
+proptest-derive = "0.3.0"
+
+pont-proptest-helpers = { path = "../../crates/pont-proptest-helpers" }
+
+move-core-types = { workspace = true, features = ["fuzzing"] }
+
+[features]
+default = []
+fuzzing = ["pont-types/fuzzing", "move-core-types/fuzzing", "move-vm-types/fuzzing"]

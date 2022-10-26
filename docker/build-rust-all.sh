@@ -12,38 +12,38 @@ echo "FEATURES: $FEATURES"
 
 # Build all the rust binaries
 cargo build --locked --profile=$PROFILE \
-    -p aptos \
-    -p aptos-faucet \
-    -p aptos-node-checker \
-    -p aptos-openapi-spec-generator \
-    -p aptos-telemetry-service \
-    -p aptos-fn-check-client \
+    -p pont \
+    -p pont-faucet \
+    -p pont-node-checker \
+    -p pont-openapi-spec-generator \
+    -p pont-telemetry-service \
+    -p pont-fn-check-client \
     -p backup-cli \
     -p db-bootstrapper \
     -p forge-cli \
     -p transaction-emitter \
     "$@"
 
-# Build aptos-node separately
+# Build pont-node separately
 cargo build --locked --profile=$PROFILE \
-    -p aptos-node \
+    -p pont-node \
     "$@"
 
-# Build and overwrite the aptos-node binary with features if specified
+# Build and overwrite the pont-node binary with features if specified
 if [ -n "$FEATURES" ]; then
-    echo "Building aptos-node with features ${FEATURES}"
-    (cd aptos-node && cargo build --profile=$PROFILE --features=$FEATURES "$@")
+    echo "Building pont-node with features ${FEATURES}"
+    (cd pont-node && cargo build --profile=$PROFILE --features=$FEATURES "$@")
 fi
 
 # After building, copy the binaries we need to `dist` since the `target` directory is used as docker cache mount and only available during the RUN step
 BINS=(
-    aptos
-    aptos-faucet
-    aptos-node
-    aptos-node-checker
-    aptos-openapi-spec-generator
-    aptos-telemetry-service
-    aptos-fn-check-client
+    pont
+    pont-faucet
+    pont-node
+    pont-node-checker
+    pont-openapi-spec-generator
+    pont-telemetry-service
+    pont-fn-check-client
     db-backup
     db-backup-verify
     db-bootstrapper
@@ -58,5 +58,5 @@ for BIN in "${BINS[@]}"; do
     cp target/$PROFILE/$BIN dist/$BIN
 done
 
-# Build the Aptos Move framework and place it in dist. It can be found afterwards in the current directory.
+# Build the Pont Move framework and place it in dist. It can be found afterwards in the current directory.
 (cd dist && cargo run --package framework -- release)

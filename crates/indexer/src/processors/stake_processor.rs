@@ -12,10 +12,10 @@ use crate::{
     models::stake_models::staking_pool_voter::{CurrentStakingPoolVoter, StakingPoolVoterMap},
     schema,
 };
-use aptos_api_types::Transaction as APITransaction;
 use async_trait::async_trait;
 use diesel::{pg::upsert::excluded, result::Error, ExpressionMethods, PgConnection};
 use field_count::FieldCount;
+use pont_api_types::Transaction as APITransaction;
 use std::{collections::HashMap, fmt::Debug};
 
 pub const NAME: &str = "stake_processor";
@@ -55,7 +55,7 @@ fn insert_to_db(
     end_version: u64,
     current_stake_pool_voters: Vec<CurrentStakingPoolVoter>,
 ) -> Result<(), diesel::result::Error> {
-    aptos_logger::trace!(
+    pont_logger::trace!(
         name = name,
         start_version = start_version,
         end_version = end_version,

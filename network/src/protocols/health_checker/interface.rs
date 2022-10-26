@@ -15,10 +15,10 @@ use crate::{
         network::Event,
     },
 };
-use aptos_config::network_id::PeerNetworkId;
-use aptos_types::PeerId;
 use async_trait::async_trait;
 use futures::{stream::FusedStream, Stream};
+use pont_config::network_id::PeerNetworkId;
+use pont_types::PeerId;
 use std::{
     collections::hash_map::Entry,
     pin::Pin,

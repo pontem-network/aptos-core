@@ -2,13 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::Result;
-use aptos_config::config::{
-    BUFFERED_STATE_TARGET_ITEMS, DEFAULT_MAX_NUM_NODES_PER_LRU_CACHE_SHARD,
-    NO_OP_STORAGE_PRUNER_CONFIG,
-};
-use aptos_logger::{prelude::*, Level, Logger};
-use aptos_types::transaction::Version;
-use aptosdb::{AptosDB, GetRestoreHandler};
 use backup_cli::utils::ReplayConcurrencyLevelOpt;
 use backup_cli::{
     coordinators::replay_verify::ReplayVerifyCoordinator,
@@ -17,6 +10,13 @@ use backup_cli::{
     utils::{ConcurrentDownloadsOpt, RocksdbOpt, TrustedWaypointOpt},
 };
 use clap::Parser;
+use pont_config::config::{
+    BUFFERED_STATE_TARGET_ITEMS, DEFAULT_MAX_NUM_NODES_PER_LRU_CACHE_SHARD,
+    NO_OP_STORAGE_PRUNER_CONFIG,
+};
+use pont_logger::{prelude::*, Level, Logger};
+use pont_types::transaction::Version;
+use pontdb::{GetRestoreHandler, PontDB};
 use std::{path::PathBuf, sync::Arc};
 
 #[derive(Parser)]
@@ -60,7 +60,7 @@ async fn main_impl() -> Result<()> {
     Logger::new().level(Level::Info).read_env().init();
 
     let opt = Opt::from_args();
-    let restore_handler = Arc::new(AptosDB::open(
+    let restore_handler = Arc::new(PontDB::open(
         opt.db_dir,
         false,                       /* read_only */
         NO_OP_STORAGE_PRUNER_CONFIG, /* pruner config */

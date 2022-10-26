@@ -5,16 +5,16 @@ use crate::{Get, K8sApi, Result, KUBECTL_BIN};
 use std::{process::Command, sync::Arc, time::Duration};
 
 use anyhow::bail;
-use aptos_retrier::ExponentWithLimitDelay;
 use k8s_openapi::api::{apps::v1::StatefulSet, core::v1::Pod};
+use pont_retrier::ExponentWithLimitDelay;
 
 use again::RetryPolicy;
-use aptos_logger::info;
 use json_patch::{Patch as JsonPatch, PatchOperation, ReplaceOperation};
 use kube::{
     api::{Api, Meta, Patch, PatchParams},
     client::Client as K8sClient,
 };
+use pont_logger::info;
 use serde_json::{json, Value};
 use thiserror::Error;
 
@@ -257,7 +257,7 @@ pub async fn set_identity(
     let kube_client = create_k8s_client().await;
     let stateful_set_api: Api<StatefulSet> = Api::namespaced(kube_client.clone(), kube_namespace);
     let patch_op = PatchOperation::Replace(ReplaceOperation {
-        // The json path below should match `terraform/helm/aptos-node/templates/validator.yaml`.
+        // The json path below should match `terraform/helm/pont-node/templates/validator.yaml`.
         path: "/spec/template/spec/volumes/1/secret/secretName".to_string(),
         value: json!(k8s_secret_name),
     });
@@ -271,7 +271,7 @@ pub async fn get_identity(sts_name: &str, kube_namespace: &str) -> Result<String
     let kube_client = create_k8s_client().await;
     let stateful_set_api: Api<StatefulSet> = Api::namespaced(kube_client.clone(), kube_namespace);
     let sts = stateful_set_api.get(sts_name).await?;
-    // The json path below should match `terraform/helm/aptos-node/templates/validator.yaml`.
+    // The json path below should match `terraform/helm/pont-node/templates/validator.yaml`.
     let secret_name = sts.spec.unwrap().template.spec.unwrap().volumes.unwrap()[1]
         .secret
         .clone()
@@ -286,7 +286,7 @@ pub async fn check_for_container_restart(
     kube_namespace: &str,
     sts_name: &str,
 ) -> Result<()> {
-    aptos_retrier::retry_async(
+    pont_retrier::retry_async(
         ExponentWithLimitDelay::new(1000, 10 * 1000, 60 * 1000),
         || {
             let pod_api: Api<Pod> = Api::namespaced(kube_client.clone(), kube_namespace);

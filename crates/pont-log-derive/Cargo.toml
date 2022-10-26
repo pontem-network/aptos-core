@@ -1,0 +1,20 @@
+[package]
+name = "pont-log-derive"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont structured log type macros"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1.0.38"
+quote = "1.0.18"
+syn = { version = "1.0.92", features = ["extra-traits"] }
+
+

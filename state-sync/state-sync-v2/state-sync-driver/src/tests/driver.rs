@@ -9,18 +9,6 @@ use crate::{
         verify_mempool_and_event_notification,
     },
 };
-use aptos_config::config::{NodeConfig, RoleType};
-use aptos_data_client::aptosnet::AptosNetDataClient;
-use aptos_infallible::RwLock;
-use aptos_time_service::TimeService;
-use aptos_types::{
-    event::EventKey,
-    on_chain_config::{new_epoch_event_key, ON_CHAIN_CONFIG_REGISTRY},
-    transaction::{Transaction, WriteSetPayload},
-    waypoint::Waypoint,
-};
-use aptos_vm::AptosVM;
-use aptosdb::AptosDB;
 use claims::{assert_err, assert_none};
 use consensus_notifications::{ConsensusNotificationSender, ConsensusNotifier};
 use data_streaming_service::streaming_client::new_streaming_service_client_listener_pair;
@@ -32,6 +20,18 @@ use executor_test_helpers::bootstrap_genesis;
 use futures::{FutureExt, StreamExt};
 use mempool_notifications::MempoolNotificationListener;
 use network::application::{interface::MultiNetworkSender, storage::PeerMetadataStorage};
+use pont_config::config::{NodeConfig, RoleType};
+use pont_data_client::pontnet::PontNetDataClient;
+use pont_infallible::RwLock;
+use pont_time_service::TimeService;
+use pont_types::{
+    event::EventKey,
+    on_chain_config::{new_epoch_event_key, ON_CHAIN_CONFIG_REGISTRY},
+    transaction::{Transaction, WriteSetPayload},
+    waypoint::Waypoint,
+};
+use pont_vm::PontVM;
+use pontdb::PontDB;
 use std::{collections::HashMap, sync::Arc};
 use storage_interface::DbReaderWriter;
 use storage_service_client::StorageServiceClient;
@@ -225,15 +225,15 @@ async fn create_driver_for_tests(
     ReconfigNotificationListener,
     EventNotificationListener,
 ) {
-    // Create test aptos database
-    let db_path = aptos_temppath::TempPath::new();
+    // Create test pont database
+    let db_path = pont_temppath::TempPath::new();
     db_path.create_as_dir().unwrap();
-    let (_, db_rw) = DbReaderWriter::wrap(AptosDB::new_for_test(db_path.path()));
+    let (_, db_rw) = DbReaderWriter::wrap(PontDB::new_for_test(db_path.path()));
 
     // Bootstrap the genesis transaction
     let (genesis, _) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
     let genesis_txn = Transaction::GenesisTransaction(WriteSetPayload::Direct(genesis));
-    bootstrap_genesis::<AptosVM>(&db_rw, &genesis_txn).unwrap();
+    bootstrap_genesis::<PontVM>(&db_rw, &genesis_txn).unwrap();
 
     // Create the event subscription service and subscribe to events and reconfigurations
     let mut event_subscription_service = EventSubscriptionService::new(
@@ -256,18 +256,18 @@ async fn create_driver_for_tests(
         mempool_notifications::new_mempool_notifier_listener_pair();
 
     // Create the chunk executor
-    let chunk_executor = Arc::new(ChunkExecutor::<AptosVM>::new(db_rw.clone()));
+    let chunk_executor = Arc::new(ChunkExecutor::<PontVM>::new(db_rw.clone()));
 
     // Create a streaming service client
     let (streaming_service_client, _) = new_streaming_service_client_listener_pair();
 
-    // Create a test aptos data client
+    // Create a test pont data client
     let network_client = StorageServiceClient::new(
         MultiNetworkSender::new(HashMap::new()),
         PeerMetadataStorage::new(&[]),
     );
-    let (aptos_data_client, _) = AptosNetDataClient::new(
-        node_config.state_sync.aptos_data_client,
+    let (pont_data_client, _) = PontNetDataClient::new(
+        node_config.state_sync.pont_data_client,
         node_config.base.clone(),
         node_config.state_sync.storage_service,
         TimeService::mock(),
@@ -289,7 +289,7 @@ async fn create_driver_for_tests(
         metadata_storage,
         consensus_listener,
         event_subscription_service,
-        aptos_data_client,
+        pont_data_client,
         streaming_service_client,
     );
 

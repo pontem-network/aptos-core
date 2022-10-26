@@ -29,7 +29,7 @@ spec:
         - name: node-health-checker
           image: "{{ .Values.node_health_checker.image.repo }}:{{ .Values.node_health_checker.image.tag | default .Values.imageTag }}"
           imagePullPolicy: {{ .Values.node_health_checker.image.pullPolicy }}
-          command: ["aptos-node-checker"]
+          command: ["pont-node-checker"]
           args: 
             - server
             - run

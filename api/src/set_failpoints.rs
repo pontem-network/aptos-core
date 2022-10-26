@@ -4,12 +4,12 @@
 use crate::context::Context;
 #[allow(unused_imports)]
 use anyhow::{format_err, Result};
-#[cfg(feature = "failpoints")]
-use aptos_logger::prelude::*;
 use poem::{
     handler,
     web::{Data, Query},
 };
+#[cfg(feature = "failpoints")]
+use pont_logger::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]

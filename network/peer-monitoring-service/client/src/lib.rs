@@ -3,8 +3,6 @@
 
 #![forbid(unsafe_code)]
 
-use aptos_config::network_id::PeerNetworkId;
-use aptos_types::PeerId;
 use async_trait::async_trait;
 use network::{
     application::{
@@ -21,12 +19,14 @@ use peer_monitoring_service_types::{
     PeerMonitoringServiceError, PeerMonitoringServiceMessage, PeerMonitoringServiceRequest,
     PeerMonitoringServiceResponse,
 };
+use pont_config::network_id::PeerNetworkId;
+use pont_types::PeerId;
 use std::{sync::Arc, time::Duration};
 use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum Error {
-    #[error("Aptos network rpc error: {0}")]
+    #[error("Pont network rpc error: {0}")]
     RpcError(#[from] RpcError),
 
     #[error("Error from remote monitoring service: {0}")]

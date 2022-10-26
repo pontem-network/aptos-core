@@ -1,4 +1,4 @@
-# This defines a workflow to build and release a new version of the aptos CLI.
+# This defines a workflow to build and release a new version of the pont CLI.
 # In order to trigger it go to the Actions Tab of the Repo, click "Release CLI" and then "Run Workflow".
 
 name: "Release CLI"
@@ -9,7 +9,7 @@ on:
       release_tag:
         type: string
         required: true
-        description: "The release tag to create. E.g. `aptos-cli-v0.2.3`:"
+        description: "The release tag to create. E.g. `pont-cli-v0.2.3`:"
       source_git_ref_override:
         type: string
         required: false
@@ -17,7 +17,7 @@ on:
       release_title:
         type: string
         required: false
-        description: 'Name of the release, e.g. "Aptos CLI devnet release 2022-06-09":'
+        description: 'Name of the release, e.g. "Pont CLI devnet release 2022-06-09":'
 
 jobs:
   build-ubuntu20-binary:
@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # pin@v3
         with:
           name: cli-builds
-          path: aptos-cli-*.zip
+          path: pont-cli-*.zip
 
   build-ubuntu22-binary:
     name: "Build Ubuntu 22.04 binary"
@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # pin@v3
         with:
           name: cli-builds
-          path: aptos-cli-*.zip
+          path: pont-cli-*.zip
 
   build-os-x-binary:
     name: "Build OS X binary"
@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # pin@v3
         with:
           name: cli-builds
-          path: aptos-cli-*.zip
+          path: pont-cli-*.zip
 
   build-windows-binary:
     name: "Build Windows binary"
@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # pin@v3
         with:
           name: cli-builds
-          path: aptos-cli-*.zip
+          path: pont-cli-*.zip
 
   release-binaries:
     name: "Release binaries"
@@ -104,4 +104,4 @@ jobs:
           prerelease: false
           title: "${{ github.event.inputs.release_title }}"
           files: |
-            aptos-cli-*.zip
+            pont-cli-*.zip

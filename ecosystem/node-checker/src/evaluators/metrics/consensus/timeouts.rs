@@ -28,7 +28,7 @@ use serde::{Deserialize, Serialize};
 // TODO: When we have it, switch to using a crate that unifies metric names.
 // As it is now, this metric name could change and we'd never catch it here
 // at compile time.
-const METRIC: &str = "aptos_consensus_timeout_count";
+const METRIC: &str = "pont_consensus_timeout_count";
 
 #[derive(Clone, Debug, Deserialize, Parser, PoemObject, Serialize)]
 pub struct ConsensusTimeoutsEvaluatorArgs {

@@ -1,10 +1,10 @@
 [package]
-name = "aptos-api"
+name = "pont-api"
 version = "0.2.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos REST API"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont REST API"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -29,27 +29,27 @@ serde_json = { version = "1.0.81", features = ["preserve_order"] }
 tokio = { version = "1.21.0", features = ["full"] }
 url = "2.2.2"
 
-aptos-api-types = { path = "./types", package = "aptos-api-types" }
-aptos-build-info = { path = "../crates/aptos-build-info" }
-aptos-config = { path = "../config" }
-aptos-crypto = { path = "../crates/aptos-crypto" }
-aptos-gas = { path = "../aptos-move/aptos-gas" }
-aptos-logger = { path = "../crates/aptos-logger" }
-aptos-mempool = { path = "../mempool" }
-aptos-metrics-core = { path = "../crates/aptos-metrics-core" }
-aptos-state-view = { path = "../storage/state-view" }
-aptos-types = { path = "../types" }
-aptos-vm = { path = "../aptos-move/aptos-vm" }
+pont-api-types = { path = "./types", package = "pont-api-types" }
+pont-build-info = { path = "../crates/pont-build-info" }
+pont-config = { path = "../config" }
+pont-crypto = { path = "../crates/pont-crypto" }
+pont-gas = { path = "../pont-move/pont-gas" }
+pont-logger = { path = "../crates/pont-logger" }
+pont-mempool = { path = "../mempool" }
+pont-metrics-core = { path = "../crates/pont-metrics-core" }
+pont-state-view = { path = "../storage/state-view" }
+pont-types = { path = "../types" }
+pont-vm = { path = "../pont-move/pont-vm" }
 
 storage-interface = { path = "../storage/storage-interface" }
 
 move-core-types = { workspace = true }
 
 [dev-dependencies]
-aptos-api-test-context = { path = "./test-context", package = "aptos-api-test-context" }
-aptos-gas = { path = "../aptos-move/aptos-gas", features = ["testing"] }
-aptos-proptest-helpers = { path = "../crates/aptos-proptest-helpers" }
-aptos-sdk = { path = "../sdk" }
+pont-api-test-context = { path = "./test-context", package = "pont-api-test-context" }
+pont-gas = { path = "../pont-move/pont-gas", features = ["testing"] }
+pont-proptest-helpers = { path = "../crates/pont-proptest-helpers" }
+pont-sdk = { path = "../sdk" }
 percent-encoding = "2.1.0"
 proptest = { version = "1.0.0", default-features = true }
 rand = "0.7.3"

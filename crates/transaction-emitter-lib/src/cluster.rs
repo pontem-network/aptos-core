@@ -3,14 +3,14 @@
 
 use crate::{emitter::query_sequence_number, instance::Instance, ClusterArgs};
 use anyhow::{anyhow, bail, format_err, Result};
-use aptos_crypto::{
+use pont_crypto::{
     ed25519::{Ed25519PrivateKey, Ed25519PublicKey},
     test_utils::KeyPair,
 };
-use aptos_logger::{info, warn};
-use aptos_rest_client::Client as RestClient;
-use aptos_sdk::types::{
-    account_config::aptos_test_root_address, chain_id::ChainId, AccountKey, LocalAccount,
+use pont_logger::{info, warn};
+use pont_rest_client::Client as RestClient;
+use pont_sdk::types::{
+    account_config::pont_test_root_address, chain_id::ChainId, AccountKey, LocalAccount,
 };
 use rand::seq::SliceRandom;
 use std::convert::TryFrom;
@@ -142,7 +142,7 @@ impl Cluster {
     pub async fn load_coin_source_account(&self, client: &RestClient) -> Result<LocalAccount> {
         let account_key = self.account_key();
         let address = if self.coin_source_is_root {
-            aptos_test_root_address()
+            pont_test_root_address()
         } else {
             account_key.authentication_key().derived_address()
         };

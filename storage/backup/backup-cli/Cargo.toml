@@ -1,9 +1,9 @@
 [package]
 name = "backup-cli"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -29,17 +29,17 @@ tokio = { version = "1.21.0", features = ["full"] }
 tokio-stream = "0.1.8"
 tokio-util = { version = "0.7.2", features = ["compat"] }
 
-aptos-config = { path = "../../../config" }
-aptos-crypto = { path = "../../../crates/aptos-crypto" }
-aptos-infallible = { path = "../../../crates/aptos-infallible" }
-aptos-jellyfish-merkle = { path = "../../jellyfish-merkle" }
-aptos-logger = { path = "../../../crates/aptos-logger" }
-aptos-push-metrics = { path = "../../../crates/aptos-push-metrics" }
-aptos-temppath = { path = "../../../crates/aptos-temppath" }
-aptos-types = { path = "../../../types" }
-aptos-vm = { path = "../../../aptos-move/aptos-vm" }
+pont-config = { path = "../../../config" }
+pont-crypto = { path = "../../../crates/pont-crypto" }
+pont-infallible = { path = "../../../crates/pont-infallible" }
+pont-jellyfish-merkle = { path = "../../jellyfish-merkle" }
+pont-logger = { path = "../../../crates/pont-logger" }
+pont-push-metrics = { path = "../../../crates/pont-push-metrics" }
+pont-temppath = { path = "../../../crates/pont-temppath" }
+pont-types = { path = "../../../types" }
+pont-vm = { path = "../../../pont-move/pont-vm" }
 
-aptosdb = { path = "../../aptosdb" }
+pontdb = { path = "../../pontdb" }
 executor = { path = "../../../execution/executor" }
 executor-test-helpers = { path = "../../../execution/executor-test-helpers", optional = true }
 executor-types = { path = "../../../execution/executor-types" }
@@ -50,12 +50,12 @@ storage-interface = { path = "../../storage-interface" }
 proptest = "1.0.0"
 warp = "0.3.2"
 
-aptos-config = { path = "../../../config" }
-aptos-proptest-helpers = { path = "../../../crates/aptos-proptest-helpers" }
-aptosdb = { path = "../../aptosdb", features = ["fuzzing"] }
+pont-config = { path = "../../../config" }
+pont-proptest-helpers = { path = "../../../crates/pont-proptest-helpers" }
+pontdb = { path = "../../pontdb", features = ["fuzzing"] }
 backup-service = { path = "../backup-service" }
 executor-test-helpers = { path = "../../../execution/executor-test-helpers" }
 storage-interface = { path = "../../storage-interface" }
 
 [features]
-fuzzing = ["aptosdb/fuzzing"]
+fuzzing = ["pontdb/fuzzing"]

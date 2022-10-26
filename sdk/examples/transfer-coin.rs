@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{Context, Result};
-use aptos_sdk::coin_client::CoinClient;
-use aptos_sdk::rest_client::{Client, FaucetClient};
-use aptos_sdk::types::LocalAccount;
 use once_cell::sync::Lazy;
+use pont_sdk::coin_client::CoinClient;
+use pont_sdk::rest_client::{Client, FaucetClient};
+use pont_sdk::types::LocalAccount;
 use std::str::FromStr;
 use url::Url;
 
@@ -15,7 +15,7 @@ static NODE_URL: Lazy<Url> = Lazy::new(|| {
         std::env::var("APTOS_NODE_URL")
             .as_ref()
             .map(|s| s.as_str())
-            .unwrap_or("https://fullnode.devnet.aptoslabs.com"),
+            .unwrap_or("https://fullnode.devnet.pontlabs.com"),
     )
     .unwrap()
 });
@@ -25,7 +25,7 @@ static FAUCET_URL: Lazy<Url> = Lazy::new(|| {
         std::env::var("APTOS_FAUCET_URL")
             .as_ref()
             .map(|s| s.as_str())
-            .unwrap_or("https://faucet.devnet.aptoslabs.com"),
+            .unwrap_or("https://faucet.devnet.pontlabs.com"),
     )
     .unwrap()
 });

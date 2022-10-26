@@ -11,50 +11,50 @@ slug: "glossary"
 
 ## Account
 
-- An **account** in the Aptos blockchain is a container for an arbitrary number of [Move modules](#move-module) and [Move resources](#move-resources). This essentially means that the state of each account is comprised of both code and data.
+- An **account** in the Pont blockchain is a container for an arbitrary number of [Move modules](#move-module) and [Move resources](#move-resources). This essentially means that the state of each account is comprised of both code and data.
 - The account is identified by an [account address](#account-address).
 
 ## Account Address
 
-- The address of a Aptos account, see [basics on accounts](/concepts/basics-accounts#initial-account-setup).
+- The address of a Pont account, see [basics on accounts](/concepts/basics-accounts#initial-account-setup).
 
-## AptosBFT
+## PontBFT
 
-- AptosBFT is the Aptos protocol's BFT consensus algorithm.
-- AptosBFT is based on HotStuff.
+- PontBFT is the Pont protocol's BFT consensus algorithm.
+- PontBFT is based on HotStuff.
 
-## Aptos blockchain
+## Pont blockchain
 
-- The **Aptos blockchain** is a ledger of immutable transactions agreed upon by the validators on the Aptos network (the network of validators).
+- The **Pont blockchain** is a ledger of immutable transactions agreed upon by the validators on the Pont network (the network of validators).
 
-## Aptos-core
+## Pont-core
 
-Aptos-core is the open source technology on which the Aptos Payment Network runs. Aptos-core contains software for
+Pont-core is the open source technology on which the Pont Payment Network runs. Pont-core contains software for
 
-* the Aptos blockchain itself, which generates and stores the immutable ledger of confirmed transactions and
-* the validation process, which implements the consensus algorithm to validate transactions and add them to the Aptos blockchain immutable ledger.
+* the Pont blockchain itself, which generates and stores the immutable ledger of confirmed transactions and
+* the validation process, which implements the consensus algorithm to validate transactions and add them to the Pont blockchain immutable ledger.
 
-## Aptos Framework
-The Aptos Framework defines the public API for blockchain updates and the structure of on-chain data. It defines the business logic and access control for the three key pillars of Aptos functionality: payments, treasury, and on-chain governance. It is implemented as a set of modules written in the Move programming language and stored on-chain as Move bytecode.
+## Pont Framework
+The Pont Framework defines the public API for blockchain updates and the structure of on-chain data. It defines the business logic and access control for the three key pillars of Pont functionality: payments, treasury, and on-chain governance. It is implemented as a set of modules written in the Move programming language and stored on-chain as Move bytecode.
 
-## Aptos node
-An Aptos node is a peer entity of the Aptos network that tracks the state of the Aptos blockchain. There are two types of Aptos nodes, [validators](#validator) and [fullnodes](#fullnode)).
+## Pont node
+An Pont node is a peer entity of the Pont network that tracks the state of the Pont blockchain. There are two types of Pont nodes, [validators](#validator) and [fullnodes](#fullnode)).
 
-## Aptos Protocol
+## Pont Protocol
 
-- **Aptos protocol** is the specification of how transactions are submitted, ordered, executed, and recorded within the Aptos network.
+- **Pont protocol** is the specification of how transactions are submitted, ordered, executed, and recorded within the Pont network.
 
-## AptosAccount
+## PontAccount
 
-- A **`AptosAccount`** is a Move resource that holds all the administrative data associated with an account, such as sequence number, balance, and authentication key.
-- A **`AptosAccount`** is the only resource that every account is guaranteed to contain.
+- A **`PontAccount`** is a Move resource that holds all the administrative data associated with an account, such as sequence number, balance, and authentication key.
+- A **`PontAccount`** is the only resource that every account is guaranteed to contain.
 
-## AptosAccount module
+## PontAccount module
 
-- **The AptosAccount module** is a Move module that contains the code for manipulating the administrative data held in a particular `AptosAccount.T` resource.
-- Code for checking or incrementing sequence numbers, withdrawing or depositing currency, and extracting gas deposits is included in the AptosAccount module.
+- **The PontAccount module** is a Move module that contains the code for manipulating the administrative data held in a particular `PontAccount.T` resource.
+- Code for checking or incrementing sequence numbers, withdrawing or depositing currency, and extracting gas deposits is included in the PontAccount module.
 
-## Aptos devnet
+## Pont devnet
 
 - See [devnet](#devnet).
 
@@ -68,8 +68,8 @@ An Aptos node is a peer entity of the Aptos network that tracks the state of the
 ## Byzantine Fault Tolerance (BFT)
 
 - **Byzantine Fault Tolerance** (BFT) is the ability of a distributed system to provide safety and liveness guarantees in the presence of faulty, or “[Byzantine](#byzantine-validator),” validators below a certain threshold.
-- The Aptos blockchain uses AptosBFT, a consensus protocol based on [HotStuff.](#hotstuff)
-- BFT algorithms typically operate with a number of entities, collectively holding N votes (which are called “validators” in the Aptos network’s application of the system).
+- The Pont blockchain uses PontBFT, a consensus protocol based on [HotStuff.](#hotstuff)
+- BFT algorithms typically operate with a number of entities, collectively holding N votes (which are called “validators” in the Pont network’s application of the system).
 - N is chosen to withstand some number of validators holding f votes, which might be malicious.
 - In this configuration, N is typically set to 3f+1. Validators holding up to f votes will be allowed to be faulty &mdash; offline, malicious, slow, etc. As long as 2f+1 votes are held by [honest](#honest-validator) validators, they will be able to reach consensus on consistent decisions.
 - This implies that BFT consensus protocols can function correctly, even if up to one-third of the voting power is held by validators that are compromised or fail.
@@ -78,7 +78,7 @@ An Aptos node is a peer entity of the Aptos network that tracks the state of the
 
 - **Consensus** is a component of a validator.
 - The consensus component is responsible for coordination and agreement amongst all validators on the block of transactions to be executed, their order, and the execution results.
-- The Aptos blockchain is formed with these agreed-upon transactions and their corresponding execution results.
+- The Pont blockchain is formed with these agreed-upon transactions and their corresponding execution results.
 
 ## Consensus Protocol
 
@@ -89,8 +89,8 @@ An Aptos node is a peer entity of the Aptos network that tracks the state of the
 
 ## devnet
 
-- The **devnet** is a publicly deployed instance of the Aptos network that runs using a set of validator test nodes.
-- The devnet is a demonstration of the Aptos network that is built for experimenting with new ideas
+- The **devnet** is a publicly deployed instance of the Pont network that runs using a set of validator test nodes.
+- The devnet is a demonstration of the Pont network that is built for experimenting with new ideas
 - The devnet simulates a digital payment system and the coins on the devnet have _no real world value_.
 
 # E
@@ -98,13 +98,13 @@ An Aptos node is a peer entity of the Aptos network that tracks the state of the
 ## Ed25519
 
 - **Ed25519** is our supported digital signature scheme.
-- More specifically, the Aptos network uses the PureEdDSA scheme over the Ed25519 curve, as defined in RFC 8032.
+- More specifically, the Pont network uses the PureEdDSA scheme over the Ed25519 curve, as defined in RFC 8032.
 
 ## Event
 
 - An **event** is the user-facing representation of the effects of executing a transaction.
-- A transaction may be designed to emit any number of events as a list. For example, a `Coin<AptosCoin>` transfer emits a `WithdrawEvent` for the sender account and a `DepositEvent` for the recipient account.
-- In the Aptos protocol, events provide evidence that the successful execution of a transaction resulted in a specific effect. The `DepositEvent` (in the above example) allows the recipient to confirm that a payment was received into their account.
+- A transaction may be designed to emit any number of events as a list. For example, a `Coin<PontCoin>` transfer emits a `WithdrawEvent` for the sender account and a `DepositEvent` for the recipient account.
+- In the Pont protocol, events provide evidence that the successful execution of a transaction resulted in a specific effect. The `DepositEvent` (in the above example) allows the recipient to confirm that a payment was received into their account.
 - Events are persisted on the blockchain and are used to answer queries by [clients](#client).
 
 ## Expiration Time
@@ -121,7 +121,7 @@ then there is a guarantee that T_N will never be included in the blockchain.
 
 ## Faucet
 
-- **Faucet** is the way to create Aptos currency with no real-world value, only on our devnet.
+- **Faucet** is the way to create Pont currency with no real-world value, only on our devnet.
 - The Faucet is a service running along with the devnet. This service only exists to facilitate minting coins for the devnet.
 - You can use the Faucet by sending a request to create coins and transfer them into a given account on your behalf.
 
@@ -129,7 +129,7 @@ then there is a guarantee that T_N will never be included in the blockchain.
 
 ## Gas
 
-- **Gas** is a way to pay for computation and storage on a blockchain network. All transactions on the Aptos network cost a certain amount of gas.
+- **Gas** is a way to pay for computation and storage on a blockchain network. All transactions on the Pont network cost a certain amount of gas.
 - The gas required for a transaction depends on the size of the transaction, the computational cost of executing the transaction, and the amount of additional global state created by the transaction (e.g., if new accounts are created).
 - The purpose of gas is regulating demand for the limited computational and storage resources of the validators, including preventing denial of service (DoS) attacks.
 
@@ -148,7 +148,7 @@ then there is a guarantee that T_N will never be included in the blockchain.
 ## HotStuff
 
 - **HotStuff** is a recent proposal for a [BFT](#byzantine-fault-tolerance-bft) consensus protocol.
-- AptosBFT, the Aptos network's consensus algorithm, is based on HotStuff.
+- PontBFT, the Pont network's consensus algorithm, is based on HotStuff.
 - It simplifies the reasoning about safety, and it addresses some performance limitations of previous consensus protocols.
 
 # L
@@ -170,26 +170,26 @@ then there is a guarantee that T_N will never be included in the blockchain.
 ## Mempool
 
 - **Mempool** is one of the components of the validator. It holds an in-memory buffer of transactions that have been submitted but not yet agreed upon and executed. Mempool receives transactions from [JSON-RPC Service](#json-rpc-service).
-- Transactions in the mempool of a validator are added from the JSON-RPC Service of the current node and from the mempool of other Aptos nodes.
+- Transactions in the mempool of a validator are added from the JSON-RPC Service of the current node and from the mempool of other Pont nodes.
 - When the current validator is the leader, its consensus component pulls the transactions from its mempool and proposes the order of the transactions that form a block. The validator quorum then votes on the proposal.
 
 ## Merkle Trees
 
 - **Merkle tree** is a type of authenticated data structure that allows for efficient verification of data integrity and updates.
-- The Aptos network treats the entire blockchain as a single data structure that records the history of transactions and states over time.
+- The Pont network treats the entire blockchain as a single data structure that records the history of transactions and states over time.
 - The [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) implementation simplifies the work of apps accessing the blockchain. It allows apps to:
   - Read any data from any point in time.
   - Verify the integrity of the data using a unified framework.
 
 ## Merkle Accumulator
 
-- The [Merkle Accumulator](https://www.usenix.org/legacy/event/sec09/tech/full_papers/crosby.pdf) is an _append-only_ Merkle tree that the Aptos blockchain uses to store the ledger.
+- The [Merkle Accumulator](https://www.usenix.org/legacy/event/sec09/tech/full_papers/crosby.pdf) is an _append-only_ Merkle tree that the Pont blockchain uses to store the ledger.
 - Merkle accumulators can provide proofs that a transaction was included in the chain (“proof of inclusion”).
 - They are also called "history trees" in literature.
 
 ## Move
 
-- **Move** is a new programming language that implements all the transactions on the Aptos blockchain.
+- **Move** is a new programming language that implements all the transactions on the Pont blockchain.
 - It has two different kinds of code &mdash; [transaction scripts](#transaction-script) and [Move modules](#move-module).
 
 ## Move Bytecode
@@ -199,8 +199,8 @@ then there is a guarantee that T_N will never be included in the blockchain.
 
 ## Move Module
 
-- A **Move module** defines the rules for updating the global state of the Aptos blockchain.
-- In the Aptos protocol, a Move module is a **smart contract**.
+- A **Move module** defines the rules for updating the global state of the Pont blockchain.
+- In the Pont protocol, a Move module is a **smart contract**.
 - Each user-submitted transaction includes a transaction script. The transaction script invokes procedures of one or more Move modules to update the global state of the blockchain according to the rules.
 
 ## Move Resources
@@ -217,21 +217,21 @@ then there is a guarantee that T_N will never be included in the blockchain.
 
 ## Node
 
-- A **node** is a peer entity of the Aptos network that tracks the state of the Aptos blockchain.
-- An Aptos node consists of logical components. [Mempool](#mempool), [consensus](#consensus), and the [virtual machine](#virtual-machine) are examples of node components.
+- A **node** is a peer entity of the Pont network that tracks the state of the Pont blockchain.
+- An Pont node consists of logical components. [Mempool](#mempool), [consensus](#consensus), and the [virtual machine](#virtual-machine) are examples of node components.
 
 # O
 
 ## Open-Source Community
 
-- **Open-source community** is a term used for a group of developers who work on open-source software. If you're reading this glossary, then you are part of the Aptos project's developer community.
+- **Open-source community** is a term used for a group of developers who work on open-source software. If you're reading this glossary, then you are part of the Pont project's developer community.
 
 # P
 
 ## Proof
 
 - A **proof** is a way to verify the accuracy of data in the blockchain.
-- Every operation in the Aptos blockchain can be verified cryptographically that it is indeed correct and that data has not been omitted.
+- Every operation in the Pont blockchain can be verified cryptographically that it is indeed correct and that data has not been omitted.
 - For example, if a user queries the information within a particular executed transaction, they will be provided with a cryptographic proof that the data returned to them is correct.
 
 # R
@@ -239,13 +239,13 @@ then there is a guarantee that T_N will never be included in the blockchain.
 ## Resource Account
 
 - A resource account is used to manage resources independent of an account managed by a user. For example, a developer may use a resource account to manage an account for module publishing, say managing a contract. The contract itself does not require a signer post initialization. A resource account gives you the means for the module to provide a signer to other modules and sign transactions on behalf of the module.
-- In Aptos, a resource account is created based upon the SHA3-256 hash of the source's address and additional seed data. A resource account can be created only once. An entity may call `create_account` in an attempt to claim an account ahead of the creation of a resource account. But if a resource account is found, Aptos will transition ownership of the account over to the resource account. This is done by validating that the account has yet to execute any transactions and that the `Account::signer_capbility_offer::for` is none. The probability of a collision where someone has legitimately produced a private key that maps to a resource account address is improbably low.
-- For an example, see the `SignerCapability` employed by the `mint_nft` function in this [section of `minting.move`](https://github.com/aptos-labs/aptos-core/blob/2e9d8ee759fcd3f6e831034f05c1656b1c48efc4/aptos-move/move-examples/mint_nft/sources/minting.move#L143-L181).
-- For more details, see the "resource account" references in [resource_account.move](https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/framework/aptos-framework/sources/resource_account.move) and [account.move](https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/framework/aptos-framework/sources/account.move).
+- In Pont, a resource account is created based upon the SHA3-256 hash of the source's address and additional seed data. A resource account can be created only once. An entity may call `create_account` in an attempt to claim an account ahead of the creation of a resource account. But if a resource account is found, Pont will transition ownership of the account over to the resource account. This is done by validating that the account has yet to execute any transactions and that the `Account::signer_capbility_offer::for` is none. The probability of a collision where someone has legitimately produced a private key that maps to a resource account address is improbably low.
+- For an example, see the `SignerCapability` employed by the `mint_nft` function in this [section of `minting.move`](https://github.com/aptos-labs/pont-core/blob/2e9d8ee759fcd3f6e831034f05c1656b1c48efc4/pont-move/move-examples/mint_nft/sources/minting.move#L143-L181).
+- For more details, see the "resource account" references in [resource_account.move](https://github.com/aptos-labs/pont-core/blob/main/pont-move/framework/pont-framework/sources/resource_account.move) and [account.move](https://github.com/aptos-labs/pont-core/blob/main/pont-move/framework/pont-framework/sources/account.move).
 
 ## REST Service
 
-- The REST Service component is the external interface of a Aptos node. Any incoming client request, such as submitted transactions or queries, must first go through the REST Service. A client needs to go through the REST Service component to access storage or any other component in the system. This filters requests and protects the system.
+- The REST Service component is the external interface of a Pont node. Any incoming client request, such as submitted transactions or queries, must first go through the REST Service. A client needs to go through the REST Service component to access storage or any other component in the system. This filters requests and protects the system.
 - Whenever a client submits a new transaction, the REST Service passes it to [mempool](#mempool).
 
 ## Round
@@ -277,12 +277,12 @@ then there is a guarantee that T_N will never be included in the blockchain.
 
 ## State
 
-- A **state** in the Aptos protocol is a snapshot of the distributed database.
+- A **state** in the Pont protocol is a snapshot of the distributed database.
 - A transaction modifies the database and produces a new and updated state.
 
 ## State Root Hash
 
-- **State root hash** is a [Merkle hash](https://en.wikipedia.org/wiki/Merkle_tree) over all keys and values the state of the Aptos blockchain at a given version.
+- **State root hash** is a [Merkle hash](https://en.wikipedia.org/wiki/Merkle_tree) over all keys and values the state of the Pont blockchain at a given version.
 
 # T
 
@@ -296,14 +296,14 @@ then there is a guarantee that T_N will never be included in the blockchain.
   - [Sequence number](#sequence-number)
   - [Expiration time](#expiration-time)
 - A signed transaction is a raw transaction with the digital signature.
-- An executed transaction changes the state of the Aptos blockchain.
+- An executed transaction changes the state of the Pont blockchain.
 
 ## Transaction Script
 
 - Each transaction submitted by a user includes a **transaction script**.
 - It represents the operation a client submits to a validator.
 - The operation could be a request to move coins from user A to user B, or it could involve interactions with published [Move modules](#move-modules)/smart contracts.
-- The transaction script is an arbitrary program that interacts with resources published in the global storage of the Aptos blockchain by calling the procedures of a module. It encodes the logic for a transaction.
+- The transaction script is an arbitrary program that interacts with resources published in the global storage of the Pont blockchain by calling the procedures of a module. It encodes the logic for a transaction.
 - A single transaction script can send funds to multiple recipients and invoke procedures from several different modules.
 - A transaction script **is not** stored in the global state and cannot be invoked by other transaction scripts. It is a single-use program.
 
@@ -312,21 +312,21 @@ then there is a guarantee that T_N will never be included in the blockchain.
 ## Validator
 
 - _Alternate name_: Validators.
-- A **validator** is an entity of the Aptos ecosystem that validates on the Aptos blockchain. It receives requests from clients and runs consensus, execution, and storage.
+- A **validator** is an entity of the Pont ecosystem that validates on the Pont blockchain. It receives requests from clients and runs consensus, execution, and storage.
 - A validator maintains the history of all the transactions on the blockchain.
 - Internally, a validator needs to keep the current state, to execute transactions, and to calculate the next state.
 
 ## Version
 
 - A **version** is also called “height” in blockchain literature.
-- The Aptos blockchain doesn't have an explicit notion of a block &mdash; it only uses blocks for batching and executing transactions.
+- The Pont blockchain doesn't have an explicit notion of a block &mdash; it only uses blocks for batching and executing transactions.
 - A transaction at height 0 is the first transaction (genesis transaction), and a transaction at height 100 is the 101st transaction in the transaction store.
 
 # W
 
 ## Well-Formed Transaction
 
-An Aptos transaction is **well formed** if each of the following conditions are true for the transaction:
+An Pont transaction is **well formed** if each of the following conditions are true for the transaction:
 
 - The transaction has a valid signature.
 - An account exists at the sender address.

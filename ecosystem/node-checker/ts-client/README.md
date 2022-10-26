@@ -1,4 +1,4 @@
-# Generated TS client for Aptos Node Health Checker
+# Generated TS client for Pont Node Health Checker
 
 [![Discord][discord-image]][discord-url]
 [![NPM Package Version][npm-image-version]][npm-url]
@@ -6,7 +6,7 @@
 
 ## Quickstart
 ```bash
-yarn add aptos-node-checker-client
+yarn add pont-node-checker-client
 ```
 ## Usage
 
@@ -45,12 +45,12 @@ yarn generate-client
 ### Running tests
 Run a local node (run from the root of the repo):
 ```
-cargo run -p aptos -- node run-local-testnet --with-faucet --faucet-port 8081 --force-restart --assume-yes
+cargo run -p pont -- node run-local-testnet --with-faucet --faucet-port 8081 --force-restart --assume-yes
 ```
 
 Run a local Node Health Checker:
 ```
-cargo run -p aptos-node-checker -- server run --baseline-node-config-paths ecosystem/node-checker/configuration_examples/local_testnet.yaml --listen-address 0.0.0.0
+cargo run -p pont-node-checker -- server run --baseline-node-config-paths ecosystem/node-checker/configuration_examples/local_testnet.yaml --listen-address 0.0.0.0
 ```
 
 Run the tests:
@@ -87,9 +87,9 @@ yarn test
 
 ## References
 
-[repo]: https://github.com/aptos-labs/aptos-core
-[npm-image-version]: https://img.shields.io/npm/v/aptos.svg
-[npm-image-downloads]: https://img.shields.io/npm/dm/aptos.svg
-[npm-url]: https://npmjs.org/package/aptos-node-checker-client
+[repo]: https://github.com/aptos-labs/pont-core
+[npm-image-version]: https://img.shields.io/npm/v/pont.svg
+[npm-image-downloads]: https://img.shields.io/npm/dm/pont.svg
+[npm-url]: https://npmjs.org/package/pont-node-checker-client
 [discord-image]: https://img.shields.io/discord/945856774056083548?label=Discord&logo=discord&style=flat~~~~
-[discord-url]: https://discord.gg/aptoslabs
+[discord-url]: https://discord.gg/pontlabs

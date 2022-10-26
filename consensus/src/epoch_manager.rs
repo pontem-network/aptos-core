@@ -17,8 +17,8 @@ use crate::{
     liveness::{
         cached_proposer_election::CachedProposerElection,
         leader_reputation::{
-            extract_epoch_to_proposers, AptosDBBackend, LeaderReputation,
-            ProposerAndVoterHeuristic, ReputationHeuristic,
+            extract_epoch_to_proposers, LeaderReputation, PontDBBackend, ProposerAndVoterHeuristic,
+            ReputationHeuristic,
         },
         proposal_generator::ProposalGenerator,
         proposer_election::ProposerElection,
@@ -40,21 +40,7 @@ use crate::{
     util::time_service::TimeService,
 };
 use anyhow::{bail, ensure, Context};
-use aptos_config::config::{ConsensusConfig, NodeConfig};
-use aptos_infallible::{duration_since_epoch, Mutex};
-use aptos_logger::prelude::*;
-use aptos_mempool::QuorumStoreRequest;
-use aptos_types::{
-    account_address::AccountAddress,
-    epoch_change::EpochChangeProof,
-    epoch_state::EpochState,
-    on_chain_config::{
-        LeaderReputationType, OnChainConfigPayload, OnChainConsensusConfig, ProposerElectionType,
-        ValidatorSet,
-    },
-    validator_verifier::ValidatorVerifier,
-};
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use consensus_types::{
     common::{Author, Round},
     epoch_retrieval::EpochRetrievalRequest,
@@ -72,6 +58,20 @@ use futures::{
 };
 use itertools::Itertools;
 use network::protocols::network::{ApplicationNetworkSender, Event};
+use pont_config::config::{ConsensusConfig, NodeConfig};
+use pont_infallible::{duration_since_epoch, Mutex};
+use pont_logger::prelude::*;
+use pont_mempool::QuorumStoreRequest;
+use pont_types::{
+    account_address::AccountAddress,
+    epoch_change::EpochChangeProof,
+    epoch_state::EpochState,
+    on_chain_config::{
+        LeaderReputationType, OnChainConfigPayload, OnChainConsensusConfig, ProposerElectionType,
+        ValidatorSet,
+    },
+    validator_verifier::ValidatorVerifier,
+};
 use safety_rules::SafetyRulesManager;
 use std::{
     cmp::Ordering,
@@ -110,16 +110,15 @@ pub struct EpochManager {
     reconfig_events: ReconfigNotificationListener,
     commit_notifier: Arc<dyn CommitNotifier>,
     // channels to buffer manager
-    buffer_manager_msg_tx: Option<aptos_channel::Sender<AccountAddress, VerifiedEvent>>,
+    buffer_manager_msg_tx: Option<pont_channel::Sender<AccountAddress, VerifiedEvent>>,
     buffer_manager_reset_tx: Option<UnboundedSender<ResetRequest>>,
     // channels to round manager
     round_manager_tx: Option<
-        aptos_channel::Sender<(Author, Discriminant<VerifiedEvent>), (Author, VerifiedEvent)>,
+        pont_channel::Sender<(Author, Discriminant<VerifiedEvent>), (Author, VerifiedEvent)>,
     >,
     round_manager_close_tx: Option<oneshot::Sender<oneshot::Sender<()>>>,
     epoch_state: Option<EpochState>,
-    block_retrieval_tx:
-        Option<aptos_channel::Sender<AccountAddress, IncomingBlockRetrievalRequest>>,
+    block_retrieval_tx: Option<pont_channel::Sender<AccountAddress, IncomingBlockRetrievalRequest>>,
 }
 
 impl EpochManager {
@@ -238,10 +237,10 @@ impl EpochManager {
                     + onchain_config.max_failed_authors_to_store()
                     + PROPSER_ROUND_BEHIND_STORAGE_BUFFER;
 
-                let backend = Box::new(AptosDBBackend::new(
+                let backend = Box::new(PontDBBackend::new(
                     window_size,
                     seek_len,
-                    self.storage.aptos_db(),
+                    self.storage.pont_db(),
                 ));
                 let voting_powers: Vec<_> = if weight_by_voting_power {
                     proposers
@@ -262,7 +261,7 @@ impl EpochManager {
                 // If we are considering beyond the current epoch, we need to fetch validators for those epochs
                 let epoch_to_proposers = if epoch_state.epoch > first_epoch_to_consider {
                     self.storage
-                        .aptos_db()
+                        .pont_db()
                         .get_epoch_ending_ledger_infos(first_epoch_to_consider - 1, epoch_state.epoch)
                         .and_then(|proof| {
                             ensure!(proof.ledger_info_with_sigs.len() as u64 == (epoch_state.epoch - (first_epoch_to_consider - 1)));
@@ -325,7 +324,7 @@ impl EpochManager {
         );
         let proof = self
             .storage
-            .aptos_db()
+            .pont_db()
             .get_epoch_ending_ledger_infos(request.start_epoch, request.end_epoch)
             .map_err(DbError::from)
             .context("[EpochManager] Failed to get epoch proof")?;
@@ -434,7 +433,7 @@ impl EpochManager {
     }
 
     fn spawn_block_retrieval_task(&mut self, epoch: u64, block_store: Arc<BlockStore>) {
-        let (request_tx, mut request_rx) = aptos_channel::new(
+        let (request_tx, mut request_rx) = pont_channel::new(
             QueueStyle::LIFO,
             1,
             Some(&counters::BLOCK_RETRIEVAL_TASK_MSGS),
@@ -456,7 +455,7 @@ impl EpochManager {
     }
 
     /// this function spawns the phases and a buffer manager
-    /// it sets `self.commit_msg_tx` to a new aptos_channel::Sender and returns an OrderingStateComputer
+    /// it sets `self.commit_msg_tx` to a new pont_channel::Sender and returns an OrderingStateComputer
     fn spawn_decoupled_execution(
         &mut self,
         safety_rules_container: Arc<Mutex<MetricsSafetyRules>>,
@@ -472,7 +471,7 @@ impl EpochManager {
         let (block_tx, block_rx) = unbounded::<OrderedBlocks>();
         let (reset_tx, reset_rx) = unbounded::<ResetRequest>();
 
-        let (commit_msg_tx, commit_msg_rx) = aptos_channel::new::<AccountAddress, VerifiedEvent>(
+        let (commit_msg_tx, commit_msg_rx) = pont_channel::new::<AccountAddress, VerifiedEvent>(
             QueueStyle::FIFO,
             self.config.channel_size,
             Some(&counters::BUFFER_MANAGER_MSGS),
@@ -545,7 +544,7 @@ impl EpochManager {
             self.self_sender.clone(),
             epoch_state.verifier.clone(),
         );
-        let (recovery_manager_tx, recovery_manager_rx) = aptos_channel::new(
+        let (recovery_manager_tx, recovery_manager_rx) = pont_channel::new(
             QueueStyle::LIFO,
             1,
             Some(&counters::ROUND_MANAGER_CHANNEL_MSGS),
@@ -651,7 +650,7 @@ impl EpochManager {
             onchain_config.max_failed_authors_to_store(),
         );
 
-        let (round_manager_tx, round_manager_rx) = aptos_channel::new(
+        let (round_manager_tx, round_manager_rx) = pont_channel::new(
             QueueStyle::LIFO,
             1,
             Some(&counters::ROUND_MANAGER_CHANNEL_MSGS),

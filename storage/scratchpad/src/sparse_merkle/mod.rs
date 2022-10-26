@@ -84,13 +84,13 @@ use crate::sparse_merkle::{
     node::{NodeInner, SubTree},
     updater::SubTreeUpdater,
 };
-use aptos_crypto::{
+use pont_crypto::{
     hash::{CryptoHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use aptos_infallible::Mutex;
-use aptos_types::state_store::state_storage_usage::StateStorageUsage;
-use aptos_types::{nibble::nibble_path::NibblePath, proof::SparseMerkleProofExt};
+use pont_infallible::Mutex;
+use pont_types::state_store::state_storage_usage::StateStorageUsage;
+use pont_types::{nibble::nibble_path::NibblePath, proof::SparseMerkleProofExt};
 use std::sync::MutexGuard;
 use std::{
     borrow::Borrow,

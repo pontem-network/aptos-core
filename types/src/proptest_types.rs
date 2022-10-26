@@ -29,14 +29,14 @@ use crate::{
     vm_status::VMStatus,
     write_set::{WriteOp, WriteSet, WriteSetMut},
 };
-use aptos_crypto::{
+use move_core_types::language_storage::TypeTag;
+use pont_crypto::{
     bls12381::{self, bls12381_keys},
     ed25519::{self, Ed25519PrivateKey, Ed25519PublicKey},
     test_utils::KeyPair,
     traits::*,
     HashValue,
 };
-use move_core_types::language_storage::TypeTag;
 use proptest::{
     collection::{vec, SizeRange},
     option,

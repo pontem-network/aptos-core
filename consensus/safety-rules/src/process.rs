@@ -6,7 +6,7 @@ use crate::{
     remote_service::{self, RemoteService},
     safety_rules_manager,
 };
-use aptos_config::config::{SafetyRulesConfig, SafetyRulesService};
+use pont_config::config::{SafetyRulesConfig, SafetyRulesService};
 
 use std::net::SocketAddr;
 

@@ -5,7 +5,7 @@ slug: "run-a-fullnode-on-gcp"
 
 # Run a Public Fullnode on GCP
 
-This tutorial explains how to configure and deploy a public fullnode to connect to the Aptos devnet using Google Cloud (GCP). Running a public fullnode in the cloud usually provides better stability and availability compared to running it on your laptop. **If you are looking to deploy a production grade public fullnode, we recommend you to deploy it on the cloud.**
+This tutorial explains how to configure and deploy a public fullnode to connect to the Pont devnet using Google Cloud (GCP). Running a public fullnode in the cloud usually provides better stability and availability compared to running it on your laptop. **If you are looking to deploy a production grade public fullnode, we recommend you to deploy it on the cloud.**
 
 :::tip Alternative methods for running a public fullnode
 Read [Public Fullnode](/nodes/full-node/public-fullnode) if you want other alternatives for deployment. Using cloud comes with a cost, and it varies depends on how you configure it.
@@ -62,10 +62,10 @@ This should be enough to get your GCP setup ready to start deploying your fullno
 ## Getting started
 
 :::tip Before you proceed
-From here on, this guide assumes that you have already set up your GCP account, and have created a new project for deploying Aptos public fullnode. If you don't, check out the instructions above for [GCP Setup](#gcp-setup).
+From here on, this guide assumes that you have already set up your GCP account, and have created a new project for deploying Pont public fullnode. If you don't, check out the instructions above for [GCP Setup](#gcp-setup).
 :::
 
-You can deploy a public fullnode on GCP by using the Aptos fullnode Terraform module.
+You can deploy a public fullnode on GCP by using the Pont fullnode Terraform module.
 
 1. Create a working directory for your configuration.
 
@@ -84,7 +84,7 @@ You can deploy a public fullnode on GCP by using the Aptos fullnode Terraform mo
   ```bash
   gsutil mb gs://BUCKET_NAME
   # for example
-  gsutil mb gs://<project-name>-aptos-terraform-dev
+  gsutil mb gs://<project-name>-pont-terraform-dev
   ```
 
 3. Create Terraform file called `main.tf` in your working directory:
@@ -105,8 +105,8 @@ You can deploy a public fullnode on GCP by using the Aptos fullnode Terraform mo
   }
 
   module "fullnode" {
-    # download Terraform module from aptos-labs/aptos-core repo
-    source        = "github.com/aptos-labs/aptos-core.git//terraform/fullnode/gcp?ref=main"
+    # download Terraform module from aptos-labs/pont-core repo
+    source        = "github.com/aptos-labs/pont-core.git//terraform/fullnode/gcp?ref=main"
     region        = "us-central1"  # Specify the region
     zone          = "c"            # Specify the zone suffix
     project       = "gcp-fullnode" # Specify your GCP project name
@@ -146,21 +146,21 @@ Once Terraform apply finished, you can follow this section to validate your depl
 1. Configure your Kubernetes client to access the cluster you just deployed:
 
   ```bash
-  gcloud container clusters get-credentials aptos-$WORKSPACE --zone <region_zone_name> --project <project_name>
+  gcloud container clusters get-credentials pont-$WORKSPACE --zone <region_zone_name> --project <project_name>
   # for example:
-  gcloud container clusters get-credentials aptos-devnet --zone us-central1-a --project aptos-fullnode
+  gcloud container clusters get-credentials pont-devnet --zone us-central1-a --project pont-fullnode
   ```
 
 2. Check that your public fullnode pods are now running (this may take a few minutes):
 
   ```bash
-  kubectl get pods -n aptos
+  kubectl get pods -n pont
   ```
 
 3. Get your public fullnode IP:
 
   ```bash
-  kubectl get svc -o custom-columns=IP:status.loadBalancer.ingress -n aptos
+  kubectl get svc -o custom-columns=IP:status.loadBalancer.ingress -n pont
   ```
 
 4. Check the REST API, make sure that the ledger version is increasing:
@@ -171,33 +171,33 @@ Once Terraform apply finished, you can follow this section to validate your depl
   ```
 
 5. To verify the correctness of your public fullnode, as outlined in the section [Verify the correctness of your FullNode](/nodes/full-node/fullnode-source-code-or-docker#verify-the-correctness-of-your-public-fullnode), you will need to:
-   - Set up a port-forwarding mechanism directly to the aptos pod in one ssh terminal, and
+   - Set up a port-forwarding mechanism directly to the pont pod in one ssh terminal, and
    - Test it in another ssh terminal. 
    
    Follow the below steps:
 
-   * Set up the port-forwarding to the aptos-fullnode pod.  Use `kubectl get pods -n aptos` to get the name of the pod:
+   * Set up the port-forwarding to the pont-fullnode pod.  Use `kubectl get pods -n pont` to get the name of the pod:
 
       ```bash
-      kubectl port-forward -n aptos <pod-name> 9101:9101
+      kubectl port-forward -n pont <pod-name> 9101:9101
       # for example:
-      kubectl port-forward -n aptos devnet0-aptos-fullnode-0 9101:9101
+      kubectl port-forward -n pont devnet0-pont-fullnode-0 9101:9101
       ```
 
    * Open a new ssh terminal.  Execute the following curl calls to verify the correctness:
    
       ```bash
-      curl -v http://0:9101/metrics 2> /dev/null | grep "aptos_state_sync_version{type=\"synced\"}"
+      curl -v http://0:9101/metrics 2> /dev/null | grep "pont_state_sync_version{type=\"synced\"}"
 
-      curl -v http://0:9101/metrics 2> /dev/null | grep "aptos_connections{direction=\"outbound\""
+      curl -v http://0:9101/metrics 2> /dev/null | grep "pont_connections{direction=\"outbound\""
       ```
 
    * Exit port-forwarding when you are done by entering control-c in the terminal.
 
 ## Update public fullnode with new releases
 
-Aptos devnet releases can be of two types: 
-- One with a data wipe to startover the Aptos blockchain
+Pont devnet releases can be of two types: 
+- One with a data wipe to startover the Pont blockchain
 - Second type is only a software update without a data wipe.
 
 ### Upgrade with data wipe
@@ -252,8 +252,8 @@ If you want to configure your node with a static identity, first see the [Networ
 
   ```rust
   module "fullnode" {
-    # download Terraform module from aptos-labs/aptos-core repo
-    source        = "github.com/aptos-labs/aptos-core.git//terraform/fullnode/gcp?ref=main"
+    # download Terraform module from aptos-labs/pont-core repo
+    source        = "github.com/aptos-labs/pont-core.git//terraform/fullnode/gcp?ref=main"
     region        = "us-central1"  # Specify the region
     zone          = "c"            # Specify the zone suffix
     project       = "gcp-fullnode" # Specify your GCP project name
@@ -284,14 +284,14 @@ If you want to configure your node with a static identity, first see the [Networ
 
 You can add upstream seed peers to allow your node state sync from a specific . This is helpful when the public fullnode is not able to connect to the network due to congestion.
 
-1. Obtain the upstream peer id information. You can either use the one listed in the [Connecting your fullnode to seed peers](/nodes/full-node/fullnode-network-connections#connecting-your-fullnode-to-seed-peers), or grab one from [Aptos Discord](http://discord.gg/aptoslabs), `#advertise-full-node` channel, which are the nodes hosted by our community.
+1. Obtain the upstream peer id information. You can either use the one listed in the [Connecting your fullnode to seed peers](/nodes/full-node/fullnode-network-connections#connecting-your-fullnode-to-seed-peers), or grab one from [Pont Discord](http://discord.gg/pontlabs), `#advertise-full-node` channel, which are the nodes hosted by our community.
 
 2. Modify the `main.tf` to add seeds for devnet in `fullnode_helm_values`. This will configure the upstream seeds for public fullnode. For example:
 
 ```rust
 module "fullnode" {
-    # download Terraform module from aptos-labs/aptos-core repo
-    source        = "github.com/aptos-labs/aptos-core.git//terraform/fullnode/gcp?ref=main"
+    # download Terraform module from aptos-labs/pont-core repo
+    source        = "github.com/aptos-labs/pont-core.git//terraform/fullnode/gcp?ref=main"
     region        = "us-central1"  # Specify the region
     zone          = "c"            # Specify the zone suffix
     project       = "gcp-fullnode" # Specify your GCP project name
@@ -300,19 +300,19 @@ module "fullnode" {
 
     fullnode_helm_values = {
       # add a list of peers as upstream
-      aptos_chains = {
+      pont_chains = {
         devnet = {
           seeds = {
             "bb14af025d226288a3488b4433cf5cb54d6a710365a2d95ac6ffbd9b9198a86a" = {
-            addresses = ["/dns4/pfn0.node.devnet.aptoslabs.com/tcp/6182/noise-ik/bb14af025d226288a3488b4433cf5cb54d6a710365a2d95ac6ffbd9b9198a86a/handshake/0"]
+            addresses = ["/dns4/pfn0.node.devnet.pontlabs.com/tcp/6182/noise-ik/bb14af025d226288a3488b4433cf5cb54d6a710365a2d95ac6ffbd9b9198a86a/handshake/0"]
             role = "Upstream"
             },
             "7fe8523388084607cdf78ff40e3e717652173b436ae1809df4a5fcfc67f8fc61" = {
-            addresses = ["/dns4/pfn1.node.devnet.aptoslabs.com/tcp/6182/noise-ik/7fe8523388084607cdf78ff40e3e717652173b436ae1809df4a5fcfc67f8fc61/handshake/0"]
+            addresses = ["/dns4/pfn1.node.devnet.pontlabs.com/tcp/6182/noise-ik/7fe8523388084607cdf78ff40e3e717652173b436ae1809df4a5fcfc67f8fc61/handshake/0"]
             role = "Upstream"
             },
             "f6b135a59591677afc98168791551a0a476222516fdc55869d2b649c614d965b" = {
-            addresses = ["/dns4/pfn2.node.devnet.aptoslabs.com/tcp/6182/noise-ik/f6b135a59591677afc98168791551a0a476222516fdc55869d2b649c614d965b/handshake/0"]
+            addresses = ["/dns4/pfn2.node.devnet.pontlabs.com/tcp/6182/noise-ik/f6b135a59591677afc98168791551a0a476222516fdc55869d2b649c614d965b/handshake/0"]
             role = "Upstream"
             }
           }
@@ -334,12 +334,12 @@ To check the logs of the pod, use the following commands:
 
   ```bash
   # Get a list of the pods
-  kubectl get pods -n aptos
+  kubectl get pods -n pont
 
   # Get logs of the pod
-  kubectl logs <pod-name> -n aptos
+  kubectl logs <pod-name> -n pont
   # for example:
-  kubectl logs devnet0-aptos-fullnode-0 -n aptos
+  kubectl logs devnet0-pont-fullnode-0 -n pont
   ```
 
 When using GKE, the logs of the cluster and pod will automatically show up in the Google Cloud console.  From the console menu, choose `Kubernetes Engine`.  From the side menu, choose `Workloads`.  You will see all the pods from the cluster listed.  
@@ -348,7 +348,7 @@ When using GKE, the logs of the cluster and pod will automatically show up in th
 ![GKE Workloads screenshot](../../../static/img/tutorial-gcp-logging1.png "GKE Workloads screenshot")
 
 
-The `devnet0-aptos-fullnode` is the pod that is running the aptos fullnode container. Click on the pod to view details.  You will see some metrics and other details about the pod.
+The `devnet0-pont-fullnode` is the pod that is running the pont fullnode container. Click on the pod to view details.  You will see some metrics and other details about the pod.
 
 
 ![GKE Workloads Pod screenshot](../../../static/img/tutorial-gcp-logging2.png "GKE Workloads Pod screenshot")
@@ -379,7 +379,7 @@ Additional [features](https://cloud.google.com/logging/docs) are available throu
 
 ## Check monitoring
 
-Google cloud captures many metrics from the cluster and makes them easily viewable in the console.  From the console menu, choose `Kubernetes Engine`.  Click on the cluster that aptos is deployed to.  Click on the `Operations` link at the top right.  Click on the `Metrics` sub-tab to view specific cluster metrics.
+Google cloud captures many metrics from the cluster and makes them easily viewable in the console.  From the console menu, choose `Kubernetes Engine`.  Click on the cluster that pont is deployed to.  Click on the `Operations` link at the top right.  Click on the `Metrics` sub-tab to view specific cluster metrics.
 
 
 ![GKE Monitoring metrics screenshot](../../../static/img/tutorial-gcp-mon1.png "GKE Monitoring metrics screenshot")

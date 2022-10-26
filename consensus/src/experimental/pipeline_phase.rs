@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::experimental::buffer_manager::{Receiver, Sender};
-use aptos_logger::debug;
 use async_trait::async_trait;
 use futures::{SinkExt, StreamExt};
+use pont_logger::debug;
 use std::sync::{
     atomic::{AtomicU64, Ordering},
     Arc,

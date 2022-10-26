@@ -2,19 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{LoadDestination, NetworkLoadTest};
-use aptos::account::create::DEFAULT_FUNDED_COINS;
-use aptos_logger::info;
-use aptos_sdk::crypto::ed25519::Ed25519PrivateKey;
-use aptos_sdk::crypto::PrivateKey;
 use forge::{
     reconfig, NetworkContext, NetworkTest, NodeExt, Result, Swarm, SwarmExt, Test, FORGE_KEY_SEED,
 };
+use pont::account::create::DEFAULT_FUNDED_COINS;
+use pont_logger::info;
+use pont_sdk::crypto::ed25519::Ed25519PrivateKey;
+use pont_sdk::crypto::PrivateKey;
 
-use aptos_keygen::KeyGen;
+use pont_keygen::KeyGen;
 
-use aptos::test::CliTestFramework;
-use aptos_types::account_address::AccountAddress;
-use aptos_types::transaction::authenticator::AuthenticationKey;
+use pont::test::CliTestFramework;
+use pont_types::account_address::AccountAddress;
+use pont_types::transaction::authenticator::AuthenticationKey;
 use std::time::Duration;
 use tokio::runtime::Runtime;
 
@@ -60,7 +60,7 @@ impl NetworkLoadTest for ValidatorJoinLeaveTest {
             .await
         });
 
-        let mut public_info = swarm.chain_info().into_aptos_public_info();
+        let mut public_info = swarm.chain_info().into_pont_public_info();
 
         let mut validator_cli_indices = Vec::new();
 

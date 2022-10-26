@@ -1,18 +1,18 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_api_types::mime_types::JSON;
-use aptos_api_types::{AptosError, AptosErrorCode};
 use poem::http::header::{HeaderValue, CONTENT_TYPE};
 use poem::{IntoResponse, Response};
 use poem_openapi::payload::Json;
+use pont_api_types::mime_types::JSON;
+use pont_api_types::{PontError, PontErrorCode};
 
 // The way I'm determining which errors are framework errors is very janky, as
 // is the way I'm building the response. See:
 // - https://github.com/poem-web/poem/issues/343
 
 /// In the OpenAPI spec for this API, we say that every response we return will
-/// be a JSON representation of AptosError. For our own code, this is exactly
+/// be a JSON representation of PontError. For our own code, this is exactly
 /// what we do. The problem is the Poem framework does not conform to this
 /// format, it can return errors in a different format. The purpose of this
 /// function is to catch those errors and convert them to the correct format.
@@ -37,9 +37,9 @@ pub async fn convert_error(error: poem::Error) -> impl poem::IntoResponse {
 }
 
 fn build_error_response(error_string: String) -> Response {
-    Json(AptosError::new_with_error_code(
+    Json(PontError::new_with_error_code(
         error_string,
-        AptosErrorCode::WebFrameworkError,
+        PontErrorCode::WebFrameworkError,
     ))
     .into_response()
 }

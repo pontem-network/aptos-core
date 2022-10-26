@@ -11,11 +11,11 @@ use crate::{
     workspace_builder::workspace_root,
 };
 use anyhow::{bail, Result};
-use aptos_logger::info;
-use aptos_temppath::TempPath;
-use aptos_types::{transaction::Version, waypoint::Waypoint};
 use backup_cli::metadata::view::BackupStorageState;
 use forge::{reconfig, NodeExt, Swarm, SwarmExt};
+use pont_logger::info;
+use pont_temppath::TempPath;
+use pont_types::{transaction::Version, waypoint::Waypoint};
 use std::{
     fs,
     path::Path,
@@ -28,14 +28,14 @@ const MAX_WAIT_SECS: u64 = 180;
 #[tokio::test]
 async fn test_db_restore() {
     // pre-build tools
-    ::aptos_logger::Logger::new().init();
+    ::pont_logger::Logger::new().init();
     info!("---------- 0. test_db_restore started.");
     workspace_builder::get_bin("db-backup");
     workspace_builder::get_bin("db-restore");
     workspace_builder::get_bin("db-backup-verify");
     info!("---------- 1. pre-building finished.");
 
-    let mut swarm = SwarmBuilder::new_local(4).with_aptos().build().await;
+    let mut swarm = SwarmBuilder::new_local(4).with_pont().build().await;
     info!("---------- 1.1 swarm built, sending some transactions.");
     let validator_peer_ids = swarm.validators().map(|v| v.peer_id()).collect::<Vec<_>>();
     let client_1 = swarm

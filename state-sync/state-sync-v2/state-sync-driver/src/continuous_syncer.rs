@@ -9,18 +9,18 @@ use crate::{
     utils,
     utils::{SpeculativeStreamState, PENDING_DATA_LOG_FREQ_SECS},
 };
-use aptos_config::config::ContinuousSyncingMode;
-use aptos_infallible::Mutex;
-use aptos_logger::{prelude::*, sample, sample::SampleRate};
-use aptos_types::{
-    ledger_info::LedgerInfoWithSignatures,
-    transaction::{TransactionListWithProof, TransactionOutputListWithProof, Version},
-};
 use data_streaming_service::streaming_client::NotificationAndFeedback;
 use data_streaming_service::{
     data_notification::{DataNotification, DataPayload, NotificationId},
     data_stream::DataStreamListener,
     streaming_client::{DataStreamingClient, Epoch, NotificationFeedback},
+};
+use pont_config::config::ContinuousSyncingMode;
+use pont_infallible::Mutex;
+use pont_logger::{prelude::*, sample, sample::SampleRate};
+use pont_types::{
+    ledger_info::LedgerInfoWithSignatures,
+    transaction::{TransactionListWithProof, TransactionOutputListWithProof, Version},
 };
 use std::{sync::Arc, time::Duration};
 use storage_interface::DbReader;
@@ -36,7 +36,7 @@ pub struct ContinuousSyncer<StorageSyncer, StreamingClient> {
     // The speculative state tracking the active data stream
     speculative_stream_state: Option<SpeculativeStreamState>,
 
-    // The client through which to stream data from the Aptos network
+    // The client through which to stream data from the Pont network
     streaming_client: StreamingClient,
 
     // The interface to read from storage

@@ -1,10 +1,10 @@
 [package]
 name = "executor-benchmark"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos executor benchmark"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont executor benchmark"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -21,19 +21,19 @@ serde = "1.0.137"
 structopt = "0.3.21"
 toml = "0.5.9"
 
-aptos-config = { path = "../../config" }
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-genesis = { path = "../../crates/aptos-genesis", features = ["testing"] }
-aptos-infallible = { path = "../../crates/aptos-infallible" }
-aptos-jellyfish-merkle = { path = "../../storage/jellyfish-merkle" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-push-metrics = { path = "../../crates/aptos-push-metrics" }
-aptos-sdk = { path = "../../sdk" }
-aptos-state-view = { path = "../../storage/state-view" }
-aptos-types = { path = "../../types" }
-aptos-vm = { path = "../../aptos-move/aptos-vm" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-genesis = { path = "../../crates/pont-genesis", features = ["testing"] }
+pont-infallible = { path = "../../crates/pont-infallible" }
+pont-jellyfish-merkle = { path = "../../storage/jellyfish-merkle" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-push-metrics = { path = "../../crates/pont-push-metrics" }
+pont-sdk = { path = "../../sdk" }
+pont-state-view = { path = "../../storage/state-view" }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../../pont-move/pont-vm" }
 
-aptosdb = { path = "../../storage/aptosdb" }
+pontdb = { path = "../../storage/pontdb" }
 executor = { path = "../executor" }
 executor-types = { path = "../executor-types" }
 schemadb = { path = "../../storage/schemadb" }
@@ -44,11 +44,11 @@ storage-interface = { path = "../../storage/storage-interface" }
 jemallocator = { version = "0.3.2", features = ["profiling", "unprefixed_malloc_on_supported_platforms"] }
 
 [dev-dependencies]
-aptos-temppath = { path = "../../crates/aptos-temppath" }
+pont-temppath = { path = "../../crates/pont-temppath" }
 
 [features]
 default = []
-fuzzing = ["aptos-config/fuzzing", "aptos-crypto/fuzzing", "aptos-types/fuzzing"]
+fuzzing = ["pont-config/fuzzing", "pont-crypto/fuzzing", "pont-types/fuzzing"]
 
 [[bench]]
 name = "executor_benchmark"

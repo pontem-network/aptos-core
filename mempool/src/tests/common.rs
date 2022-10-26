@@ -4,17 +4,17 @@
 use crate::core_mempool::{CoreMempool, TimelineState, TxnPointer};
 use crate::network::MempoolSyncMsg;
 use anyhow::{format_err, Result};
-use aptos_compression::metrics::CompressionClient;
-use aptos_config::config::{NodeConfig, MAX_APPLICATION_MESSAGE_SIZE};
-use aptos_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
-use aptos_types::{
+use once_cell::sync::Lazy;
+use pont_compression::metrics::CompressionClient;
+use pont_config::config::{NodeConfig, MAX_APPLICATION_MESSAGE_SIZE};
+use pont_crypto::{ed25519::Ed25519PrivateKey, PrivateKey, Uniform};
+use pont_types::{
     account_address::AccountAddress,
     account_config::AccountSequenceInfo,
     chain_id::ChainId,
     mempool_status::MempoolStatusCode,
     transaction::{RawTransaction, Script, SignedTransaction},
 };
-use once_cell::sync::Lazy;
 use rand::{rngs::StdRng, SeedableRng};
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
@@ -186,7 +186,7 @@ impl ConsensusMock {
 /// Decompresses and deserializes the raw message bytes into a message struct
 pub fn decompress_and_deserialize(message_bytes: &Vec<u8>) -> MempoolSyncMsg {
     bcs::from_bytes(
-        &aptos_compression::decompress(
+        &pont_compression::decompress(
             message_bytes,
             CompressionClient::Mempool,
             MAX_APPLICATION_MESSAGE_SIZE,

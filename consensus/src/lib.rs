@@ -3,9 +3,9 @@
 
 #![forbid(unsafe_code)]
 
-//! Consensus for the Aptos Core blockchain
+//! Consensus for the Pont Core blockchain
 //!
-//! The consensus protocol implemented is AptosBFT (based on
+//! The consensus protocol implemented is PontBFT (based on
 //! [HotStuff](https://arxiv.org/pdf/1803.05069.pdf)).
 
 #![cfg_attr(not(feature = "fuzzing"), deny(missing_docs))]
@@ -41,11 +41,11 @@ mod twins;
 mod txn_notifier;
 mod util;
 
-/// AptosBFT implementation
+/// PontBFT implementation
 pub mod consensus_provider;
 /// Required by the telemetry service
 pub mod counters;
-/// AptosNet interface.
+/// PontNet interface.
 pub mod network_interface;
 
 /// Required by the smoke tests

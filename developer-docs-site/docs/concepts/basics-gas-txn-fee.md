@@ -7,7 +7,7 @@ slug: "basics-gas-txn-fee"
 
 ## Concept
 
-To conduct any transaction with the Aptos blockchain on the mainnet, you are required to pay a processing fee. This fee is derived from transactions with a client application, stake owner, node operator, or voter. The processing fee you are required to pay is based on the computing and storage resources you use on the blockchain to:
+To conduct any transaction with the Pont blockchain on the mainnet, you are required to pay a processing fee. This fee is derived from transactions with a client application, stake owner, node operator, or voter. The processing fee you are required to pay is based on the computing and storage resources you use on the blockchain to:
 
 1. Process your transactions on the blockchain.
 1. Propagate the validated record throughout the distributed network of the mainnet.
@@ -25,7 +25,7 @@ You can even bump up your transaction to a higher priority level on the blockcha
 
 You can make a simple and inexpensive transaction or a complicated transaction that requires the blockchain to perform much computation and distributed storage. In either case, you will be required to spend a processing fee sufficient to complete the transaction. This is where the notion of **gas** becomes clear. Here is how it works:
 
-In the Aptos blockchain a **unit of gas** represents a basic unit of resource consumption. A single unit of gas is a combined representation of:
+In the Pont blockchain a **unit of gas** represents a basic unit of resource consumption. A single unit of gas is a combined representation of:
 
 - Computation resource, and
 - Storage resource.
@@ -36,20 +36,20 @@ See [How Base Gas Works](base-gas.md) for a detailed description of gas fee type
 
 ### Gas price
 
-In the Aptos network, the Aptos governance sets the minimum gas unit price. However, the market determines the actual minimum gas unit price. See [Ethereum Gas Tracker](https://etherscan.io/gastracker), for example, which shows the market price movements of Ethereum gas price.
+In the Pont network, the Pont governance sets the minimum gas unit price. However, the market determines the actual minimum gas unit price. See [Ethereum Gas Tracker](https://etherscan.io/gastracker), for example, which shows the market price movements of Ethereum gas price.
 
 :::tip Unit of gas
-👉 A **unit of gas** is a dimensionless number, expressed as an integer. The total gas units consumed by your transaction depends on the complexity of your transaction. The **gas price**, on the other hand, is expressed in terms of Aptos blockchain’s native coin (Octas). Also see [Transactions and States](/concepts/basics-txns-states) for how a transaction submitted to the Aptos blockchain looks like.
+👉 A **unit of gas** is a dimensionless number, expressed as an integer. The total gas units consumed by your transaction depends on the complexity of your transaction. The **gas price**, on the other hand, is expressed in terms of Pont blockchain’s native coin (Octas). Also see [Transactions and States](/concepts/basics-txns-states) for how a transaction submitted to the Pont blockchain looks like.
 :::
 
-## Gas and transaction fee on the Aptos blockchain
+## Gas and transaction fee on the Pont blockchain
 
-When a transaction is submitted to the Aptos blockchain, the transaction must contain the following mandatory gas fields:
+When a transaction is submitted to the Pont blockchain, the transaction must contain the following mandatory gas fields:
 
 - `max_gas_amount`: The maximum number of gas units that the transaction sender is willing to spend to execute the transaction. This determines the maximum computational resources that can be consumed by the transaction.
 - `gas_price`: The gas price the transaction sender is willing to pay. It is expressed in Octa units, where:
     - 1 Octa = 10<sup>-8</sup> APT and 
-    - APT is the Aptos coin. 
+    - APT is the Pont coin. 
   
   During the transaction execution, the total gas amount, expressed as:
   ```
@@ -61,10 +61,10 @@ The transaction fee charged to the client will be at the most `gas_price * max_
 
 ## Gas parameters set by governance
 
-The following gas parameters are set by Aptos governance. 
+The following gas parameters are set by Pont governance. 
 
 :::tip On-chain gas schedule
-These on-chain gas parameters are published on the Aptos blockchain at `0x1::gas_schedule::GasScheduleV2`.
+These on-chain gas parameters are published on the Pont blockchain at `0x1::gas_schedule::GasScheduleV2`.
 :::
 
 - `txn.maximum_number_of_gas_units`: Maximum number of gas units that can be spent (this is the maximum allowed value for the `max_gas_amount` gas parameter in the transaction). This is to ensure that the dynamic pricing adjustments do not exceed how much you are willing to pay in total.
@@ -72,9 +72,9 @@ These on-chain gas parameters are published on the Aptos blockchain at `0x1::gas
 
 ## Dynamic gas pricing for storage
 
-Aptos gas pricing uses dynamic prices for the storage operations. This means that the storage costs, hence the `gas_used`, can increase exponentially as the Aptos blockchain state database is filled up. The storage cost can become as high as `100x` at 100% utilization. However, the expectation is that the validators will make use of larger and cheaper storage hardware to mitigate such exponential rise in the storage costs. 
+Pont gas pricing uses dynamic prices for the storage operations. This means that the storage costs, hence the `gas_used`, can increase exponentially as the Pont blockchain state database is filled up. The storage cost can become as high as `100x` at 100% utilization. However, the expectation is that the validators will make use of larger and cheaper storage hardware to mitigate such exponential rise in the storage costs. 
 
-Dynamic pricing is used to protect the Aptos network in the worse-case scenarios. However, we expect upgrades to Aptos network to happen well before the network gets into the high-cost zones.
+Dynamic pricing is used to protect the Pont network in the worse-case scenarios. However, we expect upgrades to Pont network to happen well before the network gets into the high-cost zones.
 
 ## Examples
 
@@ -82,7 +82,7 @@ Dynamic pricing is used to protect the Aptos network in the worse-case scenarios
 
 **The sender’s account must have sufficient funds to pay for the transaction fee.**
 
-If, let's say, you transfer all the money out of your account so that you have no remaining balance to pay for the transaction fee. In such case the Aptos blockchain would let you know that the transaction will fail, and your transfer wouldn't succeed either.
+If, let's say, you transfer all the money out of your account so that you have no remaining balance to pay for the transaction fee. In such case the Pont blockchain would let you know that the transaction will fail, and your transfer wouldn't succeed either.
 
 ### Example 2: Transaction amounts vs transaction fee
 
@@ -96,7 +96,7 @@ The gas used for a transaction can be estimated by simulating the transaction. W
 
 ## Simulating the transaction to estimate the gas
 
-Transactions can be simulated with the [`SimulateTransaction`](https://fullnode.devnet.aptoslabs.com/v1/spec#/operations/simulate_transaction) API. This API will run the exact transaction that you plan to run.  
+Transactions can be simulated with the [`SimulateTransaction`](https://fullnode.devnet.pontlabs.com/v1/spec#/operations/simulate_transaction) API. This API will run the exact transaction that you plan to run.  
 
 :::tip
 Note that the `Signature` provided on the transaction must be all zeros. This is to prevent someone from using the valid signature.
@@ -104,7 +104,7 @@ Note that the `Signature` provided on the transaction must be all zeros. This is
 
 To simulate the transaction, there are two flags:
 
-1. `estimate_gas_unit_price`: This flag will estimate the gas unit price in the transaction using the same algorithm as the [`estimate_gas_price`](https://fullnode.devnet.aptoslabs.com/v1/spec#/operations/estimate_gas_price) API.
+1. `estimate_gas_unit_price`: This flag will estimate the gas unit price in the transaction using the same algorithm as the [`estimate_gas_price`](https://fullnode.devnet.pontlabs.com/v1/spec#/operations/estimate_gas_price) API.
 2. `estimate_max_gas_amount`: This flag will find the maximum possible gas you can use, and it will simulate the transaction to tell you the actual `gas_used`.
 
 ### Simulation steps

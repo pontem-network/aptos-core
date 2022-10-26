@@ -1,10 +1,10 @@
 [package]
 name = "executor"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos executor"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont executor"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -18,15 +18,15 @@ once_cell = "1.10.0"
 rayon = "1.5.2"
 serde = { version = "1.0.137", features = ["derive"] }
 
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-gas = { path = "../../aptos-move/aptos-gas" }
-aptos-infallible = { path = "../../crates/aptos-infallible" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-metrics-core = { path = "../../crates/aptos-metrics-core" }
-aptos-secure-net = { path = "../../secure/net" }
-aptos-state-view = { path = "../../storage/state-view" }
-aptos-types = { path = "../../types" }
-aptos-vm = { path = "../../aptos-move/aptos-vm" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-gas = { path = "../../pont-move/pont-gas" }
+pont-infallible = { path = "../../crates/pont-infallible" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-metrics-core = { path = "../../crates/pont-metrics-core" }
+pont-secure-net = { path = "../../secure/net" }
+pont-state-view = { path = "../../storage/state-view" }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../../pont-move/pont-vm" }
 
 consensus-types = { path = "../../consensus/consensus-types" }
 executor-types = { path = "../executor-types" }
@@ -39,17 +39,17 @@ move-core-types = { workspace = true }
 proptest = "1.0.0"
 rand = "0.7.3"
 
-aptos-config = { path = "../../config" }
-aptos-genesis = { path = "../../crates/aptos-genesis", features = ["testing"] }
-aptos-temppath = { path = "../../crates/aptos-temppath" }
-aptos-types = { path = "../../types", features = ["fuzzing"] }
-aptosdb = { path = "../../storage/aptosdb" }
-cached-packages = { path = "../../aptos-move/framework/cached-packages" }
+pont-config = { path = "../../config" }
+pont-genesis = { path = "../../crates/pont-genesis", features = ["testing"] }
+pont-temppath = { path = "../../crates/pont-temppath" }
+pont-types = { path = "../../types", features = ["fuzzing"] }
+pontdb = { path = "../../storage/pontdb" }
+cached-packages = { path = "../../pont-move/framework/cached-packages" }
 executor-test-helpers = { path = "../executor-test-helpers" }
 storage-interface = { path = "../../storage/storage-interface", features = ["fuzzing"] }
-vm-genesis = { path = "../../aptos-move/vm-genesis" }
+vm-genesis = { path = "../../pont-move/vm-genesis" }
 
 [features]
 default = []
-fuzzing = ["consensus-types/fuzzing", "aptos-crypto/fuzzing", "aptos-types/fuzzing", "storage-interface/fuzzing"]
-failpoints = ["fail/failpoints", "aptos-vm/failpoints"]
+fuzzing = ["consensus-types/fuzzing", "pont-crypto/fuzzing", "pont-types/fuzzing", "storage-interface/fuzzing"]
+failpoints = ["fail/failpoints", "pont-vm/failpoints"]

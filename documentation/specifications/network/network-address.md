@@ -5,7 +5,7 @@ protocols, inspired by libp2p's [multiaddr](https://multiformats.io/multiaddr/) 
 using [BCS] to describe the binary format and reducing the set of supported protocols.
 
 In particular, a `NetworkAddress` is intended to be a fully self-contained description of _how_ to dial a
-[AptosNet](README.md) peer, describing both the base transport protocol and all subsequent connection upgrade protocols.
+[PontNet](README.md) peer, describing both the base transport protocol and all subsequent connection upgrade protocols.
 
 ## Data Structures
 
@@ -103,8 +103,8 @@ Example possible combinations:
 
 ## Network Protocol Upgradability
 
-It is important for Aptos to support upgrading its network protocols. In particular, providing a process for doing
-backwards-incompatible upgrades allows Aptos to evolve quickly and prevents protocol ossification.
+It is important for Pont to support upgrading its network protocols. In particular, providing a process for doing
+backwards-incompatible upgrades allows Pont to evolve quickly and prevents protocol ossification.
 
 Each node advertises the full set of protocols needed to speak with a it using
 [onchain discovery](onchain-discovery.md). In other words, a node that sees
@@ -112,9 +112,9 @@ Each node advertises the full set of protocols needed to speak with a it using
 must speak and in which order for the listening node to understand them.
 
 By allowing several `NetworkAddress`es to be advertised at once, nodes can also facilitate backwards-incompatible
-network protocol upgrades. For instance, suppose Aptos wants to modify the Noise secure transport to a different
+network protocol upgrades. For instance, suppose Pont wants to modify the Noise secure transport to a different
 handshake pattern or crypto primitives (e.g. move from `"Noise_IK_25519_AESGCM_SHA256"` to
-`"Noise_IX_25519_ChaChaPoly_BLAKE2s"`). A new binary version of Aptos could be released that supports the new Noise
+`"Noise_IX_25519_ChaChaPoly_BLAKE2s"`). A new binary version of Pont could be released that supports the new Noise
 handshake. Nodes that update to the new binary version would then advertise both the old handshake protocol and the new
 handshake protocol:
 

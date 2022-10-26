@@ -23,17 +23,7 @@ use crate::{
         RandomComputeResultStateComputer,
     },
 };
-use aptos_crypto::{hash::ACCUMULATOR_PLACEHOLDER_HASH, HashValue};
-use aptos_infallible::Mutex;
-use aptos_secure_storage::Storage;
-use aptos_types::{
-    account_address::AccountAddress,
-    ledger_info::LedgerInfo,
-    validator_signer::ValidatorSigner,
-    validator_verifier::{random_validator_verifier, ValidatorVerifier},
-    waypoint::Waypoint,
-};
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use consensus_types::{
     block::block_test_utils::certificate_for_genesis, executed_block::ExecutedBlock,
     vote_proposal::VoteProposal,
@@ -44,6 +34,16 @@ use network::{
     peer_manager::{ConnectionRequestSender, PeerManagerRequestSender},
     protocols::network::{Event, NewNetworkSender},
 };
+use pont_crypto::{hash::ACCUMULATOR_PLACEHOLDER_HASH, HashValue};
+use pont_infallible::Mutex;
+use pont_secure_storage::Storage;
+use pont_types::{
+    account_address::AccountAddress,
+    ledger_info::LedgerInfo,
+    validator_signer::ValidatorSigner,
+    validator_verifier::{random_validator_verifier, ValidatorVerifier},
+    waypoint::Waypoint,
+};
 use safety_rules::{PersistentSafetyStorage, SafetyRulesManager};
 use std::sync::Arc;
 use tokio::runtime::Runtime;
@@ -52,7 +52,7 @@ pub fn prepare_buffer_manager() -> (
     BufferManager,
     Sender<OrderedBlocks>,
     Sender<ResetRequest>,
-    aptos_channel::Sender<AccountAddress, VerifiedEvent>,
+    pont_channel::Sender<AccountAddress, VerifiedEvent>,
     channel::Receiver<Event<ConsensusMsg>>,
     PipelinePhase<ExecutionPhase>,
     PipelinePhase<SigningPhase>,
@@ -74,7 +74,7 @@ pub fn prepare_buffer_manager() -> (
         Waypoint::new_epoch_boundary(&LedgerInfo::mock_genesis(Some(validator_set))).unwrap();
 
     let safety_storage = PersistentSafetyStorage::initialize(
-        Storage::from(aptos_secure_storage::InMemoryStorage::new()),
+        Storage::from(pont_secure_storage::InMemoryStorage::new()),
         signer.author(),
         signer.private_key().clone(),
         waypoint,
@@ -87,8 +87,8 @@ pub fn prepare_buffer_manager() -> (
     let mut safety_rules = MetricsSafetyRules::new(safety_rules_manager.client(), storage);
     safety_rules.perform_initialize().unwrap();
 
-    let (network_reqs_tx, _network_reqs_rx) = aptos_channel::new(QueueStyle::FIFO, 8, None);
-    let (connection_reqs_tx, _) = aptos_channel::new(QueueStyle::FIFO, 8, None);
+    let (network_reqs_tx, _network_reqs_rx) = pont_channel::new(QueueStyle::FIFO, 8, None);
+    let (connection_reqs_tx, _) = pont_channel::new(QueueStyle::FIFO, 8, None);
 
     let network_sender = ConsensusNetworkSender::new(
         PeerManagerRequestSender::new(network_reqs_tx),
@@ -99,7 +99,7 @@ pub fn prepare_buffer_manager() -> (
     let network = NetworkSender::new(author, network_sender, self_loop_tx, validators.clone());
 
     let (msg_tx, msg_rx) =
-        aptos_channel::new::<AccountAddress, VerifiedEvent>(QueueStyle::FIFO, channel_size, None);
+        pont_channel::new::<AccountAddress, VerifiedEvent>(QueueStyle::FIFO, channel_size, None);
 
     let (result_tx, result_rx) = create_channel::<OrderedBlocks>();
     let (reset_tx, _) = create_channel::<ResetRequest>();
@@ -152,7 +152,7 @@ pub fn prepare_buffer_manager() -> (
 pub fn launch_buffer_manager() -> (
     Sender<OrderedBlocks>,
     Sender<ResetRequest>,
-    aptos_channel::Sender<AccountAddress, VerifiedEvent>,
+    pont_channel::Sender<AccountAddress, VerifiedEvent>,
     channel::Receiver<Event<ConsensusMsg>>,
     HashValue,
     Runtime,
@@ -197,7 +197,7 @@ pub fn launch_buffer_manager() -> (
 
 async fn loopback_commit_vote(
     self_loop_rx: &mut channel::Receiver<Event<ConsensusMsg>>,
-    msg_tx: &aptos_channel::Sender<AccountAddress, VerifiedEvent>,
+    msg_tx: &pont_channel::Sender<AccountAddress, VerifiedEvent>,
     verifier: &ValidatorVerifier,
 ) {
     match self_loop_rx.next().await {

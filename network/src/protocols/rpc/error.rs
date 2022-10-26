@@ -5,8 +5,8 @@
 
 use crate::peer_manager::PeerManagerError;
 use anyhow::anyhow;
-use aptos_types::PeerId;
 use futures::channel::{mpsc, oneshot};
+use pont_types::PeerId;
 use std::io;
 use thiserror::Error;
 

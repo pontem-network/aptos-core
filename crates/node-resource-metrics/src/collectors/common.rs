@@ -3,8 +3,8 @@
 
 use std::time::Instant;
 
-use aptos_metrics_core::{exponential_buckets, HistogramVec};
 use once_cell::sync::Lazy;
+use pont_metrics_core::{exponential_buckets, HistogramVec};
 use prometheus::{
     core::{self, Collector},
     histogram_opts,

@@ -3,8 +3,8 @@
 
 use crate::smoke_test_environment::SwarmBuilder;
 use crate::test_utils::{assert_balance, create_and_fund_account, transfer_coins};
-use aptos_config::config::NodeConfig;
 use forge::{NodeExt, Swarm, SwarmExt};
+use pont_config::config::NodeConfig;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
@@ -15,7 +15,7 @@ const MAX_WAIT_SECS: u64 = 60;
 #[tokio::test]
 async fn test_txn_broadcast() {
     let mut swarm = SwarmBuilder::new_local(4)
-        .with_aptos()
+        .with_pont()
         .with_init_config(Arc::new(|_, conf, _| {
             conf.api.failpoints_enabled = true;
         }))

@@ -12,12 +12,13 @@ use crate::{
     NibbleExt, TreeReader, TreeWriter, IO_POOL, ROOT_NIBBLE_HEIGHT,
 };
 use anyhow::{ensure, Result};
-use aptos_crypto::{
+use itertools::Itertools;
+use pont_crypto::{
     hash::{CryptoHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use aptos_logger::info;
-use aptos_types::{
+use pont_logger::info;
+use pont_types::{
     nibble::{
         nibble_path::{NibbleIterator, NibblePath},
         Nibble,
@@ -25,7 +26,6 @@ use aptos_types::{
     proof::{SparseMerkleInternalNode, SparseMerkleLeafNode, SparseMerkleRangeProof},
     transaction::Version,
 };
-use itertools::Itertools;
 use std::sync::mpsc::{channel, Receiver};
 use std::{cmp::Eq, collections::HashMap, sync::Arc};
 

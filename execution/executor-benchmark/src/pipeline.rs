@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{TransactionCommitter, TransactionExecutor};
-use aptos_logger::info;
-use aptos_types::transaction::{Transaction, Version};
-use aptos_vm::AptosVM;
 use executor::block_executor::BlockExecutor;
 use executor_types::BlockExecutorTrait;
+use pont_logger::info;
+use pont_types::transaction::{Transaction, Version};
+use pont_vm::PontVM;
 use std::{
     sync::{mpsc, Arc},
     thread::JoinHandle,
@@ -18,7 +18,7 @@ pub struct Pipeline {
 
 impl Pipeline {
     pub fn new(
-        executor: BlockExecutor<AptosVM>,
+        executor: BlockExecutor<PontVM>,
         version: Version,
     ) -> (Self, mpsc::SyncSender<Vec<Transaction>>) {
         let parent_block_id = executor.committed_block_id();

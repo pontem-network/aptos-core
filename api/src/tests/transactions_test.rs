@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::new_test_context;
-use aptos_api_test_context::{assert_json, current_function_name, pretty, TestContext};
+use pont_api_test_context::{assert_json, current_function_name, pretty, TestContext};
 
-use aptos_crypto::{
+use pont_crypto::{
     multi_ed25519::{MultiEd25519PrivateKey, MultiEd25519PublicKey},
     PrivateKey, SigningKey, Uniform,
 };
-use aptos_sdk::types::LocalAccount;
-use aptos_types::{
+use pont_sdk::types::LocalAccount;
+use pont_types::{
     account_address::AccountAddress,
     transaction::{
         authenticator::{AuthenticationKey, TransactionAuthenticator},
@@ -18,12 +18,12 @@ use aptos_types::{
     utility_coin::APTOS_COIN_TYPE,
 };
 
-use aptos_crypto::ed25519::Ed25519PrivateKey;
 use move_core_types::{
     identifier::Identifier,
     language_storage::{ModuleId, TypeTag},
 };
 use poem_openapi::types::ParseFromJSON;
+use pont_crypto::ed25519::Ed25519PrivateKey;
 use rand::{distributions::Alphanumeric, thread_rng, Rng};
 use serde_json::json;
 
@@ -33,7 +33,7 @@ async fn test_deserialize_genesis_transaction() {
     let resp = context.get("/transactions/by_version/0").await;
     // TODO: serde_json::from_value doesn't work here, either make it work
     // or remove the ability to do that.
-    aptos_api_types::Transaction::parse_from_json(Some(resp)).unwrap();
+    pont_api_types::Transaction::parse_from_json(Some(resp)).unwrap();
 }
 
 // Unstable due to framework changes
@@ -472,7 +472,7 @@ async fn test_signing_message_with_entry_function_payload() {
     let txn = context.create_user_account(&account);
     let payload = json!({
         "type": "entry_function_payload",
-        "function": "0x1::aptos_account::create_account",
+        "function": "0x1::pont_account::create_account",
         "type_arguments": [],
         "arguments": [
             account.address().to_hex_literal(), // new_account_address

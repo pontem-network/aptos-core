@@ -3,8 +3,8 @@
 
 #![forbid(unsafe_code)]
 
-use aptos_config::network_id::PeerNetworkId;
 use network::application::types::PeerInfo;
+use pont_config::network_id::PeerNetworkId;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, convert::TryFrom};
 use thiserror::Error;

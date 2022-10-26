@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::sparse_merkle::utils::partition;
-use aptos_crypto::{
+use bitvec::prelude::*;
+use pont_crypto::{
     hash::{CryptoHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use aptos_types::proof::definition::NodeInProof;
-use aptos_types::proof::{SparseMerkleInternalNode, SparseMerkleLeafNode, SparseMerkleProofExt};
-use bitvec::prelude::*;
+use pont_types::proof::definition::NodeInProof;
+use pont_types::proof::{SparseMerkleInternalNode, SparseMerkleLeafNode, SparseMerkleProofExt};
 use std::collections::{BTreeMap, HashMap};
 
 type Cache = HashMap<BitVec<Msb0, u8>, NodeInProof>;

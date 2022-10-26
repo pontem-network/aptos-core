@@ -3,13 +3,15 @@
 
 pub mod integration_test_impl;
 
-use aptos_config::config::NodeConfig;
-use aptos_crypto::{
+use executor::db_bootstrapper::{generate_waypoint, maybe_bootstrap};
+use executor_types::StateComputeResult;
+use pont_config::config::NodeConfig;
+use pont_crypto::{
     ed25519::{Ed25519PrivateKey, Ed25519PublicKey},
     HashValue,
 };
-use aptos_types::ledger_info::generate_ledger_info_with_sig;
-use aptos_types::{
+use pont_types::ledger_info::generate_ledger_info_with_sig;
+use pont_types::{
     account_address::AccountAddress,
     block_info::BlockInfo,
     ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
@@ -18,9 +20,7 @@ use aptos_types::{
     validator_signer::ValidatorSigner,
     waypoint::Waypoint,
 };
-use aptos_vm::VMExecutor;
-use executor::db_bootstrapper::{generate_waypoint, maybe_bootstrap};
-use executor_types::StateComputeResult;
+use pont_vm::VMExecutor;
 use storage_interface::DbReaderWriter;
 
 /// Helper function for test to blindly bootstrap without waypoint.

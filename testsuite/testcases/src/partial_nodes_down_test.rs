@@ -37,7 +37,7 @@ impl NetworkTest for PartialNodesDown {
             ctx,
             &up_nodes,
             duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )?;
         ctx.report
             .report_txn_stats(self.name().to_string(), &txn_stat, duration);

@@ -14,8 +14,8 @@ use crate::{
     validator_verifier::{random_validator_verifier, ValidatorConsensusInfo, ValidatorVerifier},
     waypoint::Waypoint,
 };
-use aptos_crypto::hash::{CryptoHash, CryptoHasher, HashValue};
 use bcs::test_helpers::assert_canonical_encode_decode;
+use pont_crypto::hash::{CryptoHash, CryptoHasher, HashValue};
 use proptest::{
     collection::{size_range, vec, SizeRange},
     prelude::*,

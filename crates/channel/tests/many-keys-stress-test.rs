@@ -1,7 +1,7 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use futures::{executor::block_on, stream::StreamExt};
 use std::{
     io::{Cursor, Write},
@@ -32,7 +32,7 @@ pub fn run(args: Args) {
     static NUM_POP: AtomicUsize = AtomicUsize::new(0);
     static IS_DONE: AtomicBool = AtomicBool::new(false);
 
-    let (sender, mut receiver) = aptos_channel::new::<[u8; KEY_SIZE_BYTES], [u8; MSG_SIZE_BYTES]>(
+    let (sender, mut receiver) = pont_channel::new::<[u8; KEY_SIZE_BYTES], [u8; MSG_SIZE_BYTES]>(
         QueueStyle::FIFO,
         args.max_queue_size,
         None,

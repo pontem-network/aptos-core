@@ -3,13 +3,13 @@
 
 //! The purpose of this crate is to offer a single source of truth for the definitions of shared
 //! constants within the codebase. This is useful because many different components within
-//! Aptos often require access to global constant definitions (e.g., Safety Rules,
+//! Pont often require access to global constant definitions (e.g., Safety Rules,
 //! Key Manager, and Secure Storage). To avoid duplicating these definitions across crates
 //! (and better allow these constants to be updated in a single location), we define them here.
 #![forbid(unsafe_code)]
 
 /// Definitions of global cryptographic keys (e.g., as held in secure storage)
-pub const APTOS_ROOT_KEY: &str = "aptos_root";
+pub const APTOS_ROOT_KEY: &str = "pont_root";
 pub const CONSENSUS_KEY: &str = "consensus";
 pub const FULLNODE_NETWORK_KEY: &str = "fullnode_network";
 pub const OPERATOR_ACCOUNT: &str = "operator_account";

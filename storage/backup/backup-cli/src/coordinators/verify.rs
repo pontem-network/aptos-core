@@ -16,8 +16,8 @@ use crate::{
     utils::{unix_timestamp_sec, GlobalRestoreOptions, RestoreRunMode, TrustedWaypointOpt},
 };
 use anyhow::Result;
-use aptos_logger::prelude::*;
-use aptos_types::transaction::Version;
+use pont_logger::prelude::*;
+use pont_types::transaction::Version;
 use std::sync::Arc;
 
 pub struct VerifyCoordinator {

@@ -1,0 +1,21 @@
+[package]
+name = "pont-crypto-derive"
+version = "0.0.3"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Custom derives for `pont-crypto`"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = ["crates-io"]
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1.0.38"
+quote = "1.0.18"
+syn = { version = "1.0.92", features = ["derive"] }
+
+[dev-dependencies]
+anyhow = "1.0.57"

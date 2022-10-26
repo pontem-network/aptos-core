@@ -1,0 +1,25 @@
+[package]
+name = "pont-compression"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "A unified compression interface and implementation offered by Pont"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+lz4 = "1.24.0"
+once_cell = "1.10.0"
+thiserror = "1.0.31"
+
+pont-logger = { path = "../pont-logger" }
+pont-metrics-core = { path = "../pont-metrics-core" }
+
+[dev-dependencies]
+bcs = { git = "https://github.com/aptos-labs/bcs", rev = "2cde3e8446c460cb17b0c1d6bac7e27e964ac169" }
+serde = { version = "1.0.137", default-features = false }
+
+pont-crypto = { path = "../pont-crypto" }
+pont-types = { path = "../../types" }

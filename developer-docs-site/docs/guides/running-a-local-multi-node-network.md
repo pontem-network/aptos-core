@@ -5,7 +5,7 @@ slug: "running-a-local-multi-node-network"
 
 # Running a Local Multi-node Network
 
-This guide describes how to run a local network with multiple validator nodes and validator fullnodes. You will use the [Aptos Forge CLI](https://github.com/aptos-labs/aptos-core/tree/main/testsuite/forge-cli/src) for this.
+This guide describes how to run a local network with multiple validator nodes and validator fullnodes. You will use the [Pont Forge CLI](https://github.com/aptos-labs/pont-core/tree/main/testsuite/forge-cli/src) for this.
 
 :::tip Use only for test deployments
 The method described in this guide should be used only for test deployments of multi-node local networks. Do not use this guide for deploying in production environments. Currently this is the only guide for multi-node deployments. 
@@ -15,18 +15,18 @@ For deploying a local network with a single node, see [Running Local Testnet](/n
 
 ## Before you proceed
 
-Make sure you cloned the Aptos source GitHub repo by following these steps:
+Make sure you cloned the Pont source GitHub repo by following these steps:
 
-1. Clone the Aptos repo.
+1. Clone the Pont repo.
 
 ```bash
-git clone https://github.com/aptos-labs/aptos-core.git
+git clone https://github.com/aptos-labs/pont-core.git
 ```
 
-2. `cd` into aptos-core directory.
+2. `cd` into pont-core directory.
 
 ```bash
-cd aptos-core
+cd pont-core
 ```
 
 3. Run the scripts/dev_setup.sh Bash script as shown below. This will prepare your developer environment.
@@ -60,11 +60,11 @@ The terminal output will display the locations of the validator files (for examp
 
 ```bash
 ...
-2022-09-01T15:41:27.228289Z [main] INFO crates/aptos-genesis/src/builder.rs:462 Building genesis with 4 validators. Directory of output: "/private/var/folders/dx/c0l2rrkn0656gfx6v5_dy_p80000gn/T/.tmpq9uPMJ"
+2022-09-01T15:41:27.228289Z [main] INFO crates/pont-genesis/src/builder.rs:462 Building genesis with 4 validators. Directory of output: "/private/var/folders/dx/c0l2rrkn0656gfx6v5_dy_p80000gn/T/.tmpq9uPMJ"
 ...
 2022-09-01T15:41:28.090606Z [main] INFO testsuite/forge/src/backend/local/swarm.rs:207 The root (or mint) key for the swarm is: 0xf9f...
 ...
-2022-09-01T15:41:28.094800Z [main] INFO testsuite/forge/src/backend/local/node.rs:129 Started node 0 (PID: 78939) with command: ".../aptos-core/target/debug/aptos-node" "-f" "/private/var/folders/dx/c0l2rrkn0656gfx6v5_dy_p80000gn/T/.tmpq9uPMJ/0/node.yaml"
+2022-09-01T15:41:28.094800Z [main] INFO testsuite/forge/src/backend/local/node.rs:129 Started node 0 (PID: 78939) with command: ".../pont-core/target/debug/pont-node" "-f" "/private/var/folders/dx/c0l2rrkn0656gfx6v5_dy_p80000gn/T/.tmpq9uPMJ/0/node.yaml"
 2022-09-01T15:41:28.094825Z [main] INFO testsuite/forge/src/backend/local/node.rs:137 Node 0: REST API is listening at: http://127.0.0.1:64566
 2022-09-01T15:41:28.094838Z [main] INFO testsuite/forge/src/backend/local/node.rs:142 Node 0: Inspection service is listening at http://127.0.0.1:64568
 ...
@@ -75,7 +75,7 @@ it. For example, to stop and restart the node `0`, execute the below commands:
 
 ```bash
 kill -9 <Node 0 PID>
-cargo run -p aptos-node \
+cargo run -p pont-node \
         -- \
         -f <Location to the node 0 configuration file displayed above>
 ```
@@ -85,7 +85,7 @@ cargo run -p aptos-node \
 In addition, the terminal output also displays the root (or mint) key for the network. This allows you to run a local faucet and start minting test tokens in the network. For this, simply run the faucet command using the mint key and point it to the REST API of one of the nodes, for example, node `0`:
 
 ```bash
-cargo run --bin aptos-faucet \
+cargo run --bin pont-faucet \
         -- \
         -c TESTING \
         --mint-key <Root/mint key displayed above> \
@@ -100,10 +100,10 @@ curl -X POST http://127.0.0.1:8081/mint\?amount\=<amount to mint>\&pub_key\=<pub
 01000000000000000000000000000000dd05a600000000000001e001a11ceb0b01000...
 ```
 
-:::tip Faucet and Aptos CLI
-See more on how the faucet works in the [README](https://github.com/aptos-labs/aptos-core/tree/main/crates/aptos-faucet).
+:::tip Faucet and Pont CLI
+See more on how the faucet works in the [README](https://github.com/aptos-labs/pont-core/tree/main/crates/pont-faucet).
 
-Also see how to use the [Aptos CLI](https://aptos.dev/cli-tools/aptos-cli-tool/use-aptos-cli/#account-examples) with an existing faucet.
+Also see how to use the [Pont CLI](https://pont.dev/cli-tools/pont-cli-tool/use-pont-cli/#account-examples) with an existing faucet.
 :::
 
 ## Validator fullnodes

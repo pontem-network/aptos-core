@@ -22,7 +22,7 @@ use log::debug;
 use poem_openapi::Object as PoemObject;
 use serde::{Deserialize, Serialize};
 
-// TODO: Use the key in crates/aptos-telemetry/src/build_information.rs
+// TODO: Use the key in crates/pont-telemetry/src/build_information.rs
 const BUILD_COMMIT_HASH_KEY: &str = "build_commit_hash";
 
 #[derive(Clone, Debug, Deserialize, Parser, PoemObject, Serialize)]

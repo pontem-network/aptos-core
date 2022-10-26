@@ -1,29 +1,29 @@
 [package]
-name = "aptos-api-test-context"
+name = "pont-api-test-context"
 version = "0.2.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos API test context"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont API test context"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
 
 [dependencies]
 anyhow = "1.0.57"
-aptos-api = { path = "../", package = "aptos-api" }
-aptos-api-types = { path = "../types", package = "aptos-api-types" }
-aptos-config = { path = "../../config" }
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-genesis = { path = "../../crates/aptos-genesis", features = ["testing"] }
-aptos-mempool = { path = "../../mempool", features = ["fuzzing"] }
-aptos-sdk = { path = "../../sdk" }
-aptos-temppath = { path = "../../crates/aptos-temppath" }
-aptos-types = { path = "../../types" }
-aptos-vm = { path = "../../aptos-move/aptos-vm" }
-aptosdb = { path = "../../storage/aptosdb", features = ["fuzzing"] }
+pont-api = { path = "../", package = "pont-api" }
+pont-api-types = { path = "../types", package = "pont-api-types" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-genesis = { path = "../../crates/pont-genesis", features = ["testing"] }
+pont-mempool = { path = "../../mempool", features = ["fuzzing"] }
+pont-sdk = { path = "../../sdk" }
+pont-temppath = { path = "../../crates/pont-temppath" }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../../pont-move/pont-vm" }
+pontdb = { path = "../../storage/pontdb", features = ["fuzzing"] }
 bytes = "1.1.0"
-cached-packages = { path = "../../aptos-move/framework/cached-packages" }
+cached-packages = { path = "../../pont-move/framework/cached-packages" }
 executor = { path = "../../execution/executor" }
 executor-types = { path = "../../execution/executor-types" }
 goldenfile = "1.1.0"

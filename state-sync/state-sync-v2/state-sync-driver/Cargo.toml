@@ -1,10 +1,10 @@
 [package]
 name = "state-sync-driver"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-repository = "https://github.com/aptos-labs/aptos-core"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+repository = "https://github.com/aptos-labs/pont-core"
 description = "The driver for state sync"
-homepage = "https://aptoslabs.com"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -20,13 +20,13 @@ thiserror = "1.0.31"
 tokio = { version = "1.21.0", features = ["full"] }
 tokio-stream = "0.1.8"
 
-aptos-config = { path = "../../../config" }
-aptos-crypto = { path = "../../../crates/aptos-crypto" }
-aptos-data-client = { path = "../../aptos-data-client" }
-aptos-infallible = { path = "../../../crates/aptos-infallible" }
-aptos-logger = { path = "../../../crates/aptos-logger" }
-aptos-metrics-core = { path = "../../../crates/aptos-metrics-core" }
-aptos-types = { path = "../../../types" }
+pont-config = { path = "../../../config" }
+pont-crypto = { path = "../../../crates/pont-crypto" }
+pont-data-client = { path = "../../pont-data-client" }
+pont-infallible = { path = "../../../crates/pont-infallible" }
+pont-logger = { path = "../../../crates/pont-logger" }
+pont-metrics-core = { path = "../../../crates/pont-metrics-core" }
+pont-types = { path = "../../../types" }
 
 consensus-notifications = { path = "../../inter-component/consensus-notifications" }
 data-streaming-service = { path = "../data-streaming-service" }
@@ -45,12 +45,12 @@ claims = "0.7"
 mockall = "0.11.0"
 rand = "0.7.3"
 
-aptos-crypto = { path = "../../../crates/aptos-crypto" }
-aptos-genesis = { path = "../../../crates/aptos-genesis", features = ["testing"] }
-aptos-temppath = { path = "../../../crates/aptos-temppath" }
-aptos-time-service = { path = "../../../crates/aptos-time-service", features = ["async", "testing"] }
-aptos-vm = { path = "../../../aptos-move/aptos-vm" }
-aptosdb = { path = "../../../storage/aptosdb" }
+pont-crypto = { path = "../../../crates/pont-crypto" }
+pont-genesis = { path = "../../../crates/pont-genesis", features = ["testing"] }
+pont-temppath = { path = "../../../crates/pont-temppath" }
+pont-time-service = { path = "../../../crates/pont-time-service", features = ["async", "testing"] }
+pont-vm = { path = "../../../pont-move/pont-vm" }
+pontdb = { path = "../../../storage/pontdb" }
 channel = { path = "../../../crates/channel" }
 executor = { path = "../../../execution/executor" }
 executor-test-helpers = { path = "../../../execution/executor-test-helpers" }
@@ -58,4 +58,4 @@ move-core-types = { workspace = true }
 network = { path = "../../../network", features = ["fuzzing"] }
 storage-service-client = { path = "../../storage-service/client" }
 storage-service-types = { path = "../../storage-service/types" }
-vm-genesis = { path = "../../../aptos-move/vm-genesis", features = ["fuzzing"] }
+vm-genesis = { path = "../../../pont-move/vm-genesis", features = ["fuzzing"] }

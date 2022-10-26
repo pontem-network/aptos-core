@@ -1,10 +1,10 @@
 [package]
-name = "aptos-state-view"
+name = "pont-state-view"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos state view"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont state view"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -16,9 +16,9 @@ serde = { version = "1.0.137", default-features = false }
 serde_bytes = "0.11.6"
 serde_json = "1.0.81"
 
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-types = { path = "../../types" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-types = { path = "../../types" }
 
 [features]
 default = []
-fuzzing = ["aptos-types/fuzzing"]
+fuzzing = ["pont-types/fuzzing"]

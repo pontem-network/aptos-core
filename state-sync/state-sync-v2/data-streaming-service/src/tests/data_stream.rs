@@ -13,24 +13,24 @@ use crate::{
     tests::utils::{
         create_data_client_response, create_ledger_info, create_random_u64,
         create_transaction_list_with_proof, get_data_notification, initialize_logger,
-        MockAptosDataClient, NoopResponseCallback, MAX_ADVERTISED_EPOCH_END, MAX_ADVERTISED_STATES,
+        MockPontDataClient, NoopResponseCallback, MAX_ADVERTISED_EPOCH_END, MAX_ADVERTISED_STATES,
         MAX_ADVERTISED_TRANSACTION_OUTPUT, MAX_NOTIFICATION_TIMEOUT_SECS, MIN_ADVERTISED_EPOCH_END,
         MIN_ADVERTISED_STATES, MIN_ADVERTISED_TRANSACTION_OUTPUT,
     },
 };
-use aptos_config::config::DataStreamingServiceConfig;
-use aptos_data_client::{
+use claims::{assert_err, assert_ge, assert_matches, assert_none, assert_ok};
+use futures::{FutureExt, StreamExt};
+use pont_config::config::DataStreamingServiceConfig;
+use pont_data_client::{
     AdvertisedData, GlobalDataSummary, OptimalChunkSizes, Response, ResponseContext,
     ResponsePayload,
 };
-use aptos_id_generator::U64IdGenerator;
-use aptos_infallible::Mutex;
-use aptos_types::{
+use pont_id_generator::U64IdGenerator;
+use pont_infallible::Mutex;
+use pont_types::{
     ledger_info::LedgerInfoWithSignatures, proof::SparseMerkleRangeProof,
     state_store::state_value::StateValueChunkWithProof, transaction::Version,
 };
-use claims::{assert_err, assert_ge, assert_matches, assert_none, assert_ok};
-use futures::{FutureExt, StreamExt};
 use std::{sync::Arc, time::Duration};
 use storage_service_types::responses::CompleteDataRange;
 use tokio::time::timeout;
@@ -193,7 +193,7 @@ async fn test_stream_data_error() {
     });
     let pending_response = PendingClientResponse {
         client_request: client_request.clone(),
-        client_response: Some(Err(aptos_data_client::Error::DataIsUnavailable(
+        client_response: Some(Err(pont_data_client::Error::DataIsUnavailable(
             "Missing data!".into(),
         ))),
     };
@@ -483,7 +483,7 @@ async fn test_stream_listener_dropped() {
 fn create_state_value_stream(
     streaming_service_config: DataStreamingServiceConfig,
     version: Version,
-) -> (DataStream<MockAptosDataClient>, DataStreamListener) {
+) -> (DataStream<MockPontDataClient>, DataStreamListener) {
     // Create a state value stream request
     let stream_request = StreamRequest::GetAllStates(GetAllStatesRequest {
         version,
@@ -496,7 +496,7 @@ fn create_state_value_stream(
 fn create_epoch_ending_stream(
     streaming_service_config: DataStreamingServiceConfig,
     start_epoch: u64,
-) -> (DataStream<MockAptosDataClient>, DataStreamListener) {
+) -> (DataStream<MockPontDataClient>, DataStreamListener) {
     // Create an epoch ending stream request
     let stream_request =
         StreamRequest::GetAllEpochEndingLedgerInfos(GetAllEpochEndingLedgerInfosRequest {
@@ -510,7 +510,7 @@ fn create_transaction_stream(
     streaming_service_config: DataStreamingServiceConfig,
     start_version: Version,
     end_version: Version,
-) -> (DataStream<MockAptosDataClient>, DataStreamListener) {
+) -> (DataStream<MockPontDataClient>, DataStreamListener) {
     // Create a transaction output stream
     let stream_request = StreamRequest::GetAllTransactions(GetAllTransactionsRequest {
         start_version,
@@ -524,7 +524,7 @@ fn create_transaction_stream(
 fn create_data_stream(
     streaming_service_config: DataStreamingServiceConfig,
     stream_request: StreamRequest,
-) -> (DataStream<MockAptosDataClient>, DataStreamListener) {
+) -> (DataStream<MockPontDataClient>, DataStreamListener) {
     initialize_logger();
 
     // Create an advertised data
@@ -544,8 +544,8 @@ fn create_data_stream(
         .unwrap()],
     };
 
-    // Create an aptos data client mock and notification generator
-    let aptos_data_client = MockAptosDataClient::new(false, false, false);
+    // Create an pont data client mock and notification generator
+    let pont_data_client = MockPontDataClient::new(false, false, false);
     let notification_generator = Arc::new(U64IdGenerator::new());
 
     // Return the data stream and listener pair
@@ -553,7 +553,7 @@ fn create_data_stream(
         streaming_service_config,
         create_random_u64(10000),
         &stream_request,
-        aptos_data_client,
+        pont_data_client,
         notification_generator,
         &advertised_data,
     )
@@ -578,7 +578,7 @@ fn create_optimal_chunk_sizes(chunk_sizes: u64) -> OptimalChunkSizes {
 /// Sets the client response at the index in the pending queue to contain an
 /// epoch ending data response.
 fn set_epoch_ending_response_in_queue(
-    data_stream: &mut DataStream<MockAptosDataClient>,
+    data_stream: &mut DataStream<MockPontDataClient>,
     index: usize,
 ) {
     // Set the response at the specified index
@@ -597,7 +597,7 @@ fn set_epoch_ending_response_in_queue(
 /// Sets the client response at the index in the pending queue to contain a
 /// number of state values response.
 fn set_num_state_values_response_in_queue(
-    data_stream: &mut DataStream<MockAptosDataClient>,
+    data_stream: &mut DataStream<MockPontDataClient>,
     index: usize,
 ) {
     let (sent_requests, _) = data_stream.get_sent_requests_and_notifications();
@@ -611,7 +611,7 @@ fn set_num_state_values_response_in_queue(
 /// Sets the client response at the index in the pending queue to contain an
 /// state value data response.
 fn set_state_value_response_in_queue(
-    data_stream: &mut DataStream<MockAptosDataClient>,
+    data_stream: &mut DataStream<MockPontDataClient>,
     index: usize,
 ) {
     let (sent_requests, _) = data_stream.get_sent_requests_and_notifications();
@@ -632,7 +632,7 @@ fn set_state_value_response_in_queue(
 
 /// Sets the client response at the head of the pending queue to contain an
 /// transaction response.
-fn set_transaction_response_at_queue_head(data_stream: &mut DataStream<MockAptosDataClient>) {
+fn set_transaction_response_at_queue_head(data_stream: &mut DataStream<MockPontDataClient>) {
     // Set the response at the specified index
     let (sent_requests, _) = data_stream.get_sent_requests_and_notifications();
     if !sent_requests.as_mut().unwrap().is_empty() {
@@ -647,7 +647,7 @@ fn set_transaction_response_at_queue_head(data_stream: &mut DataStream<MockAptos
 /// Clears the pending queue of the given data stream and inserts a single
 /// response into the head of the queue.
 fn insert_response_into_pending_queue(
-    data_stream: &mut DataStream<MockAptosDataClient>,
+    data_stream: &mut DataStream<MockPontDataClient>,
     pending_response: PendingClientResponse,
 ) {
     // Clear the queue
@@ -662,7 +662,7 @@ fn insert_response_into_pending_queue(
 /// Verifies that a client request was resubmitted (i.e., pushed to the head of the
 /// sent request queue)
 fn verify_client_request_resubmitted(
-    data_stream: &mut DataStream<MockAptosDataClient>,
+    data_stream: &mut DataStream<MockPontDataClient>,
     client_request: DataClientRequest,
 ) {
     let (sent_requests, _) = data_stream.get_sent_requests_and_notifications();

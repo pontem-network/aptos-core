@@ -1,8 +1,8 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::HashValue;
 use move_core_types::{account_address::AccountAddress, value::MoveValue};
+use pont_crypto::HashValue;
 use serde::{Deserialize, Serialize};
 
 /// Struct that will be persisted on chain to store the information of the current block.

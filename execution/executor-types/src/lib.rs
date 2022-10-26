@@ -8,11 +8,14 @@ use std::{cmp::max, collections::HashMap, sync::Arc};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-use aptos_crypto::{
+pub use error::Error;
+pub use executed_chunk::ExecutedChunk;
+pub use parsed_transaction_output::ParsedTransactionOutput;
+use pont_crypto::{
     hash::{EventAccumulatorHasher, TransactionAccumulatorHasher, ACCUMULATOR_PLACEHOLDER_HASH},
     HashValue,
 };
-use aptos_types::{
+use pont_types::{
     contract_event::ContractEvent,
     epoch_state::EpochState,
     ledger_info::LedgerInfoWithSignatures,
@@ -24,9 +27,6 @@ use aptos_types::{
     },
     write_set::WriteSet,
 };
-pub use error::Error;
-pub use executed_chunk::ExecutedChunk;
-pub use parsed_transaction_output::ParsedTransactionOutput;
 use scratchpad::{ProofRead, SparseMerkleTree};
 
 mod error;
@@ -147,7 +147,7 @@ pub struct StateComputeResult {
     /// transaction accumulator root hash is identified as `state_id` in Consensus.
     root_hash: HashValue,
     /// Represents the roots of all the full subtrees from left to right in this accumulator
-    /// after the execution. For details, please see [`InMemoryAccumulator`](aptos_types::proof::accumulator::InMemoryAccumulator).
+    /// after the execution. For details, please see [`InMemoryAccumulator`](pont_types::proof::accumulator::InMemoryAccumulator).
     frozen_subtree_roots: Vec<HashValue>,
 
     /// The frozen subtrees roots of the parent block,

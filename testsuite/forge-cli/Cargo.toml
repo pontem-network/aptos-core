@@ -1,10 +1,10 @@
 [package]
 name = "forge-cli"
 version = "0.0.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos end to end test framework CLI"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont end to end test framework CLI"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -16,13 +16,13 @@ structopt = "0.3.21"
 tokio = { version = "1.21.0", features = ["full"] }
 url = "2.2.2"
 
-aptos-global-constants = { path = "../../config/global-constants" }
-aptos-logger = { path = "../../crates/aptos-logger" }
-aptos-rest-client = { path = "../../crates/aptos-rest-client" }
-aptos-sdk = { path = "../../sdk" }
-cached-packages = { path = "../../aptos-move/framework/cached-packages" }
+pont-global-constants = { path = "../../config/global-constants" }
+pont-logger = { path = "../../crates/pont-logger" }
+pont-rest-client = { path = "../../crates/pont-rest-client" }
+pont-sdk = { path = "../../sdk" }
+cached-packages = { path = "../../pont-move/framework/cached-packages" }
 forge = { path = "../forge" }
-framework = { path = "../../aptos-move/framework" }
+framework = { path = "../../pont-move/framework" }
 serde_yaml = "0.8.24"
 testcases = { path = "../testcases" }
 

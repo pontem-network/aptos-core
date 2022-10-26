@@ -7,45 +7,45 @@ slug: "guide-move-transactional-testing"
 
 :::caution Exploratory feature
 
-The Move transactional testing feature described in this document is in exploratory phase. Support for it will depend on its usage and adoption by the Aptos community. 
+The Move transactional testing feature described in this document is in exploratory phase. Support for it will depend on its usage and adoption by the Pont community. 
 :::
 
 
 
 If you are a smart contract developer using the Move language, then you can use the Move transactional tests to write and run end-to-end tests. 
 
-This tutorial walks you through the steps for writing and running end-to-end Move transactional tests using the [Aptos CLI](/cli-tools/aptos-cli-tool/index.md). 
+This tutorial walks you through the steps for writing and running end-to-end Move transactional tests using the [Pont CLI](/cli-tools/pont-cli-tool/index.md). 
 
 Compared to the Move unit tests, which are useful for verifying the intra-module code correctness, the Move transactional tests enable you to test a broader spectrum of use cases, such as publishing the Move modules and the inter-module interactions. 
 
 ## Overview
 
-See this `aptos_test_harness` [GitHub folder](https://github.com/aptos-labs/aptos-core/tree/main/aptos-move/aptos-transactional-test-harness/tests/aptos_test_harness) for how Move transactional tests look like. 
+See this `pont_test_harness` [GitHub folder](https://github.com/aptos-labs/pont-core/tree/main/pont-move/pont-transactional-test-harness/tests/pont_test_harness) for how Move transactional tests look like. 
 
 A Move transactional test suite consists of two types of files:
 
 - The Move files, with`*.move` extension. These Move files contain the transactional tests. Transactional tests are Rust [clap](https://docs.rs/clap/latest/clap/) (Command Line Argument Parser ) commands. They are written as comments in the Move files. To distinguish from the normal Move comments, these transactional test commands are prefixed with a special comment string indicator `//#` .
-- The baseline files, with `*.exp`extension. These baseline files will be created empty when you run the `aptos` CLI for the first time. If you run the test with `UB=1` option the first time, the baseline files will be populated with the test output.
+- The baseline files, with `*.exp`extension. These baseline files will be created empty when you run the `pont` CLI for the first time. If you run the test with `UB=1` option the first time, the baseline files will be populated with the test output.
 
 ## Quickstart
 
 Before you get into the details, you can follow the below steps to run a sample Move transactional test and see the results. 
 
-### Step 1: Install Aptos CLI
+### Step 1: Install Pont CLI
 
-Make sure you have installed `aptos` , the Aptos CLI tool. See [Aptos CLI](/cli-tools/aptos-cli-tool/index.md) for how to install and use the `aptos` CLI tool. 
+Make sure you have installed `pont` , the Pont CLI tool. See [Pont CLI](/cli-tools/pont-cli-tool/index.md) for how to install and use the `pont` CLI tool. 
 
 ### Step 2: Run the Move transactional test suite
 
-- Clone or download the `aptos-core` [GitHub repo](https://github.com/aptos-labs/aptos-core.git).
-- The Move transactional test suite is located in `aptos-core/aptos-move/aptos-transactional-test-harness/test` .
-- Run the `aptos` CLI command with the option `move transactional-test`.
+- Clone or download the `pont-core` [GitHub repo](https://github.com/aptos-labs/pont-core.git).
+- The Move transactional test suite is located in `pont-core/pont-move/pont-transactional-test-harness/test` .
+- Run the `pont` CLI command with the option `move transactional-test`.
 :::tip Use UB=1
-When you run the `aptos` CLI command make sure to include the `UB=1` **only during the first time or if you have updated the tests**, as shown below. 
+When you run the `pont` CLI command make sure to include the `UB=1` **only during the first time or if you have updated the tests**, as shown below. 
 :::
 
 ```bash
-UB=1 aptos move transactional-test --root-path aptos-core/aptos-move/aptos-transactional-test-harness/test
+UB=1 pont move transactional-test --root-path pont-core/pont-move/pont-transactional-test-harness/test
 ```
 - The `--root-path` specifies where all the tests are located. 
 - The test runner walks down the directory hierarchies and finds the tests, specified as comments with the special prefix `//#`, in the files whose names end with `.move` or `.mvir`. 
@@ -87,7 +87,7 @@ The default value is the maximum coins available at the sender account.
 ### Run module script functions
 
 ```rust
-//# run --signers Alice [--args x"68656C6C6F20776F726C64"] [--type-args "0x1::aptos_coin::AptosCoin"] [--expiration 1658432810] [--sequence-number 1] [--gas-price 1] [--show-events] -- Alice::first_module::function_name
+//# run --signers Alice [--args x"68656C6C6F20776F726C64"] [--type-args "0x1::pont_coin::PontCoin"] [--expiration 1658432810] [--sequence-number 1] [--gas-price 1] [--show-events] -- Alice::first_module::function_name
 ```
 
 The `run` command runs a module script function by sending a transaction. 
@@ -106,13 +106,13 @@ In the above example:
 ### Execute scripts
 
 ```rust
-//# run --script --signers Alice [--args x"68656C6C6F20776F726C64"] [--type-args "0x1::aptos_coin::AptosCoin"] [--expiration 1658432810] [--sequence-number 1] [--gas-price 1]
+//# run --script --signers Alice [--args x"68656C6C6F20776F726C64"] [--type-args "0x1::pont_coin::PontCoin"] [--expiration 1658432810] [--sequence-number 1] [--gas-price 1]
 script {
-    use aptos_framework::coin;
-    use aptos_framework::aptos_coin::AptosCoin;
+    use pont_framework::coin;
+    use pont_framework::pont_coin::PontCoin;
 
     fun main(sender: &signer, receiver: address, amount: u64) {
-        coin::transfer<AptosCoin>(sender, receiver, amount);
+        coin::transfer<PontCoin>(sender, receiver, amount);
     }
 }
 ```

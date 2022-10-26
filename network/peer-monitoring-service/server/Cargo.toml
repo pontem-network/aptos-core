@@ -1,10 +1,10 @@
 [package]
 name = "peer-monitoring-service-server"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
+authors = ["Pont Labs <opensource@pontlabs.com>"]
 description = "The peer monitoring service (server-side)"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -18,10 +18,10 @@ serde = { version = "1.0.124", default-features = false }
 thiserror = "1.0.24"
 tokio = { version = "1.8.1", features = ["rt", "macros"], default-features = false }
 
-aptos-config = { path = "../../../config" }
-aptos-logger = { path = "../../../crates/aptos-logger" }
-aptos-metrics-core = { path = "../../../crates/aptos-metrics-core" }
-aptos-types = { path = "../../../types" }
+pont-config = { path = "../../../config" }
+pont-logger = { path = "../../../crates/pont-logger" }
+pont-metrics-core = { path = "../../../crates/pont-metrics-core" }
+pont-types = { path = "../../../types" }
 
 bounded-executor = { path = "../../../crates/bounded-executor" }
 channel = { path = "../../../crates/channel" }

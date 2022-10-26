@@ -1,10 +1,10 @@
 [package]
-name = "aptos-api-types"
+name = "pont-api-types"
 version = "0.0.1"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos API Types"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont API Types"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -20,11 +20,11 @@ poem-openapi = "2.0.10"
 serde = { version = "1.0.137", default-features = false }
 serde_json = "1.0.81"
 
-aptos-config = { path = "../../config" }
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-openapi = { path = "../../crates/aptos-openapi" }
-aptos-types = { path = "../../types" }
-aptos-vm = { path = "../../aptos-move/aptos-vm" }
+pont-config = { path = "../../config" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-openapi = { path = "../../crates/pont-openapi" }
+pont-types = { path = "../../types" }
+pont-vm = { path = "../../pont-move/pont-vm" }
 
 storage-interface = { path = "../../storage/storage-interface" }
 

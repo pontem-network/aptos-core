@@ -1,6 +1,6 @@
 env_vars:
   - key: "BUCKET"
-    value: "aptos-backup/backup1"
+    value: "pont-backup/backup1"
   - key: "SUB_DIR"
     value: "e1"
 commands:

@@ -10,7 +10,7 @@ pub const MAX_MESSAGE_SIZE: usize = 4 * 1024 * 1024; /* 4 MiB */
 #[serde(default, deny_unknown_fields)]
 pub struct StateSyncConfig {
     pub data_streaming_service: DataStreamingServiceConfig,
-    pub aptos_data_client: AptosDataClientConfig,
+    pub pont_data_client: PontDataClientConfig,
     pub state_sync_driver: StateSyncDriverConfig,
     pub storage_service: StorageServiceConfig,
 }
@@ -167,7 +167,7 @@ impl Default for DataStreamingServiceConfig {
 
 #[derive(Copy, Clone, Debug, Deserialize, PartialEq, Eq, Serialize)]
 #[serde(default, deny_unknown_fields)]
-pub struct AptosDataClientConfig {
+pub struct PontDataClientConfig {
     pub max_num_in_flight_priority_polls: u64, // Max num of in-flight polls for priority peers
     pub max_num_in_flight_regular_polls: u64,  // Max num of in-flight polls for regular peers
     pub response_timeout_ms: u64, // Timeout (in milliseconds) when waiting for a response
@@ -175,7 +175,7 @@ pub struct AptosDataClientConfig {
     pub use_compression: bool,    // Whether or not to request compression for incoming data
 }
 
-impl Default for AptosDataClientConfig {
+impl Default for PontDataClientConfig {
     fn default() -> Self {
         Self {
             max_num_in_flight_priority_polls: 10,

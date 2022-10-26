@@ -5,12 +5,26 @@
 
 use crate::{network::StorageServiceNetworkEvents, StorageReader, StorageServiceServer};
 use anyhow::{format_err, Result};
-use aptos_bitvec::BitVec;
-use aptos_config::config::StorageServiceConfig;
-use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
-use aptos_logger::Level;
-use aptos_time_service::{MockTimeService, TimeService};
-use aptos_types::{
+use channel::pont_channel;
+use claims::{assert_matches, assert_none};
+use futures::channel::{oneshot, oneshot::Receiver};
+use mockall::{
+    mock,
+    predicate::{always, eq},
+    Sequence,
+};
+use network::{
+    peer_manager::PeerManagerNotification,
+    protocols::{
+        network::NewNetworkEvents, rpc::InboundRpcRequest, wire::handshake::v1::ProtocolId,
+    },
+};
+use pont_bitvec::BitVec;
+use pont_config::config::StorageServiceConfig;
+use pont_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
+use pont_logger::Level;
+use pont_time_service::{MockTimeService, TimeService};
+use pont_types::{
     account_address::AccountAddress,
     aggregate_signature::AggregateSignature,
     block_info::BlockInfo,
@@ -36,20 +50,6 @@ use aptos_types::{
     },
     write_set::WriteSet,
     PeerId,
-};
-use channel::aptos_channel;
-use claims::{assert_matches, assert_none};
-use futures::channel::{oneshot, oneshot::Receiver};
-use mockall::{
-    mock,
-    predicate::{always, eq},
-    Sequence,
-};
-use network::{
-    peer_manager::PeerManagerNotification,
-    protocols::{
-        network::NewNetworkEvents, rpc::InboundRpcRequest, wire::handshake::v1::ProtocolId,
-    },
 };
 use rand::Rng;
 use std::{sync::Arc, time::Duration};
@@ -1385,7 +1385,7 @@ async fn test_get_epoch_ending_ledger_infos_invalid() {
 /// A wrapper around the inbound network interface/channel for easily sending
 /// mock client requests to a [`StorageServiceServer`].
 struct MockClient {
-    peer_mgr_notifs_tx: aptos_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
+    peer_mgr_notifs_tx: pont_channel::Sender<(PeerId, ProtocolId), PeerManagerNotification>,
 }
 
 impl MockClient {
@@ -2153,9 +2153,9 @@ async fn verify_new_transactions_with_proof(
     };
 }
 
-/// Initializes the Aptos logger for tests
+/// Initializes the Pont logger for tests
 pub fn initialize_logger() {
-    aptos_logger::Logger::builder()
+    pont_logger::Logger::builder()
         .is_async(false)
         .level(Level::Debug)
         .build();

@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "aptos-sdk"
+name = "pont-sdk"
 version = "0.2.0"
-description = "Aptos SDK"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
+description = "Pont SDK"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
 license = "Apache-2.0"
 
 [tool.poetry.dependencies]

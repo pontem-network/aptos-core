@@ -3,8 +3,8 @@
 
 use std::collections::BTreeMap;
 
-use aptos_infallible::Mutex;
 use consensus_types::common::{Author, Round};
+use pont_infallible::Mutex;
 
 use crate::counters::PROPOSER_ELECTION_DURATION;
 

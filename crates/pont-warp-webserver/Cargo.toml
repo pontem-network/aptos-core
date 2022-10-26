@@ -1,0 +1,21 @@
+[package]
+name = "pont-warp-webserver"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont warp based webserver API"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+pont-api-types = { path = "../../api/types" }
+pont-config = { path = "../../config" }
+pont-logger = { path = "../../crates/pont-logger" }
+bcs = { git = "https://github.com/aptos-labs/bcs", rev = "2cde3e8446c460cb17b0c1d6bac7e27e964ac169" }
+hyper = "0.14.18"
+serde = { version = "1.0.137", features = ["derive"], default-features = false }
+serde_json = { version = "1.0.81", features = ["preserve_order"] }
+warp = { version = "0.3.2", features = ["default", "tls"] }

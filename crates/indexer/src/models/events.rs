@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 #![allow(clippy::extra_unused_lifetimes)]
 use crate::{models::transactions::Transaction, schema::events, util::standardize_address};
-use aptos_api_types::Event as APIEvent;
 use field_count::FieldCount;
+use pont_api_types::Event as APIEvent;
 use serde::{Deserialize, Serialize};
 
 use super::transactions::TransactionQuery;

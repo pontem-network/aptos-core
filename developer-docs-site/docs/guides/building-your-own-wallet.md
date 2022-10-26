@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 # Building Your Own Wallet
 
-In order to allow for Aptos' wallet interoperability, the following is required:
+In order to allow for Pont' wallet interoperability, the following is required:
 1. Mnemonics - a set of words that can derive account private keys
 2. dApp API - entry points into the wallet to support access to identity managed by the wallet
 3. Key rotation - handling both the relationship around mnemonics and the recovery of accounts in different wallets
@@ -15,11 +15,11 @@ In order to allow for Aptos' wallet interoperability, the following is required:
 ## Mnemonics
 While [Petra wallet](../guides/install-petra-wallet.md) recommends 1 mnemonic <-> 1 account, we recognize that some wallets may want to support 1 mnemonic <-> n accounts coming from other chains. To support both of these use cases we are using a [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) derive path for mnemonics to accounts.
 
-### Creating an Aptos Account
+### Creating an Pont Account
 1. Generate mnemonic using something like BIP39
 2. Get a master seed from that mnemonic using BIP39
 3. Use the BIP44 derive path to retrieve an account address (e.g. `m/44'/637'/0'/0'/0'`)
-    - See Aptos' [typescript SDK implementation for the derive path](https://github.com/aptos-labs/aptos-core/blob/1bc5fd1f5eeaebd2ef291ac741c0f5d6f75ddaef/ecosystem/typescript/sdk/src/aptos_account.ts#L49-L69))
+    - See Pont' [typescript SDK implementation for the derive path](https://github.com/aptos-labs/pont-core/blob/1bc5fd1f5eeaebd2ef291ac741c0f5d6f75ddaef/ecosystem/typescript/sdk/src/pont_account.ts#L49-L69))
     - In the case of Petra, we will always use the path `m/44'/637'/0'/0'/0'` since we have 1 mnemonic <-> 1 account
 
 
@@ -29,10 +29,10 @@ While [Petra wallet](../guides/install-petra-wallet.md) recommends 1 mnemonic <-
    * @param path. (e.g. m/44'/637'/0'/0'/0')
    * Detailed description: {@link https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki}
    * @param mnemonics.
-   * @returns AptosAccount
+   * @returns PontAccount
    */
-  static fromDerivePath(path: string, mnemonics: string): AptosAccount {
-    if (!AptosAccount.isValidPath(path)) {
+  static fromDerivePath(path: string, mnemonics: string): PontAccount {
+    if (!PontAccount.isValidPath(path)) {
       throw new Error("Invalid derivation path");
     }
 
@@ -44,7 +44,7 @@ While [Petra wallet](../guides/install-petra-wallet.md) recommends 1 mnemonic <-
 
     const { key } = derivePath(path, bytesToHex(bip39.mnemonicToSeedSync(normalizeMnemonics)));
 
-    return new AptosAccount(new Uint8Array(key));
+    return new PontAccount(new Uint8Array(key));
   }
 ```
 
@@ -76,7 +76,7 @@ for (let i = 0; currentGap < gapLimit; i += 1) {
 ```
 
 ## dApp API
-**[Forum post with discussion](https://forum.aptoslabs.com/t/wallet-dapp-api-standards/11765/33)**
+**[Forum post with discussion](https://forum.pontlabs.com/t/wallet-dapp-api-standards/11765/33)**
 There will be some APIs that certain wallets may add but there should be a few apis that are standard across wallets. This will make mass adoption easier and will make dApp developers' lives easier.
 
 - `connect()`, `disconnect()`, and `isConnected()`
@@ -97,9 +97,9 @@ interface PublicAccount {
 }
 
 // The important thing to return here is the transaction hash the dApp can wait for it
-type [PendingTransaction](https://github.com/aptos-labs/aptos-core/blob/1bc5fd1f5eeaebd2ef291ac741c0f5d6f75ddaef/ecosystem/typescript/sdk/src/generated/models/PendingTransaction.ts)
+type [PendingTransaction](https://github.com/aptos-labs/pont-core/blob/1bc5fd1f5eeaebd2ef291ac741c0f5d6f75ddaef/ecosystem/typescript/sdk/src/generated/models/PendingTransaction.ts)
 
-type [EntryFunctionPayload](https://github.com/aptos-labs/aptos-core/blob/1bc5fd1f5eeaebd2ef291ac741c0f5d6f75ddaef/ecosystem/typescript/sdk/src/generated/models/EntryFunctionPayload.ts)
+type [EntryFunctionPayload](https://github.com/aptos-labs/pont-core/blob/1bc5fd1f5eeaebd2ef291ac741c0f5d6f75ddaef/ecosystem/typescript/sdk/src/generated/models/EntryFunctionPayload.ts)
 
 
 ```
@@ -123,7 +123,7 @@ The dApp may want to query for the current connected account to get the address 
     - returns `Promise<PublicAccount>`
 
 ### signAndSubmitTransaction(transaction: EntryFunctionPayload)
-We will be generate a transaction from payload(simple JSON) using the [SDK](https://github.com/aptos-labs/aptos-core/blob/1bc5fd1f5eeaebd2ef291ac741c0f5d6f75ddaef/ecosystem/typescript/sdk/src/aptos_client.ts#L217-L221) and then sign and submit it to the wallet's node.
+We will be generate a transaction from payload(simple JSON) using the [SDK](https://github.com/aptos-labs/pont-core/blob/1bc5fd1f5eeaebd2ef291ac741c0f5d6f75ddaef/ecosystem/typescript/sdk/src/pont_client.ts#L217-L221) and then sign and submit it to the wallet's node.
 
 - `signAndSubmitTransaction(transaction: EntryFunctionPayload)` will prompt the user with the transaction they are signing
     - returns `Promise<PendingTransaction>`
@@ -178,4 +178,4 @@ If the wallet is multi-signers account, there are multiple `signature` and `bitm
 
 ## Key Rotation (In Progress)
 
-Mapping has been [implemented](https://github.com/aptos-labs/aptos-core/pull/2972) but SDK integration is in progress. This will be updated soon.
+Mapping has been [implemented](https://github.com/aptos-labs/pont-core/pull/2972) but SDK integration is in progress. This will be updated soon.

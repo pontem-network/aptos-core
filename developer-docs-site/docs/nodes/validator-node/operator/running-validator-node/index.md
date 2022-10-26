@@ -19,10 +19,10 @@ If you are deploying a validator node, then make sure to read the [Node Requirem
 :::
 
 ## Installation guides
-The following guides provide step-by-step instructions for running public fullnode, validator node, and validator fullnode for the Aptos blockchain. 
+The following guides provide step-by-step instructions for running public fullnode, validator node, and validator fullnode for the Pont blockchain. 
 
 - ### [On AWS](nodes/validator-node/operator/running-validator-node/using-aws.md)
 - ### [On Azure](nodes/validator-node/operator/running-validator-node/using-azure.md)
 - ### [On GCP](nodes/validator-node/operator/running-validator-node/using-gcp.md)
 - ### [Using Docker](nodes/validator-node/operator/running-validator-node/using-docker.md)
-- ### [Using Aptos Source](nodes/validator-node/operator/running-validator-node/using-source-code.md)
+- ### [Using Pont Source](nodes/validator-node/operator/running-validator-node/using-source-code.md)

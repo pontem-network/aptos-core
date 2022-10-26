@@ -1,4 +1,4 @@
-# AptosNet
+# PontNet
 
 ## Version and Status
 
@@ -6,7 +6,7 @@
 
 ## Introduction
 
-This document describes **AptosNet**, the primary network protocol used for communication between any two nodes in the Aptos ecosystem. The protocol only describes the structure and order of messages on the wire, while relying on an underlying transport (TCP) for the actual message delivery. In addition, all communication between peers MUST be encrypted and authenticated using [Noise protocol](noise.md). AptosNet supports multiplexing several application protocols concurrently over a single connection. For each application protocol, AptosNet provides two kinds of messaging semantics: (1) a fire-and-forget DirectSend and (2) a unary RPC.
+This document describes **PontNet**, the primary network protocol used for communication between any two nodes in the Pont ecosystem. The protocol only describes the structure and order of messages on the wire, while relying on an underlying transport (TCP) for the actual message delivery. In addition, all communication between peers MUST be encrypted and authenticated using [Noise protocol](noise.md). PontNet supports multiplexing several application protocols concurrently over a single connection. For each application protocol, PontNet provides two kinds of messaging semantics: (1) a fire-and-forget DirectSend and (2) a unary RPC.
 
 ## Terminology
 
@@ -20,13 +20,13 @@ This document describes **AptosNet**, the primary network protocol used for comm
 
 ## Standard Network Topology
 
-While AptosNet does not assume a specific network topology, we will frame the specification in terms of the standard Aptos network topology for clarity.
+While PontNet does not assume a specific network topology, we will frame the specification in terms of the standard Pont network topology for clarity.
 
 ### Node Types
 
-* **Validator Node (V)**: A validator node is a core node type in the Aptos network. The validator network is comprised of all validator nodes registered for the current epoch, as defined by the `ValidatorSet` in the [`OnChainConfig`](../consensus/README.md#onchainconfig). For DDoS resistance and defense-in-depth purposes, a validator node SHOULD be isolated from all other node types except for other validators and the VFNs it controls.
-* **Validator Full Node (VFN)**: VFNs are full nodes owned and operated by one of the Aptos validators. VFNs will typically connect to their validator over an internal VPC to maintain isolation of the validator node. VFNs can also service all node types on public-facing endpoints.
-* **Public Full Node (PFN)**: In contrast, PFNs are any non-validator operated full nodes that primarily interface with Aptos by communicating with VFNs.
+* **Validator Node (V)**: A validator node is a core node type in the Pont network. The validator network is comprised of all validator nodes registered for the current epoch, as defined by the `ValidatorSet` in the [`OnChainConfig`](../consensus/README.md#onchainconfig). For DDoS resistance and defense-in-depth purposes, a validator node SHOULD be isolated from all other node types except for other validators and the VFNs it controls.
+* **Validator Full Node (VFN)**: VFNs are full nodes owned and operated by one of the Pont validators. VFNs will typically connect to their validator over an internal VPC to maintain isolation of the validator node. VFNs can also service all node types on public-facing endpoints.
+* **Public Full Node (PFN)**: In contrast, PFNs are any non-validator operated full nodes that primarily interface with Pont by communicating with VFNs.
 * **Client Node (C)**: Client nodes are effectively PFNs that do not store ledger history.
 
 ### Authentication Modes
@@ -38,41 +38,41 @@ While AptosNet does not assume a specific network topology, we will frame the sp
 
 * **Validator Network (VN)**: The validator network is a fully-connected, mutually authenticated network consisting only of validator nodes. Non-validators (i.e., any peer without a keypair in the current epoch's validator set) are explicitly not allowed to join the validator network and other validators will reject any unauthenticated inbound connections. Validators in the Validator Network [synchronize mempools](../mempool/README.md) of transactions, order and execute transactions with [consensus](../consensus/README.md), and synchronize ledger states with [state sync](../state_sync/README.md).
 * **Validator-internal Full Node Network (VFNN)**: Each validator operates a logically private network consisting of only a validator and its operated VFNs. For operational simplicity, the v1 version of each VFNN operates in a server-only authentication mode, with the Validator as the server and the VFNs as the clients. VFNs will typically forward transactions to their upstream validator via [mempool](../mempool/README.md) and synchronize their ledger state with their upstream validator via [state sync](../state_sync/README.md).
-* **Public Validator Full Node Network (PVFNN)**: A publicly accessible network of VFNs that services transaction submission and state queries for all node types. For instance, public clients may submit transactions to the Aptos Network and synchronize their ledger states over the PVFNN.
-* **Public Full Node Network (PFNN)**: There is no public network of PFNs in Aptos v1.
+* **Public Validator Full Node Network (PVFNN)**: A publicly accessible network of VFNs that services transaction submission and state queries for all node types. For instance, public clients may submit transactions to the Pont Network and synchronize their ledger states over the PVFNN.
+* **Public Full Node Network (PFNN)**: There is no public network of PFNs in Pont v1.
 
-Below is a diagram that illustrates the set of standard Aptos node types, the different network configurations, and the different connection authentication modes.
+Below is a diagram that illustrates the set of standard Pont node types, the different network configurations, and the different connection authentication modes.
 
-![Standard Aptos Network Topology](../images/aptosnet_network_topology.png)
+![Standard Pont Network Topology](../images/pontnet_network_topology.png)
 
 ## Base Transport
 
-AptosNet makes the following assumptions about the underlying transport:
+PontNet makes the following assumptions about the underlying transport:
 
 * Connection-oriented
 * Ordered and reliable delivery of messages
 * Unicast communication
 * Session-local state - protocol state is not preserved across transport protocol sessions
 
-Today, AptosNet only supports TCP as the base transport, with the capacity to upgrade to new base transports using the addressing scheme.
+Today, PontNet only supports TCP as the base transport, with the capacity to upgrade to new base transports using the addressing scheme.
 
 ## Secure Transport
 
-All communication between nodes MUST be encrypted and authenticated using the [AptosNet Noise IK protocol](noise.md).
+All communication between nodes MUST be encrypted and authenticated using the [PontNet Noise IK protocol](noise.md).
 
 By virtue of using the Noise IK handshake, the client always authenticates the server, as the initial noise handshake message is encrypted so only a server with the intended keypair can decrypt it and respond to it. This pattern is analogous to the client using TLS certificate pinning, pinned to a specific public key, for every connection.
 
-In contrast, the server may or may not authenticate the client, depending on the specific network configuration. In Aptos v1, only the Validator Network uses mutual authentication, where validators will only allow inbound connections from other current validators.
+In contrast, the server may or may not authenticate the client, depending on the specific network configuration. In Pont v1, only the Validator Network uses mutual authentication, where validators will only allow inbound connections from other current validators.
 
-## AptosNet Versioning Scheme
+## PontNet Versioning Scheme
 
-In an effort to prevent protocol ossification and allow backwards-incompatible protocol upgrades, all AptosNet protocols are versioned and can be negotiated in various ways.
+In an effort to prevent protocol ossification and allow backwards-incompatible protocol upgrades, all PontNet protocols are versioned and can be negotiated in various ways.
 
-Primarily, the [AptosNet handshake protocol](handshake-v1.md) is responsible for negotiating the [AptosNet messaging protocol](messaging-v1.md) version and supported application protocol versions. The handshake protocol is "pre-negoiated" in nodes' advertised network addresses as it is not intended to be changed very frequently.
+Primarily, the [PontNet handshake protocol](handshake-v1.md) is responsible for negotiating the [PontNet messaging protocol](messaging-v1.md) version and supported application protocol versions. The handshake protocol is "pre-negoiated" in nodes' advertised network addresses as it is not intended to be changed very frequently.
 
-## AptosNet NetworkAddress
+## PontNet NetworkAddress
 
-AptosNet uses [`NetworkAddress`](network-address.md) to encapsulate the precise set of protocols used to dial a peer. Canonical AptosNet addresses in v1 contain the following protocols, in sequence, in human-readable format:
+PontNet uses [`NetworkAddress`](network-address.md) to encapsulate the precise set of protocols used to dial a peer. Canonical PontNet addresses in v1 contain the following protocols, in sequence, in human-readable format:
 
 1. Base Transport: one of:
     * `"/ip4/<ipaddr>/tcp/<port>"`
@@ -82,26 +82,26 @@ AptosNet uses [`NetworkAddress`](network-address.md) to encapsulate the precise 
     * `"/dns6/<name>/tcp/<port>"`
 2. Secure Transport Upgrade:
     * `"/noise-ik/<x25519-public-key>"`
-3. AptosNet Handshake Upgrade:
+3. PontNet Handshake Upgrade:
     * `"/handshake/<version>"`
 
-For example, a full AptosNet `NetworkAddress` in human-readable format:
+For example, a full PontNet `NetworkAddress` in human-readable format:
 
 ```
 "/ip4/10.0.0.61/tcp/6080/noise-ik/080e287879c918794170e258bfaddd75acac5b3e350419044655e4983a487120/handshake/0"
 ```
 
-AptosNet `NetworkAddress`es are advertised via the [onchain discovery protocol](onchain-discovery.md) or stored in local configurations.
+PontNet `NetworkAddress`es are advertised via the [onchain discovery protocol](onchain-discovery.md) or stored in local configurations.
 
 ## Discovery
 
-AptosNet does not prescribe a method for node discovery. Different discovery mechanisms are used in the validator and full-node networks:
+PontNet does not prescribe a method for node discovery. Different discovery mechanisms are used in the validator and full-node networks:
 
 * Validators use the [onchain discovery protocol](onchain-discovery.md) to discover each other.
 * All nodes use the [onchain discovery protocol](onchain-discovery.md) to discover VFNs.
 * Discovery information needed to bootstrap initially is provided as "seed" peers through configuration.
 
-These protocols operate on top of the core AptosNet protocol.
+These protocols operate on top of the core PontNet protocol.
 
 ## Connection Lifecycle
 
@@ -119,11 +119,11 @@ client: discover server_address = "/ip4/[address]/noise-ik/[public_key]/handshak
 client: TCP::connect [address]
 server: TCP::accept
 
-// AptosNet Noise IK handshake
+// PontNet Noise IK handshake
 client: server_peer_id = Noise::upgrade_outbound [public_key]
 server: client_peer_id = Noise::upgrade_inbound
 
-// AptosNet version handshake
+// PontNet version handshake
 client: (server_version, server_protocols) = Handshake::upgrade [version]
 server: (client_version, client_protocols) = Handshake::upgrade [version]
 ```
@@ -132,15 +132,15 @@ where `Noise::upgrade_outbound` and `Noise::upgrade_inbound` are defined in [Noi
 
 ### Connection Deduplication
 
-AptosNet v1 tries to maintain at-most-one connection per peer. If a peer attempts to open more than one connection to a server, the server will only keep the most recent connection and close the older connection. When operating in peer-to-peer mode, two nodes can also simultaneously dial each other. In the event two peers simultaneously dial each other, we need to be able to do tie-breaking to determine which connection to keep and which to drop in a deterministic way. In this case, both peers will compare the dialer `PeerId` of both connections and keep the connection with the greater dialer `PeerId` (in lexicographic order).
+PontNet v1 tries to maintain at-most-one connection per peer. If a peer attempts to open more than one connection to a server, the server will only keep the most recent connection and close the older connection. When operating in peer-to-peer mode, two nodes can also simultaneously dial each other. In the event two peers simultaneously dial each other, we need to be able to do tie-breaking to determine which connection to keep and which to drop in a deterministic way. In this case, both peers will compare the dialer `PeerId` of both connections and keep the connection with the greater dialer `PeerId` (in lexicographic order).
 
 ### Messaging Protocol
 
-After establishing and negotiating a complete connection, peers may begin exchanging AptosNet messages as defined in the [AptosNet messaging protocol](messaging-v1.md). These messages are framed, encrypted, and decrypted using the `Noise::encrypt` and `Noise::decrypt` protocols defined in [Noise#Post-handshake](noise.md#post-handshake) before sending or receiving over the base TCP connection. Note that multiple `NetworkMsg` may be sent or received in a single Noise frame.
+After establishing and negotiating a complete connection, peers may begin exchanging PontNet messages as defined in the [PontNet messaging protocol](messaging-v1.md). These messages are framed, encrypted, and decrypted using the `Noise::encrypt` and `Noise::decrypt` protocols defined in [Noise#Post-handshake](noise.md#post-handshake) before sending or receiving over the base TCP connection. Note that multiple `NetworkMsg` may be sent or received in a single Noise frame.
 
 Since the Noise layer limits frame sizes to at-most `65535` bytes, of which `16` bytes are always reserved for the AES GCM authentication tag, sending a serialized `NetworkMsg` (include the big-endian 4-byte length prefix) over-the-write first requires splitting it into chunks of size at most `65535 - 16 = 65519` bytes.
 
-#### Sending a single `NetworkMsg` over a negotiated Aptos Transport, in simplified pseudo-rust:
+#### Sending a single `NetworkMsg` over a negotiated Pont Transport, in simplified pseudo-rust:
 
 ```rust
 const MAX_NOISE_FRAME_LEN: u16 = 65519; // u16::MAX - AES_GCM_TAG_LEN

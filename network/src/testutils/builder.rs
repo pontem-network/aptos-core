@@ -5,7 +5,7 @@ use crate::testutils::{
     test_framework::TestFramework,
     test_node::{NodeId, NodeType, TestNode},
 };
-use aptos_config::{
+use pont_config::{
     config::NodeConfig,
     network_id::{NetworkId, PeerNetworkId},
 };

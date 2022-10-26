@@ -9,20 +9,6 @@
 //! authentication -- a network end-point running with remote authentication enabled will
 //! connect to or accept connections from an end-point running in authenticated mode as
 //! long as the latter is in its trusted peers set.
-use aptos_config::{
-    config::{
-        DiscoveryMethod, NetworkConfig, Peer, PeerRole, PeerSet, RateLimitConfig, RoleType,
-        CONNECTION_BACKOFF_BASE, CONNECTIVITY_CHECK_INTERVAL_MS, MAX_CONCURRENT_NETWORK_REQS,
-        MAX_CONNECTION_DELAY_MS, MAX_FRAME_SIZE, MAX_FULLNODE_OUTBOUND_CONNECTIONS,
-        MAX_INBOUND_CONNECTIONS, NETWORK_CHANNEL_SIZE,
-    },
-    network_id::NetworkContext,
-};
-use aptos_crypto::x25519::PublicKey;
-use aptos_infallible::RwLock;
-use aptos_logger::prelude::*;
-use aptos_time_service::TimeService;
-use aptos_types::{chain_id::ChainId, network_address::NetworkAddress};
 use event_notifications::{EventSubscriptionService, ReconfigNotificationListener};
 use network::{
     application::storage::PeerMetadataStorage,
@@ -38,6 +24,20 @@ use network::{
         network::{AppConfig, NewNetworkEvents, NewNetworkSender},
     },
 };
+use pont_config::{
+    config::{
+        DiscoveryMethod, NetworkConfig, Peer, PeerRole, PeerSet, RateLimitConfig, RoleType,
+        CONNECTION_BACKOFF_BASE, CONNECTIVITY_CHECK_INTERVAL_MS, MAX_CONCURRENT_NETWORK_REQS,
+        MAX_CONNECTION_DELAY_MS, MAX_FRAME_SIZE, MAX_FULLNODE_OUTBOUND_CONNECTIONS,
+        MAX_INBOUND_CONNECTIONS, NETWORK_CHANNEL_SIZE,
+    },
+    network_id::NetworkContext,
+};
+use pont_crypto::x25519::PublicKey;
+use pont_infallible::RwLock;
+use pont_logger::prelude::*;
+use pont_time_service::TimeService;
+use pont_types::{chain_id::ChainId, network_address::NetworkAddress};
 
 use netcore::transport::tcp::TCPBufferCfg;
 use network_discovery::DiscoveryChangeListener;

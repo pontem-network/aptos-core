@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{LedgerInfo, U64};
-use aptos_config::config::RoleType;
 use poem_openapi::Object as PoemObject;
+use pont_config::config::RoleType;
 use serde::{Deserialize, Serialize};
 
 // The data in IndexResponse is flattened into a single JSON map to offer

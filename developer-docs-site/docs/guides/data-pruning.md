@@ -51,4 +51,4 @@ storage:
     prune_window: 1000000000
 ```
 
-See the complete set of storage configuration settings in the [Storage README](https://github.com/aptos-labs/aptos-core/tree/main/storage#configs).
+See the complete set of storage configuration settings in the [Storage README](https://github.com/aptos-labs/pont-core/tree/main/storage#configs).

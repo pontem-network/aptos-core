@@ -11,16 +11,16 @@
 //! [stream]: crate::noise::stream
 
 use crate::noise::{error::NoiseHandshakeError, stream::NoiseStream};
-use aptos_config::{
+use futures::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
+use netcore::transport::ConnectionOrigin;
+use pont_config::{
     config::{Peer, PeerRole, PeerSet},
     network_id::NetworkContext,
 };
-use aptos_crypto::{noise, x25519};
-use aptos_infallible::{duration_since_epoch, RwLock};
-use aptos_logger::trace;
-use aptos_types::PeerId;
-use futures::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
-use netcore::transport::ConnectionOrigin;
+use pont_crypto::{noise, x25519};
+use pont_infallible::{duration_since_epoch, RwLock};
+use pont_logger::trace;
+use pont_types::PeerId;
 use short_hex_str::{AsShortHexStr, ShortHexStr};
 use std::{collections::HashMap, convert::TryFrom as _, fmt::Debug, sync::Arc};
 
@@ -75,7 +75,7 @@ pub enum HandshakeAuthMode {
     /// In `Mutual` mode, both sides will authenticate each other with their
     /// `trusted_peers` set. We also include replay attack mitigation in this mode.
     ///
-    /// For example, in the Aptos validator network, validator peers will only
+    /// For example, in the Pont validator network, validator peers will only
     /// allow connections from other validator peers. They will use this mode to
     /// check that inbound connections authenticate to a network public key
     /// actually contained in the current validator set.
@@ -367,7 +367,7 @@ impl NoiseUpgrader {
                     None => {
                         // if not, verify that their peerid is constructed correctly from their public key
                         let derived_remote_peer_id =
-                            aptos_types::account_address::from_identity_public_key(
+                            pont_types::account_address::from_identity_public_key(
                                 remote_public_key,
                             );
                         if derived_remote_peer_id != remote_peer_id {
@@ -465,10 +465,10 @@ impl NoiseUpgrader {
 mod test {
     use super::*;
     use crate::testutils::fake_socket::ReadWriteTestSocket;
-    use aptos_config::config::{Peer, PeerRole};
-    use aptos_crypto::{test_utils::TEST_SEED, traits::Uniform as _};
     use futures::{executor::block_on, future::join};
     use memsocket::MemorySocket;
+    use pont_config::config::{Peer, PeerRole};
+    use pont_crypto::{test_utils::TEST_SEED, traits::Uniform as _};
     use rand::SeedableRng as _;
 
     const TEST_SEED_2: [u8; 32] = [42; 32];
@@ -512,9 +512,9 @@ mod test {
             (client_auth, server_auth, client_peer_id, server_peer_id)
         } else {
             let client_peer_id =
-                aptos_types::account_address::from_identity_public_key(client_public_key);
+                pont_types::account_address::from_identity_public_key(client_public_key);
             let server_peer_id =
-                aptos_types::account_address::from_identity_public_key(server_public_key);
+                pont_types::account_address::from_identity_public_key(server_public_key);
             (
                 HandshakeAuthMode::server_only(),
                 HandshakeAuthMode::server_only(),
@@ -688,7 +688,7 @@ mod test {
 
     #[test]
     fn test_handshake_client_peerid_mismatch_fails_server_only_auth() {
-        ::aptos_logger::Logger::init_for_testing();
+        ::pont_logger::Logger::init_for_testing();
 
         let ((mut client, _), (server, server_public_key)) =
             build_peers(false /* is_mutual_auth */);

@@ -2,10 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::metrics;
-use aptos_config::config::StorageServiceConfig;
-use aptos_types::PeerId;
 use bytes::Bytes;
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use futures::{
     channel::oneshot,
     future,
@@ -16,6 +14,8 @@ use network::{
     protocols::network::{AppConfig, Event, NetworkEvents, NewNetworkEvents, RpcError},
     ProtocolId,
 };
+use pont_config::config::StorageServiceConfig;
+use pont_types::PeerId;
 use std::{
     pin::Pin,
     task::{Context, Poll},
@@ -28,7 +28,7 @@ pub fn network_endpoint_config(storage_config: StorageServiceConfig) -> AppConfi
     let max_network_channel_size = storage_config.max_network_channel_size as usize;
     AppConfig::service(
         [ProtocolId::StorageServiceRpc],
-        aptos_channel::Config::new(max_network_channel_size)
+        pont_channel::Config::new(max_network_channel_size)
             .queue_style(QueueStyle::FIFO)
             .counters(&metrics::PENDING_STORAGE_SERVER_NETWORK_EVENTS),
     )
@@ -42,8 +42,8 @@ pub struct StorageServiceNetworkEvents(BoxStream<'static, NetworkRequest>);
 
 impl NewNetworkEvents for StorageServiceNetworkEvents {
     fn new(
-        peer_mgr_notifs_rx: aptos_channel::Receiver<(PeerId, ProtocolId), PeerManagerNotification>,
-        connection_notifs_rx: aptos_channel::Receiver<PeerId, ConnectionNotification>,
+        peer_mgr_notifs_rx: pont_channel::Receiver<(PeerId, ProtocolId), PeerManagerNotification>,
+        connection_notifs_rx: pont_channel::Receiver<PeerId, ConnectionNotification>,
     ) -> Self {
         let events = NetworkEvents::new(peer_mgr_notifs_rx, connection_notifs_rx)
             .filter_map(|event| future::ready(Self::event_to_request(event)))

@@ -5,14 +5,14 @@
 #
 # The best way to do this however is to run scripts/dev_setup.sh
 #
-# If you want to run this from anywhere in aptos-core, try adding this wrapepr
+# If you want to run this from anywhere in pont-core, try adding this wrapepr
 # script to your path:
 # https://gist.github.com/banool/e6a2b85e2fff067d3a215cbfaf808032
 
 # Make sure we're in the root of the repo.
 if [ ! -d ".github" ] 
 then
-    echo "Please run this from the root of aptos-core" 
+    echo "Please run this from the root of pont-core" 
     exit 1
 fi
 

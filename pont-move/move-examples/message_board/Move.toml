@@ -1,0 +1,10 @@
+[package]
+name = "MessageBoard"
+version = "0.0.1"
+
+[dependencies]
+PontFramework = { local = "../../framework/pont-framework" }
+
+[addresses]
+std = "0x1"
+message_board = "_"

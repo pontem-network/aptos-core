@@ -1,16 +1,16 @@
 ---
-title: "Fullnode Using Aptos Source or Docker"
+title: "Fullnode Using Pont Source or Docker"
 slug: "fullnode-source-code-or-docker"
 sidebar_position: 10
 ---
 
-# Public Fullnode Using Aptos Source or Docker
+# Public Fullnode Using Pont Source or Docker
 
-You can run your own [public fullnode](/concepts/basics-fullnodes) to synchronize with the state of the Aptos blockchain and stay up-to-date. Public fullnodes replicate the entire state of the blockchain by querying other Aptos fullnodes (public fullnodes or validator fullnodes) or validators.
+You can run your own [public fullnode](/concepts/basics-fullnodes) to synchronize with the state of the Pont blockchain and stay up-to-date. Public fullnodes replicate the entire state of the blockchain by querying other Pont fullnodes (public fullnodes or validator fullnodes) or validators.
 
-Alternatively, you can use the public fullnodes provided by Aptos Labs. However, such Aptos Labs-provided public fullnodes have rate limits, which can impede your development. By running your own public fullnode you can directly synchronize with the Aptos blockchain and avoid such rate limits.
+Alternatively, you can use the public fullnodes provided by Pont Labs. However, such Pont Labs-provided public fullnodes have rate limits, which can impede your development. By running your own public fullnode you can directly synchronize with the Pont blockchain and avoid such rate limits.
 
-Public fullnodes can be run by anyone. This tutorial explains how to configure a public fullnode to connect to an Aptos network.
+Public fullnodes can be run by anyone. This tutorial explains how to configure a public fullnode to connect to an Pont network.
 
 ## Hardware requirements
 
@@ -28,33 +28,33 @@ We recommend the following hardware resources:
 
 ## Storage requirements
 
-The amount of data stored by Aptos depends on the ledger history (length) of the blockchain and the number of on-chain states (e.g., accounts). These values depend on several factors, including: the age of the blockchain, the average transaction rate and the configuration of the ledger pruner. Follow the storage requirements described in [Validator Hardware Requirements](/nodes/validator-node/operator/node-requirements#hardware-requirements). 
+The amount of data stored by Pont depends on the ledger history (length) of the blockchain and the number of on-chain states (e.g., accounts). These values depend on several factors, including: the age of the blockchain, the average transaction rate and the configuration of the ledger pruner. Follow the storage requirements described in [Validator Hardware Requirements](/nodes/validator-node/operator/node-requirements#hardware-requirements). 
 
 :::tip Devnet blockchain storage
-The Aptos devnet is currently reset on a weekly basis. Hence we estimate that if you are connecting to the devnet, then the Aptos blockchain will not require more than several GBs of storage. See the `#devnet-release` channel on Aptos Discord.
+The Pont devnet is currently reset on a weekly basis. Hence we estimate that if you are connecting to the devnet, then the Pont blockchain will not require more than several GBs of storage. See the `#devnet-release` channel on Pont Discord.
 :::
 
 ## Configuring a public fullnode
 
 You can configure a public fullnode in one of two ways:
 
-1. Building and running [aptos-core](https://github.com/aptos-labs/aptos-core) from source code.
+1. Building and running [pont-core](https://github.com/aptos-labs/pont-core) from source code.
 2. Using Docker.
 
 This document describes how to configure your public fullnode using both methods.
 
 ### Method 1: Building and running from source
 
-1. Clone the Aptos repo.
+1. Clone the Pont repo.
 
     ```bash
-    git clone https://github.com/aptos-labs/aptos-core.git
+    git clone https://github.com/aptos-labs/pont-core.git
     ```
 
-2. `cd` into `aptos-core` directory.
+2. `cd` into `pont-core` directory.
 
     ```bash
-    cd aptos-core
+    cd pont-core
     ```
 
 3. Run the `scripts/dev_setup.sh` Bash script as shown below. This will prepare your developer environment.
@@ -73,7 +73,7 @@ With your development environment ready, now you can start to setup your fullnod
 
 5. Checkout the `mainnet` branch using `git checkout --track origin/mainnet`.
 
-6. Make sure your current working directory is `aptos-core`.
+6. Make sure your current working directory is `pont-core`.
 
    Run:
    ```bash
@@ -81,24 +81,24 @@ With your development environment ready, now you can start to setup your fullnod
    ```
    to create a copy of the public fullnode configuration YAML template. You will edit this file to ensure that your public fullnode:
 
-    - Contains the correct genesis blob that is published by the Aptos mainnet.
+    - Contains the correct genesis blob that is published by the Pont mainnet.
     - Synchronizes correctly with the mainnet, by using the checkpoint file `waypoint.txt` published by the mainnet. 
     - Stores the mainnet database at a location of your choice on your local machine.
 
-7. Make sure your current working directory is `aptos-core`. The Aptos mainnet publishes the `genesis.blob` and `waypoint.txt` files. Download them:
+7. Make sure your current working directory is `pont-core`. The Pont mainnet publishes the `genesis.blob` and `waypoint.txt` files. Download them:
 
     - Run the below command on your terminal to download the file:
       ```bash
-      curl -O https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet/genesis.blob
+      curl -O https://raw.githubusercontent.com/aptos-labs/pont-networks/main/mainnet/genesis.blob
       ```
 
     - Run the below command on your terminal to download the file:
       ```bash
-      curl -O https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet/waypoint.txt
+      curl -O https://raw.githubusercontent.com/aptos-labs/pont-networks/main/mainnet/waypoint.txt
       ```
   
     :::tip
-    To connect to other networks, you can find genesis and waypoint here ➜ https://github.com/aptos-labs/aptos-networks
+    To connect to other networks, you can find genesis and waypoint here ➜ https://github.com/aptos-labs/pont-networks
     :::
 
 8. Edit the `fullnode.yaml` file in your current working directory as follows.
@@ -127,15 +127,15 @@ With your development environment ready, now you can start to setup your fullnod
 9. Start your local public fullnode by running the below command:
 
   ```bash
-  cargo run -p aptos-node --release -- -f ./fullnode.yaml
+  cargo run -p pont-node --release -- -f ./fullnode.yaml
   ```
 
-You have now successfully configured and started running a fullnode connected to Aptos devnet.
+You have now successfully configured and started running a fullnode connected to Pont devnet.
 
 :::tip Debugging?
-This will build a release binary: `aptos-core/target/release/aptos-node`. The release binaries tend to be substantially faster than debug binaries but lack debugging information useful for development. To build a debug binary, omit the `--release` flag.
+This will build a release binary: `pont-core/target/release/pont-node`. The release binaries tend to be substantially faster than debug binaries but lack debugging information useful for development. To build a debug binary, omit the `--release` flag.
 
-You can also run this directly as `./aptos-core/target/release/aptos-node -f ./fullnode.yaml` after running `cargo build -p aptos-node --release`
+You can also run this directly as `./pont-core/target/release/pont-node -f ./fullnode.yaml` after running `cargo build -p pont-node --release`
 :::
 
 ---
@@ -145,7 +145,7 @@ You can also run this directly as `./aptos-core/target/release/aptos-node -f ./f
 This section describes how to configure and run your public fullnode using Docker.
 
 :::danger Supported only on x86-64 CPUs
-Running Aptos-core via Docker is currently only supported on x86-64 CPUs. If you have an Apple M1/M2 (ARM64) Mac, use the Aptos-core source approach. If M1/M2 support is important to you, comment on this issue: https://github.com/aptos-labs/aptos-core/issues/1412
+Running Pont-core via Docker is currently only supported on x86-64 CPUs. If you have an Apple M1/M2 (ARM64) Mac, use the Pont-core source approach. If M1/M2 support is important to you, comment on this issue: https://github.com/aptos-labs/pont-core/issues/1412
 :::
 
 1. Install [Docker](https://docs.docker.com/get-docker/).
@@ -153,9 +153,9 @@ Running Aptos-core via Docker is currently only supported on x86-64 CPUs. If you
 ```bash
 mkdir mainnet && cd mainnet
 mkdir data && \
-curl -O https://raw.githubusercontent.com/aptos-labs/aptos-core/mainnet/docker/compose/aptos-node/fullnode.yaml && \
-curl -O https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet/waypoint.txt && \
-curl -O https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet/genesis.blob
+curl -O https://raw.githubusercontent.com/aptos-labs/pont-core/mainnet/docker/compose/pont-node/fullnode.yaml && \
+curl -O https://raw.githubusercontent.com/aptos-labs/pont-networks/main/mainnet/waypoint.txt && \
+curl -O https://raw.githubusercontent.com/aptos-labs/pont-networks/main/mainnet/genesis.blob
 ```
 
 3. Make sure that the `fullnode.yaml` configuration file that you downloaded contains only the following configuration content. This will ensure that this configuration is for public fullnode and not for either a validator node or a validator fullnode:
@@ -163,12 +163,12 @@ curl -O https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet
 ```yaml
 base:
   role: "full_node"
-  data_dir: "/opt/aptos/data"
+  data_dir: "/opt/pont/data"
   waypoint:
-    from_file: "/opt/aptos/etc/waypoint.txt"
+    from_file: "/opt/pont/etc/waypoint.txt"
 
 execution:
-  genesis_file_location: "/opt/aptos/etc/genesis.blob"
+  genesis_file_location: "/opt/pont/etc/genesis.blob"
 
 full_node_networks:
 - network_id: "public"
@@ -182,16 +182,16 @@ api:
 
 **NOTE**: Set `listen_address: "/ip4/127.0.0.1/tcp/6182"` if you do not want other full nodes connecting to yours. Also see the below note.
 
-4. Run the below `docker` command. **NOTE** that from time to time the Docker image tag will be updated and you should use the latest official image tag in place of `mainnet_506f94721ca0fd0d339472fffe149a1fda469cad`. See https://github.com/aptos-labs/aptos-networks/tree/main/mainnet or this page for updates:
+4. Run the below `docker` command. **NOTE** that from time to time the Docker image tag will be updated and you should use the latest official image tag in place of `mainnet_506f94721ca0fd0d339472fffe149a1fda469cad`. See https://github.com/aptos-labs/pont-networks/tree/main/mainnet or this page for updates:
 
 ```bash
 docker run --pull=always \
     --rm -p 8080:8080 \
     -p 9101:9101 -p 6180:6180 \
-    -v $(pwd):/opt/aptos/etc -v $(pwd)/data:/opt/aptos/data \
-    --workdir /opt/aptos/etc \
-    --name=aptos-fullnode aptoslabs/validator:mainnet_506f94721ca0fd0d339472fffe149a1fda469cad aptos-node \
-    -f /opt/aptos/etc/fullnode.yaml
+    -v $(pwd):/opt/pont/etc -v $(pwd)/data:/opt/pont/data \
+    --workdir /opt/pont/etc \
+    --name=pont-fullnode pontlabs/validator:mainnet_506f94721ca0fd0d339472fffe149a1fda469cad pont-node \
+    -f /opt/pont/etc/fullnode.yaml
 ```
 
 **NOTE**: You may need to prefix the command with `sudo` depending on your configuration
@@ -199,7 +199,7 @@ docker run --pull=always \
 **NOTE**: Ensure you have opened the relevant ports: 8080, 9101 and 6180. You may also need to update the 127.0.0.1 with 0.0.0.0 in the `fullnode.yaml` for the fields `listen_address` and `address` field in the `api` list.
 
 :::tip
-To connect to a network other than mainnet, all you need is to download and use the network-specific genesis blob and waypoint files. See here ➜ https://github.com/aptos-labs/aptos-networks.
+To connect to a network other than mainnet, all you need is to download and use the network-specific genesis blob and waypoint files. See here ➜ https://github.com/aptos-labs/pont-networks.
 :::
 
 Ensure you have opened the relevant ports: 8080, 9101 and 6180. You may also need to update the 127.0.0.1 with 0.0.0.0 in the `fullnode.yaml` for the fields `listen_address` and `address` field in the `api` list.
@@ -211,7 +211,7 @@ Ensure you have opened the relevant ports: 8080, 9101 and 6180. You may also nee
 During the initial synchronization of your public fullnode, there may be a lot of data to transfer. You can monitor the progress by querying the metrics port to see what version your node is currently synced to. Run the following command to see the current synced version of your node:
 
 ```bash
-curl 127.0.0.1:9101/metrics 2> /dev/null | grep "aptos_state_sync_version{.*\"synced\"}" | awk '{print $2}'
+curl 127.0.0.1:9101/metrics 2> /dev/null | grep "pont_state_sync_version{.*\"synced\"}" | awk '{print $2}'
 ```
 
 The command will output the current synced version of your node. For example:
@@ -221,7 +221,7 @@ The command will output the current synced version of your node. For example:
 ```
 
 Compare the synced version returned by this command (e.g., `71000`) with the `Current Version` (latest) shown on the
-[Aptos status page](https://status.devnet.aptos.dev/). If your node is catching up to the current version, it is synchronizing correctly.
+[Pont status page](https://status.devnet.pont.dev/). If your node is catching up to the current version, it is synchronizing correctly.
 
 :::tip
 It is fine if the status page differs by a few versions, as the status
@@ -233,24 +233,24 @@ page does not automatically refresh.
 Optionally, you can check the output network connections. The number of outbound network connections should be more than `0`. Run the following command:
 
 ```bash
-curl 127.0.0.1:9101/metrics 2> /dev/null | grep "aptos_connections{direction=\"outbound\""
+curl 127.0.0.1:9101/metrics 2> /dev/null | grep "pont_connections{direction=\"outbound\""
 ```
 
 The above command will output the number of outbound network connections for your node. For example:
 
 ```bash
-curl 127.0.0.1:9101/metrics 2> /dev/null | grep "aptos_connections{direction=\"outbound\""
-aptos_connections{direction="outbound",network_id="Public",peer_id="aabd651f",role_type="full_node"} 3
+curl 127.0.0.1:9101/metrics 2> /dev/null | grep "pont_connections{direction=\"outbound\""
+pont_connections{direction="outbound",network_id="Public",peer_id="aabd651f",role_type="full_node"} 3
 ```
 
-If the number of outbound connections returned is `0`, then it means your node cannot connect to the Aptos blockchain. If this happens to you, follow these steps to resolve the issue:
+If the number of outbound connections returned is `0`, then it means your node cannot connect to the Pont blockchain. If this happens to you, follow these steps to resolve the issue:
 
 1. Update your node to the latest release by following the [Update Fullnode With New Devnet Releases](/nodes/full-node/update-fullnode-with-new-devnet-releases).
 2. Remove any `seed` peers you may have added to your `public_full_node.yaml` configuration file. The seeds may be preventing you from connecting to the network. Seed peers are discussed in the [Connecting your fullnode to seed peers](/nodes/full-node/fullnode-network-connections#connecting-your-fullnode-to-seed-peers) section.
 
 ### (Optional) Examine Docker ledger size
 
-The blockchain ledger's volume for Aptos devnet can be monitored by entering the Docker container ID and checking the size.
+The blockchain ledger's volume for Pont devnet can be monitored by entering the Docker container ID and checking the size.
 This will allow you to see how much storage the blockchain ledger is currently consuming.
 
 - First, run `docker container ls` on your terminal and copy the NAME field output. This will be a string similar to `public_full_node_fullnode_1`.
@@ -262,11 +262,11 @@ id=$(docker container ls | grep public_full_node_fullnode_1 | grep -oE "^[0-9a-z
 # Enter the container:
 docker exec -it $id /bin/bash
 # Observe the volume (ledger) size:
-du -cs -BM /opt/aptos/data
+du -cs -BM /opt/pont/data
 ```
 
-[rest_spec]: https://github.com/aptos-labs/aptos-core/tree/main/api
-[devnet_genesis]: https://devnet.aptoslabs.com/genesis.blob
-[devnet_waypoint]: https://devnet.aptoslabs.com/waypoint.txt
-[aptos-labs/aptos-core]: https://github.com/aptos-labs/aptos-core.git
-[status dashboard]: https://status.devnet.aptos.dev
+[rest_spec]: https://github.com/aptos-labs/pont-core/tree/main/api
+[devnet_genesis]: https://devnet.pontlabs.com/genesis.blob
+[devnet_waypoint]: https://devnet.pontlabs.com/waypoint.txt
+[aptos-labs/pont-core]: https://github.com/aptos-labs/pont-core.git
+[status dashboard]: https://status.devnet.pont.dev

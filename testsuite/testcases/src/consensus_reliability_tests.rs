@@ -3,11 +3,11 @@
 
 use crate::{LoadDestination, NetworkLoadTest};
 use anyhow::{anyhow, bail, Context};
-use aptos_logger::{info, warn};
 use forge::test_utils::consensus_utils::{
     test_consensus_fault_tolerance, FailPointFailureInjection, NodeState,
 };
 use forge::{NetworkContext, NetworkTest, Result, Swarm, SwarmExt, Test};
+use pont_logger::{info, warn};
 use rand::Rng;
 use std::collections::HashSet;
 use std::time::Duration;
@@ -93,7 +93,7 @@ impl NetworkLoadTest for ChangingWorkingQuorumTest {
 
                     validator
                         .set_failpoint(
-                            "aptos_vm::execution::block_metadata".to_string(),
+                            "pont_vm::execution::block_metadata".to_string(),
                             format!("sleep({})", sleep_time),
                         )
                         .await
@@ -248,7 +248,7 @@ impl NetworkLoadTest for ChangingWorkingQuorumTest {
 
                     validator
                         .set_failpoint(
-                            "aptos_vm::execution::block_metadata".to_string(),
+                            "pont_vm::execution::block_metadata".to_string(),
                             "off".to_string(),
                         )
                         .await

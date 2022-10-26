@@ -2,10 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::metrics;
-use aptos_config::config::PeerMonitoringServiceConfig;
-use aptos_types::PeerId;
 use bytes::Bytes;
-use channel::{aptos_channel, message_queues::QueueStyle};
+use channel::{message_queues::QueueStyle, pont_channel};
 use futures::{
     channel::oneshot,
     future,
@@ -20,19 +18,21 @@ use peer_monitoring_service_types::{
     PeerMonitoringServiceMessage, PeerMonitoringServiceRequest, PeerMonitoringServiceResponse,
     Result,
 };
+use pont_config::config::PeerMonitoringServiceConfig;
+use pont_types::PeerId;
 use std::{
     pin::Pin,
     task::{Context, Poll},
 };
 
 // TODO(joshlind): remove the code duplication and boilerplate between
-// the different AptosNet services.
+// the different PontNet services.
 
 pub fn network_endpoint_config(peer_monitoring_config: PeerMonitoringServiceConfig) -> AppConfig {
     let max_network_channel_size = peer_monitoring_config.max_network_channel_size as usize;
     AppConfig::service(
         [ProtocolId::PeerMonitoringServiceRpc],
-        aptos_channel::Config::new(max_network_channel_size)
+        pont_channel::Config::new(max_network_channel_size)
             .queue_style(QueueStyle::FIFO)
             .counters(&metrics::PENDING_PEER_MONITORING_SERVER_NETWORK_EVENTS),
     )
@@ -51,11 +51,11 @@ pub struct PeerMonitoringServiceNetworkEvents(BoxStream<'static, NetworkRequest>
 
 impl NewNetworkEvents for PeerMonitoringServiceNetworkEvents {
     fn new(
-        peer_manager_notification_receiver: aptos_channel::Receiver<
+        peer_manager_notification_receiver: pont_channel::Receiver<
             (PeerId, ProtocolId),
             PeerManagerNotification,
         >,
-        connection_notification_receiver: aptos_channel::Receiver<PeerId, ConnectionNotification>,
+        connection_notification_receiver: pont_channel::Receiver<PeerId, ConnectionNotification>,
     ) -> Self {
         let events = NetworkEvents::new(
             peer_manager_notification_receiver,

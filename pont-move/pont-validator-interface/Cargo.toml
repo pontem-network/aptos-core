@@ -1,0 +1,21 @@
+[package]
+name = "pont-validator-interface"
+version = "0.1.0"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Defines interfaces between the pont nodes and local move infrastructure"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+
+pont-config = { path = "../../config" }
+pont-state-view = { path = "../../storage/state-view" }
+pont-types = { path = "../../types" }
+
+pontdb = { path = "../../storage/pontdb" }
+move-binary-format = { workspace = true }
+storage-interface = { path = "../../storage/storage-interface" }

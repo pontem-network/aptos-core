@@ -3,7 +3,7 @@
 
 mod diag;
 
-use ::aptos_logger::{Level, Logger};
+use ::pont_logger::{Level, Logger};
 use anyhow::{Context, Result};
 use clap::{Parser, Subcommand};
 use diag::diag;

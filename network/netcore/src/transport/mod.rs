@@ -11,8 +11,8 @@
 //! [`Transport`]: crate::transport::Transport
 //! [`TransportExt`]: crate::transport::TransportExt
 
-use aptos_types::{network_address::NetworkAddress, PeerId};
 use futures::{future::Future, stream::Stream};
+use pont_types::{network_address::NetworkAddress, PeerId};
 use serde::{Deserialize, Serialize};
 use std::fmt;
 

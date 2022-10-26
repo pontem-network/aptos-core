@@ -81,18 +81,18 @@ pub mod test_helper;
 
 use crate::metrics::{APTOS_JELLYFISH_LEAF_COUNT, APTOS_JELLYFISH_LEAF_DELETION_COUNT};
 use anyhow::{bail, ensure, format_err, Result};
-use aptos_crypto::{
+use node_type::{Child, Children, InternalNode, LeafNode, Node, NodeKey};
+use once_cell::sync::Lazy;
+use pont_crypto::{
     hash::{CryptoHash, SPARSE_MERKLE_PLACEHOLDER_HASH},
     HashValue,
 };
-use aptos_types::{
+use pont_types::{
     nibble::{nibble_path::NibblePath, Nibble, ROOT_NIBBLE_HEIGHT},
     proof::{SparseMerkleProof, SparseMerkleProofExt, SparseMerkleRangeProof},
     state_store::{state_key::StateKey, state_value::StateValue},
     transaction::Version,
 };
-use node_type::{Child, Children, InternalNode, LeafNode, Node, NodeKey};
-use once_cell::sync::Lazy;
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest::arbitrary::Arbitrary;
 #[cfg(any(test, feature = "fuzzing"))]
@@ -970,8 +970,8 @@ impl NibbleExt for HashValue {
 #[cfg(test)]
 mod test {
     use super::NibbleExt;
-    use aptos_crypto::hash::{HashValue, TestOnlyHash};
-    use aptos_types::nibble::Nibble;
+    use pont_crypto::hash::{HashValue, TestOnlyHash};
+    use pont_types::nibble::Nibble;
 
     #[test]
     fn test_common_prefix_nibbles_len() {

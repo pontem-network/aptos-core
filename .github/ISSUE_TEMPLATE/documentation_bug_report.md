@@ -1,6 +1,6 @@
 ---
-name: "\U0001F41B Documentation/aptos.dev Bug report"
-about: Create a bug report to help improve the Aptos Developers' Website
+name: "\U0001F41B Documentation/pont.dev Bug report"
+about: Create a bug report to help improve the Pont Developers' Website
 title: "[Bug]"
 labels: bug
 assignees: ''
@@ -10,7 +10,7 @@ assignees: ''
 # 🐛 Bug
 
 <!-- A clear and concise description of your issue with the documentation or website.
-To report a security issue, please email security@aptoslabs.com. -->
+To report a security issue, please email security@pontlabs.com. -->
 
 ## Steps to reproduce
 

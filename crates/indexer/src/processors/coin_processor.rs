@@ -17,11 +17,11 @@ use crate::{
     },
     schema,
 };
-use aptos_api_types::Transaction as APITransaction;
-use aptos_types::APTOS_COIN_TYPE;
 use async_trait::async_trait;
 use diesel::{pg::upsert::excluded, result::Error, ExpressionMethods, PgConnection};
 use field_count::FieldCount;
+use pont_api_types::Transaction as APITransaction;
+use pont_types::APTOS_COIN_TYPE;
 use std::{collections::HashMap, fmt::Debug};
 
 pub const NAME: &str = "coin_processor";
@@ -73,7 +73,7 @@ fn insert_to_db(
     current_coin_balances: Vec<CurrentCoinBalance>,
     coin_supply: Vec<CoinSupply>,
 ) -> Result<(), diesel::result::Error> {
-    aptos_logger::trace!(
+    pont_logger::trace!(
         name = name,
         start_version = start_version,
         end_version = end_version,
@@ -249,9 +249,9 @@ impl TransactionProcessor for CoinTransactionProcessor {
         end_version: u64,
     ) -> Result<ProcessingResult, TransactionProcessingError> {
         let mut conn = self.get_conn();
-        // get aptos_coin info for supply tracking
+        // get pont_coin info for supply tracking
         // TODO: This only needs to be fetched once. Need to persist somehow
-        let maybe_aptos_coin_info =
+        let maybe_pont_coin_info =
             &CoinInfoQuery::get_by_coin_type(APTOS_COIN_TYPE.to_string(), &mut conn).unwrap();
 
         let mut all_coin_activities = vec![];
@@ -268,7 +268,7 @@ impl TransactionProcessor for CoinTransactionProcessor {
                 coin_infos,
                 current_coin_balances,
                 mut coin_supply,
-            ) = CoinActivity::from_transaction(txn, maybe_aptos_coin_info);
+            ) = CoinActivity::from_transaction(txn, maybe_pont_coin_info);
             all_coin_activities.append(&mut coin_activities);
             all_coin_balances.append(&mut coin_balances);
             all_coin_supply.append(&mut coin_supply);

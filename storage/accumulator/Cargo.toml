@@ -1,10 +1,10 @@
 [package]
 name = "accumulator"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos merkle tree accumulator"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont merkle tree accumulator"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
@@ -13,15 +13,15 @@ edition = "2021"
 anyhow = "1.0.57"
 proptest = { version = "1.0.0", optional = true }
 
-aptos-crypto = { path = "../../crates/aptos-crypto" }
-aptos-types = { path = "../../types" }
+pont-crypto = { path = "../../crates/pont-crypto" }
+pont-types = { path = "../../types" }
 
 [dev-dependencies]
 proptest = "1.0.0"
 rand = "0.7.3"
 
-aptos-crypto = { path = "../../crates/aptos-crypto", features = ["fuzzing"] }
+pont-crypto = { path = "../../crates/pont-crypto", features = ["fuzzing"] }
 
 [features]
 default = []
-fuzzing = ["proptest", "aptos-crypto/fuzzing", "aptos-types/fuzzing"]
+fuzzing = ["proptest", "pont-crypto/fuzzing", "pont-types/fuzzing"]

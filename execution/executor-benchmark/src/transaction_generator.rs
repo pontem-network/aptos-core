@@ -2,19 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::account_generator::{AccountCache, AccountGenerator};
-use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue};
-use aptos_sdk::{transaction_builder::TransactionFactory, types::LocalAccount};
-use aptos_state_view::account_with_state_view::AsAccountWithStateView;
-use aptos_types::{
+use chrono::Local;
+use indicatif::{ProgressBar, ProgressStyle};
+use itertools::Itertools;
+use pont_crypto::{ed25519::Ed25519PrivateKey, HashValue};
+use pont_sdk::{transaction_builder::TransactionFactory, types::LocalAccount};
+use pont_state_view::account_with_state_view::AsAccountWithStateView;
+use pont_types::{
     account_address::AccountAddress,
-    account_config::aptos_test_root_address,
+    account_config::pont_test_root_address,
     account_view::AccountView,
     chain_id::ChainId,
     transaction::{Transaction, Version},
 };
-use chrono::Local;
-use indicatif::{ProgressBar, ProgressStyle};
-use itertools::Itertools;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use serde::{Deserialize, Serialize};
 use std::{
@@ -97,7 +97,7 @@ impl TransactionGenerator {
     pub fn new(genesis_key: Ed25519PrivateKey) -> Self {
         Self {
             seed_accounts_cache: None,
-            root_account: LocalAccount::new(aptos_test_root_address(), genesis_key, 0),
+            root_account: LocalAccount::new(pont_test_root_address(), genesis_key, 0),
             accounts_cache: None,
             num_existing_accounts: 0,
             version: 0,
@@ -170,9 +170,9 @@ impl TransactionGenerator {
         Self {
             seed_accounts_cache: None,
             root_account: LocalAccount::new(
-                aptos_test_root_address(),
+                pont_test_root_address(),
                 genesis_key,
-                get_sequence_number(aptos_test_root_address(), db.reader),
+                get_sequence_number(pont_test_root_address(), db.reader),
             ),
             accounts_cache,
             num_existing_accounts,

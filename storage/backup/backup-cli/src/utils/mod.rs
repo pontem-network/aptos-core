@@ -11,27 +11,27 @@ pub(crate) mod stream;
 pub mod test_utils;
 
 use anyhow::{anyhow, Result};
-use aptos_config::config::{
+use clap::Parser;
+use pont_config::config::{
     RocksdbConfig, RocksdbConfigs, BUFFERED_STATE_TARGET_ITEMS,
     DEFAULT_MAX_NUM_NODES_PER_LRU_CACHE_SHARD, NO_OP_STORAGE_PRUNER_CONFIG,
 };
-use aptos_crypto::HashValue;
-use aptos_infallible::duration_since_epoch;
-use aptos_jellyfish_merkle::{NodeBatch, TreeWriter};
-use aptos_logger::info;
-use aptos_types::state_store::state_storage_usage::StateStorageUsage;
-use aptos_types::{
+use pont_crypto::HashValue;
+use pont_infallible::duration_since_epoch;
+use pont_jellyfish_merkle::{NodeBatch, TreeWriter};
+use pont_logger::info;
+use pont_types::state_store::state_storage_usage::StateStorageUsage;
+use pont_types::{
     state_store::{state_key::StateKey, state_value::StateValue},
     transaction::Version,
     waypoint::Waypoint,
 };
-use aptosdb::state_restore::StateSnapshotProgress;
-use aptosdb::{
+use pontdb::state_restore::StateSnapshotProgress;
+use pontdb::{
     backup::restore_handler::RestoreHandler,
     state_restore::{StateSnapshotRestore, StateValueBatch, StateValueWriter},
-    AptosDB, GetRestoreHandler,
+    GetRestoreHandler, PontDB,
 };
-use clap::Parser;
 use std::{
     collections::HashMap,
     convert::TryFrom,
@@ -250,7 +250,7 @@ impl TryFrom<GlobalRestoreOpt> for GlobalRestoreOptions {
         let concurrent_downloads = opt.concurrent_downloads.get();
         let replay_concurrency_level = opt.replay_concurrency_level.get();
         let run_mode = if let Some(db_dir) = &opt.db_dir {
-            let restore_handler = Arc::new(AptosDB::open(
+            let restore_handler = Arc::new(PontDB::open(
                 db_dir,
                 false,                       /* read_only */
                 NO_OP_STORAGE_PRUNER_CONFIG, /* pruner config */
@@ -328,7 +328,7 @@ impl ConcurrentDownloadsOpt {
 
 #[derive(Clone, Copy, Default, Parser)]
 pub struct ReplayConcurrencyLevelOpt {
-    /// AptosVM::set_concurrency_level_once() is called with this
+    /// PontVM::set_concurrency_level_once() is called with this
     #[clap(
         long,
         help = "concurrency_level used by the transaction executor, applicable when replaying transactions \

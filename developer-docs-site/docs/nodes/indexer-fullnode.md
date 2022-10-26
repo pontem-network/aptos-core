@@ -5,7 +5,7 @@ slug: "indexer-fullnode"
 
 # Indexer Fullnode
 
-This document describes how to run an indexer fullnode on the Aptos network. See [Indexing](/guides/indexing.md) guide that describes the basic indexing concept and the available options for indexing service on the Aptos blockchain.
+This document describes how to run an indexer fullnode on the Pont network. See [Indexing](/guides/indexing.md) guide that describes the basic indexing concept and the available options for indexing service on the Pont blockchain.
 
 :::danger On macOS with Apple silicon only
 The below installation steps are verified only on macOS with Apple silicon.
@@ -16,7 +16,7 @@ The below installation steps are verified only on macOS with Apple silicon.
 To run an indexer fullnode, these are the steps in summary:
 
 1. Make sure that you have all the required tools and packages described below in this document.
-2. Follow the [method #1 of setting up a public fullnode by using the source code](full-node/fullnode-source-code-or-docker/#method-1-building-and-running-from-source) and prepare the setup, but **do not run** the `cargo run -p aptos-node --release -- -f ./fullnode.yaml` command yet. 
+2. Follow the [method #1 of setting up a public fullnode by using the source code](full-node/fullnode-source-code-or-docker/#method-1-building-and-running-from-source) and prepare the setup, but **do not run** the `cargo run -p pont-node --release -- -f ./fullnode.yaml` command yet. 
 :::danger Docker not supported
 Docker is not yet supported for indexer fullnode. In the above step 2, use only the source code method.
 :::
@@ -50,19 +50,19 @@ Docker is not yet supported for indexer fullnode. In the above step 2, use only 
     ```bash
     cargo install diesel_cli --no-default-features --features postgres
     ```
-5. Clone `aptos-core` repo:
+5. Clone `pont-core` repo:
     ```bash
-    git clone https://github.com/aptos-labs/aptos-core.git
+    git clone https://github.com/aptos-labs/pont-core.git
     ```
-6. `cd` into `aptos-core/crates/indexer` directory.
+6. `cd` into `pont-core/crates/indexer` directory.
 7.  Run the command:
     ```bash
     diesel migration run --database-url postgresql://localhost/postgres
     ```
-    This will create a database schema with the subdirectory `migrations` located in this `aptos-core/crates/indexer` directory.
+    This will create a database schema with the subdirectory `migrations` located in this `pont-core/crates/indexer` directory.
     - If for some reason this database is already being used, try a different database. For example: `DATABASE_URL=postgres://postgres@localhost:5432/indexer_v2 diesel database reset`
 
-8. Follow the [method #1 of setting up a public fullnode by using the source code](full-node/fullnode-source-code-or-docker/#method-1-building-and-running-from-source) and prepare the setup, but **do not run** the `cargo run -p aptos-node --release -- -f ./fullnode.yaml` command yet. **Docker is not yet supported for the indexer fullnode.**
+8. Follow the [method #1 of setting up a public fullnode by using the source code](full-node/fullnode-source-code-or-docker/#method-1-building-and-running-from-source) and prepare the setup, but **do not run** the `cargo run -p pont-node --release -- -f ./fullnode.yaml` command yet. **Docker is not yet supported for the indexer fullnode.**
 9. Edit the `./fullnode.yaml` and add the following configuration:
     ```yaml
     storage:
@@ -82,6 +82,6 @@ Docker is not yet supported for indexer fullnode. In the above step 2, use only 
 
 10. Run the indexer fullnode with:
     ```bash
-    cargo run --bin aptos-node --features "indexer"  -- --config </path/to/fullnode.yaml>`
+    cargo run --bin pont-node --features "indexer"  -- --config </path/to/fullnode.yaml>`
 
 

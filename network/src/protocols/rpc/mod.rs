@@ -1,7 +1,7 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-//! Implementation of the unary RPC protocol as per [AptosNet wire protocol v1].
+//! Implementation of the unary RPC protocol as per [PontNet wire protocol v1].
 //!
 //! ## Design:
 //!
@@ -40,7 +40,7 @@
 //! We limit the number of pending inbound and outbound RPC tasks to ensure that
 //! resource usage is bounded.
 //!
-//! [AptosNet wire protocol v1]: https://github.com/aptos-labs/aptos-core/blob/main/specifications/network/messaging-v1.md
+//! [PontNet wire protocol v1]: https://github.com/aptos-labs/pont-core/blob/main/specifications/network/messaging-v1.md
 //! [`Peer`]: crate::peer::Peer
 
 use crate::{
@@ -58,13 +58,8 @@ use crate::{
     ProtocolId,
 };
 use anyhow::anyhow;
-use aptos_config::network_id::NetworkContext;
-use aptos_id_generator::{IdGenerator, U32IdGenerator};
-use aptos_logger::prelude::*;
-use aptos_time_service::{timeout, TimeService, TimeServiceTrait};
-use aptos_types::PeerId;
 use bytes::Bytes;
-use channel::aptos_channel;
+use channel::pont_channel;
 use error::RpcError;
 use futures::{
     channel::oneshot,
@@ -72,6 +67,11 @@ use futures::{
     sink::SinkExt,
     stream::{FuturesUnordered, StreamExt},
 };
+use pont_config::network_id::NetworkContext;
+use pont_id_generator::{IdGenerator, U32IdGenerator};
+use pont_logger::prelude::*;
+use pont_time_service::{timeout, TimeService, TimeServiceTrait};
+use pont_types::PeerId;
 use serde::Serialize;
 use short_hex_str::AsShortHexStr;
 use std::{cmp::PartialEq, collections::HashMap, fmt::Debug, time::Duration};
@@ -205,7 +205,7 @@ impl InboundRpcs {
     /// Handle a new inbound `RpcRequest` message off the wire.
     pub fn handle_inbound_request(
         &mut self,
-        peer_notifs_tx: &mut aptos_channel::Sender<ProtocolId, PeerNotification>,
+        peer_notifs_tx: &mut pont_channel::Sender<ProtocolId, PeerNotification>,
         request: RpcRequest,
     ) -> Result<(), RpcError> {
         let network_context = &self.network_context;

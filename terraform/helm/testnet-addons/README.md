@@ -2,22 +2,22 @@
 
 ![Version: 0.1](https://img.shields.io/badge/Version-0.1-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
-Additional components for aptos-nodes testnet
+Additional components for pont-nodes testnet
 
-**Homepage:** <https://aptoslabs.com/>
+**Homepage:** <https://pontlabs.com/>
 
 ## Source Code
 
-* <https://github.com/aptos-labs/aptos-core>
+* <https://github.com/aptos-labs/pont-core>
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| genesis.chain_id | string | `nil` | Aptos Chain ID |
+| genesis.chain_id | string | `nil` | Pont Chain ID |
 | genesis.numValidators | string | `nil` | Number of validators deployed in this testnet |
-| genesis.username_prefix | string | `"aptos-node"` | Validator username prefix, used to get genesis secrets. This should be the fullname for the aptos-node helm release |
-| imageTag | string | `"devnet"` | Default image tag to use for all aptos images |
+| genesis.username_prefix | string | `"pont-node"` | Validator username prefix, used to get genesis secrets. This should be the fullname for the pont-node helm release |
+| imageTag | string | `"devnet"` | Default image tag to use for all pont images |
 | ingress.acm_certificate | string | `nil` | The ACM certificate to install on the ingress |
 | ingress.cookieDurationSeconds | int | `86400` | If stickiness is enabled, how long the session cookie should last |
 | ingress.enableStickyness | bool | `true` | Whether to enable session stickiness on the underlying load balancer |
@@ -34,7 +34,7 @@ Additional components for aptos-nodes testnet
 | load_test.enabled | bool | `false` | Whether to enable the load test CronJob |
 | load_test.fullnode | object | `{"groups":[{"name":"fullnode"}]}` | The fullnode groups to target |
 | load_test.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy to use for tools image |
-| load_test.image.repo | string | `"aptoslabs/tools"` | Image repo to use for tools image for running load tests |
+| load_test.image.repo | string | `"pontlabs/tools"` | Image repo to use for tools image for running load tests |
 | load_test.image.tag | string | `nil` | Image tag to use for tools image |
 | load_test.intervalMins | int | `15` | How many minutes between load test runs |
 | load_test.nodeSelector | object | `{}` |  |

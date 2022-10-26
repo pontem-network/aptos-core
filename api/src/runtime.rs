@@ -9,10 +9,6 @@ use crate::{
     log::middleware_log, set_failpoints, state::StateApi, transactions::TransactionsApi,
 };
 use anyhow::Context as AnyhowContext;
-use aptos_config::config::NodeConfig;
-use aptos_logger::info;
-use aptos_mempool::MempoolClientSender;
-use aptos_types::chain_id::ChainId;
 use poem::{
     http::{header, Method},
     listener::{Listener, RustlsCertificate, RustlsConfig, TcpListener},
@@ -20,6 +16,10 @@ use poem::{
     EndpointExt, Route, Server,
 };
 use poem_openapi::{ContactObject, LicenseObject, OpenApiService};
+use pont_config::config::NodeConfig;
+use pont_logger::info;
+use pont_mempool::MempoolClientSender;
+use pont_types::chain_id::ChainId;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use storage_interface::DbReader;
 use tokio::runtime::{Builder, Handle, Runtime};
@@ -53,7 +53,7 @@ pub fn bootstrap(
 }
 
 // TODOs regarding spec generation:
-// TODO: https://github.com/aptos-labs/aptos-core/issues/2280
+// TODO: https://github.com/aptos-labs/pont-core/issues/2280
 // TODO: https://github.com/poem-web/poem/issues/321
 // TODO: https://github.com/poem-web/poem/issues/332
 // TODO: https://github.com/poem-web/poem/issues/333
@@ -100,15 +100,15 @@ pub fn get_api_service(
     let license =
         LicenseObject::new("Apache 2.0").url("https://www.apache.org/licenses/LICENSE-2.0.html");
     let contact = ContactObject::new()
-        .name("Aptos Labs")
-        .url("https://github.com/aptos-labs/aptos-core");
+        .name("Pont Labs")
+        .url("https://github.com/aptos-labs/pont-core");
 
-    OpenApiService::new(apis, "Aptos Node API", version.trim())
+    OpenApiService::new(apis, "Pont Node API", version.trim())
         .server("/v1")
-        .description("The Aptos Node API is a RESTful API for client applications to interact with the Aptos blockchain.")
+        .description("The Pont Node API is a RESTful API for client applications to interact with the Pont blockchain.")
         .license(license)
         .contact(contact)
-        .external_document("https://github.com/aptos-labs/aptos-core")
+        .external_document("https://github.com/aptos-labs/pont-core")
 }
 
 /// Returns address it is running at.
@@ -210,15 +210,15 @@ pub fn attach_poem_to_runtime(
 mod tests {
     use std::time::Duration;
 
-    use aptos_api_test_context::{new_test_context, TestContext};
-    use aptos_config::config::NodeConfig;
-    use aptos_types::chain_id::ChainId;
+    use pont_api_test_context::{new_test_context, TestContext};
+    use pont_config::config::NodeConfig;
+    use pont_types::chain_id::ChainId;
 
     use super::bootstrap;
 
     // TODO: Unignore this when I figure out why this only works when being
     // run alone (it fails when run with other tests).
-    // https://github.com/aptos-labs/aptos-core/issues/2977
+    // https://github.com/aptos-labs/pont-core/issues/2977
     #[ignore]
     #[test]
     fn test_bootstrap_jsonprc_and_api_configured_at_different_port() {

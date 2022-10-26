@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{bail, format_err, Result};
-use aptos_sdk::transaction_builder::TransactionFactory;
 use futures::future::join_all;
 use itertools::zip;
+use pont_sdk::transaction_builder::TransactionFactory;
 use rand::{rngs::StdRng, Rng, SeedableRng};
 use rand_core::OsRng;
 use std::{
@@ -18,7 +18,7 @@ pub async fn diag(cluster: &Cluster) -> Result<()> {
     let mut coin_source_account = cluster.load_coin_source_account(&client).await?;
     let emitter = TxnEmitter::new(
         TransactionFactory::new(cluster.chain_id)
-            .with_gas_unit_price(aptos_global_constants::GAS_UNIT_PRICE),
+            .with_gas_unit_price(pont_global_constants::GAS_UNIT_PRICE),
         StdRng::from_seed(OsRng.gen()),
     );
     let coin_source_account_address = coin_source_account.address();

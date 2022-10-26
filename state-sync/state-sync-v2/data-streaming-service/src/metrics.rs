@@ -1,16 +1,16 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_metrics_core::{
+use once_cell::sync::Lazy;
+use pont_metrics_core::{
     register_histogram_vec, register_int_counter, register_int_counter_vec, register_int_gauge,
     HistogramTimer, HistogramVec, IntCounter, IntCounterVec, IntGauge,
 };
-use once_cell::sync::Lazy;
 
 /// Counter for the number of active data streams
 pub static ACTIVE_DATA_STREAMS: Lazy<IntGauge> = Lazy::new(|| {
     register_int_gauge!(
-        "aptos_data_streaming_service_active_data_streams",
+        "pont_data_streaming_service_active_data_streams",
         "Counters related to the number of active data streams",
     )
     .unwrap()
@@ -19,7 +19,7 @@ pub static ACTIVE_DATA_STREAMS: Lazy<IntGauge> = Lazy::new(|| {
 /// Counter for the number of times there was a send failure
 pub static DATA_STREAM_SEND_FAILURE: Lazy<IntCounter> = Lazy::new(|| {
     register_int_counter!(
-        "aptos_data_streaming_service_stream_send_failure",
+        "pont_data_streaming_service_stream_send_failure",
         "Counters related to send failures along the data stream",
     )
     .unwrap()
@@ -28,7 +28,7 @@ pub static DATA_STREAM_SEND_FAILURE: Lazy<IntCounter> = Lazy::new(|| {
 /// Counter for the creation of new data streams
 pub static CREATE_DATA_STREAM: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_data_streaming_service_create_data_stream",
+        "pont_data_streaming_service_create_data_stream",
         "Counters related to the creation of new data streams",
         &["request_type"]
     )
@@ -38,7 +38,7 @@ pub static CREATE_DATA_STREAM: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for the termination of existing data streams
 pub static TERMINATE_DATA_STREAM: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_data_streaming_service_terminate_data_stream",
+        "pont_data_streaming_service_terminate_data_stream",
         "Counters related to the termination of existing data streams",
         &["feedback_type"]
     )
@@ -48,7 +48,7 @@ pub static TERMINATE_DATA_STREAM: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for stream progress check errors
 pub static CHECK_STREAM_PROGRESS_ERROR: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_data_streaming_service_check_progress_error",
+        "pont_data_streaming_service_check_progress_error",
         "Counters related to stream progress check errors",
         &["error_type"]
     )
@@ -58,7 +58,7 @@ pub static CHECK_STREAM_PROGRESS_ERROR: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for global data summary errors
 pub static GLOBAL_DATA_SUMMARY_ERROR: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_data_streaming_service_global_summary_error",
+        "pont_data_streaming_service_global_summary_error",
         "Counters related to global data summary errors",
         &["error_type"]
     )
@@ -68,7 +68,7 @@ pub static GLOBAL_DATA_SUMMARY_ERROR: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for tracking sent data requests
 pub static SENT_DATA_REQUESTS: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_data_streaming_service_sent_data_requests",
+        "pont_data_streaming_service_sent_data_requests",
         "Counters related to sent data requests",
         &["request_type"]
     )
@@ -78,7 +78,7 @@ pub static SENT_DATA_REQUESTS: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for tracking received data responses
 pub static RECEIVED_DATA_RESPONSE: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_data_streaming_service_received_data_response",
+        "pont_data_streaming_service_received_data_response",
         "Counters related to received data responses",
         &["response_type"]
     )
@@ -88,7 +88,7 @@ pub static RECEIVED_DATA_RESPONSE: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for tracking received data responses
 pub static RECEIVED_RESPONSE_ERROR: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_data_streaming_service_received_response_error",
+        "pont_data_streaming_service_received_response_error",
         "Counters related to received response errors",
         &["error_type"]
     )
@@ -98,7 +98,7 @@ pub static RECEIVED_RESPONSE_ERROR: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Time it takes to process a data request
 pub static DATA_REQUEST_PROCESSING_LATENCY: Lazy<HistogramVec> = Lazy::new(|| {
     register_histogram_vec!(
-        "aptos_data_streaming_service_data_request_processing_latency",
+        "pont_data_streaming_service_data_request_processing_latency",
         "Counters related to data request processing latencies",
         &["request_type"]
     )

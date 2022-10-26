@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::{format_err, Context, Result};
-use aptos_logger::Level;
-use aptos_rest_client::Client as RestClient;
-use aptos_sdk::{move_types::account_address::AccountAddress, transaction_builder::aptos_stdlib};
 use forge::success_criteria::{StateProgressThreshold, SuccessCriteria};
 use forge::system_metrics::{MetricsThreshold, SystemMetricsThreshold};
 use forge::{ForgeConfig, Options, *};
+use pont_logger::Level;
+use pont_rest_client::Client as RestClient;
+use pont_sdk::{move_types::account_address::AccountAddress, transaction_builder::pont_stdlib};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::{env, num::NonZeroUsize, process, thread, time::Duration};
@@ -174,7 +174,7 @@ struct Resize {
 }
 
 fn main() -> Result<()> {
-    let mut logger = aptos_logger::Logger::new();
+    let mut logger = pont_logger::Logger::new();
     logger
         .channel_size(1000)
         .is_async(false)
@@ -351,7 +351,7 @@ pub fn send_changelog_message(perf_msg: &str, from_commit: &Option<String>, to_c
 
 fn get_changelog(prev_commit: Option<&String>, upstream_commit: &str) -> String {
     let github_client = GitHub::new();
-    let commits = github_client.get_commits("aptos-labs/aptos-core", upstream_commit);
+    let commits = github_client.get_commits("aptos-labs/pont-core", upstream_commit);
     match commits {
         Err(e) => {
             println!("Failed to get github commits: {:?}", e);
@@ -397,12 +397,12 @@ fn run_forever() -> ForgeConfig<'static> {
     ForgeConfig::default()
         .with_admin_tests(vec![&GetMetadata])
         .with_genesis_module_bundle(cached_packages::head_release_bundle().clone())
-        .with_aptos_tests(vec![&RunForever])
+        .with_pont_tests(vec![&RunForever])
 }
 
 fn local_test_suite() -> ForgeConfig<'static> {
     ForgeConfig::default()
-        .with_aptos_tests(vec![&FundAccount, &TransferCoins])
+        .with_pont_tests(vec![&FundAccount, &TransferCoins])
         .with_admin_tests(vec![&GetMetadata])
         .with_network_tests(vec![&RestartValidator, &EmitTransaction])
         .with_genesis_module_bundle(cached_packages::head_release_bundle().clone())
@@ -411,7 +411,7 @@ fn local_test_suite() -> ForgeConfig<'static> {
 fn k8s_test_suite() -> ForgeConfig<'static> {
     ForgeConfig::default()
         .with_initial_validator_count(NonZeroUsize::new(30).unwrap())
-        .with_aptos_tests(vec![&FundAccount, &TransferCoins])
+        .with_pont_tests(vec![&FundAccount, &TransferCoins])
         .with_admin_tests(vec![&GetMetadata])
         .with_network_tests(vec![
             &EmitTransaction,
@@ -974,8 +974,8 @@ impl Test for RunForever {
 }
 
 #[async_trait::async_trait]
-impl AptosTest for RunForever {
-    async fn run<'t>(&self, _ctx: &mut AptosContext<'t>) -> Result<()> {
+impl PontTest for RunForever {
+    async fn run<'t>(&self, _ctx: &mut PontContext<'t>) -> Result<()> {
         println!("The network has been deployed. Hit Ctrl+C to kill this, otherwise it will run forever.");
         let keep_running = Arc::new(AtomicBool::new(true));
         while keep_running.load(Ordering::Acquire) {
@@ -999,7 +999,7 @@ impl AdminTest for GetMetadata {
     fn run<'t>(&self, ctx: &mut AdminContext<'t>) -> Result<()> {
         let client = ctx.rest_client();
         let runtime = Runtime::new().unwrap();
-        runtime.block_on(client.get_aptos_version()).unwrap();
+        runtime.block_on(client.get_pont_version()).unwrap();
         runtime.block_on(client.get_ledger_information()).unwrap();
 
         Ok(())
@@ -1030,8 +1030,8 @@ impl Test for FundAccount {
 }
 
 #[async_trait::async_trait]
-impl AptosTest for FundAccount {
-    async fn run<'t>(&self, ctx: &mut AptosContext<'t>) -> Result<()> {
+impl PontTest for FundAccount {
+    async fn run<'t>(&self, ctx: &mut PontContext<'t>) -> Result<()> {
         let client = ctx.client();
 
         let account = ctx.random_account();
@@ -1054,8 +1054,8 @@ impl Test for TransferCoins {
 }
 
 #[async_trait::async_trait]
-impl AptosTest for TransferCoins {
-    async fn run<'t>(&self, ctx: &mut AptosContext<'t>) -> Result<()> {
+impl PontTest for TransferCoins {
+    async fn run<'t>(&self, ctx: &mut PontContext<'t>) -> Result<()> {
         let client = ctx.client();
         let mut payer = ctx.random_account();
         let payee = ctx.random_account();
@@ -1065,8 +1065,8 @@ impl AptosTest for TransferCoins {
         check_account_balance(&client, payer.address(), 10000).await?;
 
         let transfer_txn = payer.sign_with_transaction_builder(
-            ctx.aptos_transaction_factory()
-                .payload(aptos_stdlib::aptos_coin_transfer(payee.address(), 10)),
+            ctx.pont_transaction_factory()
+                .payload(pont_stdlib::pont_coin_transfer(payee.address(), 10)),
         );
         client.submit_and_wait(&transfer_txn).await?;
         check_account_balance(&client, payee.address(), 10).await?;
@@ -1121,7 +1121,7 @@ impl NetworkTest for EmitTransaction {
             ctx,
             &all_validators,
             duration,
-            aptos_global_constants::GAS_UNIT_PRICE,
+            pont_global_constants::GAS_UNIT_PRICE,
         )
         .unwrap();
         ctx.report

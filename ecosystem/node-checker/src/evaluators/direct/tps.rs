@@ -18,7 +18,7 @@ use transaction_emitter_lib::{
 use super::types::DirectEvaluatorInput;
 
 const CATEGORY: &str = "performance";
-const NODE_REQUIREMENTS_LINK: &str = "https://aptos.dev/nodes/ait/node-requirements";
+const NODE_REQUIREMENTS_LINK: &str = "https://pont.dev/nodes/ait/node-requirements";
 
 #[derive(Debug, ThisError)]
 pub enum TpsEvaluatorError {

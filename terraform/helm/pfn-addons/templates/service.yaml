@@ -8,7 +8,7 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: /v1/-/healthy
 spec:
   selector:
-    app.kubernetes.io/part-of: aptos-fullnode
+    app.kubernetes.io/part-of: pont-fullnode
     app.kubernetes.io/name: fullnode
   ports:
   - port: 80

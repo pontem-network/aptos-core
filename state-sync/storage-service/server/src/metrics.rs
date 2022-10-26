@@ -1,11 +1,11 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_metrics_core::{
-    register_histogram_vec, register_int_counter_vec, HistogramTimer, HistogramVec, IntCounterVec,
-};
 use network::ProtocolId;
 use once_cell::sync::Lazy;
+use pont_metrics_core::{
+    register_histogram_vec, register_int_counter_vec, HistogramTimer, HistogramVec, IntCounterVec,
+};
 
 /// Useful metric constants for the storage service
 pub const LRU_CACHE_HIT: &str = "lru_cache_hit";
@@ -14,7 +14,7 @@ pub const LRU_CACHE_PROBE: &str = "lru_cache_probe";
 /// Counter for lru cache events in the storage service (server-side)
 pub static LRU_CACHE_EVENT: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_storage_service_server_lru_cache",
+        "pont_storage_service_server_lru_cache",
         "Counters for lru cache events in the storage server",
         &["protocol", "event"]
     )
@@ -25,7 +25,7 @@ pub static LRU_CACHE_EVENT: Lazy<IntCounterVec> = Lazy::new(|| {
 /// frame limit size and had to be retried.
 pub static NETWORK_FRAME_OVERFLOW: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_storage_service_server_network_frame_overflow",
+        "pont_storage_service_server_network_frame_overflow",
         "Counters for network frame overflows in the storage server",
         &["response_type"]
     )
@@ -35,7 +35,7 @@ pub static NETWORK_FRAME_OVERFLOW: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for pending network events to the storage service (server-side)
 pub static PENDING_STORAGE_SERVER_NETWORK_EVENTS: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_storage_service_server_pending_network_events",
+        "pont_storage_service_server_pending_network_events",
         "Counters for pending network events for the storage server",
         &["state"]
     )
@@ -45,7 +45,7 @@ pub static PENDING_STORAGE_SERVER_NETWORK_EVENTS: Lazy<IntCounterVec> = Lazy::ne
 /// Counter for storage service errors encountered
 pub static STORAGE_ERRORS_ENCOUNTERED: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_storage_service_server_errors",
+        "pont_storage_service_server_errors",
         "Counters related to the storage server errors encountered",
         &["protocol", "error_type"]
     )
@@ -55,7 +55,7 @@ pub static STORAGE_ERRORS_ENCOUNTERED: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for received storage service requests
 pub static STORAGE_REQUESTS_RECEIVED: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_storage_service_server_requests_received",
+        "pont_storage_service_server_requests_received",
         "Counters related to the storage server requests received",
         &["protocol", "request_type"]
     )
@@ -65,7 +65,7 @@ pub static STORAGE_REQUESTS_RECEIVED: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Counter for storage service responses sent
 pub static STORAGE_RESPONSES_SENT: Lazy<IntCounterVec> = Lazy::new(|| {
     register_int_counter_vec!(
-        "aptos_storage_service_server_responses_sent",
+        "pont_storage_service_server_responses_sent",
         "Counters related to the storage server responses sent",
         &["protocol", "response_type"]
     )
@@ -75,7 +75,7 @@ pub static STORAGE_RESPONSES_SENT: Lazy<IntCounterVec> = Lazy::new(|| {
 /// Time it takes to process a storage request
 pub static STORAGE_REQUEST_PROCESSING_LATENCY: Lazy<HistogramVec> = Lazy::new(|| {
     register_histogram_vec!(
-        "aptos_storage_service_server_request_latency",
+        "pont_storage_service_server_request_latency",
         "Time it takes to process a storage service request",
         &["protocol", "request_type"]
     )

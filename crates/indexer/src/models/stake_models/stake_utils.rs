@@ -3,7 +3,7 @@
 
 use crate::models::move_resources::MoveResource;
 use anyhow::{Context, Result};
-use aptos_api_types::{deserialize_from_string, WriteResource};
+use pont_api_types::{deserialize_from_string, WriteResource};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

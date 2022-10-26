@@ -1,7 +1,7 @@
-# Base config generated with: target/debug/aptos-node-checker configuration create --configuration-name ait3_fullnode --configuration-name-pretty AIT3 FullNode Checker --url http://34.64.49.220 --api-port 80 --evaluators api_latency api_transaction_availability noise_handshake state_sync_version --target-tps 1200
+# Base config generated with: target/debug/pont-node-checker configuration create --configuration-name ait3_fullnode --configuration-name-pretty AIT3 FullNode Checker --url http://34.64.49.220 --api-port 80 --evaluators api_latency api_transaction_availability noise_handshake state_sync_version --target-tps 1200
 ---
 node_address:
-  url: "https://ait3.aptosdev.com"
+  url: "https://ait3.pontdev.com"
   metrics_port: 9101
   api_port: 443
   noise_port: 6180

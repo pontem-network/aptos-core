@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{
-    aptos::move_test_helpers, smoke_test_environment::SwarmBuilder,
+    pont::move_test_helpers, smoke_test_environment::SwarmBuilder,
     test_utils::check_create_mint_transfer, workspace_builder, workspace_builder::workspace_root,
 };
-use aptos_crypto::ValidCryptoMaterialStringExt;
-use aptos_gas::{AptosGasParameters, GasQuantity, InitialGasSchedule, ToOnChainGasSchedule};
-use aptos_temppath::TempPath;
 use forge::Swarm;
+use pont_crypto::ValidCryptoMaterialStringExt;
+use pont_gas::{GasQuantity, InitialGasSchedule, PontGasParameters, ToOnChainGasSchedule};
+use pont_temppath::TempPath;
 use std::process::Command;
 use std::{fmt::Write, fs};
 
@@ -31,44 +31,44 @@ fn generate_blob(data: &[u8]) -> String {
 }
 
 #[tokio::test]
-/// This test verifies the flow of aptos framework upgrade process.
-/// i.e: The network will be alive after applying the new aptos framework release.
+/// This test verifies the flow of pont framework upgrade process.
+/// i.e: The network will be alive after applying the new pont framework release.
 async fn test_upgrade_flow() {
     // prebuild tools.
-    let aptos_cli = workspace_builder::get_bin("aptos");
+    let pont_cli = workspace_builder::get_bin("pont");
 
     let num_nodes = 5;
     let (mut env, _cli, _) = SwarmBuilder::new_local(num_nodes)
-        .with_aptos_testnet()
+        .with_pont_testnet()
         .build_with_cli(0)
         .await;
 
-    let url = env.aptos_public_info().url().to_string();
+    let url = env.pont_public_info().url().to_string();
     let private_key = env
-        .aptos_public_info()
+        .pont_public_info()
         .root_account()
         .private_key()
         .to_encoded_string()
         .unwrap();
 
     // Bump the limit in gas schedule
-    // TODO: Replace this logic with aptos-gas
-    let mut gas_parameters = AptosGasParameters::initial();
+    // TODO: Replace this logic with pont-gas
+    let mut gas_parameters = PontGasParameters::initial();
     gas_parameters.txn.max_transaction_size_in_bytes = GasQuantity::new(100_000_000);
 
-    let gas_schedule = aptos_types::on_chain_config::GasScheduleV2 {
-        feature_version: aptos_gas::LATEST_GAS_FEATURE_VERSION,
+    let gas_schedule = pont_types::on_chain_config::GasScheduleV2 {
+        feature_version: pont_gas::LATEST_GAS_FEATURE_VERSION,
         entries: gas_parameters.to_on_chain_gas_schedule(),
     };
 
     let update_gas_script = format!(
         r#"
     script {{
-        use aptos_framework::aptos_governance;
-        use aptos_framework::gas_schedule;
+        use pont_framework::pont_governance;
+        use pont_framework::gas_schedule;
 
         fun main(core_resources: &signer) {{
-            let framework_signer = aptos_governance::get_signer_testnet_only(core_resources, @0000000000000000000000000000000000000000000000000000000000000001);
+            let framework_signer = pont_governance::get_signer_testnet_only(core_resources, @0000000000000000000000000000000000000000000000000000000000000001);
 
             let gas_bytes = {};
 
@@ -84,7 +84,7 @@ async fn test_upgrade_flow() {
     gas_script_path.set_extension("move");
     fs::write(gas_script_path.as_path(), update_gas_script).unwrap();
 
-    assert!(Command::new(aptos_cli.as_path())
+    assert!(Command::new(pont_cli.as_path())
         .current_dir(workspace_root())
         .args(&vec![
             "move",
@@ -106,10 +106,10 @@ async fn test_upgrade_flow() {
 
     // Generate the governance proposal script.
     let package_path_list = vec![
-        ("0x1", "aptos-move/framework/move-stdlib"),
-        ("0x1", "aptos-move/framework/aptos-stdlib"),
-        ("0x1", "aptos-move/framework/aptos-framework"),
-        ("0x3", "aptos-move/framework/aptos-token"),
+        ("0x1", "pont-move/framework/move-stdlib"),
+        ("0x1", "pont-move/framework/pont-stdlib"),
+        ("0x1", "pont-move/framework/pont-framework"),
+        ("0x3", "pont-move/framework/pont-token"),
     ];
 
     for (publish_addr, relative_package_path) in package_path_list.iter() {
@@ -122,7 +122,7 @@ async fn test_upgrade_flow() {
         package_path.pop();
         package_path.push(relative_package_path);
 
-        assert!(Command::new(aptos_cli.as_path())
+        assert!(Command::new(pont_cli.as_path())
             .current_dir(workspace_root())
             .args(&vec![
                 "governance",
@@ -140,7 +140,7 @@ async fn test_upgrade_flow() {
             .status
             .success());
 
-        assert!(Command::new(aptos_cli.as_path())
+        assert!(Command::new(pont_cli.as_path())
             .current_dir(workspace_root())
             .args(&vec![
                 "move",
@@ -162,14 +162,14 @@ async fn test_upgrade_flow() {
     }
 
     // Two transactions has been emitted to root account.
-    *env.aptos_public_info().root_account().sequence_number_mut() +=
+    *env.pont_public_info().root_account().sequence_number_mut() +=
         1 + package_path_list.len() as u64;
 
     // Test the module publishing workflow
     let base_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
-    let base_path_v1 = base_dir.join("src/aptos/package_publish_modules_v1/");
+    let base_path_v1 = base_dir.join("src/pont/package_publish_modules_v1/");
 
-    move_test_helpers::publish_package(&mut env.aptos_public_info(), base_path_v1)
+    move_test_helpers::publish_package(&mut env.pont_public_info(), base_path_v1)
         .await
         .unwrap();
 

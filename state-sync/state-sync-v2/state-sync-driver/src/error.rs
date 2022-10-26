@@ -1,8 +1,8 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_types::transaction::Version;
 use futures::channel::{mpsc::SendError, oneshot::Canceled};
+use pont_types::transaction::Version;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 

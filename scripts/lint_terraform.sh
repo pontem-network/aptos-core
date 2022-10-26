@@ -27,7 +27,7 @@ terraform version
 
 # Find all the terraform module directories in the repo
 # Assume that they all contain a main.tf file, which is best practices
-echo "##### Terraform modules in aptos-core #####"
+echo "##### Terraform modules in pont-core #####"
 tf_dirs=($(find . -xdev -name main.tf -exec dirname {} \;))
 for dir in ${tf_dirs[@]}; do
     echo $dir

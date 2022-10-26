@@ -4,21 +4,21 @@
 
 Node health checker
 
-**Homepage:** <https://aptoslabs.com/>
+**Homepage:** <https://pontlabs.com/>
 
 ## Source Code
 
-* <https://github.com/aptos-labs/aptos-core>
+* <https://github.com/aptos-labs/pont-core>
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| imageTag | string | `"devnet"` | Default image tag to use for all aptos images |
+| imageTag | string | `"devnet"` | Default image tag to use for all pont images |
 | node_health_checker.affinity | object | `{}` |  |
-| node_health_checker.baseline_node_url | string | `"http://aptos-node-0-validator:8080"` | The baseline node URL for the health checker. Defaults to the validator in your deployment |
+| node_health_checker.baseline_node_url | string | `"http://pont-node-0-validator:8080"` | The baseline node URL for the health checker. Defaults to the validator in your deployment |
 | node_health_checker.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy to use for node-checker image |
-| node_health_checker.image.repo | string | `"aptoslabs/node-checker"` | Image repo to use for node-checker image for running load tests |
+| node_health_checker.image.repo | string | `"pontlabs/node-checker"` | Image repo to use for node-checker image for running load tests |
 | node_health_checker.image.tag | string | `nil` | Image tag to use for node-checker image |
 | node_health_checker.mint_key | string | `nil` | The mint key for the validator used by node health checker |
 | node_health_checker.nodeSelector | object | `{}` |  |

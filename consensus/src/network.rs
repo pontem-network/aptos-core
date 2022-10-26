@@ -9,13 +9,8 @@ use crate::{
     network_interface::{ConsensusMsg, ConsensusNetworkEvents, ConsensusNetworkSender},
 };
 use anyhow::{anyhow, ensure};
-use aptos_logger::prelude::*;
-use aptos_types::{
-    account_address::AccountAddress, epoch_change::EpochChangeProof,
-    ledger_info::LedgerInfoWithSignatures, validator_verifier::ValidatorVerifier,
-};
 use bytes::Bytes;
-use channel::{self, aptos_channel, message_queues::QueueStyle};
+use channel::{self, message_queues::QueueStyle, pont_channel};
 use consensus_types::{
     block_retrieval::{BlockRetrievalRequest, BlockRetrievalResponse, MAX_BLOCKS_PER_REQUEST},
     common::Author,
@@ -32,6 +27,11 @@ use network::{
         rpc::error::RpcError,
     },
     ProtocolId,
+};
+use pont_logger::prelude::*;
+use pont_types::{
+    account_address::AccountAddress, epoch_change::EpochChangeProof,
+    ledger_info::LedgerInfoWithSignatures, validator_verifier::ValidatorVerifier,
 };
 use std::{
     mem::{discriminant, Discriminant},
@@ -51,12 +51,12 @@ pub struct IncomingBlockRetrievalRequest {
 /// Will be returned by the NetworkTask upon startup.
 pub struct NetworkReceivers {
     /// Provide a LIFO buffer for each (Author, MessageType) key
-    pub consensus_messages: aptos_channel::Receiver<
+    pub consensus_messages: pont_channel::Receiver<
         (AccountAddress, Discriminant<ConsensusMsg>),
         (AccountAddress, ConsensusMsg),
     >,
     pub block_retrieval:
-        aptos_channel::Receiver<AccountAddress, (AccountAddress, IncomingBlockRetrievalRequest)>,
+        pont_channel::Receiver<AccountAddress, (AccountAddress, IncomingBlockRetrievalRequest)>,
 }
 
 /// Implements the actual networking support for all consensus messaging.
@@ -272,12 +272,12 @@ impl NetworkSender {
 }
 
 pub struct NetworkTask {
-    consensus_messages_tx: aptos_channel::Sender<
+    consensus_messages_tx: pont_channel::Sender<
         (AccountAddress, Discriminant<ConsensusMsg>),
         (AccountAddress, ConsensusMsg),
     >,
     block_retrieval_tx:
-        aptos_channel::Sender<AccountAddress, (AccountAddress, IncomingBlockRetrievalRequest)>,
+        pont_channel::Sender<AccountAddress, (AccountAddress, IncomingBlockRetrievalRequest)>,
     all_events: Box<dyn Stream<Item = Event<ConsensusMsg>> + Send + Unpin>,
 }
 
@@ -288,8 +288,8 @@ impl NetworkTask {
         self_receiver: channel::Receiver<Event<ConsensusMsg>>,
     ) -> (NetworkTask, NetworkReceivers) {
         let (consensus_messages_tx, consensus_messages) =
-            aptos_channel::new(QueueStyle::LIFO, 1, Some(&counters::CONSENSUS_CHANNEL_MSGS));
-        let (block_retrieval_tx, block_retrieval) = aptos_channel::new(
+            pont_channel::new(QueueStyle::LIFO, 1, Some(&counters::CONSENSUS_CHANNEL_MSGS));
+        let (block_retrieval_tx, block_retrieval) = pont_channel::new(
             QueueStyle::LIFO,
             1,
             Some(&counters::BLOCK_RETRIEVAL_CHANNEL_MSGS),
@@ -359,7 +359,7 @@ impl NetworkTask {
                             .block_retrieval_tx
                             .push(peer_id, (peer_id, req_with_callback))
                         {
-                            warn!(error = ?e, "aptos channel closed");
+                            warn!(error = ?e, "pont channel closed");
                         }
                     }
                     _ => {

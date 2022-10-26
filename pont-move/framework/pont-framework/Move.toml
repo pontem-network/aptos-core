@@ -1,0 +1,15 @@
+[package]
+name = "PontFramework"
+version = "1.0.0"
+
+[addresses]
+std = "0x1"
+pont_std = "0x1"
+pont_framework = "0x1"
+pont_token = "0x3"
+core_resources = "0xA550C18"
+vm_reserved = "0x0"
+
+[dependencies]
+PontStdlib = { local = "../pont-stdlib" }
+MoveStdlib = { local = "../move-stdlib" }

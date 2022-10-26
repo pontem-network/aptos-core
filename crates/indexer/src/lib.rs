@@ -29,7 +29,7 @@ pub fn should_skip_pg_tests() -> bool {
     if std::env::var("INDEXER_DATABASE_URL").is_ok() {
         false
     } else {
-        aptos_logger::warn!("`INDEXER_DATABASE_URL` is not set: skipping indexer tests");
+        pont_logger::warn!("`INDEXER_DATABASE_URL` is not set: skipping indexer tests");
         true
     }
 }

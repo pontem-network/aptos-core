@@ -22,16 +22,16 @@ Install your preferred SDK from the below list:
 
 ## Step 2: Install the CLI
 
-[Install the precompiled binary for the Aptos CLI](../cli-tools/aptos-cli-tool/install-aptos-cli.md).
+[Install the precompiled binary for the Pont CLI](../cli-tools/pont-cli-tool/install-pont-cli.md).
 
 ---
 
 ## Step 3: Run the example
 
-Clone the `aptos-core` repo:
+Clone the `pont-core` repo:
 
 ```bash
-git clone https://github.com/aptos-labs/aptos-core.git
+git clone https://github.com/aptos-labs/pont-core.git
 ```
 
 <Tabs groupId="examples">
@@ -40,7 +40,7 @@ git clone https://github.com/aptos-labs/aptos-core.git
 Navigate to the TypeScript SDK directory:
 
 ```bash
-cd ~/aptos-core/ecosystem/typescript/sdk
+cd ~/pont-core/ecosystem/typescript/sdk
 ```
 
 Install the necessary dependencies:
@@ -49,10 +49,10 @@ Install the necessary dependencies:
 yarn
 ```
 
-Run the TypeScript [`your_coin`](https://github.com/aptos-labs/aptos-core/blob/main/ecosystem/typescript/sdk/examples/typescript/your_coin.ts) example:
+Run the TypeScript [`your_coin`](https://github.com/aptos-labs/pont-core/blob/main/ecosystem/typescript/sdk/examples/typescript/your_coin.ts) example:
 
 ```bash
-yarn your_coin ~/aptos-core/aptos-move/move-examples/moon_coin
+yarn your_coin ~/pont-core/pont-move/move-examples/moon_coin
 ```
 
   </TabItem>
@@ -61,20 +61,20 @@ yarn your_coin ~/aptos-core/aptos-move/move-examples/moon_coin
 Navigate to the Python SDK directory:
 
 ```bash
-cd ~/aptos-core/ecosystem/python/sdk
+cd ~/pont-core/ecosystem/python/sdk
 ```
 
-Install the necessary dependencies. Also see [Aptos Developer Resources](/aptos-developer-resources):
+Install the necessary dependencies. Also see [Pont Developer Resources](/pont-developer-resources):
 
 ```bash
 curl -sSL https://install.python-poetry.org | python3
 poetry update
 ```
 
-Run the Python [`your-coin`](https://github.com/aptos-labs/aptos-core/blob/main/ecosystem/python/sdk/examples/your-coin.py) example:
+Run the Python [`your-coin`](https://github.com/aptos-labs/pont-core/blob/main/ecosystem/python/sdk/examples/your-coin.py) example:
 
 ```bash
-poetry run python -m examples.your-coin ~/aptos-core/aptos-move/move-examples/moon_coin
+poetry run python -m examples.your-coin ~/pont-core/pont-move/move-examples/moon_coin
 ```
 
   </TabItem>
@@ -102,13 +102,13 @@ Update the package with Alice's address, compile, and press enter.
 At this point, open another terminal and change directories to the MoonCoin package's directory:
 
 ```bash
-cd ~/aptos-core/aptos-move/move-examples/moon_coin
+cd ~/pont-core/pont-move/move-examples/moon_coin
 ```
 
 Next, build the package using the CLI:
 
 ```bash
-aptos move compile --named-addresses MoonCoin=0x5e603a89cf690d7134cf2f24fdb16ba90c4f5686333721c12e835fb6c76bc7ba --save-metadata
+pont move compile --named-addresses MoonCoin=0x5e603a89cf690d7134cf2f24fdb16ba90c4f5686333721c12e835fb6c76bc7ba --save-metadata
 ```
 
 The `--named-addresses` is a list of address mappings that must be translated in order for the package to be compiled to be stored in Alice's account. Notice how `MoonCoin` is set to Alice's address printed above. Also `--save-metadata` is required to publish the package.
@@ -141,7 +141,7 @@ Move contracts are effectively a set of Move modules known as a package. When de
 - `build/Examples/package-metadata.bcs`: Contains the metadata associated with the package.
 - `build/Examples/bytecode_modules/moon_coin.mv`: Contains the bytecode for the `moon_coin.move` module.
 
-These are read by the example and published to the Aptos blockchain:
+These are read by the example and published to the Pont blockchain:
 
 <Tabs groupId="examples">
   <TabItem value="typescript" label="Typescript">
@@ -172,7 +172,7 @@ These are read by the example and published to the Aptos blockchain:
 The MoonCoin module defines the `MoonCoin` struct, or the distinct type of coin type. In addition, it contains a function called `init_module`. The `init_module` function is called when the module is published. In this case, MoonCoin initializes the `MoonCoin` coin type as a `ManagedCoin`, which is maintained by the owner of the account. 
 
 :::tip ManagedCoin framework
-[`ManagedCoin`](https://github.com/aptos-labs/aptos-core/blob/f81ccb01f00227f9c0f36856fead4879f185a9f6/aptos-move/framework/aptos-framework/sources/managed_coin.move#L1) is a simple coin management framework for coins directly managed by users. It provides convenience wrappers around `mint` and `burn`.
+[`ManagedCoin`](https://github.com/aptos-labs/pont-core/blob/f81ccb01f00227f9c0f36856fead4879f185a9f6/pont-move/framework/pont-framework/sources/managed_coin.move#L1) is a simple coin management framework for coins directly managed by users. It provides convenience wrappers around `mint` and `burn`.
 :::
 
 ```rust
@@ -202,7 +202,7 @@ In order to transfer, withdraw, or deposit coins, you must have a `CoinStore` re
 
 #### Step 4.3.1: Initializing a coin
 
-Once a coin type has been published to the Aptos blockchain, the entity that published that coin type can initialize it:
+Once a coin type has been published to the Pont blockchain, the entity that published that coin type can initialize it:
 
 ```rust showLineNumbers
 public fun initialize<CoinType>(
@@ -302,18 +302,18 @@ public fun mint<CoinType>(
 
 #### Step 4.3.4: Transferring a coin
 
-Aptos provides several building blocks to support coin transfers:
+Pont provides several building blocks to support coin transfers:
 
 - `coin::deposit<CoinType>`: Allows any entity to deposit a coin into an account that has already called `coin::register<CoinType>`.
 - `coin::withdraw<CoinType>`: Allows any entity to extract a coin amount from their account.
 - `coin::transfer<CoinType>`: Leverages withdraw and deposit to perform an end-to-end transfer.
 
 :::tip important
-Aptos does not emit transfer events, but instead it leverages withdraw and deposit events.
+Pont does not emit transfer events, but instead it leverages withdraw and deposit events.
 :::
 
-* [Aptos CLI](../cli-tools/aptos-cli-tool/use-aptos-cli.md)
+* [Pont CLI](../cli-tools/pont-cli-tool/use-pont-cli.md)
 * [TypeScript SDK](../sdks/ts-sdk/index.md)
 * [Python SDK](../sdks/python-sdk.md)
 * [Rust SDK](../sdks/rust-sdk.md)
-* [REST API specification](https://fullnode.devnet.aptoslabs.com/v1/spec#/)
+* [REST API specification](https://fullnode.devnet.pontlabs.com/v1/spec#/)

@@ -3,12 +3,12 @@
 
 use crate::smoke_test_environment::SwarmBuilder;
 use crate::test_utils::{assert_balance, create_and_fund_account, transfer_coins};
-use aptos_config::{
+use forge::{LocalSwarm, NodeExt, Swarm, SwarmExt};
+use pont_config::{
     config::{DiscoveryMethod, NodeConfig, Peer, PeerRole, HANDSHAKE_VERSION},
     network_id::NetworkId,
 };
-use aptos_types::network_address::{NetworkAddress, Protocol};
-use forge::{LocalSwarm, NodeExt, Swarm, SwarmExt};
+use pont_types::network_address::{NetworkAddress, Protocol};
 use std::{
     collections::HashSet,
     net::Ipv4Addr,
@@ -112,7 +112,7 @@ async fn test_vfn_failover() {
     vfn_config.mempool.default_failovers = 0;
     let mut swarm = SwarmBuilder::new_local(4)
         .with_num_fullnodes(4)
-        .with_aptos()
+        .with_pont()
         .with_vfn_config(vfn_config)
         .build()
         .await;
@@ -317,7 +317,7 @@ fn add_node_to_seeds(
 async fn local_swarm_with_fullnodes(num_validators: usize, num_fullnodes: usize) -> LocalSwarm {
     SwarmBuilder::new_local(num_validators)
         .with_num_fullnodes(num_fullnodes)
-        .with_aptos()
+        .with_pont()
         .build()
         .await
 }

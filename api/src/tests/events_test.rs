@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::new_test_context;
-use aptos_api_test_context::current_function_name;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
+use pont_api_test_context::current_function_name;
 
 static ACCOUNT_ADDRESS: &str = "0xa550c18";
 static CREATION_NUMBER: &str = "0";
@@ -147,7 +147,7 @@ async fn test_get_events_by_struct_type_has_generic_type_parameter() {
     let path = format!(
         "/accounts/0x1/events/{}/coin",
         utf8_percent_encode(
-            "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>",
+            "0x1::coin::CoinStore<0x1::pont_coin::PontCoin>",
             NON_ALPHANUMERIC
         )
     );

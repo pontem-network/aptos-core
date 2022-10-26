@@ -1,19 +1,7 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::{hash::CryptoHash, PrivateKey};
-use aptos_state_view::account_with_state_view::AsAccountWithStateView;
-use aptos_types::{
-    access_path::AccessPath,
-    account_config::{aptos_test_root_address, AccountResource, CORE_CODE_ADDRESS},
-    account_view::AccountView,
-    block_metadata::BlockMetadata,
-    state_store::state_key::StateKey,
-    transaction::{Transaction, WriteSetPayload},
-    trusted_state::TrustedState,
-    validator_signer::ValidatorSigner,
-};
-use cached_packages::aptos_stdlib;
+use cached_packages::pont_stdlib;
 use executor_test_helpers::{
     gen_block_id, gen_ledger_info_with_sigs, get_test_signed_transaction,
     integration_test_impl::{
@@ -22,11 +10,23 @@ use executor_test_helpers::{
 };
 use executor_types::BlockExecutorTrait;
 use move_core_types::move_resource::MoveStructType;
+use pont_crypto::{hash::CryptoHash, PrivateKey};
+use pont_state_view::account_with_state_view::AsAccountWithStateView;
+use pont_types::{
+    access_path::AccessPath,
+    account_config::{pont_test_root_address, AccountResource, CORE_CODE_ADDRESS},
+    account_view::AccountView,
+    block_metadata::BlockMetadata,
+    state_store::state_key::StateKey,
+    transaction::{Transaction, WriteSetPayload},
+    trusted_state::TrustedState,
+    validator_signer::ValidatorSigner,
+};
 use storage_interface::state_view::DbStateViewAtVersion;
 
 #[test]
 fn test_genesis() {
-    let path = aptos_temppath::TempPath::new();
+    let path = pont_temppath::TempPath::new();
     path.create_as_dir().unwrap();
     let genesis = vm_genesis::test_genesis_transaction();
     let (_, db, _executor, waypoint) = create_db_and_executor(path.path(), &genesis);
@@ -42,7 +42,7 @@ fn test_genesis() {
         CORE_CODE_ADDRESS,
         AccountResource::struct_tag().access_vector(),
     ));
-    let (aptos_framework_account_resource, state_proof) = db
+    let (pont_framework_account_resource, state_proof) = db
         .reader
         .get_state_value_with_proof_by_version(&account_resource_path, 0)
         .unwrap();
@@ -56,7 +56,7 @@ fn test_genesis() {
         .verify(
             txn_info.state_checkpoint_hash().unwrap(),
             account_resource_path.hash(),
-            aptos_framework_account_resource.as_ref(),
+            pont_framework_account_resource.as_ref(),
         )
         .unwrap();
 }
@@ -66,7 +66,7 @@ fn test_reconfiguration() {
     // When executing a transaction emits a validator set change,
     // storage should propagate the new validator set
 
-    let path = aptos_temppath::TempPath::new();
+    let path = pont_temppath::TempPath::new();
     path.create_as_dir().unwrap();
     let (genesis, validators) = vm_genesis::test_genesis_change_set_and_validators(Some(1));
     let genesis_key = &vm_genesis::GENESIS_KEYPAIR.0;
@@ -87,11 +87,11 @@ fn test_reconfiguration() {
         .state_view_at_version(Some(current_version))
         .unwrap();
     let validator_account_state_view = db_state_view.as_account_with_state_view(&validator_account);
-    let aptos_framework_account_state_view =
+    let pont_framework_account_state_view =
         db_state_view.as_account_with_state_view(&CORE_CODE_ADDRESS);
 
     assert_eq!(
-        aptos_framework_account_state_view
+        pont_framework_account_state_view
             .get_validator_set()
             .unwrap()
             .unwrap()
@@ -108,11 +108,11 @@ fn test_reconfiguration() {
 
     // txn1 = give the validator some money so they can send a tx
     let txn1 = get_test_signed_transaction(
-        aptos_test_root_address(),
+        pont_test_root_address(),
         /* sequence_number = */ 0,
         genesis_key.clone(),
         genesis_key.public_key(),
-        Some(aptos_stdlib::aptos_coin_mint(validator_account, 1_000_000)),
+        Some(pont_stdlib::pont_coin_mint(validator_account, 1_000_000)),
     );
     // txn2 = a dummy block prologue to bump the timer.
     let txn2 = Transaction::BlockMetadata(BlockMetadata::new(
@@ -125,13 +125,13 @@ fn test_reconfiguration() {
         300000001,
     ));
 
-    // txn3 = set the aptos version
+    // txn3 = set the pont version
     let txn3 = get_test_signed_transaction(
-        aptos_test_root_address(),
+        pont_test_root_address(),
         /* sequence_number = */ 1,
         genesis_key.clone(),
         genesis_key.public_key(),
-        Some(aptos_stdlib::version_set_version(42)),
+        Some(pont_stdlib::version_set_version(42)),
     );
 
     let txn_block = vec![txn1, txn2, txn3];
@@ -155,7 +155,7 @@ fn test_reconfiguration() {
 
     let t3 = db
         .reader
-        .get_account_transaction(aptos_test_root_address(), 1, true, current_version)
+        .get_account_transaction(pont_test_root_address(), 1, true, current_version)
         .unwrap();
     verify_committed_txn_status(t3.as_ref(), &txn_block[2]).unwrap();
 
@@ -164,11 +164,11 @@ fn test_reconfiguration() {
         .state_view_at_version(Some(current_version))
         .unwrap();
 
-    let aptos_framework_account_state_view2 =
+    let pont_framework_account_state_view2 =
         db_state_view.as_account_with_state_view(&CORE_CODE_ADDRESS);
 
     assert_eq!(
-        aptos_framework_account_state_view2
+        pont_framework_account_state_view2
             .get_version()
             .unwrap()
             .unwrap()

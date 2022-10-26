@@ -12,14 +12,14 @@ use crate::{
     state_replication::StateComputer,
 };
 use anyhow::{anyhow, ensure, Context, Result};
-use aptos_logger::prelude::*;
-use aptos_types::{block_info::Round, epoch_state::EpochState};
-use channel::aptos_channel;
+use channel::pont_channel;
 use consensus_types::{
     common::Author, proposal_msg::ProposalMsg, sync_info::SyncInfo, vote_msg::VoteMsg,
 };
 use futures::{FutureExt, StreamExt};
 use futures_channel::oneshot;
+use pont_logger::prelude::*;
+use pont_types::{block_info::Round, epoch_state::EpochState};
 use std::{mem::Discriminant, process, sync::Arc};
 
 /// If the node can't recover corresponding blocks from local storage, RecoveryManager is responsible
@@ -96,7 +96,7 @@ impl RecoveryManager {
 
     pub async fn start(
         mut self,
-        mut event_rx: aptos_channel::Receiver<
+        mut event_rx: pont_channel::Receiver<
             (Author, Discriminant<VerifiedEvent>),
             (Author, VerifiedEvent),
         >,

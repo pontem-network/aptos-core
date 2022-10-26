@@ -3,14 +3,14 @@
 
 #![forbid(unsafe_code)]
 
-use aptos_types::{
-    contract_event::ContractEvent, ledger_info::LedgerInfoWithSignatures, transaction::Transaction,
-};
 use async_trait::async_trait;
 use futures::{
     channel::{mpsc, oneshot},
     stream::FusedStream,
     SinkExt, Stream,
+};
+use pont_types::{
+    contract_event::ContractEvent, ledger_info::LedgerInfoWithSignatures, transaction::Transaction,
 };
 use serde::{Deserialize, Serialize};
 use std::{
@@ -271,8 +271,11 @@ impl ConsensusSyncNotification {
 #[cfg(test)]
 mod tests {
     use crate::{ConsensusNotification, ConsensusNotificationSender, Error};
-    use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
-    use aptos_types::{
+    use claims::{assert_err, assert_matches, assert_ok};
+    use futures::{executor::block_on, FutureExt, StreamExt};
+    use move_core_types::language_storage::TypeTag;
+    use pont_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
+    use pont_types::{
         account_address::AccountAddress,
         aggregate_signature::AggregateSignature,
         block_info::BlockInfo,
@@ -282,9 +285,6 @@ mod tests {
         ledger_info::{LedgerInfo, LedgerInfoWithSignatures},
         transaction::{RawTransaction, Script, SignedTransaction, Transaction, TransactionPayload},
     };
-    use claims::{assert_err, assert_matches, assert_ok};
-    use futures::{executor::block_on, FutureExt, StreamExt};
-    use move_core_types::language_storage::TypeTag;
     use std::time::Duration;
     use tokio::runtime::{Builder, Runtime};
 

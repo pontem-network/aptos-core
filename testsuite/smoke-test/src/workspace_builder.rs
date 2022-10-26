@@ -5,22 +5,22 @@
 //!
 //! This utility is to only be used inside of smoke test.
 
-use aptos_logger::prelude::*;
 use once_cell::sync::Lazy;
+use pont_logger::prelude::*;
 use std::{env, path::PathBuf, process::Command};
 
 const WORKSPACE_BUILD_ERROR_MSG: &str = r#"
     Unable to build all workspace binaries. Cannot continue running tests.
 
-    Try running 'cargo build --all --bins --exclude aptos-node' yourself.
+    Try running 'cargo build --all --bins --exclude pont-node' yourself.
 "#;
 
 // Global flag indicating if all binaries in the workspace have been built.
 static WORKSPACE_BUILT: Lazy<bool> = Lazy::new(|| {
     info!("Building project binaries");
     let args = if cfg!(debug_assertions) {
-        // use get_aptos_node_with_failpoints to get aptos-node binary
-        vec!["build", "--all", "--bins", "--exclude", "aptos-node"]
+        // use get_pont_node_with_failpoints to get pont-node binary
+        vec!["build", "--all", "--bins", "--exclude", "pont-node"]
     } else {
         vec!["build", "--all", "--bins", "--release"]
     };

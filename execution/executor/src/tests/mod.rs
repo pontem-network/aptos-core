@@ -5,10 +5,11 @@ use std::{iter::once, sync::Arc};
 
 use proptest::prelude::*;
 
-use aptos_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
-use aptos_state_view::StateViewId;
-use aptos_types::aggregate_signature::AggregateSignature;
-use aptos_types::{
+use executor_types::{BlockExecutorTrait, ChunkExecutorTrait, TransactionReplayer};
+use pont_crypto::{ed25519::Ed25519PrivateKey, HashValue, PrivateKey, SigningKey, Uniform};
+use pont_state_view::StateViewId;
+use pont_types::aggregate_signature::AggregateSignature;
+use pont_types::{
     account_address::AccountAddress,
     block_info::BlockInfo,
     chain_id::ChainId,
@@ -23,8 +24,7 @@ use aptos_types::{
     },
     write_set::{WriteOp, WriteSet, WriteSetMut},
 };
-use aptosdb::AptosDB;
-use executor_types::{BlockExecutorTrait, ChunkExecutorTrait, TransactionReplayer};
+use pontdb::PontDB;
 use storage_interface::{sync_proof_fetcher::SyncProofFetcher, DbReaderWriter, ExecutedTrees};
 
 use crate::{
@@ -60,16 +60,16 @@ fn execute_and_commit_block(
 }
 
 struct TestExecutor {
-    _path: aptos_temppath::TempPath,
+    _path: pont_temppath::TempPath,
     db: DbReaderWriter,
     executor: BlockExecutor<MockVM>,
 }
 
 impl TestExecutor {
     fn new() -> TestExecutor {
-        let path = aptos_temppath::TempPath::new();
+        let path = pont_temppath::TempPath::new();
         path.create_as_dir().unwrap();
-        let db = DbReaderWriter::new(AptosDB::new_for_test(path.path()));
+        let db = DbReaderWriter::new(PontDB::new_for_test(path.path()));
         let genesis = vm_genesis::test_genesis_transaction();
         let waypoint = generate_waypoint::<MockVM>(&db, &genesis).unwrap();
         maybe_bootstrap::<MockVM>(&db, &genesis, waypoint).unwrap();

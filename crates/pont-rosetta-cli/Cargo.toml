@@ -1,0 +1,24 @@
+[package]
+name = "pont-rosetta-cli"
+version = "0.0.1"
+description = "Pont Rosetta CLI for testing"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+edition = "2021"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+anyhow = "1.0.57"
+clap = "3.1.18"
+serde = { version = "1.0.137", features = ["derive"] }
+serde_json = "1.0.81"
+tokio = { version = "1.21.0", features = ["full", "time"] }
+url = "2.2.2"
+
+pont = { path = "../pont" }
+pont-logger = { path = "../pont-logger" }
+pont-rosetta = { path = "../pont-rosetta" }
+pont-types = { path = "../../types" }
+

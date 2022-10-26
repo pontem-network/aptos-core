@@ -3,22 +3,24 @@
 
 use crate::smoke_test_environment::SwarmBuilder;
 use anyhow::anyhow;
-use aptos::common::types::GasOptions;
-use aptos::test::INVALID_ACCOUNT;
-use aptos::{account::create::DEFAULT_FUNDED_COINS, test::CliTestFramework};
-use aptos_config::config::PersistableConfig;
-use aptos_config::{config::ApiConfig, utils::get_available_port};
-use aptos_crypto::ed25519::{Ed25519PrivateKey, Ed25519Signature};
-use aptos_crypto::{HashValue, PrivateKey};
-use aptos_gas::{AptosGasParameters, FromOnChainGasSchedule};
-use aptos_rest_client::aptos_api_types::{TransactionOnChainData, UserTransaction};
-use aptos_rest_client::{Response, Transaction};
-use aptos_rosetta::common::BlockHash;
-use aptos_rosetta::types::{
+use cached_packages::pont_stdlib;
+use forge::{LocalSwarm, Node, NodeExt, PontPublicInfo, Swarm};
+use pont::common::types::GasOptions;
+use pont::test::INVALID_ACCOUNT;
+use pont::{account::create::DEFAULT_FUNDED_COINS, test::CliTestFramework};
+use pont_config::config::PersistableConfig;
+use pont_config::{config::ApiConfig, utils::get_available_port};
+use pont_crypto::ed25519::{Ed25519PrivateKey, Ed25519Signature};
+use pont_crypto::{HashValue, PrivateKey};
+use pont_gas::{FromOnChainGasSchedule, PontGasParameters};
+use pont_rest_client::pont_api_types::{TransactionOnChainData, UserTransaction};
+use pont_rest_client::{Response, Transaction};
+use pont_rosetta::common::BlockHash;
+use pont_rosetta::types::{
     AccountIdentifier, BlockResponse, Operation, OperationStatusType, OperationType,
     TransactionType, STAKING_CONTRACT_MODULE, SWITCH_OPERATOR_WITH_SAME_COMMISSION_FUNCTION,
 };
-use aptos_rosetta::{
+use pont_rosetta::{
     client::RosettaClient,
     common::{native_coin, BLOCKCHAIN, Y2K_MS},
     types::{
@@ -27,14 +29,12 @@ use aptos_rosetta::{
     },
     ROSETTA_VERSION,
 };
-use aptos_sdk::transaction_builder::TransactionFactory;
-use aptos_sdk::types::LocalAccount;
-use aptos_types::account_config::CORE_CODE_ADDRESS;
-use aptos_types::on_chain_config::GasScheduleV2;
-use aptos_types::transaction::SignedTransaction;
-use aptos_types::{account_address::AccountAddress, chain_id::ChainId};
-use cached_packages::aptos_stdlib;
-use forge::{AptosPublicInfo, LocalSwarm, Node, NodeExt, Swarm};
+use pont_sdk::transaction_builder::TransactionFactory;
+use pont_sdk::types::LocalAccount;
+use pont_types::account_config::CORE_CODE_ADDRESS;
+use pont_types::on_chain_config::GasScheduleV2;
+use pont_types::transaction::SignedTransaction;
+use pont_types::{account_address::AccountAddress, chain_id::ChainId};
 use std::collections::{BTreeMap, HashSet};
 use std::convert::TryFrom;
 use std::str::FromStr;
@@ -56,7 +56,7 @@ pub async fn setup_test(
         .with_init_genesis_config(Arc::new(|genesis_config| {
             genesis_config.epoch_duration_secs = 5;
         }))
-        .with_aptos()
+        .with_pont()
         .build_with_cli(num_accounts)
         .await;
     let validator = swarm.validators().next().unwrap();
@@ -78,12 +78,10 @@ pub async fn setup_test(
     };
 
     // Start the server
-    let _rosetta = aptos_rosetta::bootstrap_async(
+    let _rosetta = pont_rosetta::bootstrap_async(
         swarm.chain_id(),
         api_config,
-        Some(aptos_rest_client::Client::new(
-            validator.rest_api_endpoint(),
-        )),
+        Some(pont_rest_client::Client::new(validator.rest_api_endpoint())),
         cli.addresses(),
     )
     .await
@@ -102,7 +100,7 @@ async fn test_block_transactions() {
     const NUM_TXNS_PER_PAGE: u16 = 2;
 
     let (swarm, cli, _faucet) = SwarmBuilder::new_local(1)
-        .with_aptos()
+        .with_pont()
         .with_init_config(Arc::new(|_, config, _| {
             // Only one transaction will show up in a block no matter what
             config.api.max_transactions_page_size = NUM_TXNS_PER_PAGE;
@@ -129,12 +127,10 @@ async fn test_block_transactions() {
     };
 
     // Start the server
-    let _rosetta = aptos_rosetta::bootstrap_async(
+    let _rosetta = pont_rosetta::bootstrap_async(
         swarm.chain_id(),
         api_config,
-        Some(aptos_rest_client::Client::new(
-            validator.rest_api_endpoint(),
-        )),
+        Some(pont_rest_client::Client::new(validator.rest_api_endpoint())),
         cli.addresses(),
     )
     .await
@@ -260,9 +256,9 @@ async fn test_account_balance() {
     let account_2 = cli.account_id(1);
     let account_3 = cli.account_id(2);
     let chain_id = swarm.chain_id();
-    let root_address = swarm.aptos_public_info().root_account().address();
+    let root_address = swarm.pont_public_info().root_account().address();
     let root_sequence_number = swarm
-        .aptos_public_info()
+        .pont_public_info()
         .client()
         .get_account_bcs(root_address)
         .await
@@ -270,12 +266,12 @@ async fn test_account_balance() {
         .into_inner()
         .sequence_number();
     *swarm
-        .aptos_public_info()
+        .pont_public_info()
         .root_account()
         .sequence_number_mut() = root_sequence_number;
 
     let mut account_4 = swarm
-        .aptos_public_info()
+        .pont_public_info()
         .create_and_fund_user_account(10_000_000)
         .await
         .unwrap();
@@ -417,7 +413,7 @@ async fn test_account_balance() {
     .expect_err("Original staking contract is not supported");
 
     create_staking_contract(
-        &swarm.aptos_public_info(),
+        &swarm.pont_public_info(),
         &mut account_4,
         account_1,
         account_2,
@@ -448,7 +444,7 @@ async fn test_account_balance() {
 }
 
 async fn create_staking_contract(
-    info: &AptosPublicInfo<'_>,
+    info: &PontPublicInfo<'_>,
     account: &mut LocalAccount,
     operator: AccountAddress,
     voter: AccountAddress,
@@ -457,7 +453,7 @@ async fn create_staking_contract(
 ) -> Response<Transaction> {
     let staking_contract_creation = info
         .transaction_factory()
-        .payload(aptos_stdlib::staking_contract_create_staking_contract(
+        .payload(pont_stdlib::staking_contract_create_staking_contract(
             operator,
             voter,
             amount,
@@ -517,7 +513,7 @@ async fn get_balance(
 async fn test_transfer() {
     let (mut swarm, cli, _faucet, rosetta_client) = setup_test(1, 1).await;
     let chain_id = swarm.chain_id();
-    let public_info = swarm.aptos_public_info();
+    let public_info = swarm.pont_public_info();
     let client = public_info.client();
     let sender = cli.account_id(0);
     let receiver = AccountAddress::from_hex_literal("0xBEEF").unwrap();
@@ -580,7 +576,7 @@ async fn test_transfer() {
     let transaction_factory = TransactionFactory::new(chain_id)
         .with_gas_unit_price(1)
         .with_max_gas_amount(1000);
-    let txn_payload = aptos_stdlib::aptos_account_transfer(receiver, 100);
+    let txn_payload = pont_stdlib::pont_account_transfer(receiver, 100);
     let unsigned_transaction = transaction_factory
         .payload(txn_payload)
         .sender(sender)
@@ -704,7 +700,7 @@ async fn test_block() {
         .unwrap()
         .into_inner();
     let gas_params =
-        AptosGasParameters::from_on_chain_gas_schedule(&gas_schedule.to_btree_map()).unwrap();
+        PontGasParameters::from_on_chain_gas_schedule(&gas_schedule.to_btree_map()).unwrap();
     let min_gas_price = u64::from(gas_params.txn.min_price_per_gas_unit);
 
     let private_key_0 = cli.private_key(0);
@@ -1037,7 +1033,7 @@ async fn test_block() {
 
 /// Parse the transactions in each block
 async fn parse_block_transactions(
-    block: &aptos_rosetta::types::Block,
+    block: &pont_rosetta::types::Block,
     balances: &mut BTreeMap<AccountAddress, BTreeMap<u64, i128>>,
     actual_txns: &[TransactionOnChainData],
     current_version: &mut u64,
@@ -1088,13 +1084,13 @@ async fn parse_block_transactions(
                 assert_eq!(0, cur_version);
                 assert!(matches!(
                     actual_txn.transaction,
-                    aptos_types::transaction::Transaction::GenesisTransaction(_)
+                    pont_types::transaction::Transaction::GenesisTransaction(_)
                 ));
             }
             TransactionType::User => {
                 assert!(matches!(
                     actual_txn.transaction,
-                    aptos_types::transaction::Transaction::UserTransaction(_)
+                    pont_types::transaction::Transaction::UserTransaction(_)
                 ));
                 // Must have a gas fee
                 assert!(!transaction.operations.is_empty());
@@ -1102,14 +1098,14 @@ async fn parse_block_transactions(
             TransactionType::BlockMetadata => {
                 assert!(matches!(
                     actual_txn.transaction,
-                    aptos_types::transaction::Transaction::BlockMetadata(_)
+                    pont_types::transaction::Transaction::BlockMetadata(_)
                 ));
                 assert!(transaction.operations.is_empty());
             }
             TransactionType::StateCheckpoint => {
                 assert!(matches!(
                     actual_txn.transaction,
-                    aptos_types::transaction::Transaction::StateCheckpoint(_)
+                    pont_types::transaction::Transaction::StateCheckpoint(_)
                 ));
                 assert!(transaction.operations.is_empty());
             }
@@ -1138,7 +1134,7 @@ async fn parse_block_transactions(
 async fn parse_operations(
     block_height: u64,
     balances: &mut BTreeMap<AccountAddress, BTreeMap<u64, i128>>,
-    transaction: &aptos_rosetta::types::Transaction,
+    transaction: &pont_rosetta::types::Transaction,
     actual_txn: &TransactionOnChainData,
 ) {
     // If there are no operations, then there is no gas operation
@@ -1325,12 +1321,11 @@ async fn parse_operations(
                 }
 
                 // Check that operator was set the same
-                if let aptos_types::transaction::Transaction::UserTransaction(ref txn) =
+                if let pont_types::transaction::Transaction::UserTransaction(ref txn) =
                     actual_txn.transaction
                 {
-                    if let aptos_types::transaction::TransactionPayload::EntryFunction(
-                        ref payload,
-                    ) = txn.payload()
+                    if let pont_types::transaction::TransactionPayload::EntryFunction(ref payload) =
+                        txn.payload()
                     {
                         let actual_operator_address: AccountAddress = match (
                             *payload.module().address(),
@@ -1383,12 +1378,11 @@ async fn parse_operations(
                 }
 
                 // Check that voter was set the same
-                if let aptos_types::transaction::Transaction::UserTransaction(ref txn) =
+                if let pont_types::transaction::Transaction::UserTransaction(ref txn) =
                     actual_txn.transaction
                 {
-                    if let aptos_types::transaction::TransactionPayload::EntryFunction(
-                        ref payload,
-                    ) = txn.payload()
+                    if let pont_types::transaction::TransactionPayload::EntryFunction(ref payload) =
+                        txn.payload()
                     {
                         let actual_voter_address: AccountAddress =
                             bcs::from_bytes(payload.args().first().unwrap()).unwrap();
@@ -1446,7 +1440,7 @@ async fn parse_operations(
                 let new_balance = *latest_balance - delta as i128;
                 account_balances.insert(block_height, new_balance);
                 match actual_txn.transaction {
-                    aptos_types::transaction::Transaction::UserTransaction(ref txn) => {
+                    pont_types::transaction::Transaction::UserTransaction(ref txn) => {
                         assert_eq!(
                             actual_txn
                                 .info
@@ -1595,7 +1589,7 @@ fn assert_failed_transfer_transaction(
     receiver: AccountAddress,
     transfer_amount: u64,
     actual_txn: &UserTransaction,
-    rosetta_txn: &aptos_rosetta::types::Transaction,
+    rosetta_txn: &pont_rosetta::types::Transaction,
 ) {
     // Check the transaction
     assert_eq!(
@@ -1756,7 +1750,7 @@ where
 
 async fn create_account_and_wait(
     rosetta_client: &RosettaClient,
-    rest_client: &aptos_rest_client::Client,
+    rest_client: &pont_rest_client::Client,
     network_identifier: &NetworkIdentifier,
     sender_key: &Ed25519PrivateKey,
     new_account: AccountAddress,
@@ -1784,7 +1778,7 @@ async fn create_account_and_wait(
 
 async fn transfer_and_wait(
     rosetta_client: &RosettaClient,
-    rest_client: &aptos_rest_client::Client,
+    rest_client: &pont_rest_client::Client,
     network_identifier: &NetworkIdentifier,
     sender_key: &Ed25519PrivateKey,
     receiver: AccountAddress,
@@ -1816,7 +1810,7 @@ async fn transfer_and_wait(
 
 async fn set_operator_and_wait(
     rosetta_client: &RosettaClient,
-    rest_client: &aptos_rest_client::Client,
+    rest_client: &pont_rest_client::Client,
     network_identifier: &NetworkIdentifier,
     sender_key: &Ed25519PrivateKey,
     old_operator: Option<AccountAddress>,
@@ -1848,7 +1842,7 @@ async fn set_operator_and_wait(
 
 async fn set_voter_and_wait(
     rosetta_client: &RosettaClient,
-    rest_client: &aptos_rest_client::Client,
+    rest_client: &pont_rest_client::Client,
     network_identifier: &NetworkIdentifier,
     sender_key: &Ed25519PrivateKey,
     operator: Option<AccountAddress>,
@@ -1879,7 +1873,7 @@ async fn set_voter_and_wait(
 }
 
 async fn wait_for_transaction(
-    rest_client: &aptos_rest_client::Client,
+    rest_client: &pont_rest_client::Client,
     expiry_time: Duration,
     txn_hash: String,
 ) -> Result<Box<UserTransaction>, Box<UserTransaction>> {

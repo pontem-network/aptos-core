@@ -6,7 +6,7 @@
 
 use crate::state_store::state_key::StateKey;
 use anyhow::{bail, Result};
-use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use pont_crypto_derive::{BCSCryptoHash, CryptoHasher};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::{btree_map, BTreeMap},

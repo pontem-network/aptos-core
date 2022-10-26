@@ -1,19 +1,19 @@
 [package]
-name = "aptos-openapi-spec-generator"
+name = "pont-openapi-spec-generator"
 version = "0.1.0"
-authors = ["Aptos Labs <opensource@aptoslabs.com>"]
-description = "Aptos API OpenAPI Spec Generator"
-repository = "https://github.com/aptos-labs/aptos-core"
-homepage = "https://aptoslabs.com"
+authors = ["Pont Labs <opensource@pontlabs.com>"]
+description = "Pont API OpenAPI Spec Generator"
+repository = "https://github.com/aptos-labs/pont-core"
+homepage = "https://pontlabs.com"
 license = "Apache-2.0"
 publish = false
 edition = "2021"
 
 [dependencies]
 anyhow = "1.0.57"
-aptos-api = { path = "../", package = "aptos-api" }
-aptos-config = { path = "../../config" }
-aptos-mempool = { path = "../../mempool", features = ["fuzzing"] }
-aptos-types = { path = "../../types" }
+pont-api = { path = "../", package = "pont-api" }
+pont-config = { path = "../../config" }
+pont-mempool = { path = "../../mempool", features = ["fuzzing"] }
+pont-types = { path = "../../types" }
 clap = { version = "3.1.17", features = ["derive"] }
 storage-interface = { path = "../../storage/storage-interface", features = ["fuzzing"] }

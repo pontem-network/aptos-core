@@ -4,8 +4,8 @@
 use crate::{create_k8s_client, Get, K8sApi, Result};
 
 use anyhow::bail;
-use aptos_logger::info;
 use k8s_openapi::api::core::v1::Secret;
+use pont_logger::info;
 use prometheus_http_query::{response::PromqlResult, Client as PrometheusClient};
 use reqwest::{header, Client as HttpClient};
 use std::{collections::BTreeMap, sync::Arc};
@@ -235,7 +235,7 @@ mod tests {
 
         // try a simple instant query
         // if it fails to connect to a prometheus instance, skip the test
-        let query = r#"container_cpu_usage_seconds_total{chain_name=~".*forge.*", pod="aptos-node-0-validator-0", container="validator"}"#;
+        let query = r#"container_cpu_usage_seconds_total{chain_name=~".*forge.*", pod="pont-node-0-validator-0", container="validator"}"#;
         let response = client.query(query, None, None).await;
         match response {
             Ok(pres) => {
@@ -270,20 +270,20 @@ mod tests {
     #[test]
     fn test_create_query() {
         // test when no existing labels
-        let original_query = "aptos_connections";
+        let original_query = "pont_connections";
         let mut labels_map = BTreeMap::new();
         labels_map.insert("a".to_string(), "a".to_string());
         labels_map.insert("some_label".to_string(), "blabla".to_string());
-        let expected_query = r#"aptos_connections{a="a",some_label="blabla"}"#;
+        let expected_query = r#"pont_connections{a="a",some_label="blabla"}"#;
         let new_query = construct_query_with_extra_labels(original_query, labels_map);
         assert_eq!(expected_query, new_query);
 
         // test when existing labels
-        let original_query = r#"aptos_connections{abc="123",def="456"}"#;
+        let original_query = r#"pont_connections{abc="123",def="456"}"#;
         let mut labels_map = BTreeMap::new();
         labels_map.insert("a".to_string(), "a".to_string());
         labels_map.insert("some_label".to_string(), "blabla".to_string());
-        let expected_query = r#"aptos_connections{a="a",some_label="blabla",abc="123",def="456"}"#;
+        let expected_query = r#"pont_connections{a="a",some_label="blabla",abc="123",def="456"}"#;
         let new_query = construct_query_with_extra_labels(original_query, labels_map);
         assert_eq!(expected_query, new_query);
     }

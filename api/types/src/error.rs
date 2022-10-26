@@ -1,35 +1,35 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_types::vm_status::StatusCode;
 use poem_openapi::{Enum, Object};
+use pont_types::vm_status::StatusCode;
 use serde::{Deserialize, Serialize};
 use std::fmt::Formatter;
 
 /// This is the generic struct we use for all API errors, it contains a string
-/// message and an Aptos API specific error code.
+/// message and an Pont API specific error code.
 #[derive(Debug, Clone, Serialize, Deserialize, Object)]
-pub struct AptosError {
+pub struct PontError {
     /// A message describing the error
     pub message: String,
-    pub error_code: AptosErrorCode,
+    pub error_code: PontErrorCode,
     /// A code providing VM error details when submitting transactions to the VM
     pub vm_error_code: Option<u64>,
 }
 
-impl std::fmt::Display for AptosError {
+impl std::fmt::Display for PontError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "Error({:?}): {:#}", self.error_code, self.message)
     }
 }
 
-impl std::error::Error for AptosError {}
+impl std::error::Error for PontError {}
 
-impl AptosError {
+impl PontError {
     pub fn new_with_error_code<ErrorType: std::fmt::Display>(
         error: ErrorType,
-        error_code: AptosErrorCode,
-    ) -> AptosError {
+        error_code: PontErrorCode,
+    ) -> PontError {
         Self {
             message: format!("{:#}", error),
             error_code,
@@ -39,9 +39,9 @@ impl AptosError {
 
     pub fn new_with_vm_status<ErrorType: std::fmt::Display>(
         error: ErrorType,
-        error_code: AptosErrorCode,
+        error_code: PontErrorCode,
         vm_error_code: StatusCode,
-    ) -> AptosError {
+    ) -> PontError {
         Self {
             message: format!("{:#}", error),
             error_code,
@@ -56,7 +56,7 @@ impl AptosError {
 #[oai(rename_all = "snake_case")]
 #[serde(rename_all = "snake_case")]
 #[repr(u32)]
-pub enum AptosErrorCode {
+pub enum PontErrorCode {
     /// Account not found at the requested version
     AccountNotFound = 101,
     /// Resource not found at the requested version
@@ -109,7 +109,7 @@ pub enum AptosErrorCode {
     ApiDisabled = 603,
 }
 
-impl AptosErrorCode {
+impl PontErrorCode {
     pub fn as_u32(&self) -> u32 {
         *self as u32
     }
@@ -117,17 +117,16 @@ impl AptosErrorCode {
 
 #[test]
 fn test_serialize_deserialize() {
-    let with_code = AptosError::new_with_vm_status(
+    let with_code = PontError::new_with_vm_status(
         "Invalid transaction",
-        AptosErrorCode::VmError,
-        aptos_types::vm_status::StatusCode::UNKNOWN_MODULE,
+        PontErrorCode::VmError,
+        pont_types::vm_status::StatusCode::UNKNOWN_MODULE,
     );
-    let _: AptosError = bcs::from_bytes(&bcs::to_bytes(&with_code).unwrap()).unwrap();
-    let _: AptosError = serde_json::from_str(&serde_json::to_string(&with_code).unwrap()).unwrap();
+    let _: PontError = bcs::from_bytes(&bcs::to_bytes(&with_code).unwrap()).unwrap();
+    let _: PontError = serde_json::from_str(&serde_json::to_string(&with_code).unwrap()).unwrap();
 
-    let without_code =
-        AptosError::new_with_error_code("some message", AptosErrorCode::MempoolIsFull);
-    let _: AptosError = bcs::from_bytes(&bcs::to_bytes(&without_code).unwrap()).unwrap();
-    let _: AptosError =
+    let without_code = PontError::new_with_error_code("some message", PontErrorCode::MempoolIsFull);
+    let _: PontError = bcs::from_bytes(&bcs::to_bytes(&without_code).unwrap()).unwrap();
+    let _: PontError =
         serde_json::from_str(&serde_json::to_string(&without_code).unwrap()).unwrap();
 }

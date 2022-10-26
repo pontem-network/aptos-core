@@ -10,10 +10,16 @@ use crate::{
     utils,
     utils::{SpeculativeStreamState, PENDING_DATA_LOG_FREQ_SECS},
 };
-use aptos_config::config::BootstrappingMode;
-use aptos_data_client::GlobalDataSummary;
-use aptos_logger::{prelude::*, sample::SampleRate};
-use aptos_types::{
+use data_streaming_service::{
+    data_notification::{DataNotification, DataPayload, NotificationId},
+    data_stream::DataStreamListener,
+    streaming_client::{DataStreamingClient, NotificationAndFeedback, NotificationFeedback},
+};
+use futures::channel::oneshot;
+use pont_config::config::BootstrappingMode;
+use pont_data_client::GlobalDataSummary;
+use pont_logger::{prelude::*, sample::SampleRate};
+use pont_types::{
     epoch_change::Verifier,
     epoch_state::EpochState,
     ledger_info::LedgerInfoWithSignatures,
@@ -21,12 +27,6 @@ use aptos_types::{
     transaction::{TransactionListWithProof, TransactionOutputListWithProof, Version},
     waypoint::Waypoint,
 };
-use data_streaming_service::{
-    data_notification::{DataNotification, DataPayload, NotificationId},
-    data_stream::DataStreamListener,
-    streaming_client::{DataStreamingClient, NotificationAndFeedback, NotificationFeedback},
-};
-use futures::channel::oneshot;
 use std::{collections::BTreeMap, sync::Arc, time::Duration};
 use storage_interface::DbReader;
 
@@ -296,7 +296,7 @@ pub struct Bootstrapper<MetadataStorage, StorageSyncer, StreamingClient> {
     // The component used to sync state values (if downloading states)
     state_value_syncer: StateValueSyncer,
 
-    // The client through which to stream data from the Aptos network
+    // The client through which to stream data from the Pont network
     streaming_client: StreamingClient,
 
     // The interface to read from storage

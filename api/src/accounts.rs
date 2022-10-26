@@ -10,16 +10,6 @@ use crate::response::{
 };
 use crate::ApiTags;
 use anyhow::Context as AnyhowContext;
-use aptos_api_types::{
-    AccountData, Address, AptosErrorCode, AsConverter, LedgerInfo, MoveModuleBytecode,
-    MoveModuleId, MoveResource, MoveStructTag, U64,
-};
-use aptos_types::access_path::AccessPath;
-use aptos_types::account_config::AccountResource;
-use aptos_types::account_state::AccountState;
-use aptos_types::event::EventHandle;
-use aptos_types::event::EventKey;
-use aptos_types::state_store::state_key::StateKey;
 use move_core_types::value::MoveValue;
 use move_core_types::{
     identifier::Identifier,
@@ -28,6 +18,16 @@ use move_core_types::{
 };
 use poem_openapi::param::Query;
 use poem_openapi::{param::Path, OpenApi};
+use pont_api_types::{
+    AccountData, Address, AsConverter, LedgerInfo, MoveModuleBytecode, MoveModuleId, MoveResource,
+    MoveStructTag, PontErrorCode, U64,
+};
+use pont_types::access_path::AccessPath;
+use pont_types::account_config::AccountResource;
+use pont_types::account_state::AccountState;
+use pont_types::event::EventHandle;
+use pont_types::event::EventKey;
+use pont_types::state_store::state_key::StateKey;
 use std::collections::BTreeMap;
 use std::convert::TryInto;
 use std::sync::Arc;
@@ -73,7 +73,7 @@ impl AccountsApi {
     /// Retrieves all account resources for a given account and a specific ledger version.  If the
     /// ledger version is not specified in the request, the latest ledger version is used.
     ///
-    /// The Aptos nodes prune account state history, via a configurable time window.
+    /// The Pont nodes prune account state history, via a configurable time window.
     /// If the requested ledger version has been pruned, the server responds with a 410.
     #[oai(
         path = "/accounts/:address/resources",
@@ -103,7 +103,7 @@ impl AccountsApi {
     /// Retrieves all account modules' bytecode for a given account at a specific ledger version.
     /// If the ledger version is not specified in the request, the latest ledger version is used.
     ///
-    /// The Aptos nodes prune account state history, via a configurable time window.
+    /// The Pont nodes prune account state history, via a configurable time window.
     /// If the requested ledger version has been pruned, the server responds with a 410.
     #[oai(
         path = "/accounts/:address/modules",
@@ -200,7 +200,7 @@ impl Account {
             .map_err(|err| {
                 BasicErrorWith404::internal_with_code(
                     err,
-                    AptosErrorCode::InternalError,
+                    PontErrorCode::InternalError,
                     &self.latest_ledger_info,
                 )
             })?;
@@ -239,7 +239,7 @@ impl Account {
                     .map_err(|err| {
                         BasicErrorWith404::internal_with_code(
                             err,
-                            AptosErrorCode::InternalError,
+                            PontErrorCode::InternalError,
                             &self.latest_ledger_info,
                         )
                     })?;
@@ -282,7 +282,7 @@ impl Account {
                             .map_err(|err| {
                                 BasicErrorWith404::internal_with_code(
                                     err,
-                                    AptosErrorCode::InternalError,
+                                    PontErrorCode::InternalError,
                                     &self.latest_ledger_info,
                                 )
                             })?,
@@ -341,7 +341,7 @@ impl Account {
             .map_err(|err| {
                 BasicErrorWith404::bad_request_with_code(
                     err,
-                    AptosErrorCode::InvalidInput,
+                    PontErrorCode::InvalidInput,
                     &self.latest_ledger_info,
                 )
             })?;
@@ -367,7 +367,7 @@ impl Account {
             .map_err(|err| {
                 BasicErrorWith404::internal_with_code(
                     err,
-                    AptosErrorCode::InternalError,
+                    PontErrorCode::InternalError,
                     &self.latest_ledger_info,
                 )
             })?;
@@ -380,7 +380,7 @@ impl Account {
             .map_err(|err| {
                 BasicErrorWith404::bad_request_with_code(
                     err,
-                    AptosErrorCode::InvalidInput,
+                    PontErrorCode::InvalidInput,
                     &self.latest_ledger_info,
                 )
             })?;
@@ -414,7 +414,7 @@ impl Account {
             .map_err(|err| {
                 BasicErrorWith404::internal_with_code(
                     err,
-                    AptosErrorCode::InternalError,
+                    PontErrorCode::InternalError,
                     &self.latest_ledger_info,
                 )
             })

@@ -6,14 +6,14 @@ use crate::{
     transaction::{RawTransaction, RawTransactionWithData},
 };
 use anyhow::{ensure, Error, Result};
-use aptos_crypto::{
+use pont_crypto::{
     ed25519::{Ed25519PublicKey, Ed25519Signature},
     hash::CryptoHash,
     multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature},
     traits::Signature,
     CryptoMaterialError, HashValue, ValidCryptoMaterial, ValidCryptoMaterialStringExt,
 };
-use aptos_crypto_derive::{CryptoHasher, DeserializeKey, SerializeKey};
+use pont_crypto_derive::{CryptoHasher, DeserializeKey, SerializeKey};
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest_derive::Arbitrary;
 use rand::{rngs::OsRng, Rng};
@@ -33,7 +33,7 @@ pub enum AuthenticationError {
     MaxSignaturesExceeded,
 }
 
-/// Each transaction submitted to the Aptos blockchain contains a `TransactionAuthenticator`. During
+/// Each transaction submitted to the Pont blockchain contains a `TransactionAuthenticator`. During
 /// transaction execution, the executor will check if every `AccountAuthenticator`'s signature on
 /// the transaction hash is well-formed and whether the sha3 hash of the
 /// `AccountAuthenticator`'s `AuthenticationKeyPreimage` matches the `AuthenticationKey` stored

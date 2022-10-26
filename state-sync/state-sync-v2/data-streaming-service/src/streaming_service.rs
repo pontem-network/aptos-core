@@ -10,11 +10,11 @@ use crate::{
         StreamRequest, StreamRequestMessage, StreamingServiceListener, TerminateStreamRequest,
     },
 };
-use aptos_config::config::DataStreamingServiceConfig;
-use aptos_data_client::{AptosDataClient, GlobalDataSummary, OptimalChunkSizes};
-use aptos_id_generator::{IdGenerator, U64IdGenerator};
-use aptos_logger::prelude::*;
 use futures::StreamExt;
+use pont_config::config::DataStreamingServiceConfig;
+use pont_data_client::{GlobalDataSummary, OptimalChunkSizes, PontDataClient};
+use pont_id_generator::{IdGenerator, U64IdGenerator};
+use pont_logger::prelude::*;
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::time::interval;
 use tokio_stream::wrappers::IntervalStream;
@@ -30,8 +30,8 @@ pub struct DataStreamingService<T> {
     // The configuration for this streaming service.
     config: DataStreamingServiceConfig,
 
-    // The data client through which to fetch data from the Aptos network
-    aptos_data_client: T,
+    // The data client through which to fetch data from the Pont network
+    pont_data_client: T,
 
     // Cached global data summary
     global_data_summary: GlobalDataSummary,
@@ -47,15 +47,15 @@ pub struct DataStreamingService<T> {
     notification_id_generator: Arc<U64IdGenerator>,
 }
 
-impl<T: AptosDataClient + Send + Clone + 'static> DataStreamingService<T> {
+impl<T: PontDataClient + Send + Clone + 'static> DataStreamingService<T> {
     pub fn new(
         config: DataStreamingServiceConfig,
-        aptos_data_client: T,
+        pont_data_client: T,
         stream_requests: StreamingServiceListener,
     ) -> Self {
         Self {
             config,
-            aptos_data_client,
+            pont_data_client,
             global_data_summary: GlobalDataSummary::empty(),
             data_streams: HashMap::new(),
             stream_requests,
@@ -198,7 +198,7 @@ impl<T: AptosDataClient + Send + Clone + 'static> DataStreamingService<T> {
             self.config,
             stream_id,
             &request_message.stream_request,
-            self.aptos_data_client.clone(),
+            self.pont_data_client.clone(),
             self.notification_id_generator.clone(),
             &self.global_data_summary.advertised_data,
         )?;
@@ -225,7 +225,7 @@ impl<T: AptosDataClient + Send + Clone + 'static> DataStreamingService<T> {
         Ok(stream_listener)
     }
 
-    /// Refreshes the global data summary by communicating with the Aptos data client
+    /// Refreshes the global data summary by communicating with the Pont data client
     fn refresh_global_data_summary(&mut self) {
         if let Err(error) = self.fetch_global_data_summary() {
             metrics::increment_counter(&metrics::GLOBAL_DATA_SUMMARY_ERROR, error.get_label());
@@ -239,7 +239,7 @@ impl<T: AptosDataClient + Send + Clone + 'static> DataStreamingService<T> {
     }
 
     fn fetch_global_data_summary(&mut self) -> Result<(), Error> {
-        let global_data_summary = self.aptos_data_client.get_global_data_summary();
+        let global_data_summary = self.pont_data_client.get_global_data_summary();
         if global_data_summary.is_empty() {
             sample!(
                 SampleRate::Duration(Duration::from_secs(GLOBAL_DATA_REFRESH_LOG_FREQ_SECS)),
@@ -361,7 +361,7 @@ fn verify_optimal_chunk_sizes(optimal_chunk_sizes: &OptimalChunkSizes) -> Result
         || optimal_chunk_sizes.transaction_chunk_size == 0
         || optimal_chunk_sizes.transaction_output_chunk_size == 0
     {
-        Err(Error::AptosDataClientResponseIsInvalid(format!(
+        Err(Error::PontDataClientResponseIsInvalid(format!(
             "Found at least one optimal chunk size of zero: {:?}",
             optimal_chunk_sizes
         )))

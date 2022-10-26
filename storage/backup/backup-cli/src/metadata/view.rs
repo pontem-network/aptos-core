@@ -5,8 +5,8 @@ use crate::metadata::{
     EpochEndingBackupMeta, IdentityMeta, Metadata, StateSnapshotBackupMeta, TransactionBackupMeta,
 };
 use anyhow::{anyhow, ensure, Result};
-use aptos_types::transaction::Version;
 use itertools::Itertools;
+use pont_types::transaction::Version;
 use std::{fmt, str::FromStr};
 
 pub struct MetadataView {

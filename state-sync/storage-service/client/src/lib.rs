@@ -3,8 +3,6 @@
 
 #![forbid(unsafe_code)]
 
-use aptos_config::network_id::PeerNetworkId;
-use aptos_types::PeerId;
 use async_trait::async_trait;
 use network::{
     application::{
@@ -17,6 +15,8 @@ use network::{
     },
     ProtocolId,
 };
+use pont_config::network_id::PeerNetworkId;
+use pont_types::PeerId;
 use std::{sync::Arc, time::Duration};
 use storage_service_types::requests::StorageServiceRequest;
 use storage_service_types::responses::StorageServiceResponse;
@@ -25,7 +25,7 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum Error {
-    #[error("AptosNet Rpc error: {0}")]
+    #[error("PontNet Rpc error: {0}")]
     RpcError(#[from] RpcError),
 
     #[error("Error from remote storage service: {0}")]

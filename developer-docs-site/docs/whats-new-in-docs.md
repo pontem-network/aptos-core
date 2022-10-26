@@ -9,7 +9,7 @@ This page shows the key updates to the developer documentation on this site.
 
 ## 13 October 2022
 
-- Added [user documentation](/docs/guides/use-aptos-explorer.md) for [Aptos Explorer](https://explorer.aptoslabs.com/) to Aptos.dev covering common use cases and popular Explorer screen descriptions.
+- Added [user documentation](/docs/guides/use-pont-explorer.md) for [Pont Explorer](https://explorer.pontlabs.com/) to Pont.dev covering common use cases and popular Explorer screen descriptions.
 
 ## 12 October 2022
 
@@ -25,7 +25,7 @@ This page shows the key updates to the developer documentation on this site.
 
 ## 07 October 2022
 
-- [Using the Petra Wallet](https://petra.app/docs/use) covers common use cases of the Petra Wallet Chrome browser extension and can be found from [Install Petra Extension](guides/install-petra-wallet.md) on Aptos.dev.
+- [Using the Petra Wallet](https://petra.app/docs/use) covers common use cases of the Petra Wallet Chrome browser extension and can be found from [Install Petra Extension](guides/install-petra-wallet.md) on Pont.dev.
 
 ## 06 October 2022
 
@@ -33,19 +33,19 @@ This page shows the key updates to the developer documentation on this site.
 
 ## 05 October 2022
 
-- Related Aptos resources (aptoslabs.com, Twitter, Discord, and more) can be found in the [Have fun](https://aptos.dev/#have-fun) section of the Aptos.dev landing page.
+- Related Pont resources (pontlabs.com, Twitter, Discord, and more) can be found in the [Have fun](https://pont.dev/#have-fun) section of the Pont.dev landing page.
 
 ## 03 October 2022
 
-- [How Base Gas Works](/docs/concepts/base-gas.md) describes the types of gas involved in Aptos transactions and offers optimizations for your use.
+- [How Base Gas Works](/docs/concepts/base-gas.md) describes the types of gas involved in Pont transactions and offers optimizations for your use.
 
 ## 26 September 2022
 
-- [Installing Aptos CLI](/docs/cli-tools/aptos-cli-tool/install-aptos-cli.md) provides detailed guidance for all major operating systems: Linux, macOS, and Windows.
+- [Installing Pont CLI](/docs/cli-tools/pont-cli-tool/install-pont-cli.md) provides detailed guidance for all major operating systems: Linux, macOS, and Windows.
 
 ## 25 September 2022
 
-- [Transactions and States](/docs/concepts/basics-txns-states.md) matches the [Aptos Blockchain whitepaper](/docs/aptos-white-paper/index.md) in structure and content.
+- [Transactions and States](/docs/concepts/basics-txns-states.md) matches the [Pont Blockchain whitepaper](/docs/pont-white-paper/index.md) in structure and content.
 
 ## 23 September 2022
 
@@ -57,19 +57,19 @@ The [System Integrators Guide](/docs/guides/system-integrators-guide.md) contain
 
 ## 21 September 2022
 
-When [installing Aptos CLI](/docs/cli-tools/aptos-cli-tool/install-aptos-cli.md), we recommend [downloading the precompiled binary](/docs/cli-tools/aptos-cli-tool/install-aptos-cli.md#download-precompiled-binary) over [building the CLI binary from the source code](/docs/cli-tools/aptos-cli-tool/install-aptos-cli.md#advanced-users-only-build-the-cli-binary-from-the-source-code) as less error prone and much easier to get started.
+When [installing Pont CLI](/docs/cli-tools/pont-cli-tool/install-pont-cli.md), we recommend [downloading the precompiled binary](/docs/cli-tools/pont-cli-tool/install-pont-cli.md#download-precompiled-binary) over [building the CLI binary from the source code](/docs/cli-tools/pont-cli-tool/install-pont-cli.md#advanced-users-only-build-the-cli-binary-from-the-source-code) as less error prone and much easier to get started.
 
 ## 19 September 2022
 
-When [using the Aptos CLI to publish Move modules](/docs/cli-tools/aptos-cli-tool/use-aptos-cli.md#publishing-a-move-package-with-a-named-address), we note multiple modules in one package must have the same account or publishing will fail at the transaction level.
+When [using the Pont CLI to publish Move modules](/docs/cli-tools/pont-cli-tool/use-pont-cli.md#publishing-a-move-package-with-a-named-address), we note multiple modules in one package must have the same account or publishing will fail at the transaction level.
 
 ## 16 September 2022
 
-When [connecting to Aptos Testnet](/docs/nodes/validator-node/operator/connect-to-aptos-network.md), use the `testnet` rather than `testnet-stable` branch. See that document for the latest commit and Docker image tag.
+When [connecting to Pont Testnet](/docs/nodes/validator-node/operator/connect-to-pont-network.md), use the `testnet` rather than `testnet-stable` branch. See that document for the latest commit and Docker image tag.
 
 ## 15 September 2022
 
-The [hardware requirements](/docs/nodes/validator-node/operator/node-requirements.md#hardware-requirements) for Aptos nodes have grown for both Amazon Web Services and Google Cloud.
+The [hardware requirements](/docs/nodes/validator-node/operator/node-requirements.md#hardware-requirements) for Pont nodes have grown for both Amazon Web Services and Google Cloud.
 
 ## 13 September 2022
 
@@ -77,7 +77,7 @@ The [hardware requirements](/docs/nodes/validator-node/operator/node-requirement
 
 ## 12 September 2022
 
-- A new set of documents on Aptos [Coin and Token](/concepts/coin-and-token/index.md) are posted. 
+- A new set of documents on Pont [Coin and Token](/concepts/coin-and-token/index.md) are posted. 
 - A new document describing how to [bootstrap a new fullnode using data restore](/nodes/full-node/bootstrap-fullnode.md) is posted.
 
 ## 06 September 2022
@@ -88,7 +88,7 @@ The [hardware requirements](/docs/nodes/validator-node/operator/node-requirement
 
 ## 29 August 2022
 
-- A new guide, [Leaderboard Metrics](/nodes/leaderboard-metrics), describing the [Aptos Validator Status](https://aptoslabs.com/leaderboard/it3) page is released.
+- A new guide, [Leaderboard Metrics](/nodes/leaderboard-metrics), describing the [Pont Validator Status](https://pontlabs.com/leaderboard/it3) page is released.
 
 ## 25 August 2022
 
@@ -97,7 +97,7 @@ The [hardware requirements](/docs/nodes/validator-node/operator/node-requirement
 
 ## 24 August 2022
 
-- The Korean language version of the [Aptos White Paper](/aptos-white-paper/aptos-white-paper-in-korean) is posted.
+- The Korean language version of the [Pont White Paper](/pont-white-paper/pont-white-paper-in-korean) is posted.
 - Typescript and Rust are added to the [first transaction tutorial](/tutorials/your-first-transaction-sdk).
 - A [new tutorial](/tutorials/your-first-nft-sdk) is added that shows how to use the Typescript SDK and Python SDKs to work with NFT. The tutorial covers topics such as creating your own collection, creating a token in that collection, and how to offer and claim that token.
 
@@ -107,9 +107,9 @@ The [hardware requirements](/docs/nodes/validator-node/operator/node-requirement
 
 ## 11 August 2022
 
-- The [Aptos White Paper](/aptos-white-paper/aptos-white-paper-index) is released.
+- The [Pont White Paper](/pont-white-paper/pont-white-paper-index) is released.
 
-- A section explaining the network [Port settings](/nodes/validator-node/operator/node-requirements#ports) for the nodes connecting to an Aptos network is added.
+- A section explaining the network [Port settings](/nodes/validator-node/operator/node-requirements#ports) for the nodes connecting to an Pont network is added.
 
 ## 08 August 2022
 
@@ -117,7 +117,7 @@ The [hardware requirements](/docs/nodes/validator-node/operator/node-requirement
 
 ## 07 August 2022
 
-- A new document for [using the Aptos CLI to launch a local testnet](/nodes/local-testnet/using-cli-to-run-a-local-testnet) is posted.
+- A new document for [using the Pont CLI to launch a local testnet](/nodes/local-testnet/using-cli-to-run-a-local-testnet) is posted.
 
 ## 02 August 2022
 

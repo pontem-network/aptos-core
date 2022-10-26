@@ -5,7 +5,6 @@ use crate::tests::{
     common::TestTransaction,
     test_framework::{test_transaction, MempoolNode, MempoolTestFrameworkBuilder},
 };
-use aptos_config::network_id::PeerNetworkId;
 use netcore::transport::ConnectionOrigin;
 use network::{
     testutils::{
@@ -18,6 +17,7 @@ use network::{
     transport::ConnectionMetadata,
     ProtocolId,
 };
+use pont_config::network_id::PeerNetworkId;
 use std::time::Duration;
 
 const ALL_PROTOCOLS: [ProtocolId; 1] = [ProtocolId::MempoolDirectSend];

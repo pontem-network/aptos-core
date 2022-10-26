@@ -16,9 +16,17 @@ use crate::{
     test_utils::{EmptyStateComputer, MockPayloadManager, MockStorage},
     util::{mock_time_service::SimulatedTimeService, time_service::TimeService},
 };
-use aptos_config::config::ConsensusConfig;
-use aptos_infallible::Mutex;
-use aptos_types::{
+use channel::{self, message_queues::QueueStyle, pont_channel};
+use consensus_types::proposal_msg::ProposalMsg;
+use futures::{channel::mpsc, executor::block_on};
+use network::{
+    peer_manager::{ConnectionRequestSender, PeerManagerRequestSender},
+    protocols::network::NewNetworkSender,
+};
+use once_cell::sync::Lazy;
+use pont_config::config::ConsensusConfig;
+use pont_infallible::Mutex;
+use pont_types::{
     aggregate_signature::AggregateSignature,
     epoch_change::EpochChangeProof,
     epoch_state::EpochState,
@@ -28,14 +36,6 @@ use aptos_types::{
     validator_signer::ValidatorSigner,
     validator_verifier::ValidatorVerifier,
 };
-use channel::{self, aptos_channel, message_queues::QueueStyle};
-use consensus_types::proposal_msg::ProposalMsg;
-use futures::{channel::mpsc, executor::block_on};
-use network::{
-    peer_manager::{ConnectionRequestSender, PeerManagerRequestSender},
-    protocols::network::NewNetworkSender,
-};
-use once_cell::sync::Lazy;
 use safety_rules::{test_utils, SafetyRules, TSafetyRules};
 use std::{sync::Arc, time::Duration};
 use tokio::runtime::Runtime;
@@ -116,8 +116,8 @@ fn create_node_for_fuzzing() -> RoundManager {
     safety_rules.initialize(&proof).unwrap();
 
     // TODO: mock channels
-    let (network_reqs_tx, _network_reqs_rx) = aptos_channel::new(QueueStyle::FIFO, 8, None);
-    let (connection_reqs_tx, _) = aptos_channel::new(QueueStyle::FIFO, 8, None);
+    let (network_reqs_tx, _network_reqs_rx) = pont_channel::new(QueueStyle::FIFO, 8, None);
+    let (connection_reqs_tx, _) = pont_channel::new(QueueStyle::FIFO, 8, None);
     let network_sender = ConsensusNetworkSender::new(
         PeerManagerRequestSender::new(network_reqs_tx),
         ConnectionRequestSender::new(connection_reqs_tx),
@@ -159,7 +159,7 @@ fn create_node_for_fuzzing() -> RoundManager {
     // TODO: have two different nodes, one for proposing, one for accepting a proposal
     let proposer_election = Box::new(RotatingProposer::new(vec![signer.author()], 1));
 
-    let (round_manager_tx, _) = aptos_channel::new(QueueStyle::LIFO, 1, None);
+    let (round_manager_tx, _) = pont_channel::new(QueueStyle::LIFO, 1, None);
 
     // event processor
     RoundManager::new(

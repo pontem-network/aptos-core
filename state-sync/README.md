@@ -1,12 +1,12 @@
 ---
 id: state sync
 title: State Sync
-custom_edit_url: https://github.com/aptos-labs/aptos-core/edit/main/state-sync/README.md
+custom_edit_url: https://github.com/aptos-labs/pont-core/edit/main/state-sync/README.md
 ---
 
 # State Synchronization (State Sync)
 
-State sync is a component that runs within each Aptos node and is responsible
+State sync is a component that runs within each Pont node and is responsible
 for synchronizing the node to the latest blockchain state. It is required by
 both validators and fullnodes to ensure that they do not fall behind the rest
 of the network. To achieve this, state sync identifies and fetches new
@@ -59,7 +59,7 @@ configuration file:
 ```
 
 While your node is syncing, you'll be able to see the
-`aptos_state_sync_version{type="synced"}` metric gradually increase.
+`pont_state_sync_version{type="synced"}` metric gradually increase.
 
 ### Applying all transaction outputs
 
@@ -75,7 +75,7 @@ node configuration file:
 ```
 
 While your node is syncing, you'll be able to see the
-`aptos_state_sync_version{type="synced"}` metric gradually increase.
+`pont_state_sync_version{type="synced"}` metric gradually increase.
 
 ### Fast Syncing
 Note: Fast sync should only be used as a last resort for validators and
@@ -101,12 +101,12 @@ node configuration file:
 ```
 
 While your node is syncing, you'll be able to see the
-`aptos_state_sync_version{type="synced_states"}` metric gradually increase.
-However, `aptos_state_sync_version{type="synced"}` will only increase once
+`pont_state_sync_version{type="synced_states"}` metric gradually increase.
+However, `pont_state_sync_version{type="synced"}` will only increase once
 the node has boostrapped. This may take several hours depending on the 
 amount of data, network bandwidth and node resources available.
 
-**Note:** If `aptos_state_sync_version{type="synced_states"}` does not
+**Note:** If `pont_state_sync_version{type="synced_states"}` does not
 increase then do the following:
 1. Double-check the node configuration file has correctly been updated.
 2. Make sure that the node is starting up with an empty storage database
@@ -145,7 +145,7 @@ each syncing mode:
 
 All of the syncing modes get their root of trust from the validator set
 and cryptographic signatures from those validators over the blockchain data.
-For more information about how this works, see the [state synchronization blogpost](https://medium.com/aptoslabs/the-evolution-of-state-sync-the-path-to-100k-transactions-per-second-with-sub-second-latency-at-52e25a2c6f10).
+For more information about how this works, see the [state synchronization blogpost](https://medium.com/pontlabs/the-evolution-of-state-sync-the-path-to-100k-transactions-per-second-with-sub-second-latency-at-52e25a2c6f10).
 
 
 ## State sync architecture
@@ -162,7 +162,7 @@ new data chunks from peers, without having to worry about which peers have the
 data or how to manage data requests. For example, the client can request all
 transactions since version `5` and the data streaming service will provide
 this.
-3. **Aptos Data Client**: The data client is responsible for handling data
+3. **Pont Data Client**: The data client is responsible for handling data
 requests from the data streaming service. For the data streaming service to
 stream all transactions, it must make multiple requests (each request for a
 batch of transactions) and send those requests to peers (e.g., transactions
@@ -176,13 +176,13 @@ a batch of transactions.
 ### Code structure
 
 The state sync code structure matches the architecture outlined above:
-- **Driver:** [https://github.com/aptos-labs/aptos-core/tree/main/state-sync/state-sync-v2/state-sync-driver](https://github.com/aptos-labs/aptos-core/tree/main/state-sync/state-sync-v2/state-sync-driver)
-- **Data Streaming Service:** [https://github.com/aptos-labs/aptos-core/tree/main/state-sync/state-sync-v2/data-streaming-service](https://github.com/aptos-labs/aptos-core/tree/main/state-sync/state-sync-v2/data-streaming-service)
-- **Aptos Data Client**: [https://github.com/aptos-labs/aptos-core/tree/main/state-sync/aptos-data-client](https://github.com/aptos-labs/aptos-core/tree/main/state-sync/aptos-data-client)
-- **Storage Service:** [https://github.com/aptos-labs/aptos-core/tree/main/state-sync/storage-service](https://github.com/aptos-labs/aptos-core/tree/main/state-sync/storage-service)
+- **Driver:** [https://github.com/aptos-labs/pont-core/tree/main/state-sync/state-sync-v2/state-sync-driver](https://github.com/aptos-labs/pont-core/tree/main/state-sync/state-sync-v2/state-sync-driver)
+- **Data Streaming Service:** [https://github.com/aptos-labs/pont-core/tree/main/state-sync/state-sync-v2/data-streaming-service](https://github.com/aptos-labs/pont-core/tree/main/state-sync/state-sync-v2/data-streaming-service)
+- **Pont Data Client**: [https://github.com/aptos-labs/pont-core/tree/main/state-sync/pont-data-client](https://github.com/aptos-labs/pont-core/tree/main/state-sync/pont-data-client)
+- **Storage Service:** [https://github.com/aptos-labs/pont-core/tree/main/state-sync/storage-service](https://github.com/aptos-labs/pont-core/tree/main/state-sync/storage-service)
 
 In addition, there is also a directory containing the code for
-**inter-component** communication: [https://github.com/aptos-labs/aptos-core/tree/main/state-sync/inter-component](https://github.com/aptos-labs/aptos-core/tree/main/state-sync/inter-component).
+**inter-component** communication: [https://github.com/aptos-labs/pont-core/tree/main/state-sync/inter-component](https://github.com/aptos-labs/pont-core/tree/main/state-sync/inter-component).
 This is required so that:
    - State sync can handle notifications from consensus (e.g., to catch up after falling behind)
    - State sync can notify mempool when transactions are committed (i.e., so they can be removed from mempool)

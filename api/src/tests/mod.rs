@@ -12,7 +12,7 @@ mod string_resource_test;
 mod transaction_vector_test;
 mod transactions_test;
 
-use aptos_api_test_context::{new_test_context as super_new_test_context, TestContext};
+use pont_api_test_context::{new_test_context as super_new_test_context, TestContext};
 
 fn new_test_context(test_name: String) -> TestContext {
     super_new_test_context(test_name, false)

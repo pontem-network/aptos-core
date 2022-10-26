@@ -1,17 +1,17 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_rest_client::Client as RestClient;
-use aptos_sdk::{
+use cached_packages::pont_stdlib;
+use forge::{reconfig, LocalSwarm, NodeExt, Swarm};
+use pont_rest_client::Client as RestClient;
+use pont_sdk::{
     transaction_builder::TransactionFactory,
     types::{transaction::SignedTransaction, LocalAccount},
 };
-use cached_packages::aptos_stdlib;
-use forge::{reconfig, LocalSwarm, NodeExt, Swarm};
 use rand::random;
 
 pub async fn create_and_fund_account(swarm: &'_ mut dyn Swarm, amount: u64) -> LocalAccount {
-    let mut info = swarm.aptos_public_info();
+    let mut info = swarm.pont_public_info();
     info.create_and_fund_user_account(amount).await.unwrap()
 }
 
@@ -22,9 +22,9 @@ pub async fn transfer_coins_non_blocking(
     receiver: &LocalAccount,
     amount: u64,
 ) -> SignedTransaction {
-    let txn = sender.sign_with_transaction_builder(transaction_factory.payload(
-        aptos_stdlib::aptos_coin_transfer(receiver.address(), amount),
-    ));
+    let txn = sender.sign_with_transaction_builder(
+        transaction_factory.payload(pont_stdlib::pont_coin_transfer(receiver.address(), amount)),
+    );
 
     client.submit(&txn).await.unwrap();
     txn
@@ -74,17 +74,17 @@ pub async fn assert_balance(client: &RestClient, account: &LocalAccount, balance
 }
 
 /// This module provides useful functions for operating, handling and managing
-/// AptosSwarm instances. It is particularly useful for working with tests that
+/// PontSwarm instances. It is particularly useful for working with tests that
 /// require a SmokeTestEnvironment, as it provides a generic interface across
-/// AptosSwarms, regardless of if the swarm is a validator swarm, validator full
+/// PontSwarms, regardless of if the swarm is a validator swarm, validator full
 /// node swarm, or a public full node swarm.
 #[cfg(test)]
 pub mod swarm_utils {
-    use aptos_config::config::{
+    use pont_config::config::{
         InitialSafetyRulesConfig, NodeConfig, SecureBackend, WaypointConfig,
     };
-    use aptos_secure_storage::{KVStorage, Storage};
-    use aptos_types::waypoint::Waypoint;
+    use pont_secure_storage::{KVStorage, Storage};
+    use pont_types::waypoint::Waypoint;
 
     pub fn insert_waypoint(node_config: &mut NodeConfig, waypoint: Waypoint) {
         node_config.base.waypoint = WaypointConfig::FromConfig(waypoint);
@@ -96,10 +96,10 @@ pub mod swarm_utils {
         let f = |backend: &SecureBackend| {
             let mut storage: Storage = backend.into();
             storage
-                .set(aptos_global_constants::WAYPOINT, waypoint)
+                .set(pont_global_constants::WAYPOINT, waypoint)
                 .expect("Unable to write waypoint");
             storage
-                .set(aptos_global_constants::GENESIS_WAYPOINT, waypoint)
+                .set(pont_global_constants::GENESIS_WAYPOINT, waypoint)
                 .expect("Unable to write waypoint");
         };
         let backend = &node_config.consensus.safety_rules.backend;
@@ -120,7 +120,7 @@ pub async fn check_create_mint_transfer_node(swarm: &mut LocalSwarm, idx: usize)
 
     // Create account 0, mint 10 coins and check balance
     let transaction_factory = TransactionFactory::new(swarm.chain_id());
-    let mut info = swarm.aptos_public_info_for_node(idx);
+    let mut info = swarm.pont_public_info_for_node(idx);
     let mut account_0 = info.create_and_fund_user_account(10).await.unwrap();
     assert_balance(&client, &account_0, 10).await;
 

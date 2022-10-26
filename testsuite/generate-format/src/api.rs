@@ -1,14 +1,15 @@
 // Copyright (c) Aptos
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos_crypto::{
+use move_core_types::language_storage;
+use pont_crypto::{
     ed25519::{Ed25519PrivateKey, Ed25519PublicKey},
     hash::{CryptoHasher as _, TestOnlyHasher},
     multi_ed25519::{MultiEd25519PublicKey, MultiEd25519Signature},
     traits::{SigningKey, Uniform},
 };
-use aptos_crypto_derive::{BCSCryptoHash, CryptoHasher};
-use aptos_types::{
+use pont_crypto_derive::{BCSCryptoHash, CryptoHasher};
+use pont_types::{
     access_path::{AccessPath, Path},
     account_config::{CoinStoreResource, DepositEvent, WithdrawEvent},
     contract_event, event,
@@ -18,7 +19,6 @@ use aptos_types::{
     vm_status::AbortLocation,
     write_set,
 };
-use move_core_types::language_storage;
 use rand::{rngs::StdRng, SeedableRng};
 use serde::{Deserialize, Serialize};
 use serde_reflection::{Registry, Result, Samples, Tracer, TracerConfig};
@@ -30,7 +30,7 @@ pub fn output_file() -> Option<&'static str> {
 
 /// This aims at signing canonically serializable BCS data
 #[derive(CryptoHasher, BCSCryptoHash, Serialize, Deserialize)]
-struct TestAptosCrypto(String);
+struct TestPontCrypto(String);
 
 /// Record sample values for crypto types used by transactions.
 fn trace_crypto_values(tracer: &mut Tracer, samples: &mut Samples) -> Result<()> {
@@ -38,7 +38,7 @@ fn trace_crypto_values(tracer: &mut Tracer, samples: &mut Samples) -> Result<()>
     hasher.update(b"Test message");
     let hashed_message = hasher.finish();
 
-    let message = TestAptosCrypto("Hello, World".to_string());
+    let message = TestPontCrypto("Hello, World".to_string());
 
     let mut rng: StdRng = SeedableRng::from_seed([0; 32]);
     let private_key = Ed25519PrivateKey::generate(&mut rng);
@@ -85,8 +85,8 @@ pub fn get_registry() -> Result<Registry> {
     tracer.trace_type::<Path>(&samples)?;
 
     // api types
-    tracer.trace_type::<aptos_api_types::TransactionData>(&samples)?;
-    tracer.trace_type::<aptos_api_types::TransactionOnChainData>(&samples)?;
+    tracer.trace_type::<pont_api_types::TransactionData>(&samples)?;
+    tracer.trace_type::<pont_api_types::TransactionOnChainData>(&samples)?;
 
     // output types
     tracer.trace_type::<CoinStoreResource>(&samples)?;

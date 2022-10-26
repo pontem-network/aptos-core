@@ -23,14 +23,7 @@ use crate::{
     persistent_liveness_storage::PersistentLivenessStorage,
 };
 use anyhow::{bail, ensure, Context, Result};
-use aptos_config::config::ConsensusConfig;
-use aptos_infallible::{checked, Mutex};
-use aptos_logger::prelude::*;
-use aptos_types::{
-    epoch_state::EpochState, on_chain_config::OnChainConsensusConfig,
-    validator_verifier::ValidatorVerifier,
-};
-use channel::aptos_channel;
+use channel::pont_channel;
 use consensus_types::{
     block::Block,
     common::{Author, Round},
@@ -44,6 +37,13 @@ use consensus_types::{
 };
 use fail::fail_point;
 use futures::{channel::oneshot, FutureExt, StreamExt};
+use pont_config::config::ConsensusConfig;
+use pont_infallible::{checked, Mutex};
+use pont_logger::prelude::*;
+use pont_types::{
+    epoch_state::EpochState, on_chain_config::OnChainConsensusConfig,
+    validator_verifier::ValidatorVerifier,
+};
 #[cfg(test)]
 use safety_rules::ConsensusState;
 use safety_rules::TSafetyRules;
@@ -151,7 +151,7 @@ pub struct RoundManager {
     storage: Arc<dyn PersistentLivenessStorage>,
     onchain_config: OnChainConsensusConfig,
     round_manager_tx:
-        aptos_channel::Sender<(Author, Discriminant<VerifiedEvent>), (Author, VerifiedEvent)>,
+        pont_channel::Sender<(Author, Discriminant<VerifiedEvent>), (Author, VerifiedEvent)>,
     local_config: ConsensusConfig,
 }
 
@@ -166,7 +166,7 @@ impl RoundManager {
         network: NetworkSender,
         storage: Arc<dyn PersistentLivenessStorage>,
         onchain_config: OnChainConsensusConfig,
-        round_manager_tx: aptos_channel::Sender<
+        round_manager_tx: pont_channel::Sender<
             (Author, Discriminant<VerifiedEvent>),
             (Author, VerifiedEvent),
         >,
@@ -901,7 +901,7 @@ impl RoundManager {
     /// Mainloop of processing messages.
     pub async fn start(
         mut self,
-        mut event_rx: aptos_channel::Receiver<
+        mut event_rx: pont_channel::Receiver<
             (Author, Discriminant<VerifiedEvent>),
             (Author, VerifiedEvent),
         >,

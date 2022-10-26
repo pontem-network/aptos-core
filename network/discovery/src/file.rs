@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::DiscoveryError;
-use aptos_config::config::PeerSet;
-use aptos_time_service::{Interval, TimeService, TimeServiceTrait};
 use futures::Stream;
+use pont_config::config::PeerSet;
+use pont_time_service::{Interval, TimeService, TimeServiceTrait};
 use std::{
     path::{Path, PathBuf},
     pin::Pin,
@@ -13,7 +13,7 @@ use std::{
 };
 
 #[cfg(test)]
-use aptos_logger::spawn_named;
+use pont_logger::spawn_named;
 
 pub struct FileStream {
     file_path: PathBuf,
@@ -57,15 +57,15 @@ fn load_file(path: &Path) -> Result<PeerSet, DiscoveryError> {
 mod tests {
     use super::*;
     use crate::DiscoveryChangeListener;
-    use aptos_config::{
-        config::{Peer, PeerRole},
-        network_id::NetworkContext,
-    };
-    use aptos_temppath::TempPath;
-    use aptos_types::{network_address::NetworkAddress, PeerId};
     use channel::Receiver;
     use futures::StreamExt;
     use network::connectivity_manager::{ConnectivityRequest, DiscoverySource};
+    use pont_config::{
+        config::{Peer, PeerRole},
+        network_id::NetworkContext,
+    };
+    use pont_temppath::TempPath;
+    use pont_types::{network_address::NetworkAddress, PeerId};
     use std::{collections::HashSet, str::FromStr, sync::Arc};
     use tokio::time::sleep;
 

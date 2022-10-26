@@ -5,24 +5,24 @@ slug: "typescript-sdk"
 
 # Typescript SDK
 
-Aptos provides an official Typescript SDK. This section describes how to install and use it.
+Pont provides an official Typescript SDK. This section describes how to install and use it.
 
 ## Installing Typescript SDK
 
-1. Make sure you [downloaded the latest precompiled binary for the Aptos CLI](/cli-tools/aptos-cli-tool/install-aptos-cli/#download-precompiled-binary).
-2. On a terminal run the below command to install the Typescript SDK from [npmjs](https://www.npmjs.com/package/aptos):
+1. Make sure you [downloaded the latest precompiled binary for the Pont CLI](/cli-tools/pont-cli-tool/install-pont-cli/#download-precompiled-binary).
+2. On a terminal run the below command to install the Typescript SDK from [npmjs](https://www.npmjs.com/package/pont):
    ```bash
-   npm -i aptos
+   npm -i pont
    ```
 
    or
 
    ```bash
-   yarn add aptos
+   yarn add pont
    ```
    
    :::tip
-   The above command installs the TS SDK and should not be confused as installing the Aptos CLI.
+   The above command installs the TS SDK and should not be confused as installing the Pont CLI.
    :::
 
 ## Using Typescript SDK

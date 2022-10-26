@@ -12,10 +12,10 @@ use crate::{
     utils::{GlobalRestoreOptions, RestoreRunMode, TrustedWaypointOpt},
 };
 use anyhow::{ensure, Result};
-use aptos_logger::prelude::*;
-use aptos_types::transaction::Version;
-use aptos_vm::AptosVM;
-use aptosdb::backup::restore_handler::RestoreHandler;
+use pont_logger::prelude::*;
+use pont_types::transaction::Version;
+use pont_vm::PontVM;
+use pontdb::backup::restore_handler::RestoreHandler;
 use std::sync::Arc;
 
 pub struct ReplayVerifyCoordinator {
@@ -70,7 +70,7 @@ impl ReplayVerifyCoordinator {
     }
 
     async fn run_impl(self) -> Result<()> {
-        AptosVM::set_concurrency_level_once(self.replay_concurrency_level);
+        PontVM::set_concurrency_level_once(self.replay_concurrency_level);
 
         let metadata_view = metadata::cache::sync_and_load(
             &self.metadata_cache_opt,

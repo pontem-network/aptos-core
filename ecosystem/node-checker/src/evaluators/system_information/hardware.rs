@@ -17,11 +17,11 @@ use clap::Parser;
 use poem_openapi::Object as PoemObject;
 use serde::{Deserialize, Serialize};
 
-// TODO: Use the keys in crates/aptos-telemetry/src/system_information.rs
+// TODO: Use the keys in crates/pont-telemetry/src/system_information.rs
 const CPU_COUNT_KEY: &str = "cpu_count";
 const MEMORY_TOTAL_KEY: &str = "memory_total";
 
-const NODE_REQUIREMENTS_DOC_LINK: &str = "https://aptos.dev/nodes/ait/node-requirements";
+const NODE_REQUIREMENTS_DOC_LINK: &str = "https://pont.dev/nodes/ait/node-requirements";
 
 #[derive(Clone, Debug, Deserialize, Parser, PoemObject, Serialize)]
 pub struct HardwareEvaluatorArgs {

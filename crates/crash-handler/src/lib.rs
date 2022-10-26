@@ -3,8 +3,8 @@
 
 #![forbid(unsafe_code)]
 
-use aptos_logger::prelude::*;
 use backtrace::Backtrace;
+use pont_logger::prelude::*;
 use serde::Serialize;
 use std::{
     panic::{self, PanicInfo},
@@ -38,11 +38,11 @@ fn handle_panic(panic_info: &PanicInfo<'_>) {
     let crash_info = toml::to_string_pretty(&info).unwrap();
     error!("{}", crash_info);
     // TODO / HACK ALARM: Write crash info synchronously via eprintln! to ensure it is written before the process exits which error! doesn't guarantee.
-    // This is a workaround until https://github.com/aptos-labs/aptos-core/issues/2038 is resolved.
+    // This is a workaround until https://github.com/aptos-labs/pont-core/issues/2038 is resolved.
     eprintln!("{}", crash_info);
 
     // Wait till the logs have been flushed
-    aptos_logger::flush();
+    pont_logger::flush();
 
     // Kill the process
     process::exit(12);

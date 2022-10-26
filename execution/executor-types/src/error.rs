@@ -4,8 +4,8 @@
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-use aptos_crypto::HashValue;
-use aptos_types::transaction::Version;
+use pont_crypto::HashValue;
+use pont_types::transaction::Version;
 
 #[derive(Debug, Deserialize, Error, PartialEq, Eq, Serialize)]
 /// Different reasons for proposal rejection
@@ -49,8 +49,8 @@ impl From<bcs::Error> for Error {
     }
 }
 
-impl From<aptos_secure_net::Error> for Error {
-    fn from(error: aptos_secure_net::Error) -> Self {
+impl From<pont_secure_net::Error> for Error {
+    fn from(error: pont_secure_net::Error) -> Self {
         Self::InternalError {
             error: format!("{}", error),
         }

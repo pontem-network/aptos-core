@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{gather_metrics, json_encoder::JsonEncoder, NUM_METRICS};
-use aptos_build_info::build_information;
-use aptos_config::config::NodeConfig;
 use hyper::{
     service::{make_service_fn, service_fn},
     Body, Method, Request, Response, Server, StatusCode,
 };
+use pont_build_info::build_information;
+use pont_config::config::NodeConfig;
 use prometheus::{
     proto::{MetricFamily, MetricType},
     Encoder, TextEncoder,
@@ -122,7 +122,7 @@ async fn serve_requests(
         (&Method::GET, "/system_information") => {
             if node_config.inspection_service.expose_system_information {
                 let mut system_information =
-                    aptos_telemetry::system_information::get_system_information();
+                    pont_telemetry::system_information::get_system_information();
                 let build_info = build_information!();
                 system_information.extend(build_info);
                 let encoded_information = serde_json::to_string(&system_information).unwrap();

@@ -4,11 +4,11 @@
 use std::{convert::TryFrom, path::Path};
 
 use anyhow::{bail, format_err, Result};
-use aptos::common::types::EncodingType;
-use aptos_config::keys::ConfigKey;
-use aptos_crypto::ed25519::Ed25519PrivateKey;
-use aptos_sdk::types::chain_id::ChainId;
 use clap::{ArgEnum, ArgGroup, Parser};
+use pont::common::types::EncodingType;
+use pont_config::keys::ConfigKey;
+use pont_crypto::ed25519::Ed25519PrivateKey;
+use pont_sdk::types::chain_id::ChainId;
 
 use serde::{Deserialize, Serialize};
 use url::Url;

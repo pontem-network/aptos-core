@@ -3,7 +3,7 @@
 
 use crate::{Factory, GenesisConfig, GenesisConfigFn, NodeConfigFn, Result, Swarm, Version};
 use anyhow::bail;
-use aptos_logger::info;
+use pont_logger::info;
 use rand::rngs::StdRng;
 use std::time::Duration;
 use std::{convert::TryInto, num::NonZeroUsize};
@@ -24,7 +24,7 @@ pub use node::K8sNode;
 pub use stateful_set::*;
 pub use swarm::*;
 
-use aptos_sdk::crypto::ed25519::ED25519_PRIVATE_KEY_LENGTH;
+use pont_sdk::crypto::ed25519::ED25519_PRIVATE_KEY_LENGTH;
 
 pub struct K8sFactory {
     root_key: [u8; ED25519_PRIVATE_KEY_LENGTH],

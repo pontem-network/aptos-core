@@ -10,7 +10,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Your First NFT
 
-This tutorial describes how to create and transfer NFTs on the Aptos blockchain. The Aptos implementation for core NFTs can be found in the [token.move](https://github.com/aptos-labs/aptos-core/blob/main/aptos-move/framework/aptos-token/sources/token.move) Move module.
+This tutorial describes how to create and transfer NFTs on the Pont blockchain. The Pont implementation for core NFTs can be found in the [token.move](https://github.com/aptos-labs/pont-core/blob/main/pont-move/framework/pont-token/sources/token.move) Move module.
 
 ## Step 1: Pick an SDK
 
@@ -26,9 +26,9 @@ Install your preferred SDK from the below list:
 
 Each SDK provides an `examples` directory. This tutorial covers the `simple-nft` example.
 
-Clone the `aptos-core` repo:
+Clone the `pont-core` repo:
 ```bash
-git clone git@github.com:aptos-labs/aptos-core.git ~/aptos-core
+git clone git@github.com:aptos-labs/pont-core.git ~/pont-core
 ```
 
 <Tabs groupId="sdk-examples">
@@ -36,7 +36,7 @@ git clone git@github.com:aptos-labs/aptos-core.git ~/aptos-core
 
   Navigate to the Typescript SDK examples directory:
   ```bash
-  cd ~/aptos-core/ecosystem/typescript/sdk/examples/typescript
+  cd ~/pont-core/ecosystem/typescript/sdk/examples/typescript
   ```
 
   Install the necessary dependencies:
@@ -44,7 +44,7 @@ git clone git@github.com:aptos-labs/aptos-core.git ~/aptos-core
   yarn install
   ```
 
-  Run the Typescript [`simple_nft`](https://github.com/aptos-labs/aptos-core/blob/main/ecosystem/typescript/sdk/examples/typescript/simple_nft.ts) example:
+  Run the Typescript [`simple_nft`](https://github.com/aptos-labs/pont-core/blob/main/ecosystem/typescript/sdk/examples/typescript/simple_nft.ts) example:
   ```bash
   yarn run simple_nft
   ```
@@ -53,7 +53,7 @@ git clone git@github.com:aptos-labs/aptos-core.git ~/aptos-core
 
   Navigate to the Python SDK directory:
   ```bash
-  cd ~/aptos-core/ecosystem/python/sdk
+  cd ~/pont-core/ecosystem/python/sdk
   ```
 
   Install the necessary dependencies:
@@ -62,7 +62,7 @@ git clone git@github.com:aptos-labs/aptos-core.git ~/aptos-core
   poetry update
   ```
 
-  Run the Python [`simple-nft`](https://github.com/aptos-labs/aptos-core/blob/main/ecosystem/python/sdk/examples/simple-nft.py) example:
+  Run the Python [`simple-nft`](https://github.com/aptos-labs/pont-core/blob/main/ecosystem/python/sdk/examples/simple-nft.py) example:
   ```bash
   poetry run python -m examples.simple-nft
   ```
@@ -99,7 +99,7 @@ Alice's collection: {
     },
     "name": "Alice's",
     "supply": "1",
-    "uri": "https://aptos.dev"
+    "uri": "https://pont.dev"
 }
 Alice's token balance: 1
 Alice's token data: {
@@ -125,7 +125,7 @@ Alice's token data: {
         "royalty_points_numerator": "0"
     },
     "supply": "1",
-    "uri": "https://aptos.dev/img/nyan.jpeg"
+    "uri": "https://pont.dev/img/nyan.jpeg"
 }
 
 === Transferring the token to Bob ===
@@ -154,13 +154,13 @@ This example demonstrates:
   <TabItem value="typescript" label="Typescript">
 
 :::tip See the full code
-See [`simple_nft`](https://github.com/aptos-labs/aptos-core/blob/main/ecosystem/typescript/sdk/examples/typescript/simple_nft.ts) for the complete code as you follow the below steps.
+See [`simple_nft`](https://github.com/aptos-labs/pont-core/blob/main/ecosystem/typescript/sdk/examples/typescript/simple_nft.ts) for the complete code as you follow the below steps.
 :::
   </TabItem>
   <TabItem value="python" label="Python">
 
 :::tip See the full code
-See [`simple-nft`](https://github.com/aptos-labs/aptos-core/blob/main/ecosystem/python/sdk/examples/simple-nft.py) for the complete code as you follow the below steps.
+See [`simple-nft`](https://github.com/aptos-labs/pont-core/blob/main/ecosystem/python/sdk/examples/simple-nft.py) for the complete code as you follow the below steps.
 :::
   </TabItem>
   <TabItem value="rust" label="Rust">
@@ -201,7 +201,7 @@ Using the API client we can create a `TokenClient`, which we use for common toke
 :!: static/sdks/python/examples/simple-nft.py section_1
 ```
 
-[`common.py`](https://github.com/aptos-labs/aptos-core/tree/main/ecosystem/python/sdk/examples/common.py) initializes these values as follows:
+[`common.py`](https://github.com/aptos-labs/pont-core/tree/main/ecosystem/python/sdk/examples/common.py) initializes these values as follows:
 
 ```python
 :!: static/sdks/python/examples/common.py section_1
@@ -216,7 +216,7 @@ Coming soon.
 
 :::tip
 
-By default the URLs for both the services point to Aptos devnet services. However, they can be configured with the following environment variables:
+By default the URLs for both the services point to Pont devnet services. However, they can be configured with the following environment variables:
   - `APTOS_NODE_URL`
   - `APTOS_FAUCET_URL`
 :::
@@ -250,7 +250,7 @@ Coming soon.
 
 ### Step 4.3: Creating blockchain accounts
 
-In Aptos, each account must have an on-chain representation in order to support receive tokens and coins as well as interacting in other dApps. An account represents a medium for storing assets, hence it must be explicitly created. This example leverages the Faucet to create Alice and Bob's accounts:
+In Pont, each account must have an on-chain representation in order to support receive tokens and coins as well as interacting in other dApps. An account represents a medium for storing assets, hence it must be explicitly created. This example leverages the Faucet to create Alice and Bob's accounts:
 
 <Tabs groupId="sdk-examples">
   <TabItem value="typescript" label="Typescript">
@@ -299,7 +299,7 @@ Your application will call `create_collection`:
 
 The function signature of `create_collection`. It returns a transaction hash:
 ```python
-:!: static/sdks/python/aptos_sdk/client.py create_collection
+:!: static/sdks/python/pont_sdk/client.py create_collection
 ```
   </TabItem>
   <TabItem value="rust" label="Rust">
@@ -336,7 +336,7 @@ Your application will call `create_token`:
 
 The function signature of `create_token`. It returns a transaction hash:
 ```python
-:!: static/sdks/python/aptos_sdk/client.py create_token
+:!: static/sdks/python/pont_sdk/client.py create_token
 ```
   </TabItem>
   <TabItem value="rust" label="Rust">
@@ -384,7 +384,7 @@ To read a token's metadata:
 
 Here's how `get_token_data` queries the token metadata:
 ```python
-:!: static/sdks/python/aptos_sdk/client.py read_token_data_table
+:!: static/sdks/python/pont_sdk/client.py read_token_data_table
 ```
 
   </TabItem>
@@ -398,7 +398,7 @@ Coming soon.
 
 ### Step 4.7: Reading a token balance
 
-Each token within Aptos is a distinct asset, the assets owned by the user are stored within their `TokenStore`. To get the balance:
+Each token within Pont is a distinct asset, the assets owned by the user are stored within their `TokenStore`. To get the balance:
 
 <Tabs groupId="sdk-examples">
   <TabItem value="typescript" label="Typescript">
@@ -423,7 +423,7 @@ Coming soon.
 
 ### Step 4.8: Offering and claiming a token
 
-Many users have received unwanted tokens that may cause minimally embarrassment to serious ramifications. Aptos gives the rights to each owner of an account to dictate whether or not to receive unilateral transfers. By default, unilateral transfers are unsupported. So Aptos provides a framework for *offering* and *claiming* tokens.
+Many users have received unwanted tokens that may cause minimally embarrassment to serious ramifications. Pont gives the rights to each owner of an account to dictate whether or not to receive unilateral transfers. By default, unilateral transfers are unsupported. So Pont provides a framework for *offering* and *claiming* tokens.
 
 To offer a token:
 
@@ -517,4 +517,4 @@ Coming soon.
 [typescript-sdk]: /sdks/ts-sdk/index
 [python-sdk]: /sdks/python-sdk
 [rust-sdk]: /sdks/rust-sdk
-[rest_spec]: https://fullnode.devnet.aptoslabs.com/v1/spec#/
+[rest_spec]: https://fullnode.devnet.pontlabs.com/v1/spec#/

@@ -6,7 +6,7 @@ hide_table_of_contents: true
 
 # Nodes Home
 
-The Aptos network is comprised of nodes of three types: validator node, validator fullnode and public fullnode. To participate in consensus, you are required to run both a validator node and a validator fullnode, and stake. This section describes everything you need to stake and participate in consensus and governance. Also learn how to run a public fullnode on a local network and connect to either a testnet or a devnet. 
+The Pont network is comprised of nodes of three types: validator node, validator fullnode and public fullnode. To participate in consensus, you are required to run both a validator node and a validator fullnode, and stake. This section describes everything you need to stake and participate in consensus and governance. Also learn how to run a public fullnode on a local network and connect to either a testnet or a devnet. 
 
 
 
@@ -17,13 +17,13 @@ The Aptos network is comprised of nodes of three types: validator node, validato
     <div class="col">
       <div class="card-no-border card-body h-100 d-flex flex-column align-items-start">
         <div class="card-body">
-          <h2 class="card-title">Validation on Aptos</h2>
+          <h2 class="card-title">Validation on Pont</h2>
           <p class="card-text">
-            Everything you need to know about how validation, staking and governance works on Aptos.
+            Everything you need to know about how validation, staking and governance works on Pont.
           </p>
         </div>
         <div class="list-group list-group-flush">
-          <a href="/concepts/staking#validation-on-the-aptos-blockchain" class="list-group-item">
+          <a href="/concepts/staking#validation-on-the-pont-blockchain" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
               <h4 class="mb-1">How validation works</h4>
             </div>
@@ -40,9 +40,9 @@ The Aptos network is comprised of nodes of three types: validator node, validato
           </div>
           <a href="/concepts/staking" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
-              <h4 class="mb-1">Staking on Aptos (concept)</h4>
+              <h4 class="mb-1">Staking on Pont (concept)</h4>
             </div>
-            <small>A comprehensive guide to how staking works on Aptos.</small>
+            <small>A comprehensive guide to how staking works on Pont.</small>
           </a>
           <a href="/concepts/governance" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
@@ -90,13 +90,13 @@ The Aptos network is comprised of nodes of three types: validator node, validato
             <div class="d-flex w-100 justify-content-between">
               <h4 class="mb-1">Node liveness criteria</h4>
             </div>
-            <small>Your nodes must pass these liveness criteria to be in an Aptos network.</small>
+            <small>Your nodes must pass these liveness criteria to be in an Pont network.</small>
           </a>
-          <a href="/nodes/validator-node/operator/connect-to-aptos-network" class="list-group-item">
+          <a href="/nodes/validator-node/operator/connect-to-pont-network" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
-              <h4 class="mb-1">Connecting to Aptos network</h4>
+              <h4 class="mb-1">Connecting to Pont network</h4>
             </div>
-            <small>Steps to connect your nodes to an Aptos network. </small>
+            <small>Steps to connect your nodes to an Pont network. </small>
           </a>
           <a href="/nodes/validator-node/operator/staking-pool-operations" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
@@ -133,7 +133,7 @@ The Aptos network is comprised of nodes of three types: validator node, validato
               <h4 class="mb-1">Indexer fullnode</h4>
             </div>
             <small
-              >Describes how to run an indexer fullnode on the Aptos network. </small>
+              >Describes how to run an indexer fullnode on the Pont network. </small>
           </a>
           <a href="/nodes/local-testnet/local-testnet-index" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
@@ -182,11 +182,11 @@ The Aptos network is comprised of nodes of three types: validator node, validato
         <div class="card-body">
         </div>
         <div class="list-group list-group-flush">
-          <a href="/nodes/aptos-deployments" class="list-group-item">
+          <a href="/nodes/pont-deployments" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
-              <h4 class="mb-1">Aptos blockchain deployments</h4>
+              <h4 class="mb-1">Pont blockchain deployments</h4>
             </div>
-            <small>See a snapshot of all Aptos deployments.</small>
+            <small>See a snapshot of all Pont deployments.</small>
           </a>
           <a href="/nodes/identity-and-configuration" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
@@ -204,13 +204,13 @@ The Aptos network is comprised of nodes of three types: validator node, validato
             <div class="d-flex w-100 justify-content-between">
               <h4 class="mb-1">Indexing</h4>
             </div>
-            <small>Access Aptos-provided indexer service or build your own custom indexer for the Aptos blockchain.</small>
+            <small>Access Pont-provided indexer service or build your own custom indexer for the Pont blockchain.</small>
           </a>
           <a href="/guides/state-sync" class="list-group-item">
             <div class="d-flex w-100 justify-content-between">
               <h4 class="mb-1">State synchronization</h4>
             </div>
-            <small>Synchronize your nodes to the latest Aptos blockchain state.</small>
+            <small>Synchronize your nodes to the latest Pont blockchain state.</small>
           </a>
         </div>
       </div>

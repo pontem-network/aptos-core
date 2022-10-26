@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::Error;
-use aptos_logger::Schema;
 use peer_monitoring_service_types::PeerMonitoringServiceRequest;
+use pont_logger::Schema;
 use serde::Serialize;
 
 #[derive(Schema)]

@@ -11,7 +11,7 @@ spec:
   serviceAccountName: forge
   containers:
   - name: main
-    image: {AWS_ACCOUNT_NUM}.dkr.ecr.{AWS_REGION}.amazonaws.com/aptos/forge:{FORGE_IMAGE_TAG}
+    image: {AWS_ACCOUNT_NUM}.dkr.ecr.{AWS_REGION}.amazonaws.com/pont/forge:{FORGE_IMAGE_TAG}
     imagePullPolicy: Always
     command:
     - /bin/bash
@@ -55,5 +55,5 @@ spec:
     eks.amazonaws.com/nodegroup: validators
   tolerations:
   - effect: NoExecute
-    key: aptos.org/nodepool
+    key: pont.org/nodepool
     value: validators

@@ -1,4 +1,4 @@
-# aptos-fullnode
+# pont-fullnode
 
 ![Version: 1.5.0-rc.1](https://img.shields.io/badge/Version-1.5.0--rc.1-informational?style=flat-square) ![AppVersion: 1.5.0-rc.1](https://img.shields.io/badge/AppVersion-1.5.0--rc.1-informational?style=flat-square)
 
@@ -7,7 +7,7 @@
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
-| aptos_chains | object | `{"ait3":{"genesis_blob_url":"https://raw.githubusercontent.com/aptos-labs/aptos-ait3/main/genesis.blob","waypoint_txt_url":"https://raw.githubusercontent.com/aptos-labs/aptos-ait3/main/waypoint.txt"},"devnet":{"genesis_blob_url":"https://devnet.aptoslabs.com/genesis.blob","waypoint_txt_url":"https://devnet.aptoslabs.com/waypoint.txt"},"testnet":{"genesis_blob_url":"https://raw.githubusercontent.com/aptos-labs/aptos-genesis-waypoint/main/testnet/genesis.blob","waypoint_txt_url":"https://raw.githubusercontent.com/aptos-labs/aptos-genesis-waypoint/main/testnet/waypoint.txt"}}` | For each supported chain, specify the URLs from which to download the genesis.blob and waypoint.txt |
+| pont_chains | object | `{"ait3":{"genesis_blob_url":"https://raw.githubusercontent.com/aptos-labs/pont-ait3/main/genesis.blob","waypoint_txt_url":"https://raw.githubusercontent.com/aptos-labs/pont-ait3/main/waypoint.txt"},"devnet":{"genesis_blob_url":"https://devnet.pontlabs.com/genesis.blob","waypoint_txt_url":"https://devnet.pontlabs.com/waypoint.txt"},"testnet":{"genesis_blob_url":"https://raw.githubusercontent.com/aptos-labs/pont-genesis-waypoint/main/testnet/genesis.blob","waypoint_txt_url":"https://raw.githubusercontent.com/aptos-labs/pont-genesis-waypoint/main/testnet/waypoint.txt"}}` | For each supported chain, specify the URLs from which to download the genesis.blob and waypoint.txt |
 | backup.affinity | object | `{}` |  |
 | backup.config.azure.account | string | `nil` |  |
 | backup.config.azure.container | string | `nil` |  |
@@ -19,7 +19,7 @@
 | backup.config.transaction_batch_size | int | `1000000` | Transaction batch size |
 | backup.enable | bool | `false` | Whether to enable backup |
 | backup.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy to use for backup images |
-| backup.image.repo | string | `"aptoslabs/tools"` | Image repo to use for backup images |
+| backup.image.repo | string | `"pontlabs/tools"` | Image repo to use for backup images |
 | backup.image.tag | string | `"devnet"` | Image tag to use for backup images |
 | backup.nodeSelector | object | `{}` |  |
 | backup.resources.limits.cpu | int | `1` |  |
@@ -38,10 +38,10 @@
 | chain.era | int | `1` | Bump this number to wipe the underlying storage |
 | chain.genesisConfigmap | string | `nil` | Kubernetes Configmap from which to load the genesis.blob and waypoint.txt |
 | chain.genesisSecret | string | `nil` | Kubernetes Secret from which to load the genesis.blob and waypoint.txt |
-| chain.name | string | `"devnet"` | Name of the testnet to connect to. There must be a corresponding entry in .Values.aptos_chains |
-| fullnode.config | object | `{"full_node_networks":[{"identity":{},"inbound_rate_limit_config":null,"max_inbound_connections":100,"network_id":"public","outbound_rate_limit_config":null,"seeds":{}}]}` | Fullnode configuration. See NodeConfig https://github.com/aptos-labs/aptos-core/blob/main/config/src/config/mod.rs |
+| chain.name | string | `"devnet"` | Name of the testnet to connect to. There must be a corresponding entry in .Values.pont_chains |
+| fullnode.config | object | `{"full_node_networks":[{"identity":{},"inbound_rate_limit_config":null,"max_inbound_connections":100,"network_id":"public","outbound_rate_limit_config":null,"seeds":{}}]}` | Fullnode configuration. See NodeConfig https://github.com/aptos-labs/pont-core/blob/main/config/src/config/mod.rs |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy to use for fullnode images |
-| image.repo | string | `"aptoslabs/validator"` | Image repo to use for fullnode images. Fullnodes and validators use the same image |
+| image.repo | string | `"pontlabs/validator"` | Image repo to use for fullnode images. Fullnodes and validators use the same image |
 | image.tag | string | `"devnet"` | Image tag to use for fullnode images |
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` | Change enabled to true and fill out the rest of the fields to expose the REST API externally via your ingress controller |
@@ -64,7 +64,7 @@
 | restore.config.s3.bucket | string | `nil` |  |
 | restore.config.trusted_waypoints | list | `[]` | List of trusted waypoints for restore |
 | restore.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy to use for restore images |
-| restore.image.repo | string | `"aptoslabs/tools"` | Image repo to use for restore images |
+| restore.image.repo | string | `"pontlabs/tools"` | Image repo to use for restore images |
 | restore.image.tag | string | `"devnet"` | Image tag to use for restore images |
 | restore.nodeSelector | object | `{}` |  |
 | restore.resources.limits.cpu | int | `6` |  |
@@ -76,7 +76,7 @@
 | service.annotations | object | `{}` |  |
 | service.externalTrafficPolicy | string | `nil` | The externalTrafficPolicy for the fullnode service |
 | service.loadBalancerSourceRanges | list | `[]` | If set and if the ServiceType is LoadBalancer, allow traffic to fullnode from these CIDRs |
-| service.type | string | `"ClusterIP"` | The Kubernetes ServiceType to use for the fullnode. Change this to LoadBalancer expose the REST API, aptosnet endpoint externally |
+| service.type | string | `"ClusterIP"` | The Kubernetes ServiceType to use for the fullnode. Change this to LoadBalancer expose the REST API, pontnet endpoint externally |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `nil` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
@@ -87,8 +87,8 @@
 Configuration
 -------------
 
-This Helm chart deploys a public fullnode for the Aptos blockchain network. The
-fullnode connects to Aptos validators and synchronises the blockchain state to
+This Helm chart deploys a public fullnode for the Pont blockchain network. The
+fullnode connects to Pont validators and synchronises the blockchain state to
 a persistent volume. It provides a [REST API][] for interacting with
 the blockchain.
 
@@ -97,9 +97,9 @@ See [values.yaml][] for the full list of options you can configure.
 Connecting to Testnet
 -------------
 
-To connect to the Aptos devnet, you must have the correct genesis blob and waypoint. The source of truth for these are hosted here: https://github.com/aptos-labs/aptos-genesis-waypoint
+To connect to the Pont devnet, you must have the correct genesis blob and waypoint. The source of truth for these are hosted here: https://github.com/aptos-labs/pont-genesis-waypoint
 
-The waypoint and genesis blobs are download at runtime, and their URLs are specified in `.Values.aptos_chains`.
+The waypoint and genesis blobs are download at runtime, and their URLs are specified in `.Values.pont_chains`.
 
 Deployment
 ----------
@@ -110,6 +110,6 @@ Deployment
 
        $ helm install fullnode --set storage.class=gp2 .
 
-[REST API]: https://github.com/aptos-labs/aptos-core/blob/main/api/doc/v0/openapi.yaml
+[REST API]: https://github.com/aptos-labs/pont-core/blob/main/api/doc/v0/openapi.yaml
 [values.yaml]: values.yaml
-[Aptos dockerhub]: https://hub.docker.com/r/aptoslabs/validator/tags?page=1&ordering=last_updated
+[Pont dockerhub]: https://hub.docker.com/r/pontlabs/validator/tags?page=1&ordering=last_updated

@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{LoadDestination, NetworkLoadTest};
-use aptos_logger::info;
 use forge::{
     GroupNetworkDelay, NetworkContext, NetworkTest, Swarm, SwarmChaos, SwarmNetworkBandwidth,
     SwarmNetworkDelay, Test,
 };
+use pont_logger::info;
 
 pub struct ThreeRegionSimulationTest;
 

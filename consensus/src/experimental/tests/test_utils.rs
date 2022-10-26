@@ -2,15 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::{metrics_safety_rules::MetricsSafetyRules, test_utils::MockStorage};
-use aptos_crypto::{hash::ACCUMULATOR_PLACEHOLDER_HASH, HashValue};
-use aptos_infallible::Mutex;
-use aptos_secure_storage::Storage;
-use aptos_types::{
-    ledger_info::{generate_ledger_info_with_sig, LedgerInfo, LedgerInfoWithSignatures},
-    validator_signer::ValidatorSigner,
-    validator_verifier::random_validator_verifier,
-    waypoint::Waypoint,
-};
 use consensus_types::{
     block::block_test_utils::certificate_for_genesis,
     common::{Payload, Round},
@@ -19,6 +10,15 @@ use consensus_types::{
     vote_proposal::VoteProposal,
 };
 use executor_types::StateComputeResult;
+use pont_crypto::{hash::ACCUMULATOR_PLACEHOLDER_HASH, HashValue};
+use pont_infallible::Mutex;
+use pont_secure_storage::Storage;
+use pont_types::{
+    ledger_info::{generate_ledger_info_with_sig, LedgerInfo, LedgerInfoWithSignatures},
+    validator_signer::ValidatorSigner,
+    validator_verifier::random_validator_verifier,
+    waypoint::Waypoint,
+};
 use safety_rules::{
     test_utils::{make_proposal_with_parent, make_proposal_with_qc},
     PersistentSafetyStorage, SafetyRulesManager,
@@ -37,7 +37,7 @@ pub fn prepare_safety_rules() -> (Arc<Mutex<MetricsSafetyRules>>, Vec<ValidatorS
         Waypoint::new_epoch_boundary(&LedgerInfo::mock_genesis(Some(validator_set))).unwrap();
 
     let safety_storage = PersistentSafetyStorage::initialize(
-        Storage::from(aptos_secure_storage::InMemoryStorage::new()),
+        Storage::from(pont_secure_storage::InMemoryStorage::new()),
         signer.author(),
         signer.private_key().clone(),
         waypoint,

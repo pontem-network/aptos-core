@@ -3,14 +3,14 @@
 
 use crate::vm_validator::TransactionValidation;
 use anyhow::Result;
-use aptos_state_view::StateView;
-use aptos_types::{
+use pont_state_view::StateView;
+use pont_types::{
     account_address::AccountAddress,
     on_chain_config::OnChainConfigPayload,
     transaction::{SignedTransaction, VMValidatorResult},
     vm_status::StatusCode,
 };
-use aptos_vm::VMValidator;
+use pont_vm::VMValidator;
 
 pub const ACCOUNT_DNE_TEST_ADD: AccountAddress =
     AccountAddress::new([0_u8; AccountAddress::LENGTH]);

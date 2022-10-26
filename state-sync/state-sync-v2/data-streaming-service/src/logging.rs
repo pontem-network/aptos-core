@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::error::Error;
-use aptos_logger::Schema;
+use pont_logger::Schema;
 use serde::Serialize;
 
 #[derive(Schema)]
@@ -30,7 +30,7 @@ impl<'a> LogSchema<'a> {
 #[serde(rename_all = "snake_case")]
 pub enum LogEntry {
     CheckStreamProgress,
-    AptosDataClient,
+    PontDataClient,
     EndOfStreamNotification,
     HandleTerminateRequest,
     HandleStreamRequest,

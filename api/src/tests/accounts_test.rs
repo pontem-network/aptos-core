@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::new_test_context;
-use aptos_api_test_context::{current_function_name, find_value};
+use pont_api_test_context::{current_function_name, find_value};
 use serde_json::json;
 
 /* TODO: reactivate once cause of failure for `"8"` vs `8` in the JSON output is known.
@@ -86,7 +86,7 @@ async fn test_get_module_with_entry_functions() {
 // Unstable due to framework changes
 #[ignore]
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-async fn test_get_module_aptos_config() {
+async fn test_get_module_pont_config() {
     let mut context = new_test_context(current_function_name!());
     let address = "0x1";
 
