@@ -1,0 +1,39 @@
+name: Rust
+
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install Rust toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        components: rustfmt, clippy
+    
+    - name: cargo fmt --check
+      run: cargo fmt --check
+       
+    - name: Run tests
+      run: RUST_BACKTRACE=1 cargo test --verbose
+      
+    - name: Clippy
+      uses: actions-rs/clippy-check@v1
+      with:
+        name: Clippy Report
+        token: ${{ secrets.GITHUB_TOKEN }}
+        failure-mode: warnings
+        args: --all --all-targets -- -D warnings
