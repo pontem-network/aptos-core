@@ -17,18 +17,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: ./.github/actions/rust-setup
-    
-    - name: cargo fmt --check
-      run: cargo fmt --check
-       
-    - name: Run tests
-      run: RUST_BACKTRACE=1 cargo test --verbose
-      
-    - name: Clippy
-      uses: actions-rs/clippy-check@v1
-      with:
-        name: Clippy Report
-        token: ${{ secrets.GITHUB_TOKEN }}
-        failure-mode: warnings
-        args: --all --all-targets -- -D warnings
+    - name: Install tools
+      uses: ./.github/actions/rust-setup
+
+    - run: cargo install cargo-sort
+
+    - name: Fmt/XClippy
+      run: scripts/rust_lint.sh --check
