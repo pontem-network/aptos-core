@@ -1,0 +1,26 @@
+name: Rust
+
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install tools
+      uses: ./.github/actions/rust-setup
+
+    - run: cargo install cargo-sort
+
+    - name: Fmt/XClippy
+      run: scripts/rust_lint.sh --check
