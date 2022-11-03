@@ -30,15 +30,15 @@ jobs:
 
       - name: Compress Artifact
         run: |
-          UBUNTU_VERSION=$(sed -n 's/^VERSION_ID=//p' /etc/os-release | tr -d '"') >>${GITHUB_ENV}
-          echo "UBUNTU_VERSION=${UBUNTU_VERSION}"
-          tar -czvf "pont-node-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}.tar.gz" ./target/release/pont-node
-          tar -czvf "pont-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}.tar.gz" ./target/cli/pont
+          UBUNTU_VERSION=$(sed -n 's/^VERSION_ID=//p' /etc/os-release | tr -d '"') 
+          echo "UBUNTU_VERSION=${UBUNTU_VERSION}" >>${GITHUB_ENV}
+          tar -czvf "pont-node-${{ github.event.pull_request.head.ref }}-${UBUNTU_VERSION}.tar.gz" ./target/release/pont-node
+          tar -czvf "pont-${{ github.event.pull_request.head.ref }}-${UBUNTU_VERSION}.tar.gz" ./target/cli/pont
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: "build-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}"
+          name: "build-${{ github.event.pull_request.head.ref }}-${UBUNTU_VERSION}"
           path: |
-            "pont-node-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}.tar.gz"
-            "pont-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}.tar.gz"
+            "pont-node-${{ github.event.pull_request.head.ref }}-${UBUNTU_VERSION}.tar.gz"
+            "pont-${{ github.event.pull_request.head.ref }}-${UBUNTU_VERSION}.tar.gz"
