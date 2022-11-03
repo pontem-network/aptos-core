@@ -1,0 +1,44 @@
+name: Build Pont
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+    branches:
+      - fork_26.10.2022
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os}}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-20.04
+          - ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install tools
+        uses: ./.github/actions/rust-setup
+
+      - name: Build
+        run: |
+          cargo build --release -p pont-node
+          cargo build -p pont --profile cli
+
+      - name: Compress Artifact
+        run: |
+          UBUNTU_VERSION=$(lsb_realese -r | awk '{print $2}') >>${GITHUB_ENV}
+          echo "UBUNTU_VERSION=${UBUNTU_VERSION}"
+          tar -czvf "pont-node-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}.tar.gz" ./target/release/pont-node
+          tar -czvf "pont-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}.tar.gz" ./target/cli/pont
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: "build-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}"
+          path: |
+            "pont-node-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}.tar.gz"
+            "pont-${{ github.event.pull_request.head.ref }}_${UBUNTU_VERSION}.tar.gz"
