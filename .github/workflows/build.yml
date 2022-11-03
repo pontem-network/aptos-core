@@ -2,8 +2,8 @@ name: Build Pont
 on:
   pull_request:
     types: [ opened, synchronize ]
-    branches:
-      - fork_26.10.2022
+    # branches:
+    #   - fork_26.10.2022
 
 jobs:
   build:
