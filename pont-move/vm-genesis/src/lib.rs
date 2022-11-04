@@ -502,7 +502,7 @@ fn create_and_initialize_validators_with_commission(
     let validators_bytes = bcs::to_bytes(validators).expect("Validators can be serialized");
     let mut serialized_values = serialize_values(&vec![
         MoveValue::Signer(CORE_CODE_ADDRESS),
-        MoveValue::Bool(true),
+        MoveValue::Bool(false),
     ]);
     serialized_values.push(validators_bytes);
     exec_function(

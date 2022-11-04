@@ -102,3 +102,6 @@ __pycache__
 **/*.mrb
 
 nodes
+genesis
+mainnet
+stand
