@@ -40,6 +40,11 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: "build-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}"
+          name: "pont-node-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}"
           path: "pont-node-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz"
-            # "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz"
+            
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}"
+          path: "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz"
