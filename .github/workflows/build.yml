@@ -20,23 +20,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      # - name: Install tools
-      #   uses: ./.github/actions/rust-setup
+      - name: Install tools
+        uses: ./.github/actions/rust-setup
 
-      # - name: Build
-      #   run: |
-      #     cargo build --release -p pont-node
-      #     cargo build -p pont --profile cli
+      - name: Build
+        run: |
+          cargo build --release -p pont-node
+          cargo build -p pont --profile cli
 
       - name: Compress Artifact
         run: |
-          touch pont pont-node
-          tar -czvf "pont-node-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" pont-node
-          tar -czvf "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" pont
-          #tar -czvf "pont-node-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" ./target/release/pont-node
-          #tar -czvf "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" ./target/cli/pont
-          echo $(pwd)
-          ls -la
+          tar -czvf "pont-node-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" ./target/release/pont-node
+          tar -czvf "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" ./target/cli/pont
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
