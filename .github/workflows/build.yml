@@ -35,6 +35,7 @@ jobs:
           tar -czvf "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" pont
           #tar -czvf "pont-node-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" ./target/release/pont-node
           #tar -czvf "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" ./target/cli/pont
+          echo $(pwd)
           ls -la
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
