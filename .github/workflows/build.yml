@@ -33,8 +33,9 @@ jobs:
 
       - name: Compress Artifact
         run: |
-          tar -czvf "pont-node-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" -C target/release/pont-node .
-          tar -czvf "pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" -C target/cli/pont .
+          pushd target/release && tar -czvf ../../"pont-node-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" pont-node
+          popd
+          cd target/cli && tar -czvf ../../"pont-${{ github.event.pull_request.head.ref }}-${{ matrix.os }}.tar.gz" pont
       
       - name: Upload pont-node
         uses: actions/upload-artifact@v3
