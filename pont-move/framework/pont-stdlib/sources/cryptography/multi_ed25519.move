@@ -198,7 +198,7 @@ module pont_std::multi_ed25519 {
     #[test]
     fun test_multisigs_verify() {
         // Generated via `cargo test -- test_sample_multisig --nocapture --ignored` in pont-crypto/
-        let msg = b"Hello Pont!";
+        let msg = b"Hello Aptos!";
         //let ks = vector[1, 1, 2, 2, 3, 15, ]; // the thresholds, implicitly encoded in the public keys
         let ns = vector[1, 2, 2, 3, 10, 32, ];
         let pks = vector[
