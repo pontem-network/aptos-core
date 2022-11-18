@@ -23,10 +23,15 @@ module pont_std::pont_hash {
 
     native public fun keccak256(bytes: vector<u8>): vector<u8>;
 
+
+    //
+    // Native functions
+    //
+    native public fun poseidon(bytes: vector<u8>): vector<u8>;
+
     //
     // Testing
     //
-
     #[test]
     fun keccak256_test() {
         let inputs = vector[
@@ -44,6 +49,30 @@ module pont_std::pont_hash {
             let input = *std::vector::borrow(&inputs, i);
             let hash_expected = *std::vector::borrow(&outputs, i);
             let hash = keccak256(input);
+
+            assert!(hash_expected == hash, 1);
+
+            i = i + 1;
+        };
+    }
+
+    #[test]
+    fun poseidon_test() {
+        let inputs = vector[
+            b"testing",
+            b"",
+        ];
+
+        let outputs = vector[
+            x"14a5658f6ce7f9930161189cc97830ebf176dbc0ffda4cb2157eaee877460b4a",
+            x"2a09a9fd93c590c26b91effbb2499f07e8f7aa12e2b4940a3aed2411cb65e11c",
+        ];
+
+        let i = 0;
+        while (i < std::vector::length(&inputs)) {
+            let input = *std::vector::borrow(&inputs, i);
+            let hash_expected = *std::vector::borrow(&outputs, i);
+            let hash = poseidon(input);
 
             assert!(hash_expected == hash, 1);
 
