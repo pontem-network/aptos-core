@@ -43,6 +43,9 @@ siphasher = "0.3.10"
 smallvec = "1.8.0"
 tempfile = "3.3.0"
 tiny-keccak = { version = "2.0.2", features = ["keccak"] }
+poseidon-rs = "0.0.8"
+ff = { version = "0.11", default-features = false, package = "ff_ce" }
+
 
 move-command-line-common = { workspace = true }
 move-compiler ={ workspace = true }

@@ -16,6 +16,7 @@ Non-cryptograhic hashes:
 -  [Function `sip_hash`](#0x1_pont_hash_sip_hash)
 -  [Function `sip_hash_from_value`](#0x1_pont_hash_sip_hash_from_value)
 -  [Function `keccak256`](#0x1_pont_hash_keccak256)
+-  [Function `poseidon`](#0x1_pont_hash_poseidon)
 -  [Specification](#@Specification_0)
     -  [Function `sip_hash`](#@Specification_0_sip_hash)
     -  [Function `sip_hash_from_value`](#@Specification_0_sip_hash_from_value)
@@ -90,6 +91,28 @@ Non-cryptograhic hashes:
 
 
 <pre><code><b>native</b> <b>public</b> <b>fun</b> <a href="hash.md#0x1_pont_hash_keccak256">keccak256</a>(bytes: <a href="../../move-stdlib/doc/vector.md#0x1_vector">vector</a>&lt;u8&gt;): <a href="../../move-stdlib/doc/vector.md#0x1_vector">vector</a>&lt;u8&gt;;
+</code></pre>
+
+
+
+</details>
+
+<a name="0x1_pont_hash_poseidon"></a>
+
+## Function `poseidon`
+
+
+
+<pre><code><b>public</b> <b>fun</b> <a href="hash.md#0x1_pont_hash_poseidon">poseidon</a>(bytes: <a href="../../move-stdlib/doc/vector.md#0x1_vector">vector</a>&lt;u8&gt;): <a href="../../move-stdlib/doc/vector.md#0x1_vector">vector</a>&lt;u8&gt;
+</code></pre>
+
+
+
+<details>
+<summary>Implementation</summary>
+
+
+<pre><code><b>native</b> <b>public</b> <b>fun</b> <a href="hash.md#0x1_pont_hash_poseidon">poseidon</a>(bytes: <a href="../../move-stdlib/doc/vector.md#0x1_vector">vector</a>&lt;u8&gt;): <a href="../../move-stdlib/doc/vector.md#0x1_vector">vector</a>&lt;u8&gt;;
 </code></pre>
 
 
