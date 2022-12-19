@@ -72,10 +72,11 @@ impl Default for BuildOptions {
 
 /// Represents a built package.  It allows to extract `PackageMetadata`. Can also be used to
 /// just build Move code and related artifacts.
+#[derive(Debug, Clone)]
 pub struct BuiltPackage {
     options: BuildOptions,
     package_path: PathBuf,
-    package: CompiledPackage,
+    pub package: CompiledPackage,
 }
 
 pub(crate) fn build_model(

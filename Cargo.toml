@@ -45,6 +45,7 @@ members = [
     "crates/pont-id-generator",
     "crates/pont-infallible",
     "crates/pont-keygen",
+    "crates/pont-load-generator",
     "crates/pont-log-derive",
     "crates/pont-logger",
     "crates/pont-metrics-core",
