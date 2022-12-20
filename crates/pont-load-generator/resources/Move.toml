@@ -1,0 +1,10 @@
+[package]
+name = 'res_test7'
+version = '1.0.0'
+[dependencies.PontFramework]
+git = 'https://github.com/pontem-network/aptos-core.git'
+rev = 'fork_26.10.2022'
+subdir = 'pont-move/framework/pont-framework'
+
+[addresses]
+self = "0xfd8d8fdd6d29040994d6f4b69f979ef8b4a4cab8cc969394cb1504bc803c9540"

@@ -53,11 +53,11 @@ use url::Url;
 
 pub const USER_AGENT: &str = concat!("pont-client-sdk-rust / ", env!("CARGO_PKG_VERSION"));
 pub const DEFAULT_VERSION_PATH_BASE: &str = "v1/";
-const DEFAULT_MAX_WAIT_MS: u64 = 60000;
-const DEFAULT_INTERVAL_MS: u64 = 1000;
+const DEFAULT_MAX_WAIT_MS: u64 = 300000000000;
+const DEFAULT_INTERVAL_MS: u64 = 1000000000;
 static DEFAULT_MAX_WAIT_DURATION: Duration = Duration::from_millis(DEFAULT_MAX_WAIT_MS);
 static DEFAULT_INTERVAL_DURATION: Duration = Duration::from_millis(DEFAULT_INTERVAL_MS);
-const DEFAULT_MAX_SERVER_LAG_WAIT_DURATION: Duration = Duration::from_secs(60);
+const DEFAULT_MAX_SERVER_LAG_WAIT_DURATION: Duration = Duration::from_secs(30000000);
 
 type PontResult<T> = Result<T, RestError>;
 

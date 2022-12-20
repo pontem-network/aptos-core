@@ -1,0 +1,11 @@
+[package]
+name = 'load-generator-example28'
+version = '0.0.1'
+[dependencies.AptosFramework]
+git = 'https://github.com/aptos-labs/aptos-core.git'
+rev = 'main'
+subdir = 'aptos-move/framework/aptos-framework'
+
+
+[addresses]
+self = "0xf80afd1561db672b30b4b517f76f4f1a8cccfda9c7ac1a5d6a859552ab50c5ec"
