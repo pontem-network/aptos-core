@@ -4,12 +4,12 @@
 
 #![forbid(unsafe_code)]
 
-mod indexer;
-mod logger;
-mod network;
-mod services;
-mod state_sync;
-mod storage;
+pub mod indexer;
+pub mod logger;
+pub mod network;
+pub mod services;
+pub mod state_sync;
+pub mod storage;
 pub mod utils;
 
 #[cfg(test)]
