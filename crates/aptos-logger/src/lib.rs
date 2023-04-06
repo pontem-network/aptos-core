@@ -145,17 +145,17 @@ pub mod prelude {
 }
 
 pub mod aptos_logger;
-mod event;
-mod filter;
-mod kv;
-mod logger;
-mod macros;
-mod metadata;
+pub mod event;
+pub mod filter;
+pub mod kv;
+pub mod logger;
+pub mod macros;
+pub mod metadata;
 pub mod sample;
 pub mod telemetry_log_writer;
 pub mod tracing_adapter;
 
-mod security;
+pub mod security;
 
 pub use crate::aptos_logger::{
     AptosData as Logger, AptosDataBuilder, LoggerFilterUpdater, Writer, CHANNEL_SIZE,
@@ -168,4 +168,4 @@ pub use logger::flush;
 pub use metadata::{Level, Metadata};
 pub use security::SecurityEvent;
 
-mod counters;
+pub mod counters;
