@@ -1278,25 +1278,25 @@ pub struct TransactionOptions {
     /// This allows you to override the account address from the derived account address
     /// in the event that the authentication key was rotated or for a resource account
     #[clap(long, parse(try_from_str=crate::common::types::load_account_arg))]
-    pub(crate) sender_account: Option<AccountAddress>,
+    pub sender_account: Option<AccountAddress>,
 
     #[clap(flatten)]
-    pub(crate) private_key_options: PrivateKeyInputOptions,
+    pub private_key_options: PrivateKeyInputOptions,
     #[clap(flatten)]
-    pub(crate) encoding_options: EncodingOptions,
+    pub encoding_options: EncodingOptions,
     #[clap(flatten)]
-    pub(crate) profile_options: ProfileOptions,
+    pub profile_options: ProfileOptions,
     #[clap(flatten)]
-    pub(crate) rest_options: RestOptions,
+    pub rest_options: RestOptions,
     #[clap(flatten)]
-    pub(crate) gas_options: GasOptions,
+    pub gas_options: GasOptions,
     #[clap(flatten)]
-    pub(crate) prompt_options: PromptOptions,
+    pub prompt_options: PromptOptions,
 
     /// If this option is set, simulate the transaction locally using the debugger and generate
     /// flamegraphs that reflect the gas usage.
     #[clap(long)]
-    pub(crate) profile_gas: bool,
+    pub profile_gas: bool,
 }
 
 impl TransactionOptions {
