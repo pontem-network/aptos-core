@@ -1480,6 +1480,7 @@ impl FromStr for FunctionArgType {
 }
 
 /// A parseable arg with a type separated by a colon
+#[derive(Debug, Clone)]
 pub struct ArgWithType {
     pub(crate) _ty: FunctionArgType,
     pub(crate) arg: Vec<u8>,
