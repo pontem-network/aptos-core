@@ -14,7 +14,7 @@ mod headers;
 mod index;
 mod ledger_info;
 pub mod mime_types;
-mod move_types;
+pub mod move_types;
 mod table;
 pub mod transaction;
 mod view;
