@@ -1483,7 +1483,7 @@ impl FromStr for FunctionArgType {
 #[derive(Debug, Clone)]
 pub struct ArgWithType {
     pub(crate) _ty: FunctionArgType,
-    pub(crate) arg: Vec<u8>,
+    pub arg: Vec<u8>,
 }
 
 impl ArgWithType {
