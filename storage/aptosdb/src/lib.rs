@@ -22,17 +22,17 @@ pub mod metrics;
 pub mod schema;
 pub mod state_restore;
 
-mod db_options;
-mod event_store;
-mod ledger_store;
-mod lru_node_cache;
-mod pruner;
-mod state_kv_db;
-mod state_merkle_db;
-mod state_store;
-mod transaction_store;
-mod utils;
-mod versioned_node_cache;
+pub mod db_options;
+pub mod event_store;
+pub mod ledger_store;
+pub mod lru_node_cache;
+pub mod pruner;
+pub mod state_kv_db;
+pub mod state_merkle_db;
+pub mod state_store;
+pub mod transaction_store;
+pub mod utils;
+pub mod versioned_node_cache;
 
 #[cfg(test)]
 mod aptosdb_test;
