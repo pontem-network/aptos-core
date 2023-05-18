@@ -16,7 +16,7 @@ use aptos_types::transaction::Version;
 use std::{sync::Arc, thread::JoinHandle};
 
 /// The `PrunerManager` for `LedgerPruner`.
-pub(crate) struct LedgerPrunerManager {
+pub struct LedgerPrunerManager {
     pruner_enabled: bool,
     /// DB version window, which dictates how many version of other stores like transaction, ledger
     /// info, events etc to keep.
