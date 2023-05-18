@@ -91,8 +91,8 @@ pub(crate) struct StateDb {
     pub state_kv_pruner: StateKvPrunerManager,
 }
 
-pub(crate) struct StateStore {
-    pub(crate) state_db: Arc<StateDb>,
+pub struct StateStore {
+    pub state_db: Arc<StateDb>,
     // The `base` of buffered_state is the latest snapshot in state_merkle_db while `current`
     // is the latest state sparse merkle tree that is replayed from that snapshot until the latest
     // write set stored in ledger_db.
