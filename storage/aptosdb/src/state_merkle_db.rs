@@ -12,7 +12,7 @@ use crate::{
     NUM_STATE_SHARDS, OTHER_TIMERS_SECONDS,
 };
 use anyhow::Result;
-use aptos_config::config::{RocksdbConfig, RocksdbConfigs};
+use aptos_config::config::{RocksdbConfig};
 use aptos_crypto::{hash::CryptoHash, HashValue};
 use aptos_jellyfish_merkle::{
     node_type::{NodeKey, NodeType},
@@ -58,11 +58,12 @@ pub struct StateMerkleDb {
 impl StateMerkleDb {
     pub fn new<P: AsRef<Path>>(
         db_root_path: P,
-        rocksdb_configs: RocksdbConfigs,
+        state_merkle_db_config: RocksdbConfig,
         readonly: bool,
+        use_sharded_state_merkle_db: bool,
         max_nodes_per_lru_cache_shard: usize,
     ) -> Result<Self> {
-        let state_merkle_db_config = rocksdb_configs.state_merkle_db_config;
+        let state_merkle_db_config = state_merkle_db_config;
         // TODO(grao): Currently when this value is set to 0 we disable both caches. This is
         // hacky, need to revisit.
         //
@@ -70,7 +71,7 @@ impl StateMerkleDb {
         let enable_cache = max_nodes_per_lru_cache_shard > 0;
         let version_cache = VersionedNodeCache::new();
         let lru_cache = LruNodeCache::new(max_nodes_per_lru_cache_shard);
-        if !rocksdb_configs.use_sharded_state_merkle_db {
+        if !use_sharded_state_merkle_db {
             info!("Sharded state merkle DB is not enabled!");
             let state_merkle_db_path = db_root_path.as_ref().join(STATE_MERKLE_DB_NAME);
             let db = Arc::new(Self::open_db(

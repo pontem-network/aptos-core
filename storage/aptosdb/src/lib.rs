@@ -183,9 +183,9 @@ static ROCKSDB_PROPERTY_MAP: Lazy<HashMap<&str, String>> = Lazy::new(|| {
         "rocksdb.block-cache-usage",
         "rocksdb.block-cache-pinned-usage",
     ]
-    .iter()
-    .map(|x| (*x, format!("aptos_{}", x.replace('.', "_"))))
-    .collect()
+        .iter()
+        .map(|x| (*x, format!("aptos_{}", x.replace('.', "_"))))
+        .collect()
 });
 
 type ShardedStateKvSchemaBatch = [SchemaBatch; NUM_STATE_SHARDS];
@@ -410,14 +410,16 @@ impl AptosDB {
         let ledger_db = Arc::new(ledger_db);
         let state_kv_db = StateKvDb::new(
             db_root_path.as_ref(),
-            rocksdb_configs,
+            rocksdb_configs.state_kv_db_config,
             readonly,
             Arc::clone(&ledger_db),
+            rocksdb_configs.use_state_kv_db,
         )?;
         let state_merkle_db = StateMerkleDb::new(
             db_root_path,
-            rocksdb_configs,
+            rocksdb_configs.state_merkle_db_config,
             readonly,
+            rocksdb_configs.use_sharded_state_merkle_db,
             max_num_nodes_per_lru_cache_shard,
         )?;
 
@@ -490,7 +492,7 @@ impl AptosDB {
             buffered_state_target_items,
             max_num_nodes_per_lru_cache_shard,
         )
-        .expect("Unable to open AptosDB")
+            .expect("Unable to open AptosDB")
     }
 
     /// This opens db in non-readonly mode, without the pruner.
@@ -889,7 +891,7 @@ impl AptosDB {
             Some(indexer) => indexer.get_table_info(handle),
             None => {
                 bail!("Indexer not enabled.");
-            },
+            }
         }
     }
 
@@ -964,7 +966,7 @@ impl DbReader for AptosDB {
         key_prefix: &StateKeyPrefix,
         cursor: Option<&StateKey>,
         version: Version,
-    ) -> Result<Box<dyn Iterator<Item = Result<(StateKey, StateValue)>> + '_>> {
+    ) -> Result<Box<dyn Iterator<Item=Result<(StateKey, StateValue)>> + '_>> {
         gauged_api("get_prefixed_state_value_iterator", || {
             self.error_if_state_kv_pruned("StateValue", version)?;
 
@@ -972,7 +974,7 @@ impl DbReader for AptosDB {
                 self.state_store
                     .get_prefixed_state_value_iterator(key_prefix, cursor, version)?,
             )
-                as Box<dyn Iterator<Item = Result<(StateKey, StateValue)>>>)
+                as Box<dyn Iterator<Item=Result<(StateKey, StateValue)>>>)
         })
     }
 
@@ -1240,7 +1242,7 @@ impl DbReader for AptosDB {
         &self,
         start_version: Version,
         limit: u64,
-    ) -> Result<Box<dyn Iterator<Item = Result<Transaction>> + '_>> {
+    ) -> Result<Box<dyn Iterator<Item=Result<Transaction>> + '_>> {
         gauged_api("get_transaction_iterator", || {
             error_if_too_many_requested(limit, MAX_REQUEST_LIMIT)?;
             self.error_if_ledger_pruned("Transaction", start_version)?;
@@ -1248,7 +1250,7 @@ impl DbReader for AptosDB {
             let iter = self
                 .transaction_store
                 .get_transaction_iter(start_version, limit as usize)?;
-            Ok(Box::new(iter) as Box<dyn Iterator<Item = Result<Transaction>> + '_>)
+            Ok(Box::new(iter) as Box<dyn Iterator<Item=Result<Transaction>> + '_>)
         })
     }
 
@@ -1256,7 +1258,7 @@ impl DbReader for AptosDB {
         &self,
         start_version: Version,
         limit: u64,
-    ) -> Result<Box<dyn Iterator<Item = Result<TransactionInfo>> + '_>> {
+    ) -> Result<Box<dyn Iterator<Item=Result<TransactionInfo>> + '_>> {
         gauged_api("get_transaction_info_iterator", || {
             error_if_too_many_requested(limit, MAX_REQUEST_LIMIT)?;
             self.error_if_ledger_pruned("Transaction", start_version)?;
@@ -1264,7 +1266,7 @@ impl DbReader for AptosDB {
             let iter = self
                 .ledger_store
                 .get_transaction_info_iter(start_version, limit as usize)?;
-            Ok(Box::new(iter) as Box<dyn Iterator<Item = Result<TransactionInfo>> + '_>)
+            Ok(Box::new(iter) as Box<dyn Iterator<Item=Result<TransactionInfo>> + '_>)
         })
     }
 
@@ -1272,7 +1274,7 @@ impl DbReader for AptosDB {
         &self,
         start_version: Version,
         limit: u64,
-    ) -> Result<Box<dyn Iterator<Item = Result<Vec<ContractEvent>>> + '_>> {
+    ) -> Result<Box<dyn Iterator<Item=Result<Vec<ContractEvent>>> + '_>> {
         gauged_api("get_events_iterator", || {
             error_if_too_many_requested(limit, MAX_REQUEST_LIMIT)?;
             self.error_if_ledger_pruned("Transaction", start_version)?;
@@ -1282,8 +1284,8 @@ impl DbReader for AptosDB {
                 .get_events_by_version_iter(start_version, limit as usize)?;
             Ok(Box::new(iter)
                 as Box<
-                    dyn Iterator<Item = Result<Vec<ContractEvent>>> + '_,
-                >)
+                dyn Iterator<Item=Result<Vec<ContractEvent>>> + '_,
+            >)
         })
     }
 
@@ -1291,7 +1293,7 @@ impl DbReader for AptosDB {
         &self,
         start_version: Version,
         limit: u64,
-    ) -> Result<Box<dyn Iterator<Item = Result<WriteSet>> + '_>> {
+    ) -> Result<Box<dyn Iterator<Item=Result<WriteSet>> + '_>> {
         gauged_api("get_write_set_iterator", || {
             error_if_too_many_requested(limit, MAX_REQUEST_LIMIT)?;
             self.error_if_ledger_pruned("Transaction", start_version)?;
@@ -1299,7 +1301,7 @@ impl DbReader for AptosDB {
             let iter = self
                 .transaction_store
                 .get_write_set_iter(start_version, limit as usize)?;
-            Ok(Box::new(iter) as Box<dyn Iterator<Item = Result<WriteSet>> + '_>)
+            Ok(Box::new(iter) as Box<dyn Iterator<Item=Result<WriteSet>> + '_>)
         })
     }
 
@@ -2044,8 +2046,8 @@ impl GetRestoreHandler for Arc<AptosDB> {
 }
 
 pub(crate) fn gauged_api<T, F>(api_name: &'static str, api_impl: F) -> Result<T>
-where
-    F: FnOnce() -> Result<T>,
+    where
+        F: FnOnce() -> Result<T>,
 {
     let timer = Instant::now();
 
@@ -2060,7 +2062,7 @@ where
                 "AptosDB API returned error."
             );
             "Err"
-        },
+        }
     };
     API_LATENCY_SECONDS
         .with_label_values(&[api_name, res_type])

@@ -10,7 +10,7 @@ use crate::{
     COMMIT_POOL, NUM_STATE_SHARDS,
 };
 use anyhow::Result;
-use aptos_config::config::{RocksdbConfig, RocksdbConfigs};
+use aptos_config::config::{RocksdbConfig};
 use aptos_logger::prelude::info;
 use aptos_rocksdb_options::gen_rocksdb_options;
 use aptos_schemadb::{SchemaBatch, DB};
@@ -34,11 +34,12 @@ impl StateKvDb {
     // on different disks.
     pub fn new<P: AsRef<Path>>(
         db_root_path: P,
-        rocksdb_configs: RocksdbConfigs,
+        state_kv_db_config: RocksdbConfig,
         readonly: bool,
         ledger_db: Arc<DB>,
+        use_state_kv_db: bool
     ) -> Result<Self> {
-        if !rocksdb_configs.use_state_kv_db {
+        if !use_state_kv_db {
             info!("State K/V DB is not enabled!");
             return Ok(Self {
                 state_kv_metadata_db: Arc::clone(&ledger_db),
@@ -46,7 +47,7 @@ impl StateKvDb {
             });
         }
 
-        Self::open(db_root_path, rocksdb_configs.state_kv_db_config, readonly)
+        Self::open(db_root_path, state_kv_db_config, readonly)
     }
 
     pub fn open<P: AsRef<Path>>(
