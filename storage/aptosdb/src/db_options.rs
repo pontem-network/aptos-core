@@ -11,7 +11,7 @@ use aptos_types::transaction::Version;
 
 const VERSION_SIZE: usize = std::mem::size_of::<Version>();
 
-pub(super) fn ledger_db_column_families() -> Vec<ColumnFamilyName> {
+pub fn ledger_db_column_families() -> Vec<ColumnFamilyName> {
     vec![
         /* empty cf */ DEFAULT_COLUMN_FAMILY_NAME,
         EPOCH_BY_VERSION_CF_NAME,
@@ -33,7 +33,7 @@ pub(super) fn ledger_db_column_families() -> Vec<ColumnFamilyName> {
     ]
 }
 
-pub(super) fn state_merkle_db_column_families() -> Vec<ColumnFamilyName> {
+pub fn state_merkle_db_column_families() -> Vec<ColumnFamilyName> {
     vec![
         /* empty cf */ DEFAULT_COLUMN_FAMILY_NAME,
         DB_METADATA_CF_NAME,
@@ -43,7 +43,7 @@ pub(super) fn state_merkle_db_column_families() -> Vec<ColumnFamilyName> {
     ]
 }
 
-pub(super) fn state_kv_db_column_families() -> Vec<ColumnFamilyName> {
+pub fn state_kv_db_column_families() -> Vec<ColumnFamilyName> {
     vec![
         /* empty cf */ DEFAULT_COLUMN_FAMILY_NAME,
         DB_METADATA_CF_NAME,
@@ -85,17 +85,17 @@ fn with_state_key_extractor_processor(cf_name: ColumnFamilyName, cf_opts: &mut O
     }
 }
 
-pub(super) fn gen_ledger_cfds(rocksdb_config: &RocksdbConfig) -> Vec<ColumnFamilyDescriptor> {
+pub fn gen_ledger_cfds(rocksdb_config: &RocksdbConfig) -> Vec<ColumnFamilyDescriptor> {
     let cfs = ledger_db_column_families();
     gen_cfds(rocksdb_config, cfs, with_state_key_extractor_processor)
 }
 
-pub(super) fn gen_state_merkle_cfds(rocksdb_config: &RocksdbConfig) -> Vec<ColumnFamilyDescriptor> {
+pub fn gen_state_merkle_cfds(rocksdb_config: &RocksdbConfig) -> Vec<ColumnFamilyDescriptor> {
     let cfs = state_merkle_db_column_families();
     gen_cfds(rocksdb_config, cfs, |_, _| {})
 }
 
-pub(super) fn gen_state_kv_cfds(rocksdb_config: &RocksdbConfig) -> Vec<ColumnFamilyDescriptor> {
+pub fn gen_state_kv_cfds(rocksdb_config: &RocksdbConfig) -> Vec<ColumnFamilyDescriptor> {
     let cfs = state_kv_db_column_families();
     gen_cfds(rocksdb_config, cfs, with_state_key_extractor_processor)
 }
