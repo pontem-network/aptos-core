@@ -32,7 +32,7 @@ pub struct StateKvDb {
 impl StateKvDb {
     // TODO(grao): Support more flexible path to make it easier for people to put different shards
     // on different disks.
-    pub(crate) fn new<P: AsRef<Path>>(
+    pub fn new<P: AsRef<Path>>(
         db_root_path: P,
         rocksdb_configs: RocksdbConfigs,
         readonly: bool,
@@ -49,7 +49,7 @@ impl StateKvDb {
         Self::open(db_root_path, rocksdb_configs.state_kv_db_config, readonly)
     }
 
-    pub(crate) fn open<P: AsRef<Path>>(
+    pub fn open<P: AsRef<Path>>(
         db_root_path: P,
         state_kv_db_config: RocksdbConfig,
         readonly: bool,
@@ -96,7 +96,7 @@ impl StateKvDb {
     }
 
     // TODO(grao): Remove this function.
-    pub(crate) fn commit_nonsharded(
+    pub fn commit_nonsharded(
         &self,
         version: Version,
         state_kv_batch: SchemaBatch,
@@ -109,7 +109,7 @@ impl StateKvDb {
         self.commit_raw_batch(state_kv_batch)
     }
 
-    pub(crate) fn commit(
+    pub fn commit(
         &self,
         version: Version,
         sharded_state_kv_batches: [SchemaBatch; NUM_STATE_SHARDS],
@@ -129,19 +129,19 @@ impl StateKvDb {
         self.write_progress(version)
     }
 
-    pub(crate) fn commit_raw_batch(&self, state_kv_batch: SchemaBatch) -> Result<()> {
+    pub fn commit_raw_batch(&self, state_kv_batch: SchemaBatch) -> Result<()> {
         // TODO(grao): Support sharding here.
         self.state_kv_metadata_db.write_schemas(state_kv_batch)
     }
 
-    pub(crate) fn write_progress(&self, version: Version) -> Result<()> {
+    pub fn write_progress(&self, version: Version) -> Result<()> {
         self.state_kv_metadata_db.put::<DbMetadataSchema>(
             &DbMetadataKey::StateKvCommitProgress,
             &DbMetadataValue::Version(version),
         )
     }
 
-    pub(crate) fn create_checkpoint(
+    pub fn create_checkpoint(
         db_root_path: impl AsRef<Path>,
         cp_root_path: impl AsRef<Path>,
     ) -> Result<()> {
@@ -172,15 +172,15 @@ impl StateKvDb {
         Ok(())
     }
 
-    pub(crate) fn metadata_db(&self) -> &DB {
+    pub fn metadata_db(&self) -> &DB {
         &self.state_kv_metadata_db
     }
 
-    pub(crate) fn db_shard(&self, shard_id: u8) -> &DB {
+    pub fn db_shard(&self, shard_id: u8) -> &DB {
         &self.state_kv_db_shards[shard_id as usize]
     }
 
-    pub(crate) fn commit_single_shard(
+    pub fn commit_single_shard(
         &self,
         version: Version,
         shard_id: u8,
