@@ -82,7 +82,7 @@ static IO_POOL: Lazy<rayon::ThreadPool> = Lazy::new(|| {
         .unwrap()
 });
 
-pub(crate) struct StateDb {
+pub struct StateDb {
     pub ledger_db: Arc<DB>,
     pub state_merkle_db: Arc<StateMerkleDb>,
     pub state_kv_db: Arc<StateKvDb>,

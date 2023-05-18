@@ -16,7 +16,7 @@ use aptos_types::transaction::Version;
 use std::{sync::Arc, thread::JoinHandle};
 
 /// The `PrunerManager` for `StateKvPruner`.
-pub(crate) struct StateKvPrunerManager {
+pub struct StateKvPrunerManager {
     pruner_enabled: bool,
     /// DB version window, which dictates how many version of state values to keep.
     prune_window: Version,

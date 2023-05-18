@@ -19,7 +19,7 @@ use std::sync::{atomic::Ordering, Arc};
 pub const STATE_KV_PRUNER_NAME: &str = "state_kv_pruner";
 
 /// Responsible for pruning state kv db.
-pub(crate) struct StateKvPruner {
+pub struct StateKvPruner {
     state_kv_db: Arc<StateKvDb>,
     /// Keeps track of the target version that the pruner needs to achieve.
     target_version: AtomicVersion,
