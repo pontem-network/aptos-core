@@ -56,7 +56,7 @@ pub struct StateMerkleDb {
 }
 
 impl StateMerkleDb {
-    pub(crate) fn new<P: AsRef<Path>>(
+    pub fn new<P: AsRef<Path>>(
         db_root_path: P,
         rocksdb_configs: RocksdbConfigs,
         readonly: bool,
