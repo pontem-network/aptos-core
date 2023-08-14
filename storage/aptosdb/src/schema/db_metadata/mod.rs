@@ -45,6 +45,7 @@ impl DbMetadataValue {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[cfg_attr(any(test, feature = "fuzzing"), derive(proptest_derive::Arbitrary))]
+#[allow(clippy::enum_variant_names)]
 pub enum DbMetadataKey {
     LedgerPrunerProgress,
     StateMerklePrunerProgress,

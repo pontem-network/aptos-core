@@ -1,3 +1,4 @@
+#![allow(clippy::mutable_key_type, clippy::enum_variant_names)]
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 

@@ -93,7 +93,7 @@ impl<
 pub enum SharedMempoolNotification {
     PeerStateChange,
     NewTransactions,
-    ACK,
+    Ack,
     Broadcast,
 }
 

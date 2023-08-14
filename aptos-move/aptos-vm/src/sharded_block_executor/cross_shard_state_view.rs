@@ -1,3 +1,4 @@
+#![allow(clippy::mutable_key_type)]
 // Copyright © Aptos Foundation
 // Parts of the project are originally copyright © Meta Platforms, Inc.
 // SPDX-License-Identifier: Apache-2.0

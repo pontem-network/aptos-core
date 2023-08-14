@@ -90,6 +90,7 @@ impl AccountState {
             })
     }
 
+    #[allow(clippy::mutable_key_type)]
     pub fn from_access_paths_and_values(
         account_address: AccountAddress,
         key_value_map: &HashMap<StateKey, StateValue>,

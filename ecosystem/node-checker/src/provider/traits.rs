@@ -26,6 +26,7 @@ pub trait Provider: Debug + Sync + Send {
 /// of errors that a Provider can return, in general terms. Really the only
 /// thing that matters is whether the error is retryable or not.
 #[derive(Error, Debug)]
+#[allow(clippy::enum_variant_names)]
 pub enum ProviderError {
     #[error("Something went wrong hitting endpoint {0}: {1:#}")]
     RetryableEndpointError(&'static str, #[source] anyhow::Error),

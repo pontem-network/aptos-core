@@ -101,7 +101,7 @@ impl NetworkLoadTest for ValidatorJoinLeaveTest {
 
             assert_eq!(
                 runtime.block_on(get_validator_state(&cli, validator_cli_index)),
-                ValidatorState::ACTIVE
+                ValidatorState::Active
             );
         }
 
@@ -192,10 +192,10 @@ impl NetworkTest for ValidatorJoinLeaveTest {
 
 #[derive(Debug, PartialEq, Eq)]
 enum ValidatorState {
-    ACTIVE,
-    JOINING,
-    LEAVING,
-    NONE,
+    Active,
+    Joining,
+    Leaving,
+    None,
 }
 
 struct ValidatorNodeKeys {
@@ -225,13 +225,13 @@ async fn get_validator_state(cli: &CliTestFramework, pool_index: usize) -> Valid
     let pool_address = cli.account_id(pool_index);
 
     for (state, list) in [
-        (ValidatorState::ACTIVE, &validator_set.active_validators),
-        (ValidatorState::JOINING, &validator_set.pending_active),
-        (ValidatorState::LEAVING, &validator_set.pending_inactive),
+        (ValidatorState::Active, &validator_set.active_validators),
+        (ValidatorState::Joining, &validator_set.pending_active),
+        (ValidatorState::Leaving, &validator_set.pending_inactive),
     ] {
         if list.iter().any(|info| info.account_address == pool_address) {
             return state;
         }
     }
-    ValidatorState::NONE
+    ValidatorState::None
 }

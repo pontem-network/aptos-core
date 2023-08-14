@@ -89,6 +89,7 @@ impl Client {
 
     /// Set a different version path base, e.g. "v1/" See
     /// DEFAULT_VERSION_PATH_BASE for the default value.
+    #[allow(clippy::result_large_err)]
     pub fn version_path_base(mut self, version_path_base: String) -> AptosResult<Self> {
         if !version_path_base.ends_with('/') {
             return Err(anyhow!("version_path_base must end with '/', e.g. 'v1/'").into());
@@ -97,6 +98,7 @@ impl Client {
         Ok(self)
     }
 
+    #[allow(clippy::result_large_err)]
     pub fn build_path(&self, path: &str) -> AptosResult<Url> {
         Ok(self.base_url.join(&self.version_path_base)?.join(path)?)
     }
@@ -1463,6 +1465,7 @@ impl Client {
 
     /// This function builds a URL for use in pagination. It handles setting a limit,
     /// adding the cursor, and adding a ledger version if given.
+    #[allow(clippy::result_large_err)]
     pub fn build_url_for_pagination(
         &self,
         base: &str,
@@ -1604,6 +1607,7 @@ pub struct VersionedNewBlockEvent {
     pub sequence_number: u64,
 }
 
+#[allow(clippy::result_large_err)]
 fn parse_state(response: &reqwest::Response) -> AptosResult<State> {
     Ok(State::from_headers(response.headers())?)
 }

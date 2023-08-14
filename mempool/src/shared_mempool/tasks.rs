@@ -188,7 +188,7 @@ pub(crate) async fn process_transaction_broadcast<NetworkClient, TransactionVali
         );
         return;
     }
-    notify_subscribers(SharedMempoolNotification::ACK, &smp.subscribers);
+    notify_subscribers(SharedMempoolNotification::Ack, &smp.subscribers);
 }
 
 /// If `MempoolIsFull` on any of the transactions, provide backpressure to the downstream peer.

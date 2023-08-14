@@ -591,7 +591,7 @@ async fn test_large_total_stake() {
 
     assert_eq!(
         get_validator_state(&cli, validator_cli_index).await,
-        ValidatorState::ACTIVE
+        ValidatorState::Active
     );
 
     swarm
@@ -1314,7 +1314,7 @@ async fn test_owner_create_and_delegate_flow() {
     assert_validator_set_sizes(&cli, 1, 0, 0).await;
     assert_eq!(
         get_validator_state(&cli, owner_cli_index).await,
-        ValidatorState::NONE
+        ValidatorState::None
     );
 
     let port = 6543;
@@ -1354,7 +1354,7 @@ async fn test_owner_create_and_delegate_flow() {
         .unwrap();
 
     let owner_state = get_validator_state(&cli, owner_cli_index).await;
-    if owner_state == ValidatorState::JOINING {
+    if owner_state == ValidatorState::Joining {
         reconfig(
             &rest_client,
             &transaction_factory,
@@ -1364,10 +1364,10 @@ async fn test_owner_create_and_delegate_flow() {
 
         assert_eq!(
             get_validator_state(&cli, owner_cli_index).await,
-            ValidatorState::ACTIVE
+            ValidatorState::Active
         );
     } else {
-        assert_eq!(owner_state, ValidatorState::ACTIVE);
+        assert_eq!(owner_state, ValidatorState::Active);
     }
 
     let new_operator_keys = ValidatorNodeKeys::new(&mut keygen);
@@ -1401,7 +1401,7 @@ async fn test_owner_create_and_delegate_flow() {
         .unwrap();
 
     let owner_state = get_validator_state(&cli, owner_cli_index).await;
-    if owner_state == ValidatorState::LEAVING {
+    if owner_state == ValidatorState::Leaving {
         reconfig(
             &rest_client,
             &transaction_factory,
@@ -1411,10 +1411,10 @@ async fn test_owner_create_and_delegate_flow() {
 
         assert_eq!(
             get_validator_state(&cli, owner_cli_index).await,
-            ValidatorState::NONE
+            ValidatorState::None
         );
     } else {
-        assert_eq!(owner_state, ValidatorState::NONE);
+        assert_eq!(owner_state, ValidatorState::None);
     }
 
     cli.join_validator_set(operator_cli_index, Some(owner_cli_index))
@@ -1422,7 +1422,7 @@ async fn test_owner_create_and_delegate_flow() {
         .unwrap_err();
     assert_eq!(
         get_validator_state(&cli, owner_cli_index).await,
-        ValidatorState::NONE
+        ValidatorState::None
     );
 }
 
@@ -1503,10 +1503,10 @@ async fn assert_validator_set_sizes(
 
 #[derive(Debug, PartialEq, Eq)]
 enum ValidatorState {
-    ACTIVE,
-    JOINING,
-    LEAVING,
-    NONE,
+    Active,
+    Joining,
+    Leaving,
+    None,
 }
 
 async fn get_validator_state(cli: &CliTestFramework, pool_index: usize) -> ValidatorState {
@@ -1514,15 +1514,15 @@ async fn get_validator_state(cli: &CliTestFramework, pool_index: usize) -> Valid
     let pool_address = cli.account_id(pool_index);
 
     for (state, list) in [
-        (ValidatorState::ACTIVE, &validator_set.active_validators),
-        (ValidatorState::JOINING, &validator_set.pending_active),
-        (ValidatorState::LEAVING, &validator_set.pending_inactive),
+        (ValidatorState::Active, &validator_set.active_validators),
+        (ValidatorState::Joining, &validator_set.pending_active),
+        (ValidatorState::Leaving, &validator_set.pending_inactive),
     ] {
         if list.iter().any(|info| info.account_address == pool_address) {
             return state;
         }
     }
-    ValidatorState::NONE
+    ValidatorState::None
 }
 
 fn get_gas(transaction: TransactionSummary) -> u64 {

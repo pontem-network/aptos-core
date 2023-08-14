@@ -406,7 +406,7 @@ impl TestHarness {
     /// Delivers broadcast ACK from `peer`.
     fn deliver_response(&mut self, sender_id: &NodeId, network_id: NetworkId) {
         // Wait for an ACK to come in on the events
-        self.wait_for_event(sender_id, SharedMempoolNotification::ACK);
+        self.wait_for_event(sender_id, SharedMempoolNotification::Ack);
         let sender = self.mut_node(sender_id);
         let sender_peer_id = sender.peer_id(network_id);
         let network_req = sender.get_next_network_req(network_id);

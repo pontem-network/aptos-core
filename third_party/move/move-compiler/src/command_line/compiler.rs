@@ -68,8 +68,8 @@ enum PassResult {
     Naming(naming::ast::Program),
     Typing(typing::ast::Program),
     Inlining(typing::ast::Program),
-    HLIR(hlir::ast::Program),
-    CFGIR(cfgir::ast::Program),
+    Hlir(hlir::ast::Program),
+    Cfgir(cfgir::ast::Program),
     Compilation(Vec<AnnotatedCompiledUnit>, /* warnings */ Diagnostics),
 }
 
@@ -404,8 +404,8 @@ ast_stepped_compilers!(
         at_inlining,
         new_at_inlining
     ),
-    (PASS_HLIR, hlir, HLIR, at_hlir, new_at_hlir),
-    (PASS_CFGIR, cfgir, CFGIR, at_cfgir, new_at_cfgir)
+    (PASS_HLIR, hlir, Hlir, at_hlir, new_at_hlir),
+    (PASS_CFGIR, cfgir, Cfgir, at_cfgir, new_at_cfgir)
 );
 
 impl<'a> SteppedCompiler<'a, PASS_COMPILATION> {
@@ -473,11 +473,11 @@ pub fn construct_pre_compiled_lib<Paths: Into<Symbol>, NamedAddress: Into<Symbol
             assert!(inlining.is_none());
             inlining = Some(tprog.clone())
         },
-        PassResult::HLIR(hprog) => {
+        PassResult::Hlir(hprog) => {
             assert!(hlir.is_none());
             hlir = Some(hprog.clone());
         },
-        PassResult::CFGIR(cprog) => {
+        PassResult::Cfgir(cprog) => {
             assert!(cfgir.is_none());
             cfgir = Some(cprog.clone());
         },
@@ -745,8 +745,8 @@ impl PassResult {
             PassResult::Naming(_) => PASS_NAMING,
             PassResult::Typing(_) => PASS_TYPING,
             PassResult::Inlining(_) => PASS_INLINING,
-            PassResult::HLIR(_) => PASS_HLIR,
-            PassResult::CFGIR(_) => PASS_CFGIR,
+            PassResult::Hlir(_) => PASS_HLIR,
+            PassResult::Cfgir(_) => PASS_CFGIR,
             PassResult::Compilation(_, _) => PASS_COMPILATION,
         }
     }
@@ -822,23 +822,23 @@ fn run(
             run(
                 compilation_env,
                 pre_compiled_lib,
-                PassResult::HLIR(hprog),
+                PassResult::Hlir(hprog),
                 until,
                 result_check,
             )
         },
-        PassResult::HLIR(hprog) => {
+        PassResult::Hlir(hprog) => {
             let cprog = cfgir::translate::program(compilation_env, pre_compiled_lib, hprog);
             compilation_env.check_diags_at_or_above_severity(Severity::NonblockingError)?;
             run(
                 compilation_env,
                 pre_compiled_lib,
-                PassResult::CFGIR(cprog),
+                PassResult::Cfgir(cprog),
                 until,
                 result_check,
             )
         },
-        PassResult::CFGIR(cprog) => {
+        PassResult::Cfgir(cprog) => {
             let compiled_units =
                 to_bytecode::translate::program(compilation_env, pre_compiled_lib, cprog);
             compilation_env.check_diags_at_or_above_severity(Severity::NonblockingError)?;

@@ -60,6 +60,7 @@ pub struct IndexerGrpcDataServiceConfig {
 
 #[async_trait::async_trait]
 impl RunnableConfig for IndexerGrpcDataServiceConfig {
+    #[allow(clippy::mutable_key_type)]
     async fn run(&self) -> Result<()> {
         let token_set = build_auth_token_set(self.whitelisted_auth_tokens.clone());
         let authentication_inceptor =
@@ -169,6 +170,7 @@ impl RunnableConfig for IndexerGrpcDataServiceConfig {
     }
 }
 
+#[allow(clippy::mutable_key_type)]
 /// Build a set of whitelisted auth tokens. Invalid tokens are ignored.
 pub fn build_auth_token_set(whitelisted_auth_tokens: Vec<String>) -> HashSet<MetadataValue<Ascii>> {
     whitelisted_auth_tokens

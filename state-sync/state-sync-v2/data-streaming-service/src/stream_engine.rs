@@ -106,7 +106,7 @@ pub trait DataStreamEngine {
 /// Different types of data stream engines that allow each data stream to
 /// track and update progress through the `DataStreamEngine` interface.
 #[enum_dispatch(DataStreamEngine)]
-#[allow(clippy::large_enum_variant)]
+#[allow(clippy::large_enum_variant, clippy::enum_variant_names)]
 #[derive(Debug)]
 pub enum StreamEngine {
     ContinuousTransactionStreamEngine,

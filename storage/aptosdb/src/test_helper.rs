@@ -1,8 +1,8 @@
+#![allow(clippy::mutable_key_type)]
 // Copyright © Aptos Foundation
 // Parts of the project are originally copyright © Meta Platforms, Inc.
 // SPDX-License-Identifier: Apache-2.0
-
-//! This module provides reusable helpers in tests.
+// This module provides reusable helpers in tests.
 use super::*;
 use crate::{
     jellyfish_merkle_node::JellyfishMerkleNodeSchema, schema::state_value::StateValueSchema,

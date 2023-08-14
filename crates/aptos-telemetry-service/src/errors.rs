@@ -122,6 +122,7 @@ pub(crate) enum ValidatorCacheUpdateError {
 }
 
 #[derive(Debug, ThisError)]
+#[allow(clippy::enum_variant_names)]
 pub(crate) enum ServiceErrorCode {
     #[error("authentication error: {0}")]
     AuthError(AuthError, ChainId),

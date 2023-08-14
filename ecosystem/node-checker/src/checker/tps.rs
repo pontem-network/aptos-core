@@ -18,6 +18,7 @@ const NODE_REQUIREMENTS_LINK: &str =
     "https://aptos.dev/nodes/validator-node/operator/node-requirements";
 
 #[derive(Debug, ThisError)]
+#[allow(clippy::enum_variant_names)]
 pub enum TpsCheckerError {
     /// Failed to build the cluster for the transaction emitter. This
     /// represents an internal logic error.

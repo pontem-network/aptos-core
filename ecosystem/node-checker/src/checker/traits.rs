@@ -44,6 +44,7 @@ pub trait Checker: Debug + Sync + Send {
 /// with NHC or the baseline. If something went wrong with the target, we
 /// expect the Checker to return a CheckResult indicating as such instead.
 #[derive(Error, Debug)]
+#[allow(clippy::enum_variant_names)]
 pub enum CheckerError {
     #[error("Provider failed to return data: {0:#}")]
     ProviderError(#[from] ProviderError),

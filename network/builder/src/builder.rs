@@ -50,9 +50,9 @@ use tokio::runtime::Handle;
 
 #[derive(Debug, PartialEq, PartialOrd)]
 enum State {
-    CREATED,
-    BUILT,
-    STARTED,
+    Created,
+    Built,
+    Started,
 }
 
 /// Build Network module with custom configuration values.
@@ -110,7 +110,7 @@ impl NetworkBuilder {
         );
 
         NetworkBuilder {
-            state: State::CREATED,
+            state: State::Created,
             executor: None,
             time_service,
             network_context,
@@ -265,8 +265,8 @@ impl NetworkBuilder {
 
     /// Create the configured Networking components.
     pub fn build(&mut self, executor: Handle) -> &mut Self {
-        assert_eq!(self.state, State::CREATED);
-        self.state = State::BUILT;
+        assert_eq!(self.state, State::Created);
+        self.state = State::Built;
         self.executor = Some(executor);
         self.peer_manager_builder
             .build(self.executor.as_mut().expect("Executor must exist"));
@@ -275,8 +275,8 @@ impl NetworkBuilder {
 
     /// Start the built Networking components.
     pub fn start(&mut self) -> &mut Self {
-        assert_eq!(self.state, State::BUILT);
-        self.state = State::STARTED;
+        assert_eq!(self.state, State::Built);
+        self.state = State::Started;
 
         let executor = self.executor.as_mut().expect("Executor must exist");
         self.peer_manager_builder.start(executor);

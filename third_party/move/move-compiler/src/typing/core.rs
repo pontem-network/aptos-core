@@ -21,6 +21,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 // Context
 //**************************************************************************************************
 
+#[allow(clippy::enum_variant_names)]
 pub enum Constraint {
     AbilityConstraint {
         loc: Loc,

@@ -4,7 +4,7 @@
 
 use super::{
     absint::*,
-    cfg::{BlockCFG, ReverseBlockCFG, CFG},
+    cfg::{BlockCFG, Cfg, ReverseBlockCFG},
     locals,
 };
 use crate::{
