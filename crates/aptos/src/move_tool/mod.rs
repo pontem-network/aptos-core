@@ -748,7 +748,7 @@ impl FromStr for IncludedArtifacts {
 }
 
 impl IncludedArtifacts {
-    pub(crate) fn build_options(
+    pub fn build_options(
         self,
         dev: bool,
         skip_fetch_latest_git_deps: bool,
