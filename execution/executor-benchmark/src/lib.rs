@@ -31,7 +31,7 @@ use aptos_executor::{
 use aptos_jellyfish_merkle::metrics::{
     APTOS_JELLYFISH_INTERNAL_ENCODED_BYTES, APTOS_JELLYFISH_LEAF_ENCODED_BYTES,
 };
-use aptos_logger::{info, warn};
+use aptos_logger::{debug, info, warn};
 use aptos_metrics_core::Histogram;
 use aptos_sdk::types::LocalAccount;
 use aptos_storage_interface::DbReaderWriter;
@@ -176,6 +176,7 @@ pub fn run_benchmark<V>(
 
     let version = db.reader.get_latest_version().unwrap();
 
+    debug!("Pipeline::new");
     let (pipeline, block_sender) =
         Pipeline::new(executor, version, pipeline_config.clone(), Some(num_blocks));
 
@@ -433,6 +434,7 @@ fn add_accounts_impl<V>(
 
     let version = db.reader.get_latest_version().unwrap();
 
+    debug!("Pipeline::new");
     let (pipeline, block_sender) = Pipeline::new(
         executor,
         version,
